@@ -13,7 +13,7 @@
             ))
 
 (defroutes app-routes
-           ;html pages
+           ;HTML pages
            (GET "/admin" [] (layout/application "Admin Functions" "admin.js" (admin/admin)))
            (GET "/schedule" [] (layout/application "Tennis Schedule" "schedule.js" (sched/schedule)))
 
