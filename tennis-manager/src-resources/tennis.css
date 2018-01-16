@@ -1,0 +1,105 @@
+body {
+    margin-top: 30px;
+    margin-right: 50px;
+    margin-bottom: 10px;
+    margin-left: 100px;
+}
+
+thead {
+    text-align: center
+}
+
+.table {
+    border: 2px solid black;
+}
+
+.table-striped tbody > tr:nth-child(odd) {
+    background-color: #BDC3C7;
+}
+
+.table-striped tbody > tr:nth-child(even) {
+    background-color: #D6DBDF;
+}
+
+.table-bordered tr td {
+    border: 2px solid black;
+}
+
+.points {
+    text-align: center;
+}
+
+.panel-heading {
+    font-weight: bold;
+    font-size: 30pt;
+}
+
+.schedule {
+    margin: auto;
+    width: 40%;
+    visibility: hidden;
+}
+
+.schedule-form, .admin-form, .admin-action {
+    width: 25%;
+    visibility: visible;
+    background-color: #e6e6e6;
+}
+
+.schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td {
+    border-top: none;
+    border-bottom: none;
+    border: none;
+}
+
+.schedule-hdrx tr td {
+    border-top: none;
+    border-bottom: none;
+    text-align: left;
+}
+
+.schedule-selected-team {
+    font-weight: bold;
+}
+
+.admin-form {
+    visibility: visible;
+    color: #2B4408;
+    width: 30%;
+}
+
+.admin-action {
+    display: none;
+    visibility: visible;
+    width: 45%;
+
+}
+
+.form-error {
+    color: red;
+}
+
+.form-label {
+    float: right;
+    margin: 0 0 10px 10px;
+}
+
+.test {
+    color: red;
+}
+
+.error {
+    color: red;
+    font-style: italic;
+    margin-left: 10px;
+    display: block;
+}
+
+
+.success {
+    color: green;
+    font-style: italic;
+    margin-left: 10px;
+    display: block;
+}
+

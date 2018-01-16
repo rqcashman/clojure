@@ -1,0 +1,7 @@
+:vacation_days       9
+:holidays            10
+:iterations          7
+:benefit_amt	5160
+:k401_pct 0
+:vendor_mgmt_pct 0.02
+:hsa_amt 2000
