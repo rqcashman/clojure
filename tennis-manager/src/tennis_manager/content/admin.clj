@@ -116,22 +116,7 @@
             [:button {:type "button" :onclick (str "return processRequest('#loadschedulefileform', '/load-schedule-file', '" title "')")} title]]]
       (layout/empty-row form-span)]]))
 
-(defn status-content
-  []
-  [:table.table.table-sm
-   (layout/empty-row form-span)
-   [:tr [:td {:colspan form-span :align "center"} [:h4 "Status of " [:span#status-title]]]]
-   (layout/hr-row form-span "90%")
-   [:tr
-    [:td {:width "5%"} "&nbsp;"]
-    [:td "Status:"]
-    [:td {:align "left"} [:span#status-content]]
-    [:td {:width "5%"} "&nbsp;"]]
-   (layout/hr-row form-span "90%")
-   (layout/empty-row form-span)
-   [:tr [:td {:colspan form-span :align "center"}
-         [:button {:type "button" :value "ok" :onclick "location.reload();"} "OK"]]]
-   (layout/empty-row form-span)])
+
 
 ;(def admin-actions
 ;  [{:id "add-club" :name "Add club" :content (club-content)}
@@ -139,10 +124,7 @@
 ;   {:id "add-team" :name "Add team" :content (team-content)}
 ;   {:id "manage-schedule" :name "Manage schedule" :content (load-schedule)}])
 
-(defn actions
-  [admin-actions]
-  admin-actions
-  )
+
 
 (defn select-form
   [admin-actions]
@@ -155,7 +137,7 @@
        [:tr [:td {:colspan 3 :align "center"} [:h4 "Select Admin Function"]]]
        (layout/hr-row 3 "90%")]
       [:tbody
-       (layout/add-select #(actions admin-actions) layout/option "admin-list" "Admin Action:" 1 (str "change_form(this.value);"))
+       (layout/add-select #(layout/actions admin-actions) layout/option "admin-list" "Admin Action:" 1 (str "change_form(this.value);"))
        (layout/hr-row 3 "90%")
        (layout/empty-row 3)]]]
     [:br]
@@ -174,4 +156,4 @@
     (list
       (select-form admin-actions)
       (map add-div admin-actions)
-      (add-div {:id "status-panel" :name "Status" :content (status-content)}))))
+      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span "location.reload();")}))))

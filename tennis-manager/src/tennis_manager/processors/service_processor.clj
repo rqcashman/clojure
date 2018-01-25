@@ -1,10 +1,11 @@
 (ns tennis-manager.processors.service-processor
-  (:require [tennis-manager.data.data-handler :as db]
-            [tennis-manager.content.admin :as admin]
-            [clojure.string :as s]
-            [clj-time.core :as t]
+  (:require [clj-time.core :as t]
             [clj-time.format :as f]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clojure.string :as s]
+            [tennis-manager.content.admin :as admin]
+            [tennis-manager.content.gmail :as mail]
+            [tennis-manager.data.data-handler :as db])
   (:import (java.sql SQLException)
            (clojure.lang EdnReader$StringReader)
            (java.io StringReader BufferedReader)))
@@ -14,7 +15,6 @@
 (defn add-club
   "docstring"
   [& params]
-  (println "add club parameters: " params)
   (let [p (nth params 0)
         club_name (:club_name p)]
     (try
@@ -31,11 +31,33 @@
       (catch Exception e
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
+(defn add-player
+  "docstring"
+  [& params]
+  (let [p (nth params 0)
+        team_id (:team_id p)
+        first_name (:first_name p)
+        last_name (:last_name p)
+        phone_number (:phone_number p)
+        email (:email p)]
+    (try
+      (if (or (s/blank? first_name) (s/blank? last_name))
+        (hash-map :status "failed" :status-code 200 :msg (str "Player first and last name required"))
+        (if (db/player-exists? team_id first_name last_name)
+          (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' already exists."))
+          (do
+            (db/add_player team_id first_name last_name email phone_number)
+            (hash-map :status "success" :status-code 200 :msg (str "Player '" first_name " " last_name "' added.")))))
+      (catch SQLException se
+        (println "SQLException in add-player: " (.getMessage se))
+        (hash-map :status "failed" :status-code 500 :msg (str "Insert of player '" first_name " " last_name "' failed.") :support-msg (.getMessage se)))
+      (catch Exception e
+        (println "Exception in add-player: " (.getMessage e))
+        (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+
 (defn add-season
   "docstring"
   [& params]
-  (println "add season parms: " params)
-  (println "season: " (:season (nth params 0)))
   (let [
         p (nth params 0)
         season (:season p)
@@ -64,7 +86,6 @@
 (defn load-schedule
   "docstrng"
   [& params]
-  (println "load-schedule parms: " params)
   (let [p (nth params 0)
         schedule (:schedule p)
         abbrevMap (db/team-schedule-abbreviations)]
@@ -77,10 +98,37 @@
         (db/add-match (:season_id p) matchDate homeTeamId awayTeamId)))
     (hash-map :status "success" :status-code 200 :msg (str "Season loaded"))))
 
+(defn update-player-info
+  "docstrng"
+  [& params]
+  (let [p (nth params 0)
+        first_name (:first_name p)
+        last_name (:last_name p)
+        email (:email p)
+        phone_number (:phone_number p)
+        status (:status p)
+        team_id (:team_id p)
+        player_id (:player_id p)]
+    (try
+      (if (or (s/blank? first_name) (s/blank? last_name))
+        (hash-map :status "failed" :status-code 200 :msg (str "Player first and last name required"))
+        (if (db/player-id-exists? player_id)
+          (if (db/player-name-available? team_id player_id first_name last_name)
+            (do
+              (db/update-player player_id last_name first_name email phone_number status)
+              (hash-map :status "success" :status-code 200 :msg (str "Player '" first_name " " last_name "' updated.")))
+            (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' exists under another player id.")))
+          (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' does not exist with the given player id."))))
+      (catch SQLException se
+        (println "SQLException in update-player-info-player: " (.getMessage se))
+        (hash-map :status "failed" :status-code 500 :msg (str "Update of player '" first_name " " last_name "' failed.") :support-msg (.getMessage se)))
+      (catch Exception e
+        (println "Exception in add-update-player-info: " (.getMessage e))
+        (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+
 (defn load-schedule-file
   "docstrng"
   [& params]
-  (println "load-schedule-file parms: " params)
   (let [p (nth params 0)
         scheduleFile (:schedule p)
         abbrevMap (db/team-schedule-abbreviations)]
@@ -106,7 +154,6 @@
 (defn add-team
   "docstring"
   [& params]
-  (println "add team parms: " params)
   (let [p (nth params 0)
         team-name (:team_name p)
         club-id (:club_id p)]
@@ -124,5 +171,20 @@
       (catch Exception e
         (println e)
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+
+(defn send-email
+  "docstring"
+  [& parms]
+  (try
+    (mail/send-gmail {:from     "rqcashman@gmail.com"
+                      :to       ["rqcashman@gmail.com"]
+                      :subject  "HP Bronze test"
+                      :text     "Test message from server"
+                      :user     "rqcashman@gmail.com"
+                      :password "oitdgcoxpdghplmb"})
+    (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Email sent")
+    (catch Exception e
+      (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e)))))
+
 
 

@@ -17,7 +17,9 @@
     <orderEntry type="library" name="Leiningen: clj-time:0.13.0" level="project" />
     <orderEntry type="library" name="Leiningen: clojure-complete:0.2.4" level="project" />
     <orderEntry type="library" name="Leiningen: com.github.virtuald/curvesapi:1.04" level="project" />
+    <orderEntry type="library" name="Leiningen: com.sun.mail/javax.mail:1.6.0" level="project" />
     <orderEntry type="library" name="Leiningen: commons-codec:1.10" level="project" />
+    <orderEntry type="library" name="Leiningen: javax.activation/activation:1.1" level="project" />
     <orderEntry type="library" name="Leiningen: joda-time:2.9.7" level="project" />
     <orderEntry type="library" name="Leiningen: mysql/mysql-connector-java:5.1.18" level="project" />
     <orderEntry type="library" name="Leiningen: org.apache.commons/commons-collections4:4.1" level="project" />

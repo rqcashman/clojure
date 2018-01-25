@@ -22,6 +22,11 @@
           [:body
            [:div content]]]))
 
+(defn actions
+  [actions]
+  ;(println "actions" actions)
+  actions
+  )
 
 (defn empty-row
   [colspan]
@@ -33,17 +38,36 @@
   [colspan width]
   [:tr [:td {:colspan colspan} [:hr {:color "black" :width width}]]])
 
+(defn status-content
+  [form-span click-fn]
+  [:table.table.table-sm
+   (empty-row form-span)
+   [:tr [:td {:colspan form-span :align "center"} [:h4 "Status of " [:span#status-title]]]]
+   (hr-row form-span "90%")
+   [:tr
+    [:td {:width "5%"} "&nbsp;"]
+    [:td "Status:"]
+    [:td {:align "left"} [:span#status-content]]
+    [:td {:width "5%"} "&nbsp;"]]
+   (hr-row form-span "90%")
+   (empty-row form-span)
+   [:tr [:td {:colspan form-span :align "center"}
+         [:button {:type "button" :value "ok" :onclick click-fn} "OK"]]]
+   (empty-row form-span)])
+
+
 (defn option
   "this work for both season and team because both have id and name in their maps"
   [curr]
+  ;(println "add option: " (:name curr))
   [:option {:value (:id curr)} (:name curr)])
 
 (defn add-select
   ([data-fn option-fn id title colspan]
    (add-select data-fn option-fn id title colspan nil))
-  ([data-fn option-fn id title colspan click-fn]
+  ([data-fn option-fn id title colspan change-fn]
    [:tr
     [:td {:width "5%"}]
     [:td {:width "15%" :nowrap "true"} title]
     [:td {:colspan colspan}
-     (conj [:select.state.form-control-sm {:id id :name id :onclick click-fn}] (map option-fn (data-fn)))]]))
+     (conj [:select.state.form-control-sm {:id id :name id :onChange change-fn}] (map option-fn (data-fn)))]]))

@@ -25,6 +25,10 @@ thead {
     border: 2px solid black;
 }
 
+.hidden-control {
+    display: none;
+}
+
 .points {
     text-align: center;
 }
@@ -34,25 +38,33 @@ thead {
     font-size: 30pt;
 }
 
-.schedule {
+.schedule, .roster {
     margin: auto;
     width: 40%;
     visibility: hidden;
 }
 
-.schedule-form, .admin-form, .admin-action {
+.roster {
+    visibility: visible;
+}
+
+.schedule-form, .admin-form, .admin-action, .roster-form, .roster-action, .roster-view {
     width: 25%;
     visibility: visible;
     background-color: #e6e6e6;
 }
 
-.schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td {
+.roster-view {
+    width: 75%;
+}
+
+.schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td, .roster-form tr td, .roster-action tr td {
     border-top: none;
     border-bottom: none;
     border: none;
 }
 
-.schedule-hdrx tr td {
+.schedule-hdr tr td {
     border-top: none;
     border-bottom: none;
     text-align: left;
@@ -62,13 +74,13 @@ thead {
     font-weight: bold;
 }
 
-.admin-form {
+.admin-form, .roster-form {
     visibility: visible;
     color: #2B4408;
     width: 30%;
 }
 
-.admin-action {
+.admin-action, .roster-action {
     display: none;
     visibility: visible;
     width: 45%;
@@ -101,5 +113,9 @@ thead {
     font-style: italic;
     margin-left: 10px;
     display: block;
+}
+
+#sr-details-body td:hover {
+    cursor: pointer;
 }
 
