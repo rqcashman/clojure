@@ -18,7 +18,7 @@
 (defroutes app-routes
            ;HTML pages
            (GET "/admin" [] (layout/application "Admin Functions" "admin.js" (admin/admin)))
-           (GET "/matches" [] (layout/application "Team Roster" "matches.js" (match/matches)))
+           (GET "/matches" [] (layout/application "Matches" "matches.js" (match/matches)))
            (GET "/schedule" [] (layout/application "Tennis Schedule" "schedule.js" (sched/schedule)))
            (GET "/roster" [] (layout/application "Team Roster" "roster.js" (rost/roster)))
 

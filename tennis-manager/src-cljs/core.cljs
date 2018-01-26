@@ -24,7 +24,8 @@
     )
   (str "<tr id='match-" (:match_id row) "'>"
        "<td>" (:match_date row) "</td>"
-       "<td>" (match-time (:match_time row)) "</td>"
+       ;"<td>" (match-time (:match_time row)) "</td>"
+       "<td>" (:match_time row) "</td>"
        "<td name='id-" (:home_team_id row) "'>" (:home_team row) "</td>"
        "<td name='id-" (:away_team_id row) "'>" (:away_team row) "</td>"
        "<td class='points'>" (:home_team_points row) "</td>"

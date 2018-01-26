@@ -48,7 +48,7 @@ thead {
     visibility: visible;
 }
 
-.schedule-form, .admin-form, .admin-action, .roster-form, .roster-action, .roster-view {
+.schedule-form, .admin-form, .admin-action, .roster-form, .roster-action, .roster-view, .match-form, .matches-action {
     width: 25%;
     visibility: visible;
     background-color: #e6e6e6;
@@ -58,7 +58,7 @@ thead {
     width: 75%;
 }
 
-.schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td, .roster-form tr td, .roster-action tr td {
+.schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td, .roster-form tr td, .roster-action tr td, .match-form tr td, .matches-action tr td {
     border-top: none;
     border-bottom: none;
     border: none;
@@ -74,17 +74,20 @@ thead {
     font-weight: bold;
 }
 
-.admin-form, .roster-form {
+.admin-form, .roster-form, .match-form {
     visibility: visible;
     color: #2B4408;
     width: 30%;
 }
 
-.admin-action, .roster-action {
+.admin-action, .roster-action, .matches-action {
     display: none;
     visibility: visible;
     width: 45%;
+}
 
+.matches-action {
+    width: 75%;
 }
 
 .form-error {
@@ -104,7 +107,7 @@ thead {
     color: red;
     font-style: italic;
     margin-left: 10px;
-    display: block;
+    #display: block;
 }
 
 
