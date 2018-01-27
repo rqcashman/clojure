@@ -14,21 +14,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="matches.clj" pinned="false" current-in-tab="false">
+      <file leaf-file-name="matches.clj" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/matches.clj">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="53" column="13" lean-forward="true" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="13" />
+            <state relative-caret-position="367">
+              <caret line="47" column="6" lean-forward="true" selection-start-line="47" selection-start-column="6" selection-end-line="47" selection-end-column="6" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="data_handler.clj" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/tennis_manager/data/data_handler.clj">
+      <file leaf-file-name="matches.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src-resources/matches.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="58" column="78" lean-forward="false" selection-start-line="58" selection-start-column="78" selection-end-line="58" selection-end-column="78" />
+            <state relative-caret-position="391">
+              <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -48,14 +48,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>first and</find>
-      <find>upda</find>
-      <find>:as gs</find>
-      <find>addclubform</find>
-      <find>team</find>
-      <find>up_team_id</find>
-      <find>addclub</find>
-      <find>roster</find>
       <find>player</find>
       <find>=</find>
       <find>admin</find>
@@ -76,8 +68,16 @@
       <find>nbsp</find>
       <find>action</find>
       <find>matches-action</find>
-      <find>println</find>
       <find>6</find>
+      <find>println</find>
+      <find>change_to</find>
+      <find>poin</find>
+      <find>match</find>
+      <find>%p</find>
+      <find>add-form-control</find>
+      <find>cursor</find>
+      <find>avail-fu</find>
+      <find>avail-f</find>
     </findStrings>
     <replaceStrings>
       <replace>current_form_id</replace>
@@ -144,14 +144,14 @@
         <option value="$PROJECT_DIR$/src/tennis_manager/content/roster.clj" />
         <option value="$PROJECT_DIR$/src-resources/roster.js" />
         <option value="$PROJECT_DIR$/src/tennis_manager/content/player_availability.clj" />
-        <option value="$PROJECT_DIR$/src-cljs/matches.cljs" />
-        <option value="$PROJECT_DIR$/src-resources/matches.js" />
         <option value="$PROJECT_DIR$/src/tennis_manager/content/xx.html" />
-        <option value="$PROJECT_DIR$/src/tennis_manager/handler.clj" />
         <option value="$PROJECT_DIR$/src-cljs/core.cljs" />
         <option value="$PROJECT_DIR$/src-resources/tennis.css" />
-        <option value="$PROJECT_DIR$/src/tennis_manager/content/matches.clj" />
+        <option value="$PROJECT_DIR$/src/tennis_manager/handler.clj" />
+        <option value="$PROJECT_DIR$/src-cljs/matches.cljs" />
         <option value="$PROJECT_DIR$/src/tennis_manager/data/data_handler.clj" />
+        <option value="$PROJECT_DIR$/src/tennis_manager/content/matches.clj" />
+        <option value="$PROJECT_DIR$/src-resources/matches.js" />
       </list>
     </option>
   </component>
@@ -660,12 +660,12 @@
       <workItem from="1516060732580" duration="140000" />
       <workItem from="1516062562270" duration="1066000" />
       <workItem from="1516100366636" duration="68997000" />
-      <workItem from="1516900487910" duration="20002000" />
+      <workItem from="1516900487910" duration="30967000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="245104000" />
+    <option name="totallyTimeSpent" value="256069000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -697,7 +697,7 @@
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1684435" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3511111" sideWeight="0.49573562" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3511111" sideWeight="0.49573562" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1030,34 +1030,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src-resources/matches.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/xx.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1308">
           <caret line="111" column="14" lean-forward="false" selection-start-line="111" selection-start-column="14" selection-end-line="111" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/roster.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="33" lean-forward="true" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/handler.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="20" column="58" lean-forward="false" selection-start-line="20" selection-start-column="58" selection-end-line="20" selection-end-column="58" />
           <folding />
         </state>
       </provider>
@@ -1086,26 +1062,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src-cljs/matches.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="34" column="71" lean-forward="true" selection-start-line="34" selection-start-column="71" selection-end-line="34" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/schedule.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="185">
           <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src-resources/tennis.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="91" column="0" lean-forward="true" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1118,18 +1078,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/matches.clj">
+    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/roster.clj">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="53" column="13" lean-forward="true" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="13" />
+        <state relative-caret-position="425">
+          <caret line="88" column="48" lean-forward="false" selection-start-line="88" selection-start-column="48" selection-end-line="88" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src-cljs/matches.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="53" column="20" lean-forward="true" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tennis_manager/data/data_handler.clj">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="263" column="56" lean-forward="false" selection-start-line="263" selection-start-column="56" selection-end-line="263" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tennis_manager/handler.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="26" column="71" lean-forward="false" selection-start-line="26" selection-start-column="71" selection-end-line="26" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src-resources/tennis.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="127" column="40" lean-forward="true" selection-start-line="127" selection-start-column="40" selection-end-line="127" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src-resources/matches.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/matches.clj">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="367">
-          <caret line="58" column="78" lean-forward="false" selection-start-line="58" selection-start-column="78" selection-end-line="58" selection-end-column="78" />
+          <caret line="47" column="6" lean-forward="true" selection-start-line="47" selection-start-column="6" selection-end-line="47" selection-end-column="6" />
           <folding />
         </state>
       </provider>

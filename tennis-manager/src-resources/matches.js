@@ -10,6 +10,22 @@ function change_form(new_form_id) {
     $("#" + new_form_id).css("display", "block");
 }
 
+function change_to_email_form(match_id) {
+    $("#send-availability-email").addClass("avail-small");
+    tennis_manager.matches.match(match_id);
+    change_form("send-availability-email");
+}
+
+function change_to_avail_form(match_id) {
+    $("#show-availability").addClass("avail-small");
+    tennis_manager.matches.match(match_id);
+    change_form("show-availability");
+}
+
+
+function set_lineup(match_id) {
+    change_form("set-lineup");
+}
 
 
 function get_roster_data() {

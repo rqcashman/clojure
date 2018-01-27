@@ -255,3 +255,15 @@
   []
   (j/query db-spec
            [(str "select id, name from season where start_date <= date_sub(current_date(), interval 10 day) and end_date >= current_date()")]))
+
+(defn match-info
+  "docstring"
+  [match-id]
+  (println "match info: " match-id)
+  (j/query db-spec
+           [(str "select DATE_FORMAT(s.match_date,'%M %D, %Y') as match_date,DATE_FORMAT(s.match_date,'%h:%i %p') as match_time"
+                 " ,cl.name as club_name, cl.address, cl.city, cl.state, cl.zip_code, cl.phone_number"
+                 " from schedule s"
+                 " join team t on t.id = s.home_team_id"
+                 " join club cl on cl.id = t.club_id"
+                 " where s.match_id=?") match-id]))

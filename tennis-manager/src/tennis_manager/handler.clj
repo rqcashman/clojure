@@ -24,6 +24,7 @@
 
            ;rest APIs
            (GET "/clubs" [] (rr/response (db/clubs)))
+           (GET "/match-info/:match-id" [& params] (rr/response (db/match-info (:match-id params))))
            (GET "/player/:player-id" [& params] (rr/response (db/player (:player-id params))))
            (GET "/season/:season-id" [& params] (rr/response (db/season (:season-id params))))
            (GET "/seasons" [] (rr/response (db/seasons)))

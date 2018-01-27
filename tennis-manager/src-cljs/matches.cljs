@@ -41,12 +41,10 @@
        "</tr>"))
 
 
-(defn ^:export roster [team-id]
+(defn ^:export match [match-id]
   ;remove all but first row in the table
-  (ef/at
-    "#sr-details-body tr:not(:first-child)" (ef/remove-node))
   (go
-    (let [response (<! (http/get (str "team-roster/" team-id)))
+    (let [response (<! (http/get (str "match-info/" match-id)))
           body (:body response)
           rowCt (count body)]
       (if (> rowCt 0)
@@ -54,14 +52,15 @@
           (reduce
             (fn [db-rows row]
               (ef/at
-                "#sr-details-body tr:last-child" (ef/after (roster-row row))))
+                "#av_match_date" (ef/content (:match_date row)))
+              (ef/at
+                "#av_match_time" (ef/content (:match_time row)))
+              (ef/at
+                "#av_match_location" (ef/content (:club_name row)))
+              )
             []
-            body))
-        (ef/at
-          "#sr-details-body tr:last-child" (ef/after (not-found-row))))
-      ;remove first row which was necessary to add the data rows
-      (ef/at
-        "#sr-details-body tr:first-child" (ef/remove-node)))))
+            body))))))
+
 
 (defn ^:export load_update_player_form [player-id]
   ;remove all but first row in the table

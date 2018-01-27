@@ -90,6 +90,10 @@ thead {
     width: 75%;
 }
 
+.avail-small {
+    width: 40%;
+}
+
 .form-error {
     color: red;
 }
@@ -110,6 +114,9 @@ thead {
     #display: block;
 }
 
+.bold-text {
+    font-weight: bold;
+}
 
 .success {
     color: green;
@@ -118,7 +125,7 @@ thead {
     display: block;
 }
 
-#sr-details-body td:hover {
+#sr-details-body td:hover, .avail-cursor {
     cursor: pointer;
 }
 
