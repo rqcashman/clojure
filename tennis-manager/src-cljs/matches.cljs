@@ -13,36 +13,8 @@
   []
   (str "<tr><td colspan='5' align='center'><h2 style='color:red'>No players added to roster</h2></td></tr>"))
 
-(defn display-status
-  [status]
-  (case status
-    "A" "Active"
-    "I" "Inactive"
-    "S" "Sub"
-    status))
 
-(defn format-phone
-  [phone-number]
-  (if (> (count phone-number) 7)
-    (str (subs phone-number 0 3) "." (subs phone-number 3 6) "." (subs phone-number 6))
-    (if (= (count phone-number) 7)
-      (str (subs phone-number 0 3) "." (subs phone-number 3))
-      phone-number)))
-
-(defn roster-row
-  "generate a row for the roster"
-  [row]
-  (str "<tr id='" (:id row) "' onclick='update_player_form(this.id);'>"
-       "<td>" (:last_name row) "</td>"
-       "<td>" (:first_name row) "</td>"
-       "<td>" (:email row) "</td>"
-       "<td>" (format-phone (str (:phone_number row))) "</td>"
-       "<td>" (display-status (:status row)) "</td>"
-       "</tr>"))
-
-
-(defn ^:export match [match-id]
-  ;remove all but first row in the table
+(defn ^:export email_form [match-id]
   (go
     (let [response (<! (http/get (str "match-info/" match-id)))
           body (:body response)
@@ -51,6 +23,8 @@
         (do
           (reduce
             (fn [db-rows row]
+              (ef/at
+                "#av_match_id" (ef/set-form-input match-id))
               (ef/at
                 "#av_match_date" (ef/content (:match_date row)))
               (ef/at
@@ -61,11 +35,9 @@
             []
             body))))))
 
-
-(defn ^:export load_update_player_form [player-id]
-  ;remove all but first row in the table
+(defn ^:export availability [match-id]
   (go
-    (let [response (<! (http/get (str "player/" player-id)))
+    (let [response (<! (http/get (str "match-info/" match-id)))
           body (:body response)
           rowCt (count body)]
       (if (> rowCt 0)
@@ -73,21 +45,14 @@
           (reduce
             (fn [db-rows row]
               (ef/at
-                "#up_first_name" (ef/set-form-input (:first_name row)))
+                "#av_match_id" (ef/content match-id))
               (ef/at
-                "#up_last_name" (ef/set-form-input (:last_name row)))
+                "#av_match_date" (ef/content (:match_date row)))
               (ef/at
-                "#up_email" (ef/set-form-input (:email row)))
+                "#av_match_time" (ef/content (:match_time row)))
               (ef/at
-                "#up_phone_number" (ef/set-form-input (:phone_number row)))
-              (ef/at
-                "#up_status" (ef/set-form-input (:status row)))
-              (ef/at
-                "#up_team_id" (ef/set-form-input (:team_id row)))
-              (ef/at
-                "#up_player_id" (ef/set-form-input (:id row)))
+                "#av_match_location" (ef/content (:club_name row)))
               )
             []
-            body))
-        (ef/at
-          (js/alert "Player not found"))))))
+            body))))))
+

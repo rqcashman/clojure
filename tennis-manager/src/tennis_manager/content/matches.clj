@@ -2,15 +2,12 @@
   (:use [hiccup.form]
         [hiccup.element :only (link-to)]
         [tennis-manager.data.data-handler :as db]
+        [tennis-manager.data.user-info :as usr]
         [tennis-manager.content.page-layout :as layout]
         [hiccup.page :only (html5 include-css include-js)]))
 
 (def form-span 4)
 (def sched-form-span 8)
-;plan is to add logins which will give us the team id
-;for now we will just use a hared-code team id
-(def team-id 13)
-
 
 (defn add-div
   [func-map]
@@ -35,10 +32,10 @@
     (conj rows [:tr
                 [:td (:match_date sched-row)]
                 [:td (:match_time sched-row)]
-                [:td (if (= team-id home-team-id) (:away_team sched-row) (:home_team sched-row))]
+                [:td (if (= usr/users_team_id home-team-id) (:away_team sched-row) (:home_team sched-row))]
                 [:td (:home_club_name sched-row)]
-                [:td {:align "center"} (if (= team-id home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
-                [:td {:align "center"} (if (= team-id home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
+                [:td {:align "center"} (if (= usr/users_team_id home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
+                [:td {:align "center"} (if (= usr/users_team_id home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
                 [:td {:align "center"} [:span.avail-cursor {:onclick (str avail-func "('" (:match_id sched-row) "');")} (if (= (:availability_sent sched-row) nil) "&#10060;" "&#9989;")]]
                 [:td {:align "center"} [:span.avail-cursor {:onclick (str "set_lineup('" (:match_id sched-row) "');")} (if (= (:lineup_sent sched-row) nil) "&#10060;" "&#9989;")]]])))
 
@@ -47,17 +44,17 @@
   []
   (try
     ;data is sorted by date.  Need to use reverse because conj is adding the data to the beginning of the list
-    (reduce #(schedule-row %1 %2) () (reverse (db/team-schedule (:id (nth (db/current-season) 0)) team-id)))
+    (reduce #(schedule-row %1 %2) () (reverse (db/team-schedule (:id (nth (db/current-season) 0)) usr/users_team_id)))
     (catch Exception e
       (println "Exception in get-team-schedule.  Message: " + e)
       [:tr [:td.error {:colspan sched-form-span :align "center"} "Error getting team schedule"]])))
 
 (defn schedule-form
   "docstring"
-  []
+  [team-name]
   [:table.table.table-sm
    (layout/empty-row form-span)
-   [:tr [:td {:colspan form-span :align "center"} [:h4 (:name (nth (db/team team-id) 0)) " Team Schedule"]]]
+   [:tr [:td {:colspan form-span :align "center"} [:h4 team-name " Team Schedule"]]]
    (layout/hr-row form-span "90%")
    [:tr
     [:td {:width "5%:"}]
@@ -80,12 +77,12 @@
 
 (defn availability-email-form
   "docstring"
-  []
+  [team-name]
   (let [title "Send Availability Email"]
     [:form#sendavailabilityemail.form-horizontal {:method "post" :action "/send-availability-email"}
      [:table.table.table-sm
       (layout/empty-row form-span)
-      [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
+      [:tr [:td {:colspan form-span :align "center"} [:h4 title " for " team-name]]]
       (layout/hr-row form-span "90%")
       [:tr [:td] [:td {:colspan 3 :align "left"} [:h5 "Email Header"]]]
       [:tr [:td]
@@ -120,12 +117,12 @@
 
 (defn show-availability-form
   "docstring"
-  []
+  [team-name]
   (let [title "Show Availability"]
     [:form#showavailabilityemail.form-horizontal {:method "post" :action "/get-availability"}
      [:table.table.table-sm
       (layout/empty-row form-span)
-      [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
+      [:tr [:td {:colspan form-span :align "center"} [:h4 title " for " team-name]]]
       (layout/hr-row form-span "90%")
       [:tr [:td] [:td {:colspan 3 :align "left"} [:h5 "Email Header"]]]
       [:tr [:td]
@@ -155,10 +152,10 @@
 
 (defn lineup-form
   "docstring"
-  []
+  [team-name]
   [:table.table.table-sm
    (layout/empty-row form-span)
-   [:tr [:td {:colspan form-span :align "center"} [:h4 (:name (nth (db/team team-id) 0)) " Match Lineup"]]]
+   [:tr [:td {:colspan form-span :align "center"} [:h4 team-name " Match Lineup"]]]
    (layout/hr-row form-span "90%")
    [:tr
     [:td {:width "5%:"}]
@@ -199,11 +196,12 @@
 (defn matches
   "docstring"
   []
-  (let [match-actions
-        [{:id "show-schedule" :name "Match Schedule" :content (schedule-form)}
-         {:id "send-availability-email" :name "Send Availability Email" :content (availability-email-form)}
-         {:id "show-availability" :name "Send Availability Email" :content (show-availability-form)}
-         {:id "set-lineup" :name "Set Lineup" :content (lineup-form)}
+  (let [team-name (:name (nth (db/team usr/users_team_id) 0))
+        match-actions
+        [{:id "show-schedule" :name "Match Schedule" :content (schedule-form team-name)}
+         {:id "send-availability-email" :name "Send Availability Email" :content (availability-email-form team-name)}
+         {:id "show-availability" :name "Send Availability Email" :content (show-availability-form team-name)}
+         {:id "set-lineup" :name "Set Lineup" :content (lineup-form team-name)}
          ]]
     (list
       ;(select-form match-actions)

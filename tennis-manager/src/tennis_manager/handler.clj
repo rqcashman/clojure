@@ -12,8 +12,7 @@
             [tennis-manager.content.roster :as rost]
             [tennis-manager.content.schedule :as sched]
             [tennis-manager.data.data-handler :as db]
-            [tennis-manager.processors.service-processor :as pr]
-            ))
+            [tennis-manager.processors.service-processor :as pr]))
 
 (defroutes app-routes
            ;HTML pages
@@ -32,7 +31,7 @@
            (GET "/team-roster/:team-id" [& params] (rr/response (db/team-roster (:team-id params))))
            (GET "/team-schedule/:season-id/:team-id" [& params] (rr/response (db/team-schedule (:season-id params) (:team-id params))))
            (GET "/teams" [] (rr/response (db/teams)))
-           (PUT "/player-availability/:available/:player-token" [& params] (layout/application "Availability Repsonse" "" (avail/update-availability  (:player-token params) (:available params))))
+           (PUT "/player-availability/:available/:player-token" [& params] (layout/application "Availability Repsonse" "" (avail/update-availability (:player-token params) (:available params))))
 
            ;POST
            (POST "/add-club" [& params] (rr/response (pr/add-club params)))
@@ -42,6 +41,7 @@
            (POST "/load-schedule" [& params] (rr/response (pr/load-schedule params)))
            (POST "/load-schedule-file" [& params] (rr/response (pr/load-schedule-file params)))
            (POST "/update-player" [& params] (rr/response (pr/update-player-info params)))
+           (POST "/send-availability-email" [& params] (rr/response (pr/send-avail-email params)))
            (GET "/send-email" [& params] (rr/response (pr/send-email params)))
 
            (GET "/" [] "Hello World xx")

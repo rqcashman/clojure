@@ -18,7 +18,7 @@
                           "mail.smtp.auth"       "true"}))
         session (Session/getInstance props auth)
         msg (doto (MimeMessage. session)
-              (.setText text)
+              (.setContent text, "text/html")
               (.setSubject subject)
               (.setFrom (InternetAddress. from)))]
     (doseq [addr to]

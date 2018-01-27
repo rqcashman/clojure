@@ -5,7 +5,9 @@
             [clojure.string :as s]
             [tennis-manager.content.admin :as admin]
             [tennis-manager.content.gmail :as mail]
-            [tennis-manager.data.data-handler :as db])
+            [tennis-manager.data.data-handler :as db]
+            [tennis-manager.data.user-info :as usr]
+            [tennis-manager.data.system-info :as sys])
   (:import (java.sql SQLException)
            (clojure.lang EdnReader$StringReader)
            (java.io StringReader BufferedReader)))
@@ -172,19 +174,53 @@
         (println e)
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
-(defn send-email
+(defn send-email-orig
   "docstring"
   [& parms]
   (try
     (mail/send-gmail {:from     "rqcashman@gmail.com"
                       :to       ["rqcashman@gmail.com"]
                       :subject  "HP Bronze test"
-                      :text     "Test message from server"
+                      :text     "<h1>This is a test</h1>"
                       :user     "rqcashman@gmail.com"
                       :password "oitdgcoxpdghplmb"})
     (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Email sent")
     (catch Exception e
       (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e)))))
 
+(defn send-email
+  "docstring"
+  [parms]
+  (println "send email parms: " parms)
+  (try
+    (mail/send-gmail parms)
+    (hash-map :status "success" :status-code 0 :msg (str "Successxxxx") :support-msg "Email sent")
+    (catch Exception e
+      (println "email error: " e)
+      (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e)))))
 
+
+(defn format-avail-email
+  "docstring"
+  []
+  )
+
+(defn send-avail-email
+  "docstring"
+ [{:keys [message signature match_id]}]
+  (let [match-info (nth (db/match-info match_id) 0)
+        message (str "<table width='70%'>"
+                     "<td nowrap><b>Match date:</b><td width='10%'><td nowrap>" (:match_date match-info) "</td></tr>"
+                     "<td nowrap><b>Match time:</b><td width='10%'><td nowrap>" (:match_time match-info) "</td></tr>"
+                     "<td nowrap><b>Location:</b><td width='10%'><td nowrap>" (:club_name match-info) "</td></tr>"
+                     "</table><br>"
+                     message "<br><br>" signature
+                     )
+        subject (str "Match availability for " (:match_date match-info))
+        parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text message})]
+    (println "email parms: " parms)
+    (println "match info: " match-info)
+    (send-email parms))
+  (println "destructured input: " message signature match_id)
+  (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Availability email sent"))
 

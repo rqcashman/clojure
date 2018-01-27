@@ -12,13 +12,13 @@ function change_form(new_form_id) {
 
 function change_to_email_form(match_id) {
     $("#send-availability-email").addClass("avail-small");
-    tennis_manager.matches.match(match_id);
+    tennis_manager.matches.email_form(match_id);
     change_form("send-availability-email");
 }
 
 function change_to_avail_form(match_id) {
     $("#show-availability").addClass("avail-small");
-    tennis_manager.matches.match(match_id);
+    tennis_manager.matches.availability(match_id);
     change_form("show-availability");
 }
 

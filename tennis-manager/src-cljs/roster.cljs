@@ -67,7 +67,6 @@
         "#sr-details-body tr:first-child" (ef/remove-node)))))
 
 (defn ^:export load_update_player_form [player-id]
-  ;remove all but first row in the table
   (go
     (let [response (<! (http/get (str "player/" player-id)))
           body (:body response)
