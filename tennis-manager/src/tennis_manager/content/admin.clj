@@ -1,7 +1,8 @@
 (ns tennis-manager.content.admin
   (:use [hiccup.form]
         [hiccup.element :only (link-to)]
-        [tennis-manager.data.data-handler :as db]
+        [tennis-manager.data.club-data-handler :as club]
+        [tennis-manager.data.season-data-handler :as season]
         [tennis-manager.content.page-layout :as layout]
         [hiccup.page :only (html5 include-css include-js)]))
 
@@ -52,7 +53,7 @@
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
       (layout/hr-row form-span "90%")
-      (layout/add-select db/clubs layout/option "club_id" "Club:" (- form-span 2))
+      (layout/add-select club/clubs layout/option "club_id" "Club:" (- form-span 2))
       (add-form-control "Team name:" {:id "team_name" :name "team_name" :maxlength 45 :size 45 :type= "text"})
       (add-form-control "Default match time:" {:id "match_time" :name "match_time" :maxlength 10 :size 10})
       (layout/hr-row form-span "90%")
@@ -87,7 +88,7 @@
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
       (layout/hr-row form-span "90%")
-      (layout/add-select db/seasons layout/option "season_id" "Season:" (- form-span 2))
+      (layout/add-select season/seasons layout/option "season_id" "Season:" (- form-span 2))
       [:tr [:td {:colspan form-span :align "center"}
             [:textarea {:name "schedule" :rows 30 :cols 50}]]]
       (layout/hr-row form-span "90%")
@@ -106,7 +107,7 @@
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
       (layout/hr-row form-span "90%")
-      (layout/add-select db/seasons layout/option "season_id" "Season:" (- form-span 2))
+      (layout/add-select season/seasons layout/option "season_id" "Season:" (- form-span 2))
       (add-form-control "Select file:" {:class "required" :id "schedule" :name "schedule" :type "file" :size 100})
      ; [:tr [:td {:colspan form-span :align "center"}
       ;      [:input {:name "schedule" :type "file"}]]]

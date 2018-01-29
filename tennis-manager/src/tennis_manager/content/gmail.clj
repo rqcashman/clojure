@@ -6,7 +6,10 @@
                        PasswordAuthentication Message$RecipientType)))
 
 (defn send-gmail [{:keys [from to subject text user password]}]
-  (println "from: " from " to: " to " subject: " subject " text: " text " user: " user " pwd: " password)
+  (println "-----------------------------------------------------")
+  (println text)
+  (println "-----------------------------------------------------")
+
   (let [auth (proxy [Authenticator] []
                (getPasswordAuthentication []
                  (PasswordAuthentication. user password)))

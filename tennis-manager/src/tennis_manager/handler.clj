@@ -10,27 +10,31 @@
             [tennis-manager.content.page-layout :as layout]
             [tennis-manager.content.player-availability :as avail]
             [tennis-manager.content.roster :as rost]
-            [tennis-manager.content.schedule :as sched]
-            [tennis-manager.data.data-handler :as db]
+            [tennis-manager.content.schedule :as schedule]
+            [tennis-manager.data.club-data-handler :as club]
+            [tennis-manager.data.player-data-handler :as player]
+            [tennis-manager.data.schedule-data-handler :as sched]
+            [tennis-manager.data.season-data-handler :as season]
+            [tennis-manager.data.team-data-handler :as team]
             [tennis-manager.processors.service-processor :as pr]))
 
 (defroutes app-routes
            ;HTML pages
            (GET "/admin" [] (layout/application "Admin Functions" "admin.js" (admin/admin)))
            (GET "/matches" [] (layout/application "Matches" "matches.js" (match/matches)))
-           (GET "/schedule" [] (layout/application "Tennis Schedule" "schedule.js" (sched/schedule)))
+           (GET "/schedule" [] (layout/application "Tennis Schedule" "schedule.js" (schedule/schedule)))
            (GET "/roster" [] (layout/application "Team Roster" "roster.js" (rost/roster)))
 
            ;rest APIs
-           (GET "/clubs" [] (rr/response (db/clubs)))
-           (GET "/match-info/:match-id" [& params] (rr/response (db/match-info (:match-id params))))
-           (GET "/player/:player-id" [& params] (rr/response (db/player (:player-id params))))
-           (GET "/season/:season-id" [& params] (rr/response (db/season (:season-id params))))
-           (GET "/seasons" [] (rr/response (db/seasons)))
-           (GET "/team/:team-id" [& params] (rr/response (db/team (:team-id params))))
-           (GET "/team-roster/:team-id" [& params] (rr/response (db/team-roster (:team-id params))))
-           (GET "/team-schedule/:season-id/:team-id" [& params] (rr/response (db/team-schedule (:season-id params) (:team-id params))))
-           (GET "/teams" [] (rr/response (db/teams)))
+           (GET "/clubs" [] (rr/response (club/clubs)))
+           (GET "/match-info/:match-id" [& params] (rr/response (sched/match-info (:match-id params))))
+           (GET "/player/:player-id" [& params] (rr/response (player/player (:player-id params))))
+           (GET "/season/:season-id" [& params] (rr/response (season/season (:season-id params))))
+           (GET "/seasons" [] (rr/response (season/seasons)))
+           (GET "/team/:team-id" [& params] (rr/response (team/team (:team-id params))))
+           (GET "/team-roster/:team-id" [& params] (rr/response (team/team-roster (:team-id params))))
+           (GET "/team-schedule/:season-id/:team-id" [& params] (rr/response (team/team-schedule (:season-id params) (:team-id params))))
+           (GET "/teams" [] (rr/response (team/teams)))
            (PUT "/player-availability/:available/:player-token" [& params] (layout/application "Availability Repsonse" "" (avail/update-availability (:player-token params) (:available params))))
 
            ;POST
@@ -42,7 +46,6 @@
            (POST "/load-schedule-file" [& params] (rr/response (pr/load-schedule-file params)))
            (POST "/update-player" [& params] (rr/response (pr/update-player-info params)))
            (POST "/send-availability-email" [& params] (rr/response (pr/send-avail-email params)))
-           (GET "/send-email" [& params] (rr/response (pr/send-email params)))
 
            (GET "/" [] "Hello World xx")
            (route/not-found "Not Found"))

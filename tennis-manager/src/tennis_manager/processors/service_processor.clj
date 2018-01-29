@@ -5,7 +5,11 @@
             [clojure.string :as s]
             [tennis-manager.content.admin :as admin]
             [tennis-manager.content.gmail :as mail]
-            [tennis-manager.data.data-handler :as db]
+            [tennis-manager.data.club-data-handler :as club]
+            [tennis-manager.data.player-data-handler :as player]
+            [tennis-manager.data.schedule-data-handler :as sched]
+            [tennis-manager.data.season-data-handler :as season]
+            [tennis-manager.data.team-data-handler :as team]
             [tennis-manager.data.user-info :as usr]
             [tennis-manager.data.system-info :as sys])
   (:import (java.sql SQLException)
@@ -22,11 +26,11 @@
     (try
       (if (s/blank? club_name)
         (hash-map :status "failed" :status-code 200 :msg (str "Club name required"))
-        (if (db/club_exists? (:club_name p))
+        (if (club/club_exists? (:club_name p))
           (hash-map :status "failed" :status-code 200 :msg (str "Club '" club_name "' already exists."))
           (let [phone (if (s/blank? (:phone_number p)) 0 (:phone_number p))
                 zip (if (s/blank? (:zip_code p)) 0 (:zip_code p))]
-            (db/add_club club_name (:street p) (:city p) (:club_state p) zip phone)
+            (club/add_club club_name (:street p) (:city p) (:club_state p) zip phone)
             (hash-map :status "success" :status-code 200 :msg (str "Club '" club_name "' added.")))))
       (catch SQLException se
         (hash-map :status "failed" :status-code 500 :msg (str "Insert of club '" club_name "' failed.") :support-msg (.getMessage se)))
@@ -45,10 +49,10 @@
     (try
       (if (or (s/blank? first_name) (s/blank? last_name))
         (hash-map :status "failed" :status-code 200 :msg (str "Player first and last name required"))
-        (if (db/player-exists? team_id first_name last_name)
+        (if (player/player-exists? team_id first_name last_name)
           (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' already exists."))
           (do
-            (db/add_player team_id first_name last_name email phone_number)
+            (player/add_player team_id first_name last_name email phone_number)
             (hash-map :status "success" :status-code 200 :msg (str "Player '" first_name " " last_name "' added.")))))
       (catch SQLException se
         (println "SQLException in add-player: " (.getMessage se))
@@ -71,11 +75,11 @@
       (println "end-date" end-date)
       (if (s/blank? season)
         (hash-map :status "failed" :status-code 200 :msg (str "Season name required"))
-        (if (db/season-exists? season)
+        (if (season/season-exists? season)
           (hash-map :status "failed" :status-code 200 :msg (str "Season '" season "' already exists."))
           (if (t/after? (f/parse date-fmt end-date) (f/parse date-fmt start-date))
             (do
-              (db/add_season season start-date end-date)
+              (season/add_season season start-date end-date)
               (hash-map :status "success" :status-code 200 :msg (str "Season '" season "' added.")))
             (hash-map :status "failed" :status-code 200 :msg (str "Season '" season "' not added. End date (" end-date ") must be greater than start date (" start-date ").")))))
       (catch SQLException se
@@ -90,14 +94,14 @@
   [& params]
   (let [p (nth params 0)
         schedule (:schedule p)
-        abbrevMap (db/team-schedule-abbreviations)]
+        abbrevMap (sched/team-schedule-abbreviations)]
     (doseq [line (line-seq (BufferedReader. (StringReader. schedule)))]
       (let [lineArr (s/split line #"\t")
             teamArr (s/split (nth lineArr 1) #" @ ")
             homeTeamId (get abbrevMap (keyword (nth teamArr 1)))
             awayTeamId (get abbrevMap (keyword (nth teamArr 0)))
             matchDate (nth lineArr 0)]
-        (db/add-match (:season_id p) matchDate homeTeamId awayTeamId)))
+        (sched/add-match (:season_id p) matchDate homeTeamId awayTeamId)))
     (hash-map :status "success" :status-code 200 :msg (str "Season loaded"))))
 
 (defn update-player-info
@@ -114,10 +118,10 @@
     (try
       (if (or (s/blank? first_name) (s/blank? last_name))
         (hash-map :status "failed" :status-code 200 :msg (str "Player first and last name required"))
-        (if (db/player-id-exists? player_id)
-          (if (db/player-name-available? team_id player_id first_name last_name)
+        (if (player/player-id-exists? player_id)
+          (if (player/player-name-available? team_id player_id first_name last_name)
             (do
-              (db/update-player player_id last_name first_name email phone_number status)
+              (player/update-player player_id last_name first_name email phone_number status)
               (hash-map :status "success" :status-code 200 :msg (str "Player '" first_name " " last_name "' updated.")))
             (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' exists under another player id.")))
           (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' does not exist with the given player id."))))
@@ -133,7 +137,7 @@
   [& params]
   (let [p (nth params 0)
         scheduleFile (:schedule p)
-        abbrevMap (db/team-schedule-abbreviations)]
+        abbrevMap (sched/team-schedule-abbreviations)]
     (with-open [rdr (io/reader scheduleFile)]
       (doseq [line (line-seq rdr)]
         (let [lineArr (s/split line #"\t")
@@ -141,7 +145,7 @@
               homeTeamId (get abbrevMap (keyword (nth teamArr 1)))
               awayTeamId (get abbrevMap (keyword (nth teamArr 0)))
               matchDate (nth lineArr 0)]
-          (db/add-match (:season_id p) matchDate homeTeamId awayTeamId))))
+          (sched/add-match (:season_id p) matchDate homeTeamId awayTeamId))))
     (hash-map :status "success" :status-code 200 :msg (str "Season loaded"))))
 
 (defn default-match-time
@@ -162,10 +166,10 @@
     (try
       (if (s/blank? team-name)
         (hash-map :status "failed" :status-code 200 :msg (str "Team name required"))
-        (if (db/team-exists? club-id team-name)
+        (if (team/team-exists? club-id team-name)
           (hash-map :status "failed" :status-code 200 :msg (str "Team '" team-name "' already exists."))
           (do
-            (db/add-team team-name club-id (default-match-time (:match_time p)))
+            (team/add-team team-name club-id (default-match-time (:match_time p)))
             (hash-map :status "success" :status-code 200 :msg (str "Team '" team-name "' added.")))))
       (catch SQLException se
         (println se)
@@ -188,39 +192,37 @@
     (catch Exception e
       (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e)))))
 
-(defn send-email
-  "docstring"
-  [parms]
-  (println "send email parms: " parms)
-  (try
-    (mail/send-gmail parms)
-    (hash-map :status "success" :status-code 0 :msg (str "Successxxxx") :support-msg "Email sent")
-    (catch Exception e
-      (println "email error: " e)
-      (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e)))))
-
-
-(defn format-avail-email
-  "docstring"
-  []
-  )
-
 (defn send-avail-email
   "docstring"
- [{:keys [message signature match_id]}]
-  (let [match-info (nth (db/match-info match_id) 0)
-        message (str "<table width='70%'>"
-                     "<td nowrap><b>Match date:</b><td width='10%'><td nowrap>" (:match_date match-info) "</td></tr>"
-                     "<td nowrap><b>Match time:</b><td width='10%'><td nowrap>" (:match_time match-info) "</td></tr>"
-                     "<td nowrap><b>Location:</b><td width='10%'><td nowrap>" (:club_name match-info) "</td></tr>"
-                     "</table><br>"
-                     message "<br><br>" signature
-                     )
-        subject (str "Match availability for " (:match_date match-info))
-        parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text message})]
-    (println "email parms: " parms)
-    (println "match info: " match-info)
-    (send-email parms))
-  (println "destructured input: " message signature match_id)
+  [{:keys [message signature match_id]}]
+  (try
+    (let [match-info (nth (sched/match-info match_id) 0)
+          message (str "<table width='100%' align='left' cellpadding='0' cellspacing='0'>"
+                       "<tr><td nowrap><b>Match date:</b><td nowrap>" (:match_date match-info) "</td><td width='80%'>&nbsp;</td></tr>"
+                       "<tr><td nowrap><b>Match time:</b><td nowrap>" (:match_time match-info) "</td><td width='80%'>&nbsp;</td></tr>"
+                       "<tr><td nowrap><b>Location:</b><td nowrap>" (:club_name match-info) "</td><td width='80%'>&nbsp;</td></tr>"
+                       "<tr><td colspan='3'>&nbsp;</td></tr>"
+                       "</table><br>"
+                       "<table width='70%' align='left'>"
+                       "<tr><td align='left' colspan='2'>---salutation---,</td></tr>"
+                       "<tr><td width='5%'></td><td>" (s/replace message #"\n" "<br><br>") "</td></tr>"
+                       "<tr><td width='5%'></td>"
+                       "<td nowrap><a href='http://localhost:3000/availability-reply/Y/--uuid--'>I can play </a>"
+                       "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://localhost:3000/availability-reply/N/--uuid--'>I'm out</a></td></tr>"
+                       "<tr><td colspan='2'>&nbsp;</td></tr>"
+                       "<tr><td colspan='2'><h4>" (s/replace signature #"\n" "<br>") "</h4></td></tr>"
+                       "</table>"
+                       )
+          subject (str "Match availability for " (:match_date match-info))
+          parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text message})]
+      (println "destructured input: " message signature match_id)
+      (doseq [player (team/team-roster usr/users_team_id)]
+        (if (not= (:status player) "I")
+          (let [uuid (str (java.util.UUID/randomUUID))
+                email-msg (s/replace (s/replace message #"---salutation---" (str (:first_name player) " " (:last_name player))) #"--uuid--" uuid)
+                email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
+          (mail/send-gmail email-parms)))))
+    (catch Exception e
+      (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e))))
   (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Availability email sent"))
 

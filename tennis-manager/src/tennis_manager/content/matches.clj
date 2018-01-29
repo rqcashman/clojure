@@ -1,7 +1,8 @@
 (ns tennis-manager.content.matches
   (:use [hiccup.form]
         [hiccup.element :only (link-to)]
-        [tennis-manager.data.data-handler :as db]
+        [tennis-manager.data.team-data-handler :as team]
+        [tennis-manager.data.season-data-handler :as season]
         [tennis-manager.data.user-info :as usr]
         [tennis-manager.content.page-layout :as layout]
         [hiccup.page :only (html5 include-css include-js)]))
@@ -44,7 +45,7 @@
   []
   (try
     ;data is sorted by date.  Need to use reverse because conj is adding the data to the beginning of the list
-    (reduce #(schedule-row %1 %2) () (reverse (db/team-schedule (:id (nth (db/current-season) 0)) usr/users_team_id)))
+    (reduce #(schedule-row %1 %2) () (reverse (team/team-schedule (:id (nth (season/current-season) 0)) usr/users_team_id)))
     (catch Exception e
       (println "Exception in get-team-schedule.  Message: " + e)
       [:tr [:td.error {:colspan sched-form-span :align "center"} "Error getting team schedule"]])))
@@ -196,7 +197,7 @@
 (defn matches
   "docstring"
   []
-  (let [team-name (:name (nth (db/team usr/users_team_id) 0))
+  (let [team-name (:name (nth (team/team usr/users_team_id) 0))
         match-actions
         [{:id "show-schedule" :name "Match Schedule" :content (schedule-form team-name)}
          {:id "send-availability-email" :name "Send Availability Email" :content (availability-email-form team-name)}

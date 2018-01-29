@@ -1,7 +1,8 @@
 (ns tennis-manager.content.schedule
   (:use [hiccup.form]
         [hiccup.element :only (link-to)]
-        [tennis-manager.data.data-handler :as db]
+        [tennis-manager.data.season-data-handler :as season]
+        [tennis-manager.data.team-data-handler :as team]
         [tennis-manager.content.page-layout :as layout]))
 
 (defn schedule-details
@@ -49,8 +50,8 @@
            [:tr [:td {:colspan 3 :align "center"} [:h4 "Select season and club"]]]
            (layout/hr-row 3 "90%")]
           [:tbody
-           (layout/add-select db/seasons layout/option "season-list" "Season:" 1)
-           (layout/add-select db/teams layout/option "team-list" "Team:" 1)
+           (layout/add-select season/seasons layout/option "season-list" "Season:" 1)
+           (layout/add-select team/teams layout/option "team-list" "Team:" 1)
            (layout/hr-row 3 "90%")
            [:tr
             [:td {:colspan 3 :align "center"}

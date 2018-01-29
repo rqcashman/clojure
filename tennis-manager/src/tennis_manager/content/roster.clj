@@ -1,7 +1,7 @@
 (ns tennis-manager.content.roster
   (:use [hiccup.form]
         [hiccup.element :only (link-to)]
-        [tennis-manager.data.data-handler :as db]
+        [tennis-manager.data.team-data-handler :as team]
         [tennis-manager.content.page-layout :as layout]
         [hiccup.page :only (html5 include-css include-js)]))
 
@@ -110,7 +110,7 @@
        [:tr [:td {:colspan 3 :align "center"} [:h4 "Select Roster Function"]]]
        (layout/hr-row 3 "90%")]
       [:tbody
-       (layout/add-select db/teams layout/option "team_id" "Team:" 1 (str "team_changed(this.value);"))
+       (layout/add-select team/teams layout/option "team_id" "Team:" 1 (str "team_changed(this.value);"))
        (layout/add-select #(layout/actions roster-actions) layout/option "roster-list" "Roster Action:" 1 (str "change_form(this.value);"))
        (layout/hr-row 3 "90%")
        (layout/empty-row 3)]]]
