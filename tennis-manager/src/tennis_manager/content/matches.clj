@@ -197,6 +197,7 @@
 (defn matches
   "docstring"
   []
+  (println "matches")
   (let [team-name (:name (nth (team/team usr/users_team_id) 0))
         match-actions
         [{:id "show-schedule" :name "Match Schedule" :content (schedule-form team-name)}
@@ -207,4 +208,4 @@
     (list
       ;(select-form match-actions)
       (map add-div match-actions)
-      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span "change_form(current_form_id);")}))))
+      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span "location.reload();")}))))

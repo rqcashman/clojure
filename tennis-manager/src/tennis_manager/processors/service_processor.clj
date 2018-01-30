@@ -4,8 +4,10 @@
             [clojure.java.io :as io]
             [clojure.string :as s]
             [tennis-manager.content.admin :as admin]
+            [tennis-manager.content.email-body :as em]
             [tennis-manager.content.gmail :as mail]
             [tennis-manager.data.club-data-handler :as club]
+            [tennis-manager.data.communication-data-handler :as comm]
             [tennis-manager.data.player-data-handler :as player]
             [tennis-manager.data.schedule-data-handler :as sched]
             [tennis-manager.data.season-data-handler :as season]
@@ -192,9 +194,9 @@
     (catch Exception e
       (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e)))))
 
-(defn send-avail-email
+(defn send-avail-email-orig
   "docstring"
-  [{:keys [message signature match_id]}]
+  [{:keys [message signature match_id send_subs]}]
   (try
     (let [match-info (nth (sched/match-info match_id) 0)
           message (str "<table width='100%' align='left' cellpadding='0' cellspacing='0'>"
@@ -205,7 +207,7 @@
                        "</table><br>"
                        "<table width='70%' align='left'>"
                        "<tr><td align='left' colspan='2'>---salutation---,</td></tr>"
-                       "<tr><td width='5%'></td><td>" (s/replace message #"\n" "<br><br>") "</td></tr>"
+                       "<tr><td width='5%'></td><td>" (s/replace message #"\n" "<br>") "</td></tr>"
                        "<tr><td width='5%'></td>"
                        "<td nowrap><a href='http://localhost:3000/availability-reply/Y/--uuid--'>I can play </a>"
                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://localhost:3000/availability-reply/N/--uuid--'>I'm out</a></td></tr>"
@@ -215,14 +217,83 @@
                        )
           subject (str "Match availability for " (:match_date match-info))
           parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text message})]
-      (println "destructured input: " message signature match_id)
+      (println "destructured input: " message signature match_id send_subs)
       (doseq [player (team/team-roster usr/users_team_id)]
-        (if (not= (:status player) "I")
+        (println (:last_name player))
+        (if (and (not= (:status player) "I") (or (not= (:status player) "S") (not= send_subs nil)))
           (let [uuid (str (java.util.UUID/randomUUID))
                 email-msg (s/replace (s/replace message #"---salutation---" (str (:first_name player) " " (:last_name player))) #"--uuid--" uuid)
                 email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
-          (mail/send-gmail email-parms)))))
+            (mail/send-gmail email-parms)))))
+    (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Availability email sent")
     (catch Exception e
-      (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e))))
-  (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Availability email sent"))
+      (println "Error sending availability email.  Msg" (.getMessage e))
+      (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e)))))
 
+(defn get-email-body
+  ""
+  [message signature match-info]
+  (str
+    "<table width='100%' align='left' cellpadding='0' cellspacing='0'>"
+    "   <tr> "
+    "      <td nowrap style='font-weight:bold'>Match date:</td>"
+    "      <td width='5%'>&nbsp;</td>"
+    "      <td nowrap>" (:match_date match-info) "</td> "
+    "      <td width='80%'>&nbsp;</td>"
+    "   </tr>"
+    "   <tr>"
+    "      <td nowrap><b>Match time:</b></td>"
+    "      <td width='5%'>&nbsp;</td>"
+    "      <td nowrap>" (:match_time match-info) "</td>"
+    "      <td width='80%'>&nbsp;</td>"
+    "   </tr>"
+    "   <tr>"
+    "      <td nowrap><b>Location:</b></td>"
+    "      <td width='5%'>&nbsp;</td>"
+    "      <td nowrap>" (:club_name match-info) "</td>"
+    "      <td width='80%'>&nbsp;</td>"
+    "   </tr>"
+    "   <tr><td colspan='4'>&nbsp;</td></tr>"
+    "</table><br>"
+    "<table width='70%' align='left'>"
+    "   <tr>"
+    "      <td align='left' colspan='2'>---salutation---,</td>"
+    "   </tr>"
+    "   <tr>"
+    "      <td width='5%'></td>"
+    "      <td> " (s/replace message #" \n " " <br> ") " </td> "
+    "   </tr>"
+    "   <tr>"
+    "      <td width='5%'></td> "
+    "      <td nowrap><a href='http://localhost:3000/availability-reply?available=Y&player-token=--uuid--'>I can play</a> "
+    "            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://localhost:3000/availability-reply?available=N&player-token=--uuid--'>I'm out</a>"
+    "      </td> "
+    "   </tr>"
+    "   <tr><td colspan='2'>&nbsp;</td>"
+    "    <tr>"
+    "        <tr><td colspan='2'><h4>" (s/replace signature #"\n" "<br>") "</h4></td>"
+    "    </tr>"
+    "</table>"))
+
+(defn send-avail-email
+  "docstring"
+  [{:keys [message signature match_id send_subs]}]
+  (try
+    (let [match-info (nth (sched/match-info match_id) 0)
+          email-body (get-email-body message signature match-info)
+          subject (str "Match availability for " (:match_date match-info))
+          parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text email-body})]
+      (doseq [player (team/team-roster usr/users_team_id)]
+        (if (and (not= (:status player) "I") (or (not= (:status player) "S") (not= send_subs nil)))
+          (let [uuid (s/replace (str (java.util.UUID/randomUUID)) #"-" "")
+                email-msg (s/replace (s/replace email-body #"---salutation---" (str (:first_name player) " " (:last_name player))) #"--uuid--" uuid)
+                email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
+            (mail/send-gmail email-parms)
+            (comm/add_player_communication (:id player) match_id uuid)))))
+    (if (comm/match_avail_email_sent match_id)
+      (comm/update_match_avail_email_sent_date match_id)
+      (comm/add_match_avail_email_sent match_id))
+    (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Availability email sent")
+    (catch Exception e
+      (println "Error sending availability email.  Msg" (.getMessage e))
+      (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e)))))

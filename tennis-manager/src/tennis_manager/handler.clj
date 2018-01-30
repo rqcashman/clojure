@@ -24,6 +24,8 @@
            (GET "/matches" [] (layout/application "Matches" "matches.js" (match/matches)))
            (GET "/schedule" [] (layout/application "Tennis Schedule" "schedule.js" (schedule/schedule)))
            (GET "/roster" [] (layout/application "Team Roster" "roster.js" (rost/roster)))
+           (GET "/availability-reply*" {params :query-params} (layout/application "Availability Response" "blank.js" (avail/update_availability (get  params "player-token") (get  params "available"))))
+           ;(GET "/availability-reply/:available/:player-token" [& params] (layout/application "Availability Response" "" (avail/update_availability)))
 
            ;rest APIs
            (GET "/clubs" [] (rr/response (club/clubs)))
@@ -35,7 +37,6 @@
            (GET "/team-roster/:team-id" [& params] (rr/response (team/team-roster (:team-id params))))
            (GET "/team-schedule/:season-id/:team-id" [& params] (rr/response (team/team-schedule (:season-id params) (:team-id params))))
            (GET "/teams" [] (rr/response (team/teams)))
-           (PUT "/player-availability/:available/:player-token" [& params] (layout/application "Availability Repsonse" "" (avail/update-availability (:player-token params) (:available params))))
 
            ;POST
            (POST "/add-club" [& params] (rr/response (pr/add-club params)))
@@ -47,7 +48,7 @@
            (POST "/update-player" [& params] (rr/response (pr/update-player-info params)))
            (POST "/send-availability-email" [& params] (rr/response (pr/send-avail-email params)))
 
-           (GET "/" [] "Hello World xx")
+           (GET "/" [] "Hello World")
            (route/not-found "Not Found"))
 
 (def app
