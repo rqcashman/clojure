@@ -24,7 +24,6 @@
 
 (defn actions
   [actions]
-  ;(println "actions" actions)
   actions
   )
 
@@ -59,7 +58,6 @@
 (defn option
   "this work for both season and team because both have id and name in their maps"
   [curr]
-  ;(println "add option: " (:name curr))
   [:option {:value (:id curr)} (:name curr)])
 
 (defn add-select

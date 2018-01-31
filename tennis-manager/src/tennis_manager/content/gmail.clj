@@ -6,10 +6,6 @@
                        PasswordAuthentication Message$RecipientType)))
 
 (defn send-gmail [{:keys [from to subject text user password]}]
-  (println "-----------------------------------------------------")
-  (println text)
-  (println "-----------------------------------------------------")
-
   (let [auth (proxy [Authenticator] []
                (getPasswordAuthentication []
                  (PasswordAuthentication. user password)))
@@ -25,6 +21,5 @@
               (.setSubject subject)
               (.setFrom (InternetAddress. from)))]
     (doseq [addr to]
-      (println "addr: " addr)
       (.addRecipient msg Message$RecipientType/TO (InternetAddress. addr)))
     (Transport/send msg)))

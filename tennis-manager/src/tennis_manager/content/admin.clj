@@ -81,7 +81,6 @@
 
 (defn load-schedule
   []
-  (println "load schedule")
   (let [title "Load Schedule"]
     [:form#loadscheduleform.form-horizontal {:method "post" :action "/load-schedule"}
      [:table.table.table-sm
@@ -100,7 +99,6 @@
 
 (defn load-schedule-file
   []
-  (println "load schedule file")
   (let [title "Load Schedule File"]
     [:form#loadschedulefileform.form-horizontal {:method "post" :action "/load-schedule-file" :enctype "multipart/form-data"}
      [:table.table.table-sm
@@ -129,7 +127,6 @@
 
 (defn select-form
   [admin-actions]
-  (println "in select-form")
   (list
     [:div#admin-form-div.panel.panel-default
      [:table.table.table-sm.admin-form
@@ -147,7 +144,6 @@
   )
 
 (defn admin []
-  (println "in admin")
   (let [admin-actions
         [{:id "add-club" :name "Add club" :content (club-content)}
          {:id "add-season" :name "Add season" :content (season-content)}

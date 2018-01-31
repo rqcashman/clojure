@@ -82,19 +82,23 @@
   (let [title "Send Availability Email"]
     [:form#sendavailabilityemail.form-horizontal {:method "post" :action "/send-availability-email"}
      [:table.table.table-sm
-      (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title " for " team-name]]]
       (layout/hr-row form-span "90%")
-      [:tr [:td] [:td {:colspan 3 :align "left"} [:h5 "Email Header"]]]
-      [:tr [:td]
-       [:td [:span.bold-text "Match Date:"]]
-       [:td {:colspan 2} [:span#av_match_date "January 3"]]]
-      [:tr [:td]
-       [:td [:span.bold-text "Match Time:"]]
-       [:td {:colspan 2} [:span#av_match_time "02:30 PM"]]]
-      [:tr [:td]
-       [:td [:span.bold-text "Location:"]]
-       [:td {:colspan 2} [:span#av_match_location "Harpers"]]]
+      [:tr
+       [:td {:width "50%"} "&nbsp;"]
+       [:td {:colspan 2 :align "center"}
+        [:table.table.table-sm.table-compact
+         [:tr [:td] [:td {:colspan 3 :align "center"} [:h5 "Email Header"]]]
+         [:tr [:td]
+          [:td [:span.bold-text "Match Date:"]]
+          [:td {:colspan 2} [:span#av_match_date "January 3"]]]
+         [:tr [:td]
+          [:td [:span.bold-text "Match Time:"]]
+          [:td {:colspan 2} [:span#av_match_time "02:30 PM"]]]
+         [:tr [:td]
+          [:td [:span.bold-text "Location:"]]
+          [:td {:colspan 2} [:span#av_match_location "Harpers"]]]]]
+       [:td {:width "50%"} "&nbsp;"]]
       (layout/hr-row form-span "90%")
       (add-form-control "Message:" {:id "av_message" :name "message" :cols 45 :maxlength 2000 :rows 7 :type "text-area"} "Let me know if you are available to play.")
       (add-form-control "Signature:" {:id "av_signature" :name "signature" :cols 45 :maxlength 200 :rows 3 :type "text-area"} "Rick Cashman\n513.227.9278")
@@ -119,35 +123,53 @@
 (defn show-availability-form
   "docstring"
   [team-name]
-  (let [title "Show Availability"]
-    [:form#showavailabilityemail.form-horizontal {:method "post" :action "/get-availability"}
+  (let [title "Update Availability"]
+    [:form#updateavailability.form-horizontal {:method "post" :action "/update-availability"}
      [:table.table.table-sm
-      (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title " for " team-name]]]
       (layout/hr-row form-span "90%")
-      [:tr [:td] [:td {:colspan 3 :align "left"} [:h5 "Email Header"]]]
-      [:tr [:td]
-       [:td [:span.bold-text "Match Date:"]]
-       [:td {:colspan 2} [:span#av_match_date "January 3"]]]
-      [:tr [:td]
-       [:td [:span.bold-text "Match Time:"]]
-       [:td {:colspan 2} [:span#av_match_time "02:30 PM"]]]
-      [:tr [:td]
-       [:td [:span.bold-text "Location:"]]
-       [:td {:colspan 2} [:span#av_match_location "Harpers"]]]
+      [:tr
+       [:td {:width "5%"} "&nbsp;"]
+       [:td {:colspan 2 :align "center"}
+        [:table.table.table-sm.table-compact
+         [:tr [:td]
+          [:td {:width "12%" :nowrap "true"} [:span.bold-text "Match Date:"]]
+          [:td {:colspan 2 :align "left"} [:span#pa_match_date "January 32nd"]]]
+         [:tr [:td]
+          [:td {:nowrap "true"} [:span.bold-text "Match Time:"]]
+          [:td {:colspan 2 :align "left"} [:span#pa_match_time "25:30 PM"]]]
+         [:tr [:td]
+          [:td {:nowrap "true"} [:span.bold-text "Location:"]]
+          [:td {:colspan 2 :align "left"} [:span#pa_match_location "No where"]]]]]
+       [:td {:width "5%"} "&nbsp;"]]
       (layout/hr-row form-span "90%")
-      (add-form-control "Message:" {:id "sv_message" :name "message" :cols 45 :maxlength 2000 :rows 7 :type "text-area"} "Let me know if you are available to play.")
-      ;(add-form-control "Signature:" {:id "av_signature" :name "signature" :cols 45 :maxlength 200 :rows 3 :type "text-area"} "Rick Cashman\n513.227.9278")
-      ;(add-form-control "Send to Subs:" {:id "av_send_subs" :name "send_subs" :type "checkbox"} nil)
+      [:tr
+       [:td {:width "5%"} "&nbsp;"]
+       [:td {:colspan 2 :align "center"}
+        [:table.table.table-sm
+         [:thead.table-inverse
+          [:td {:align "left"} "Player name"]
+          [:td {:align "center"} "Available"]
+          [:td {:align "center"} "Status"]
+          [:td {:align "center"} "Email Sent"]
+          [:td {:align "center"} "Email Response"]
+          [:td {:align "left"} "Email Response Time"]]
+         [:tbody#av-details-body
+          (layout/empty-row 6)]]
+        [:td {:width "5%"} "&nbsp;"]]]
       (layout/hr-row form-span "90%")
       (layout/empty-row form-span)
-      [:tr
-       [:td {:colspan form-span :align "center"}
-        [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]]
+      [:tr [:td {:colspan form-span :align "center"}
+            [:table
+             [:td {:width "50%"} "&nbsp;"]
+             [:td {:align "right" :nowrap "true"}
+              [:button {:type "button" :onclick (str "return processRequest('#updateavailability', '/update-availability', '" title "')")} title]]
+             [:td {:align "left" :nowrap "true"}
+              [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
+             [:td {:width "5%"} "&nbsp;"]]]]
       [:tr.hidden-control
        [:td {:colspan form-span :align "center"}
-        [:input.hidden-control {:id "av_team_id" :name "team_id"}]
-        [:input.hidden-control {:id "av_match_id" :name "match_id"}]]]
+        [:input.hidden-control {:id "pa_match_id" :name "match_id"}]]]
       (layout/empty-row form-span)]]))
 
 
@@ -197,7 +219,6 @@
 (defn matches
   "docstring"
   []
-  (println "matches")
   (let [team-name (:name (nth (team/team usr/users_team_id) 0))
         match-actions
         [{:id "show-schedule" :name "Match Schedule" :content (schedule-form team-name)}

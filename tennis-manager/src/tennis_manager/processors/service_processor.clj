@@ -134,6 +134,22 @@
         (println "Exception in add-update-player-info: " (.getMessage e))
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
+(defn update-player-availability
+  "docstring"
+  [parms]
+  (let [match-id (:match_id parms)]
+    (try
+      (sched/reset-match-availability match-id)
+      (doseq [keyval parms]
+        (if (s/starts-with? (key keyval) ":pl-av-")
+          (let [player-id (nth (s/split (str (key keyval)) #":pl-av-") 1)]
+            (sched/update-player-availability match-id player-id 1))))
+      (hash-map :status "success" :status-code 200 :msg (str "Match availability updated for team"))
+    (catch Exception e
+      (println "Exception in add-update-player-info: " (.getMessage e))
+      (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+
+
 (defn load-schedule-file
   "docstrng"
   [& params]
@@ -231,7 +247,7 @@
       (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e)))))
 
 (defn get-email-body
-  ""
+  "generate html to use as rich text email"
   [message signature match-info]
   (str
     "<table width='100%' align='left' cellpadding='0' cellspacing='0'>"
@@ -261,7 +277,7 @@
     "   </tr>"
     "   <tr>"
     "      <td width='5%'></td>"
-    "      <td> " (s/replace message #" \n " " <br> ") " </td> "
+    "      <td> " (s/replace message #"\n" "<br>") "</td>"
     "   </tr>"
     "   <tr>"
     "      <td width='5%'></td> "
@@ -290,9 +306,7 @@
                 email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
             (mail/send-gmail email-parms)
             (comm/add_player_communication (:id player) match_id uuid)))))
-    (if (comm/match_avail_email_sent match_id)
-      (comm/update_match_avail_email_sent_date match_id)
-      (comm/add_match_avail_email_sent match_id))
+    (comm/upsert_match_avail_email_sent match_id)
     (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Availability email sent")
     (catch Exception e
       (println "Error sending availability email.  Msg" (.getMessage e))

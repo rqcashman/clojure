@@ -29,6 +29,11 @@ thead {
     display: none;
 }
 
+.table-compact tr td {
+    padding: 0px;
+    margin: 0px;
+    background-color: #efefef;
+}
 .points {
     text-align: center;
 }
@@ -127,5 +132,14 @@ thead {
 
 #sr-details-body td:hover, .avail-cursor {
     cursor: pointer;
+}
+
+.player-avail {
+    color: #006400;
+    font-weight: bold;
+}
+
+.player-inactive {
+    color: #fa8072;
 }
 

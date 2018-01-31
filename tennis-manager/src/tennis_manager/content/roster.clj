@@ -101,7 +101,6 @@
 
 (defn select-form
   [roster-actions]
-  (println "in select-form")
   (list
     [:div#roster-form-div.panel.panel-default
      [:table.table.table-sm.roster-form
@@ -120,7 +119,6 @@
   )
 
 (defn roster []
-  (println "in roster")
   (let [roster-actions
         [{:id "add-player" :name "Add player" :content (add-player)}
          {:id "show-roster" :name "Show roster" :content (show-roster)}]]

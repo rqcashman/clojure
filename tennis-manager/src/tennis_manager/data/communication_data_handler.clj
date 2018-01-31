@@ -71,6 +71,14 @@
       (j/execute! sys/db-cred
                   [(str "insert into match_availability values (?,?,?)") match_id player_id avail_flag]))))
 
+(defn upsert_match_avail_email_sent
+  "docstring"
+  [match_id]
+  (if (match_avail_email_sent match_id)
+    (update_match_avail_email_sent_date match_id)
+    (add_match_avail_email_sent match_id))
+  )
+
 
 
 

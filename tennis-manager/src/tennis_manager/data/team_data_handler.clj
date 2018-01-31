@@ -23,7 +23,6 @@
 (defn team-schedule
   "docstring"
   [season-id team-id]
-  (println "team-schedule")
   (j/query sys/db-cred
            [(str "select s.match_id, s.season_id, DATE_FORMAT(s.match_date,'%Y-%m-%d') as match_date,DATE_FORMAT(s.match_date,'%h:%i %p') as match_time"
                  " ,s.home_team_id, s.away_team_id, ht.name as home_team, at.name as away_team, home_team_points, away_team_points, cl.name as home_club_name"
