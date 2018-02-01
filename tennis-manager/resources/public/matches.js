@@ -58,3 +58,12 @@ function processRequest(form_id, uri, title) {
     }
     return false;
 }
+
+function swapClass(elem) {
+    if(elem.checked) {
+        elem.parentElement.parentElement.className = "player-avail";
+    }
+    else {
+        elem.parentElement.parentElement.className = "";
+    }
+}

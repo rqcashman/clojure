@@ -18,6 +18,7 @@
                  [org.clojure/clojurescript "1.9.542"]
                  [org.clojure/core.async "0.3.442"]
                  [org.clojure/java.jdbc "0.7.0-alpha3"]
+                 [ring/ring-codec "1.1.0"]
                  [ring/ring-defaults "0.2.1"]
                  [ring/ring-json "0.4.0"]]
 

@@ -150,10 +150,10 @@
          [:thead.table-inverse
           [:td {:align "left"} "Player name"]
           [:td {:align "center"} "Available"]
-          [:td {:align "center"} "Status"]
-          [:td {:align "center"} "Email Sent"]
           [:td {:align "center"} "Email Response"]
-          [:td {:align "left"} "Email Response Time"]]
+          [:td {:align "center"} "Email Sent"]
+          [:td {:align "left"} "Email Response Time"]
+          [:td {:align "center"} "Status"]]
          [:tbody#av-details-body
           (layout/empty-row 6)]]
         [:td {:width "5%"} "&nbsp;"]]]

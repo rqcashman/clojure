@@ -24,6 +24,10 @@
         avail (case (:available row)
                 1 "Y"
                 "N")
+        long-status (case (:status row)
+                      "A" "Active"
+                      "S" "Sub"
+                      "I" "Inactive")
         row-class (if (= avail "Y") "player-avail" (if (= (:status row) "I") "player-inactive" ""))]
     ;we want the inactive players at the bottom
     ;so we call this twice with the same result set
@@ -32,10 +36,15 @@
           (and (= (:status row) "I") (= active? false)))
       (str "<tr class='" row-class "' id='" (:id row) "' onclick=''>"
            "<td nowrap>" (:last_name row) ", " (:first_name row) "</td>"
-           "<td align='center'><input type='checkbox' name='pl-av-" (:id row) "' " (if (= avail "Y") " checked ") (if (= (:status row) "I") " disabled ") "</input></td>"
-           "<td align='center'>" (:status row) "</td>"
-           "<td align='center'>" sent_flag "</td>"
+           "<td align='center'>
+               <input type='checkbox' name='pl-av-" (:id row) "'"
+               (if (= avail "Y") " checked")
+               (if (= (:status row) "I") " disabled")
+               " onclick='swapClass(this);'</input>"
+           "</td>"
            "<td align='center'>" player_response "</td>"
+           "<td align='center'>" sent_flag "</td>"
+           "<td align='center'>" long-status "</td>"
            "<td>" (if (= (:response_date row) nil) "" (:response_date row)) "</td>"
            "</tr>"))))
 
@@ -93,7 +102,7 @@
               (ef/at
                 "#pa_match_date" (ef/content (:match_date row)))
               (ef/at
-                "#pa_matc_time" (ef/content (:match_time row)))
+                "#pa_match_time" (ef/content (:match_time row)))
               (ef/at
                 "#pa_match_location" (ef/content (:club_name row)))
               )
@@ -101,4 +110,3 @@
             body))))
     (ef/at
       "#av-details-body tr:first-child" (ef/remove-node))))
-

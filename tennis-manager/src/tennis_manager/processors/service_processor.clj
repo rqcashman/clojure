@@ -13,7 +13,8 @@
             [tennis-manager.data.season-data-handler :as season]
             [tennis-manager.data.team-data-handler :as team]
             [tennis-manager.data.user-info :as usr]
-            [tennis-manager.data.system-info :as sys])
+            [tennis-manager.data.system-info :as sys]
+            [ring.util.codec :as codec])
   (:import (java.sql SQLException)
            (clojure.lang EdnReader$StringReader)
            (java.io StringReader BufferedReader)))
@@ -145,9 +146,9 @@
           (let [player-id (nth (s/split (str (key keyval)) #":pl-av-") 1)]
             (sched/update-player-availability match-id player-id 1))))
       (hash-map :status "success" :status-code 200 :msg (str "Match availability updated for team"))
-    (catch Exception e
-      (println "Exception in add-update-player-info: " (.getMessage e))
-      (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+      (catch Exception e
+        (println "Exception in add-update-player-info: " (.getMessage e))
+        (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
 
 (defn load-schedule-file
@@ -246,50 +247,76 @@
       (println "Error sending availability email.  Msg" (.getMessage e))
       (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e)))))
 
+(defn format-phone
+  [phone-number]
+  (if (> (count phone-number) 7)
+    (str (subs phone-number 0 3) "." (subs phone-number 3 6) "." (subs phone-number 6))
+    (if (= (count phone-number) 7)
+      (str (subs phone-number 0 3) "." (subs phone-number 3))
+      phone-number)))
+
+(defn format-map-link
+  "docstring"
+  [address]
+  (str "<a href='https://maps.google.com/maps/dir/?saddr=My+Location&daddr=" (codec/form-encode address)  "'>" address "</a"))
+
 (defn get-email-body
   "generate html to use as rich text email"
   [message signature match-info]
-  (str
-    "<table width='100%' align='left' cellpadding='0' cellspacing='0'>"
-    "   <tr> "
-    "      <td nowrap style='font-weight:bold'>Match date:</td>"
-    "      <td width='5%'>&nbsp;</td>"
-    "      <td nowrap>" (:match_date match-info) "</td> "
-    "      <td width='80%'>&nbsp;</td>"
-    "   </tr>"
-    "   <tr>"
-    "      <td nowrap><b>Match time:</b></td>"
-    "      <td width='5%'>&nbsp;</td>"
-    "      <td nowrap>" (:match_time match-info) "</td>"
-    "      <td width='80%'>&nbsp;</td>"
-    "   </tr>"
-    "   <tr>"
-    "      <td nowrap><b>Location:</b></td>"
-    "      <td width='5%'>&nbsp;</td>"
-    "      <td nowrap>" (:club_name match-info) "</td>"
-    "      <td width='80%'>&nbsp;</td>"
-    "   </tr>"
-    "   <tr><td colspan='4'>&nbsp;</td></tr>"
-    "</table><br>"
-    "<table width='70%' align='left'>"
-    "   <tr>"
-    "      <td align='left' colspan='2'>---salutation---,</td>"
-    "   </tr>"
-    "   <tr>"
-    "      <td width='5%'></td>"
-    "      <td> " (s/replace message #"\n" "<br>") "</td>"
-    "   </tr>"
-    "   <tr>"
-    "      <td width='5%'></td> "
-    "      <td nowrap><a href='http://localhost:3000/availability-reply?available=Y&player-token=--uuid--'>I can play</a> "
-    "            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://localhost:3000/availability-reply?available=N&player-token=--uuid--'>I'm out</a>"
-    "      </td> "
-    "   </tr>"
-    "   <tr><td colspan='2'>&nbsp;</td>"
-    "    <tr>"
-    "        <tr><td colspan='2'><h4>" (s/replace signature #"\n" "<br>") "</h4></td>"
-    "    </tr>"
-    "</table>"))
+  (let [address (str (:address match-info) ", " (:city match-info) " " (:state match-info) ", " (:zip_code match-info))]
+    (str
+      "<table width='100%' align='left' cellpadding='0' cellspacing='0'>"
+      "   <tr> "
+      "      <td nowrap style='font-weight:bold'>Match date:</td>"
+      "      <td width='5%'>&nbsp;</td>"
+      "      <td nowrap>" (:match_date match-info) "</td> "
+      "      <td width='80%'>&nbsp;</td>"
+      "   </tr>"
+      "   <tr>"
+      "      <td nowrap><b>Match time:</b></td>"
+      "      <td width='5%'>&nbsp;</td>"
+      "      <td nowrap>" (:match_time match-info) "</td>"
+      "      <td width='80%'>&nbsp;</td>"
+      "   </tr>"
+      "   <tr>"
+      "      <td nowrap><b>Location:</b></td>"
+      "      <td width='5%'>&nbsp;</td>"
+      "      <td nowrap>" (:club_name match-info) "</td>"
+      "      <td width='80%'>&nbsp;</td>"
+      "   </tr>"
+      "   <tr>"
+      "      <td nowrap><b>Address:</b></td>"
+      "      <td width='5%'>&nbsp;</td>"
+      "      <td nowrap>" (format-map-link address) "</td>"
+      "      <td width='80%'>&nbsp;</td>"
+      "   </tr>"
+      "   <tr>"
+      "      <td nowrap><b>Phone number:</b></td>"
+      "      <td width='5%'>&nbsp;</td>"
+      "      <td nowrap>" (format-phone (str (:phone_number match-info))) "</td>"
+      "      <td width='80%'>&nbsp;</td>"
+      "   </tr>"
+      "   <tr><td colspan='4'>&nbsp;</td></tr>"
+      "</table><br>"
+      "<table width='70%' align='left'>"
+      "   <tr>"
+      "      <td align='left' colspan='2'>---salutation---,</td>"
+      "   </tr>"
+      "   <tr>"
+      "      <td width='5%'></td>"
+      "      <td> " (s/replace message #"\n" "<br>") "</td>"
+      "   </tr>"
+      "   <tr>"
+      "      <td width='5%'></td> "
+      "      <td nowrap><a href='http://localhost:3000/availability-reply?available=Y&player-token=--uuid--'>I can play</a> "
+      "            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://localhost:3000/availability-reply?available=N&player-token=--uuid--'>I'm out</a>"
+      "      </td> "
+      "   </tr>"
+      "   <tr><td colspan='2'>&nbsp;</td>"
+      "    <tr>"
+      "        <tr><td colspan='2'><h4>" (s/replace signature #"\n" "<br>") "</h4></td>"
+      "    </tr>"
+      "</table>")))
 
 (defn send-avail-email
   "docstring"
@@ -300,7 +327,9 @@
           subject (str "Match availability for " (:match_date match-info))
           parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text email-body})]
       (doseq [player (team/team-roster usr/users_team_id)]
-        (if (and (not= (:status player) "I") (or (not= (:status player) "S") (not= send_subs nil)))
+        (if (and (complement (s/blank? (:email player)))
+                 (not= (:status player) "I")
+                 (or (not= (:status player) "S") (not= send_subs nil)))
           (let [uuid (s/replace (str (java.util.UUID/randomUUID)) #"-" "")
                 email-msg (s/replace (s/replace email-body #"---salutation---" (str (:first_name player) " " (:last_name player))) #"--uuid--" uuid)
                 email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
