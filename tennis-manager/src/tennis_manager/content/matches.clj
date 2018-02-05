@@ -172,32 +172,70 @@
         [:input.hidden-control {:id "pa_match_id" :name "match_id"}]]]
       (layout/empty-row form-span)]]))
 
+(defn add-match-select-controls
+  "docstring"
+  [list court]
+  (let [player-1 (str "c" court "-p1")
+        player-2 (str "c" court "-p2")]
+    (conj list
+          [:tr
+           [:td [:span {:style "font-weight:bold"} (str "Court " court)]]
+           [:td [:select {:id player-1 :name player-1 }
+                 [:option "Rick Cashman"]]]
+           [:td [:select {:id player-2 :name player-2 }]]])))
 
 (defn lineup-form
   "docstring"
   [team-name]
-  [:table.table.table-sm
-   (layout/empty-row form-span)
-   [:tr [:td {:colspan form-span :align "center"} [:h4 team-name " Match Lineup"]]]
-   (layout/hr-row form-span "90%")
-   [:tr
-    [:td {:width "5%:"}]
-    [:td {:colspan 2}
-     [:table#match-sched.table.table-striped.table-sm
-      [:thead.table-inverse
-       [:tr {:align "center"}
-        [:td "Date"]
-        [:td "Time"]
-        [:td "Opponent"]
-        [:td "Location"]
-        [:td {:name "team-name"} "Points"]
-        [:td "Opponent Points"]
-        [:td "Availability Email Sent"]
-        [:td "Lineup Sent"]]]
-      [:tbody#match-sched-body]
-      (get-team-schedule)]]
-    [:td {:width "5%:"}]]
-   (layout/hr-row form-span "90%")])
+  [:form#updatelineup.form-horizontal {:method "post" :action "/update-lineup"}
+  (let [title "Match Lineup"]
+    [:table.table.table-sm
+     (layout/empty-row form-span)
+     [:tr [:td {:colspan form-span :align "center"} [:h4 team-name " " title]]]
+     (layout/hr-row form-span "90%")
+     [:tr
+      [:td {:width "5%"} "&nbsp;"]
+      [:td {:colspan 2 :align "center"}
+       [:table.table.table-sm.table-compact
+        [:tr [:td]
+         [:td {:width "20%" :nowrap "true"} [:span.bold-text "Match Date:"]]
+         [:td {:colspan 2 :align "left"} [:span#ml_match_date "January 32nd"]]]
+        [:tr [:td]
+         [:td {:nowrap "true"} [:span.bold-text "Match Time:"]]
+         [:td {:colspan 2 :align "left"} [:span#ml_match_time "25:30 PM"]]]
+        [:tr [:td]
+         [:td {:nowrap "true"} [:span.bold-text "Location:"]]
+         [:td {:colspan 2 :align "left"} [:span#ml_match_location "No where"]]]]]
+      [:td {:width "5%"} "&nbsp;"]]
+     (layout/empty-row form-span)
+     [:tr
+      [:td {:width "5%:"}]
+      [:td {:colspan 2}
+       [:table#match-lineup.table.table-striped.table-sm
+        [:thead.table-inverse
+         [:tr {:align "left"}
+          [:td ""]
+          [:td "Player 1"]
+          [:td "Player 2"]]]
+        [:tbody#match-lineup-body]
+        (layout/empty-row 3)
+        (reduce #(add-match-select-controls %1 %2) () (reverse (range 1 5)))
+        (layout/empty-row 3)]
+       [:td {:width "5%:"}]]]
+     (layout/empty-row form-span)
+     [:tr [:td {:colspan form-span :align "center"}
+           [:table
+            [:td {:width "50%"} "&nbsp;"]
+            [:td {:align "right" :nowrap "true"}
+             [:button {:type "button" :onclick (str "return processRequest('#updatelineup', '/update-lineup', '" title "')")} title]]
+            [:td {:align "left" :nowrap "true"}
+             [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
+            [:td {:width "5%"} "&nbsp;"]]]]
+     [:tr.hidden-control
+      [:td {:colspan form-span :align "center"}
+       [:input.hidden-control {:id "ml_team_id" :name "team_id"}]
+       [:input.hidden-control {:id "ml_match_id" :name "match_id"}]]]
+     (layout/hr-row form-span "90%")])])
 
 (defn select-form
   [match-actions]
@@ -212,10 +250,8 @@
        (layout/add-select #(layout/actions match-actions) layout/option "match-list" "Match Action:" 1 (str "change_form(this.value);"))
        (layout/hr-row 3 "90%")
        (layout/empty-row 3)]]]
-    [:br]
-    [:hr]
-    [:br])
-  )
+    [:br] [:hr] [:br]))
+
 (defn matches
   "docstring"
   []
@@ -229,4 +265,4 @@
     (list
       ;(select-form match-actions)
       (map add-div match-actions)
-      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span "location.reload();")}))))
+      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span)}))))

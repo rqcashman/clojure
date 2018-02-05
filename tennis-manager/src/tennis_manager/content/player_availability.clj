@@ -2,13 +2,13 @@
   (:use [hiccup.form]
         [hiccup.element :only (link-to)]
         [tennis-manager.data.communication-data-handler :as comm]
+        [tennis-manager.data.schedule-data-handler :as sched]
         [tennis-manager.content.page-layout :as layout]
         [hiccup.page :only (html5 include-css include-js)]))
 
 (defn show_update_status
   "docstring"
   [comm_detail available]
-  (println "comm detail: " comm_detail)
   (let [avail_text (if (= available "Y") [:span {:style "color:green;font-weight:bold"} "available"] [:span {:style "color:red;font-weight:bold"} "unavailable"])]
     [:br] [:br]
     [:table.table-sm {:width "40%"}
@@ -27,7 +27,6 @@
 (defn update_availability
   "docstring"
   [player-token available]
-  (println "update availability " player-token available)
   (let [comm_detail (comm/get_communication_detail player-token)]
     (list
       (try
@@ -35,7 +34,7 @@
           (do
             (let [comm_rcd (nth comm_detail 0)]
               (comm/update_player_commuication_response player-token available)
-              (comm/upsert_player_availability (:match_id comm_rcd) (:player_id comm_rcd) available)
+              (sched/upsert_player_availability (:match_id comm_rcd) (:player_id comm_rcd) available)
               (show_update_status comm_rcd available)))
           [:h2 "Invalid link.  The link was invalid.  If you copied and pasted the link make sure you copied the complete link"])
         (catch Exception e

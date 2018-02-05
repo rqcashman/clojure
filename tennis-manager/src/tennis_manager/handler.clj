@@ -46,8 +46,9 @@
            (POST "/add-team" [& params] (rr/response (pr/add-team params)))
            (POST "/load-schedule" [& params] (rr/response (pr/load-schedule params)))
            (POST "/load-schedule-file" [& params] (rr/response (pr/load-schedule-file params)))
-           (POST "/update-player" [& params] (rr/response (pr/update-player-info params)))
            (POST "/update-availability" [& params] (rr/response (pr/update-player-availability params)))
+           (POST "/update-lineup" [& params] (rr/response (pr/update-lineup params)))
+           (POST "/update-player" [& params] (rr/response (pr/update-player-info params)))
            (POST "/send-availability-email" [& params] (rr/response (pr/send-avail-email params)))
 
            (GET "/" [] "Hello World")

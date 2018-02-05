@@ -126,4 +126,4 @@
       (select-form roster-actions)
       (map add-div roster-actions)
       (add-div {:id "update-player" :name "Update player" :content (update-player-form)})
-      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span "change_form(current_form_id);")}))))
+      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span)}))))

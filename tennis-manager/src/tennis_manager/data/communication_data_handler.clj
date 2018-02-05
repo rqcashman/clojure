@@ -33,15 +33,6 @@
             :result-set-fn (fn [rs]
                              (if (> (:ct (nth rs 0)) 0) true false))}))
 
-(defn match_availability_exists
-  "docstring"
-  [match_id player_id]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from match_availability where match_id=? and player_id=?") match_id player_id]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (if (> (:ct (nth rs 0)) 0) true false))}))
-
 
 (defn get_communication_detail
   "docstring"
@@ -60,16 +51,6 @@
   (let [avail_flag (if (= available "Y") 1 0)]
     (j/execute! sys/db-cred
                 [(str "update player_communication set response=?, response_date=current_timestamp() where uuid=?") avail_flag uuid])))
-
-(defn upsert_player_availability
-  "docstring"
-  [match_id player_id available]
-  (let [avail_flag (if (= available "Y") 1 0)]
-    (if (match_availability_exists match_id player_id)
-      (j/execute! sys/db-cred
-                  [(str "update match_availability set available=? where match_id=? and player_id=?") avail_flag match_id player_id])
-      (j/execute! sys/db-cred
-                  [(str "insert into match_availability values (?,?,?)") match_id player_id avail_flag]))))
 
 (defn upsert_match_avail_email_sent
   "docstring"

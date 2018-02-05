@@ -24,9 +24,14 @@ function change_to_avail_form(match_id) {
 
 
 function set_lineup(match_id) {
+    $("#set-lineup").addClass("avail-small");
+    tennis_manager.matches.set_lineup(match_id);
     change_form("set-lineup");
 }
 
+function player_selected(selected_value) {
+    return tennis_manager.matches.player_selected(selected_value);
+}
 
 function get_roster_data() {
     $("#sr_team_name").text($("#team_id option:selected").text());
@@ -40,6 +45,13 @@ function update_player_form(player_id) {
 
 $().ready(function () {
     change_form(current_form_id);
+
+
+    $("#c1-p2xx").mousedown(function (e) {
+        if (tennis_manager.matches.player_selected(e.target.valueOf().value)) {
+            e.preventDefault();
+        }
+    });
 });
 
 function isNumberKey(evt) {
@@ -60,10 +72,12 @@ function processRequest(form_id, uri, title) {
 }
 
 function swapClass(elem) {
-    if(elem.checked) {
+    if (elem.checked) {
         elem.parentElement.parentElement.className = "player-avail";
     }
     else {
         elem.parentElement.parentElement.className = "";
     }
 }
+
+

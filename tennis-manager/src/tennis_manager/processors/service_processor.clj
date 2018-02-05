@@ -144,10 +144,63 @@
       (doseq [keyval parms]
         (if (s/starts-with? (key keyval) ":pl-av-")
           (let [player-id (nth (s/split (str (key keyval)) #":pl-av-") 1)]
-            (sched/update-player-availability match-id player-id 1))))
+            (sched/upsert_player_availability match-id player-id "Y"))))
       (hash-map :status "success" :status-code 200 :msg (str "Match availability updated for team"))
       (catch Exception e
         (println "Exception in add-update-player-info: " (.getMessage e))
+        (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+
+(def player-id-arr '("c1-p1" "c1-p2" "c2-p1" "c2-p2" "c3-p1" "c3-p2" "c4-p1" "c4-p2"))
+
+(defn check-for-duplicate-player-assignment
+  "docstring"
+  [parms]
+  (let [player-list (reduce (fn [list id] (conj list ((keyword id) parms))) () player-id-arr)
+        dupe-list (->> player-list frequencies (remove #(= 1 (val %))) keys)]
+    dupe-list))
+
+(defn check-for-null-player-assignment
+  [parms]
+  "docstring"
+  (let [player-list (reduce (fn [list id] (conj list ((keyword id) parms))) () player-id-arr)]
+    (some #(= % "0") player-list)))
+
+
+(defn get-player-names
+  "docstring"
+  [player-id-list]
+  (reduce (fn [list id] (let [p (nth (player/player id) 0)]
+                          (println "player: " p)
+                          (conj list (str (:last_name p) ", " (:first_name p)))))
+          ()
+          player-id-list))
+
+(defn update-lineup
+  "docstring"
+  [parms]
+  (let [match-id (:match_id parms)]
+    (try
+      (if (= (check-for-null-player-assignment parms) true)
+        (hash-map :status "failed" :status-code 200 :msg (str "Not all courts have players assigned."))
+        (let [dupe-list (check-for-duplicate-player-assignment parms)]
+          (if (> (count dupe-list) 0)
+            (hash-map :status "failed" :status-code 200 :msg (str "Some players assigned to muliptle courts. " (get-player-names dupe-list)))
+            (do
+              (println " parms: " parms)
+              (dotimes [x 4]
+                (let [court (inc x)
+                      player1 ((keyword (str "c" court "-p1")) parms)
+                      player2 ((keyword (str "c" court "-p2")) parms)]
+                  (println "===========================")
+                    (println "x: " x)
+                    (println " court: " court)
+                    (println "p1: " player1)
+                    (println " p2: " player2)
+                    (sched/upsert-match-lineup match-id usr/users_team_id court player1 player2)))
+              (hash-map :status "success" :status-code 200 :msg (str "Match lineup updated for team"))))))
+      (catch Exception e
+        (println "Exception in update-lineup: " e)
+        (println "Exception in update-lineup: " (.getMessage e))
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
 
@@ -258,7 +311,7 @@
 (defn format-map-link
   "docstring"
   [address]
-  (str "<a href='https://maps.google.com/maps/dir/?saddr=My+Location&daddr=" (codec/form-encode address)  "'>" address "</a"))
+  (str "<a href='https://maps.google.com/maps/dir/?saddr=My+Location&daddr=" (codec/form-encode address) "'>" address "</a"))
 
 (defn get-email-body
   "generate html to use as rich text email"

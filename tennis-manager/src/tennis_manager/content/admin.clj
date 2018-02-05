@@ -153,4 +153,4 @@
     (list
       (select-form admin-actions)
       (map add-div admin-actions)
-      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span "location.reload();")}))))
+      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span)}))))

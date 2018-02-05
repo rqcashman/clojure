@@ -17,7 +17,7 @@
   [match-id]
   (j/query sys/db-cred
            [(str "select DATE_FORMAT(s.match_date,'%M %D, %Y') as match_date,DATE_FORMAT(s.match_date,'%h:%i %p') as match_time"
-                 " ,cl.name as club_name, cl.address, cl.city, cl.state, cl.zip_code, cl.phone_number"
+                 " ,cl.name as club_name, cl.address, cl.city, cl.state, cl.zip_code, cl.phone_number, s.home_team_id, s.away_team_id"
                  " from schedule s"
                  " join team t on t.id = s.home_team_id"
                  " join club cl on cl.id = t.club_id"
@@ -42,12 +42,15 @@
   [match-id]
   (j/query sys/db-cred
            [(str "select p.id, p.first_name, p.last_name, p.status,
-            pc.date_sent, pc.response, DATE_FORMAT(pc.response_date, '%M %D, %Y %h:%i %p') as response_date, ma.available
+            pc.date_sent, pc.response, DATE_FORMAT(pc.response_date, '%M %D, %Y %h:%i %p') as response_date, ma.available,
+            mc.home_player1, mc.home_player2, mc.away_player1, mc.away_player2, mc.court_number
             from player p
             left join player_communication pc on pc.player_id = p.id and pc.match_id = ?
             left join match_availability ma on ma.player_id = p.id and ma.match_id = ?
+            left join match_courts mc on mc.match_id = ?
+            and (home_player1 = p.id or home_player2 = p.id or away_player1 = p.id or away_player1 = p.id)
             where p.team_id = ?
-            order by p.status, p.last_name") match-id match-id usr/users_team_id]))
+            order by p.last_name, p.first_name") match-id match-id match-id usr/users_team_id]))
 
 (defn reset-match-availability
   "docstring"
@@ -55,11 +58,63 @@
   (j/execute! sys/db-cred
               [(str "update match_availability set available=0 where match_id = ?") match-id]))
 
+(defn reset-match-lineup
+  "docstring"
+  [match-id team-id]
+  (let [match (match-info match-id)]
+    (if (= (:home_team_id match) team-id)
+      (j/execute! sys/db-cred
+                  [(str "update match_courts set home_player_1 = null, home_player_2 = null where match_id = ?") match-id])
+      (j/execute! sys/db-cred
+                  [(str "update match_courts set away_player_1 = null, away_player_2 = null where match_id = ?") match-id]))))
+
+(defn match_court_exists?
+  "docstring"
+  [match-id court]
+  (j/query sys/db-cred
+           [(str "select count(*) as ct from match_courts where match_id=? and court_number=?") match-id court]
+           {:as-arrays?    false
+            :result-set-fn (fn [rs]
+                             (if (> (:ct (nth rs 0)) 0) true false))}))
+(defn upsert-match-lineup
+  "docstring"
+  [match-id team-id court player1 player2]
+  (println "upsert:" match-id team-id court player1 player2)
+  (let [match (nth (match-info match-id) 0)]
+    (if (= (match_court_exists? match-id court) false)
+      (j/execute! sys/db-cred
+                  [(str "insert into match_courts values (?,?,null,null,null,null,null)") match-id, court]))
+    (if (= (:home_team_id match) team-id)
+      (j/execute! sys/db-cred
+                  [(str "update match_courts set home_player1 = ?, home_player2 = ? where match_id = ? and court_number = ?") player1 player2 match-id court])
+      (j/execute! sys/db-cred
+                  [(str "update match_courts set away_player1 = ?, away_player2 = ? where match_id = ? and court_number = ?") player1 player2 match-id court]))))
+
 (defn update-player-availability
   "docstring"
   [match-id player-id avail-value]
   (j/execute! sys/db-cred
               [(str "update match_availability set available=? where match_id = ? and player_id = ?")
                avail-value match-id player-id]))
+
+(defn match_availability_exists?
+  "docstring"
+  [match_id player_id]
+  (j/query sys/db-cred
+           [(str "select count(*) as ct from match_availability where match_id=? and player_id=?") match_id player_id]
+           {:as-arrays?    false
+            :result-set-fn (fn [rs]
+                             (if (> (:ct (nth rs 0)) 0) true false))}))
+
+
+(defn upsert_player_availability
+  "docstring"
+  [match_id player_id available]
+  (let [avail_flag (if (= available "Y") 1 0)]
+    (if (match_availability_exists? match_id player_id)
+      (j/execute! sys/db-cred
+                  [(str "update match_availability set available=? where match_id=? and player_id=?") avail_flag match_id player_id])
+      (j/execute! sys/db-cred
+                  [(str "insert into match_availability values (?,?,?)") match_id player_id avail_flag]))))
 
 
