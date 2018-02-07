@@ -152,12 +152,25 @@
 
 (def player-id-arr '("c1-p1" "c1-p2" "c2-p1" "c2-p2" "c3-p1" "c3-p2" "c4-p1" "c4-p2"))
 
+(defn removePlayersFromForfeitedCourts
+  "docstring"
+  [parms court]
+  (let [forfeit-grp (str "c" court "-forfeit-grp")
+        p1 (str "c" court "-p1")
+        p2 (str "c" court "-p2")]
+    (if (not= ((keyword forfeit-grp) parms) "0")
+      (dissoc (dissoc parms (keyword p1)) (keyword p2))
+      (conj parms))))
+
 (defn check-for-duplicate-player-assignment
   "docstring"
   [parms]
-  (let [player-list (reduce (fn [list id] (conj list ((keyword id) parms))) () player-id-arr)
-        dupe-list (->> player-list frequencies (remove #(= 1 (val %))) keys)]
-    dupe-list))
+  (let
+    [player-list (reduce (fn [list id] (conj list ((keyword id) parms))) () player-id-arr)
+     dupe-list (->> player-list frequencies (remove #(= 1 (val %))) keys)]
+    (println "dupes: " dupe-list)
+    (println "dupes: " (remove #(= nil %) dupe-list))
+    (remove #(= nil %) dupe-list)))
 
 (defn check-for-null-player-assignment
   [parms]
@@ -177,8 +190,11 @@
 
 (defn update-lineup
   "docstring"
-  [parms]
-  (let [match-id (:match_id parms)]
+  [inparms]
+  (println "===============")
+  (println " parms: " inparms)
+  (let [parms (reduce #(removePlayersFromForfeitedCourts %1 %2) inparms (range 1 5))
+        match-id (:match_id parms)]
     (try
       (if (= (check-for-null-player-assignment parms) true)
         (hash-map :status "failed" :status-code 200 :msg (str "Not all courts have players assigned."))
@@ -186,17 +202,12 @@
           (if (> (count dupe-list) 0)
             (hash-map :status "failed" :status-code 200 :msg (str "Some players assigned to muliptle courts. " (get-player-names dupe-list)))
             (do
-              (println " parms: " parms)
               (dotimes [x 4]
                 (let [court (inc x)
                       player1 ((keyword (str "c" court "-p1")) parms)
-                      player2 ((keyword (str "c" court "-p2")) parms)]
-                  (println "===========================")
-                    (println "x: " x)
-                    (println " court: " court)
-                    (println "p1: " player1)
-                    (println " p2: " player2)
-                    (sched/upsert-match-lineup match-id usr/users_team_id court player1 player2)))
+                      player2 ((keyword (str "c" court "-p2")) parms)
+                      forfeit ((keyword (str "c" court "-forfeit-grp")) parms)]
+                  (sched/upsert-match-lineup match-id usr/users_team_id court player1 player2 forfeit)))
               (hash-map :status "success" :status-code 200 :msg (str "Match lineup updated for team"))))))
       (catch Exception e
         (println "Exception in update-lineup: " e)

@@ -174,68 +174,79 @@
 
 (defn add-match-select-controls
   "docstring"
-  [list court]
+  [list court team-name]
   (let [player-1 (str "c" court "-p1")
-        player-2 (str "c" court "-p2")]
+        player-2 (str "c" court "-p2")
+        btn-grp (str "c" court "-forfeit-grp")
+        no-forfeit (str "c" court "-forfeit-none")
+        team-forfeit (str "c" court "-forfeit")
+        opp-forfeit (str "c" court "-forfeit-opp")
+        btn-disabled (if (= court 4) false true)]
     (conj list
           [:tr
            [:td [:span {:style "font-weight:bold"} (str "Court " court)]]
-           [:td [:select {:id player-1 :name player-1 }
+           [:td [:select {:id player-1 :name player-1}
                  [:option "Rick Cashman"]]]
-           [:td [:select {:id player-2 :name player-2 }]]])))
+           [:td [:select {:id player-2 :name player-2}]]
+           [:td
+            [:fieldset {:id btn-grp}
+             "&nbsp;&nbsp;" [:input {:type "radio" :value "0" :id no-forfeit :name btn-grp :disabled btn-disabled :checked true :onclick "updateForfeitBtns(this)"} "&nbsp;&nbsp;None"] [:br]
+             "&nbsp;&nbsp;" [:input {:type "radio" :value "1" :id team-forfeit :name btn-grp :disabled btn-disabled :onclick "updateForfeitBtns(this)"} "&nbsp;&nbsp;" team-name] [:br]
+             "&nbsp;&nbsp;" [:input {:type "radio" :value "2" :id opp-forfeit :name btn-grp :disabled btn-disabled :onclick "updateForfeitBtns(this)"} "&nbsp;&nbsp;Opponent"] [:br]]]])))
 
 (defn lineup-form
   "docstring"
   [team-name]
   [:form#updatelineup.form-horizontal {:method "post" :action "/update-lineup"}
-  (let [title "Match Lineup"]
-    [:table.table.table-sm
-     (layout/empty-row form-span)
-     [:tr [:td {:colspan form-span :align "center"} [:h4 team-name " " title]]]
-     (layout/hr-row form-span "90%")
-     [:tr
-      [:td {:width "5%"} "&nbsp;"]
-      [:td {:colspan 2 :align "center"}
-       [:table.table.table-sm.table-compact
-        [:tr [:td]
-         [:td {:width "20%" :nowrap "true"} [:span.bold-text "Match Date:"]]
-         [:td {:colspan 2 :align "left"} [:span#ml_match_date "January 32nd"]]]
-        [:tr [:td]
-         [:td {:nowrap "true"} [:span.bold-text "Match Time:"]]
-         [:td {:colspan 2 :align "left"} [:span#ml_match_time "25:30 PM"]]]
-        [:tr [:td]
-         [:td {:nowrap "true"} [:span.bold-text "Location:"]]
-         [:td {:colspan 2 :align "left"} [:span#ml_match_location "No where"]]]]]
-      [:td {:width "5%"} "&nbsp;"]]
-     (layout/empty-row form-span)
-     [:tr
-      [:td {:width "5%:"}]
-      [:td {:colspan 2}
-       [:table#match-lineup.table.table-striped.table-sm
-        [:thead.table-inverse
-         [:tr {:align "left"}
-          [:td ""]
-          [:td "Player 1"]
-          [:td "Player 2"]]]
-        [:tbody#match-lineup-body]
-        (layout/empty-row 3)
-        (reduce #(add-match-select-controls %1 %2) () (reverse (range 1 5)))
-        (layout/empty-row 3)]
-       [:td {:width "5%:"}]]]
-     (layout/empty-row form-span)
-     [:tr [:td {:colspan form-span :align "center"}
-           [:table
-            [:td {:width "50%"} "&nbsp;"]
-            [:td {:align "right" :nowrap "true"}
-             [:button {:type "button" :onclick (str "return processRequest('#updatelineup', '/update-lineup', '" title "')")} title]]
-            [:td {:align "left" :nowrap "true"}
-             [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
-            [:td {:width "5%"} "&nbsp;"]]]]
-     [:tr.hidden-control
-      [:td {:colspan form-span :align "center"}
-       [:input.hidden-control {:id "ml_team_id" :name "team_id"}]
-       [:input.hidden-control {:id "ml_match_id" :name "match_id"}]]]
-     (layout/hr-row form-span "90%")])])
+   (let [title "Update Match Lineup"]
+     [:table.table.table-sm
+      (layout/empty-row form-span)
+      [:tr [:td {:colspan form-span :align "center"} [:h4 team-name " " title]]]
+      (layout/hr-row form-span "90%")
+      [:tr
+       [:td {:width "5%"} "&nbsp;"]
+       [:td {:colspan 2 :align "center"}
+        [:table.table.table-sm.table-compact
+         [:tr [:td]
+          [:td {:width "20%" :nowrap "true"} [:span.bold-text "Match Date:"]]
+          [:td {:colspan 2 :align "left"} [:span#ml_match_date "January 32nd"]]]
+         [:tr [:td]
+          [:td {:nowrap "true"} [:span.bold-text "Match Time:"]]
+          [:td {:colspan 2 :align "left"} [:span#ml_match_time "25:30 PM"]]]
+         [:tr [:td]
+          [:td {:nowrap "true"} [:span.bold-text "Location:"]]
+          [:td {:colspan 2 :align "left"} [:span#ml_match_location "No where"]]]]]
+       [:td {:width "5%"} "&nbsp;"]]
+      (layout/empty-row form-span)
+      [:tr
+       [:td {:width "5%:"}]
+       [:td {:colspan 2}
+        [:table#match-lineup.table.table-striped.table-sm
+         [:thead.table-inverse
+          [:tr {:align "left"}
+           [:td ""]
+           [:td "Player 1"]
+           [:td "Player 2"]
+           [:td "Forfeit"]]]
+         [:tbody#match-lineup-body]
+         (layout/empty-row 4)
+         (reduce #(add-match-select-controls %1 %2 team-name) () (reverse (range 1 5)))
+         (layout/empty-row 4)]
+        [:td {:width "5%:"}]]]
+      (layout/empty-row form-span)
+      [:tr [:td {:colspan form-span :align "center"}
+            [:table
+             [:td {:width "50%"} "&nbsp;"]
+             [:td {:align "right" :nowrap "true"}
+              [:button {:type "button" :onclick (str "return processRequest('#updatelineup', '/update-lineup', '" title "')")} title]]
+             [:td {:align "left" :nowrap "true"}
+              [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
+             [:td {:width "5%"} "&nbsp;"]]]]
+      [:tr.hidden-control
+       [:td {:colspan form-span :align "center"}
+        [:input.hidden-control {:id "ml_team_id" :name "team_id" :value usr/users_team_id}]
+        [:input.hidden-control {:id "ml_match_id" :name "match_id"}]]]
+      (layout/hr-row form-span "90%")])])
 
 (defn select-form
   [match-actions]

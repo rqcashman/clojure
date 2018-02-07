@@ -52,6 +52,15 @@
             where p.team_id = ?
             order by p.last_name, p.first_name") match-id match-id match-id usr/users_team_id]))
 
+(defn match-forfeits
+  "docstring"
+  [match-id]
+  (j/query sys/db-cred
+           [(str "select match_id, court_number, forfeit_team_id
+           from match_courts
+           where match_id =?
+           order by court_number") match-id ]))
+
 (defn reset-match-availability
   "docstring"
   [match-id]
@@ -78,17 +87,21 @@
                              (if (> (:ct (nth rs 0)) 0) true false))}))
 (defn upsert-match-lineup
   "docstring"
-  [match-id team-id court player1 player2]
-  (println "upsert:" match-id team-id court player1 player2)
-  (let [match (nth (match-info match-id) 0)]
+  [match-id team-id court player1 player2 forfeit]
+  (println "upsert:" match-id team-id court player1 player2 forfeit)
+  (let [match (nth (match-info match-id) 0)
+        forfeit_team_id (case forfeit
+                          "0" nil
+                          "1" (if (= team-id (:home_team_id match)) (:home_team_id match) (:away_team_id match))
+                          "2" (if (= team-id (:home_team_id match)) (:away_team_id match) (:home_team_id match)))]
     (if (= (match_court_exists? match-id court) false)
       (j/execute! sys/db-cred
                   [(str "insert into match_courts values (?,?,null,null,null,null,null)") match-id, court]))
     (if (= (:home_team_id match) team-id)
       (j/execute! sys/db-cred
-                  [(str "update match_courts set home_player1 = ?, home_player2 = ? where match_id = ? and court_number = ?") player1 player2 match-id court])
+                  [(str "update match_courts set home_player1=?, home_player2=?, forfeit_team_id=? where match_id = ? and court_number = ?") player1 player2 forfeit_team_id match-id court])
       (j/execute! sys/db-cred
-                  [(str "update match_courts set away_player1 = ?, away_player2 = ? where match_id = ? and court_number = ?") player1 player2 match-id court]))))
+                  [(str "update match_courts set away_player1=?, away_player2=?, forfeit_team_id=? where match_id = ? and court_number = ?") player1 player2 forfeit_team_id match-id court]))))
 
 (defn update-player-availability
   "docstring"

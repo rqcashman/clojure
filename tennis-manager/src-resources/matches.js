@@ -43,6 +43,13 @@ function update_player_form(player_id) {
     change_form("update-player");
 }
 
+function updateForfeitBtns(elem) {
+    // alert(elem);
+    // alert(elem.id);
+    // alert(elem.value);
+    tennis_manager.matches.forfeit_selected(elem.id, elem.value);
+}
+
 $().ready(function () {
     change_form(current_form_id);
 

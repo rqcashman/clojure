@@ -466,7 +466,7 @@
                     <td colspan="4">
                 </tr>
                 <tr>
-                    <td align="center" colspan="4"><h4>Beechmont Match Lineup</h4></td>
+                    <td align="center" colspan="4"><h4>Beechmont Update Match Lineup</h4></td>
                 </tr>
                 <tr>
                     <td colspan="4">
@@ -508,11 +508,12 @@
                                 <td></td>
                                 <td>Player 1</td>
                                 <td>Player 2</td>
+                                <td>Forfeit</td>
                             </tr>
                             </thead>
                             <tbody id="match-lineup-body">
                             <tr>
-                                <td colspan="3">
+                                <td colspan="4">
                             </tr>
                             <tr>
                                 <td><span style="font-weight:bold">Court 1</span></td>
@@ -520,6 +521,13 @@
                                     <option>Rick Cashman</option>
                                 </select></td>
                                 <td><select id="c1-p2" name="c1-p2"></select></td>
+                                <td>&nbsp;&nbsp;<input checked disabled id="c1forfeit-none" name="c1-fortfeit-grp"
+                                                       onclick="updateForfeitBtns(this)" type="radio" value="0">&nbsp;&nbsp;None</input>
+                                    <br>&nbsp;&nbsp;<input disabled id="c1-forfeit" name="c1-fortfeit-grp"
+                                                           onclick="updateForfeitBtns(this)" type="radio" value="1">&nbsp;&nbsp;Beechmont</input>
+                                    <br>&nbsp;&nbsp;<input disabled id="c1forfeit-none" name="c1-fortfeit-grp"
+                                                           onclick="updateForfeitBtns(this)" type="radio" value="2">&nbsp;&nbsp;Opponent</input>
+                                    <br></td>
                             </tr>
                             <tr>
                                 <td><span style="font-weight:bold">Court 2</span></td>
@@ -527,6 +535,13 @@
                                     <option>Rick Cashman</option>
                                 </select></td>
                                 <td><select id="c2-p2" name="c2-p2"></select></td>
+                                <td>&nbsp;&nbsp;<input checked disabled id="c2forfeit-none" name="c2-fortfeit-grp"
+                                                       onclick="updateForfeitBtns(this)" type="radio" value="0">&nbsp;&nbsp;None</input>
+                                    <br>&nbsp;&nbsp;<input disabled id="c2-forfeit" name="c2-fortfeit-grp"
+                                                           onclick="updateForfeitBtns(this)" type="radio" value="1">&nbsp;&nbsp;Beechmont</input>
+                                    <br>&nbsp;&nbsp;<input disabled id="c2forfeit-none" name="c2-fortfeit-grp"
+                                                           onclick="updateForfeitBtns(this)" type="radio" value="2">&nbsp;&nbsp;Opponent</input>
+                                    <br></td>
                             </tr>
                             <tr>
                                 <td><span style="font-weight:bold">Court 3</span></td>
@@ -534,6 +549,13 @@
                                     <option>Rick Cashman</option>
                                 </select></td>
                                 <td><select id="c3-p2" name="c3-p2"></select></td>
+                                <td>&nbsp;&nbsp;<input checked disabled id="c3forfeit-none" name="c3-fortfeit-grp"
+                                                       onclick="updateForfeitBtns(this)" type="radio" value="0">&nbsp;&nbsp;None</input>
+                                    <br>&nbsp;&nbsp;<input disabled id="c3-forfeit" name="c3-fortfeit-grp"
+                                                           onclick="updateForfeitBtns(this)" type="radio" value="1">&nbsp;&nbsp;Beechmont</input>
+                                    <br>&nbsp;&nbsp;<input disabled id="c3forfeit-none" name="c3-fortfeit-grp"
+                                                           onclick="updateForfeitBtns(this)" type="radio" value="2">&nbsp;&nbsp;Opponent</input>
+                                    <br></td>
                             </tr>
                             <tr>
                                 <td><span style="font-weight:bold">Court 4</span></td>
@@ -541,9 +563,16 @@
                                     <option>Rick Cashman</option>
                                 </select></td>
                                 <td><select id="c4-p2" name="c4-p2"></select></td>
+                                <td>&nbsp;&nbsp;<input checked id="c4forfeit-none" name="c4-fortfeit-grp"
+                                                       onclick="updateForfeitBtns(this)" type="radio" value="0">&nbsp;&nbsp;None</input>
+                                    <br>&nbsp;&nbsp;<input id="c4-forfeit" name="c4-fortfeit-grp"
+                                                           onclick="updateForfeitBtns(this)" type="radio" value="1">&nbsp;&nbsp;Beechmont</input>
+                                    <br>&nbsp;&nbsp;<input id="c4forfeit-none" name="c4-fortfeit-grp"
+                                                           onclick="updateForfeitBtns(this)" type="radio" value="2">&nbsp;&nbsp;Opponent</input>
+                                    <br></td>
                             </tr>
                             <tr>
-                                <td colspan="3">
+                                <td colspan="4">
                             </tr>
                         </table>
                     <td width="5%:"></td>
@@ -556,8 +585,8 @@
                         <table>
                             <td width="50%">&nbsp;</td>
                             <td align="right" nowrap="true">
-                                <button onclick="return processRequest('#updatelineup', '/update-lineup', 'Match Lineup')"
-                                        type="button">Match Lineup
+                                <button onclick="return processRequest('#updatelineup', '/update-lineup', 'Update Match Lineup')"
+                                        type="button">Update Match Lineup
                                 </button>
                             </td>
                             <td align="left" nowrap="true">
