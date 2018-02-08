@@ -227,6 +227,16 @@
   (forfeit_selected btn-id value)
   )
 
+(defn enable-disable-buttons
+  [court-number enable-value]
+  (go
+    (ef/at (str "#c" court-number "-forfeit-none")
+           (ef/set-prop "disabled" enable-value))
+    (ef/at (str "#c" court-number "-forfeit")
+           (ef/set-prop "disabled" enable-value))
+    (ef/at (str "#c" court-number "-forfeit-opp")
+           (ef/set-prop "disabled" enable-value))))
+
 (defn init-forfeit-btns
   "this intiializes the forfeit buttons.  It sets the value from the DB and sets the other forfeit buttons accordingly."
   [match-id]
@@ -237,11 +247,12 @@
       (comment "Need to reset all of the forfeit radio buttons to none.
                 If the previously selected match had more forfeits than the current match
                 then the radio buttons could be incorrect.")
-      (doseq [court_number (range 1 5)]
-        (ef/at (str "c" court_number "-forfeit-none")
-               (ef/set-attr "checked" "checked")
-               (if (< court_number 4)
-                 (ef/set-attr "disabled" "disabled"))))
+      (doseq [court-number (range 1 5)]
+        (ef/at (str "#c" court-number "-forfeit-none")
+               (ef/set-prop "checked" "checked"))
+        (if (< court-number 4)
+          (enable-disable-buttons court-number "disabled")
+          (enable-disable-buttons court-number "")))
       ;using reverse because we must process from court 4 to court 1 and the SQL is sorted by court number
       (if (> rowCt 0)
         (doseq [row (reverse body)]
