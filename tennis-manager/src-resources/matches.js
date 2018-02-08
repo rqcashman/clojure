@@ -16,6 +16,12 @@ function change_to_email_form(match_id) {
     change_form("send-availability-email");
 }
 
+function change_to_email_lineup_form(match_id) {
+    $("#send-lineup-email").addClass("avail-small");
+    tennis_manager.matches.lineup_email_form(match_id);
+    change_form("send-lineup-email");
+}
+
 function change_to_avail_form(match_id) {
     //$("#show-availability").addClass("avail-small");
     tennis_manager.matches.availability(match_id);

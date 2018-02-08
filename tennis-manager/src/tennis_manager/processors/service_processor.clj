@@ -22,7 +22,7 @@
 (def date-fmt (f/formatter "MM/dd/YYYY"))
 
 (defn add-club
-  "docstring"
+  "Add a club to the DB"
   [& params]
   (let [p (nth params 0)
         club_name (:club_name p)]
@@ -41,7 +41,7 @@
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
 (defn add-player
-  "docstring"
+  "Add a player to the DB"
   [& params]
   (let [p (nth params 0)
         team_id (:team_id p)
@@ -65,7 +65,7 @@
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
 (defn add-season
-  "docstring"
+  "Add a season to the DB"
   [& params]
   (let [
         p (nth params 0)
@@ -93,8 +93,14 @@
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
 (defn load-schedule
-  "docstrng"
+  "Loads a season schedule."
   [& params]
+  (comment "Sample input:
+             Jan-06-2018 12:00 PM\tHP Bronze @ WTF
+             Jan-06-2018 12:00 PM\tEH Blue @ CAM
+   Format is match tab then a tab and then the 2 clubs with an @ sign
+   On either side of the @ is a club abbreviation which is tranlated to the correct club
+  ")
   (let [p (nth params 0)
         schedule (:schedule p)
         abbrevMap (sched/team-schedule-abbreviations)]
@@ -108,7 +114,7 @@
     (hash-map :status "success" :status-code 200 :msg (str "Season loaded"))))
 
 (defn update-player-info
-  "docstrng"
+  "Updates player info.  "
   [& params]
   (let [p (nth params 0)
         first_name (:first_name p)
@@ -136,7 +142,7 @@
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
 (defn update-player-availability
-  "docstring"
+  "Process the request to update player availability"
   [parms]
   (let [match-id (:match_id parms)]
     (try
@@ -153,7 +159,7 @@
 (def player-id-arr '("c1-p1" "c1-p2" "c2-p1" "c2-p2" "c3-p1" "c3-p2" "c4-p1" "c4-p2"))
 
 (defn removePlayersFromForfeitedCourts
-  "docstring"
+  "Removes players from the parm array if they are assigned to a court that has been forfeited"
   [parms court]
   (let [forfeit-grp (str "c" court "-forfeit-grp")
         p1 (str "c" court "-p1")
@@ -163,24 +169,22 @@
       (conj parms))))
 
 (defn check-for-duplicate-player-assignment
-  "docstring"
+  "Returns a list of players assinged to more than one court"
   [parms]
   (let
     [player-list (reduce (fn [list id] (conj list ((keyword id) parms))) () player-id-arr)
      dupe-list (->> player-list frequencies (remove #(= 1 (val %))) keys)]
-    (println "dupes: " dupe-list)
-    (println "dupes: " (remove #(= nil %) dupe-list))
     (remove #(= nil %) dupe-list)))
 
 (defn check-for-null-player-assignment
   [parms]
-  "docstring"
+  "Returns a list where there was no player assigned to a court"
   (let [player-list (reduce (fn [list id] (conj list ((keyword id) parms))) () player-id-arr)]
     (some #(= % "0") player-list)))
 
 
 (defn get-player-names
-  "docstring"
+  "Convert player id to player name"
   [player-id-list]
   (reduce (fn [list id] (let [p (nth (player/player id) 0)]
                           (println "player: " p)
@@ -188,27 +192,36 @@
           ()
           player-id-list))
 
+(defn validate-lineup
+  "Validate the input lineup is valid.  All courts have players and no player assigned to multiple courts"
+  [parms]
+  (try
+    (if (= (check-for-null-player-assignment parms) true)
+      (hash-map :status "failed" :status-code 200 :msg (str "Not all courts have players assigned."))
+      (let [dupe-list (check-for-duplicate-player-assignment parms)]
+        (if (> (count dupe-list) 0)
+          (hash-map :status "failed" :status-code 200 :msg (str "Some players assigned to muliptle courts. " (get-player-names dupe-list))))))
+    (catch Exception e
+      (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e)))))
+
 (defn update-lineup
-  "docstring"
+  "Process an update lineup request"
   [inparms]
-  (println "===============")
-  (println " parms: " inparms)
+  (comment "Chrome is sending values for disabled items.  Need to remove players from the parm list if they are
+            assigned to a court that is being forfeited")
   (let [parms (reduce #(removePlayersFromForfeitedCourts %1 %2) inparms (range 1 5))
-        match-id (:match_id parms)]
+        validation-errors (validate-lineup parms)]
     (try
-      (if (= (check-for-null-player-assignment parms) true)
-        (hash-map :status "failed" :status-code 200 :msg (str "Not all courts have players assigned."))
-        (let [dupe-list (check-for-duplicate-player-assignment parms)]
-          (if (> (count dupe-list) 0)
-            (hash-map :status "failed" :status-code 200 :msg (str "Some players assigned to muliptle courts. " (get-player-names dupe-list)))
-            (do
-              (dotimes [x 4]
-                (let [court (inc x)
-                      player1 ((keyword (str "c" court "-p1")) parms)
-                      player2 ((keyword (str "c" court "-p2")) parms)
-                      forfeit ((keyword (str "c" court "-forfeit-grp")) parms)]
-                  (sched/upsert-match-lineup match-id usr/users_team_id court player1 player2 forfeit)))
-              (hash-map :status "success" :status-code 200 :msg (str "Match lineup updated for team"))))))
+      (if (= validation-errors nil)
+        (do
+          (dotimes [x 4]
+            (let [court (inc x)
+                  player1 ((keyword (str "c" court "-p1")) parms)
+                  player2 ((keyword (str "c" court "-p2")) parms)
+                  forfeit ((keyword (str "c" court "-forfeit-grp")) parms)]
+              (sched/upsert-match-lineup (:match_id parms) usr/users_team_id court player1 player2 forfeit)))
+          (hash-map :status "success" :status-code 200 :msg (str "Match lineup updated for team")))
+        validation-errors)
       (catch Exception e
         (println "Exception in update-lineup: " e)
         (println "Exception in update-lineup: " (.getMessage e))
@@ -216,7 +229,7 @@
 
 
 (defn load-schedule-file
-  "docstrng"
+  "Loads a season schedule from a file.  Not working because we got the file nmae not the contents"
   [& params]
   (let [p (nth params 0)
         scheduleFile (:schedule p)
@@ -232,7 +245,7 @@
     (hash-map :status "success" :status-code 200 :msg (str "Season loaded"))))
 
 (defn default-match-time
-  "convert time to 24 hour time '09:30' AM returns 09:30.  '02:30 PM' returns 14:30."
+  "Convert time to 24 hour time '09:30' AM returns 09:30.  '02:30 PM' returns 14:30."
   [input-time]
   (let [match-time (subs input-time 0 5)]
     (if (or (s/ends-with? input-time "AM") (s/starts-with? input-time "12"))
@@ -241,7 +254,7 @@
         (str (+ (read-string (nth time-arr 0)) 12) ":" (nth time-arr 1))))))
 
 (defn add-team
-  "docstring"
+  "Retrun the Add Team page"
   [& params]
   (let [p (nth params 0)
         team-name (:team_name p)
@@ -261,57 +274,8 @@
         (println e)
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
-(defn send-email-orig
-  "docstring"
-  [& parms]
-  (try
-    (mail/send-gmail {:from     "rqcashman@gmail.com"
-                      :to       ["rqcashman@gmail.com"]
-                      :subject  "HP Bronze test"
-                      :text     "<h1>This is a test</h1>"
-                      :user     "rqcashman@gmail.com"
-                      :password "oitdgcoxpdghplmb"})
-    (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Email sent")
-    (catch Exception e
-      (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e)))))
-
-(defn send-avail-email-orig
-  "docstring"
-  [{:keys [message signature match_id send_subs]}]
-  (try
-    (let [match-info (nth (sched/match-info match_id) 0)
-          message (str "<table width='100%' align='left' cellpadding='0' cellspacing='0'>"
-                       "<tr><td nowrap><b>Match date:</b><td nowrap>" (:match_date match-info) "</td><td width='80%'>&nbsp;</td></tr>"
-                       "<tr><td nowrap><b>Match time:</b><td nowrap>" (:match_time match-info) "</td><td width='80%'>&nbsp;</td></tr>"
-                       "<tr><td nowrap><b>Location:</b><td nowrap>" (:club_name match-info) "</td><td width='80%'>&nbsp;</td></tr>"
-                       "<tr><td colspan='3'>&nbsp;</td></tr>"
-                       "</table><br>"
-                       "<table width='70%' align='left'>"
-                       "<tr><td align='left' colspan='2'>---salutation---,</td></tr>"
-                       "<tr><td width='5%'></td><td>" (s/replace message #"\n" "<br>") "</td></tr>"
-                       "<tr><td width='5%'></td>"
-                       "<td nowrap><a href='http://localhost:3000/availability-reply/Y/--uuid--'>I can play </a>"
-                       "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://localhost:3000/availability-reply/N/--uuid--'>I'm out</a></td></tr>"
-                       "<tr><td colspan='2'>&nbsp;</td></tr>"
-                       "<tr><td colspan='2'><h4>" (s/replace signature #"\n" "<br>") "</h4></td></tr>"
-                       "</table>"
-                       )
-          subject (str "Match availability for " (:match_date match-info))
-          parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text message})]
-      (println "destructured input: " message signature match_id send_subs)
-      (doseq [player (team/team-roster usr/users_team_id)]
-        (println (:last_name player))
-        (if (and (not= (:status player) "I") (or (not= (:status player) "S") (not= send_subs nil)))
-          (let [uuid (str (java.util.UUID/randomUUID))
-                email-msg (s/replace (s/replace message #"---salutation---" (str (:first_name player) " " (:last_name player))) #"--uuid--" uuid)
-                email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
-            (mail/send-gmail email-parms)))))
-    (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Availability email sent")
-    (catch Exception e
-      (println "Error sending availability email.  Msg" (.getMessage e))
-      (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e)))))
-
 (defn format-phone
+  "Format phone number"
   [phone-number]
   (if (> (count phone-number) 7)
     (str (subs phone-number 0 3) "." (subs phone-number 3 6) "." (subs phone-number 6))
@@ -320,12 +284,12 @@
       phone-number)))
 
 (defn format-map-link
-  "docstring"
+  "Format a Google maps link to the match location - used in match emails"
   [address]
   (str "<a href='https://maps.google.com/maps/dir/?saddr=My+Location&daddr=" (codec/form-encode address) "'>" address "</a"))
 
 (defn get-email-body
-  "generate html to use as rich text email"
+  "Generate html to use as rich text email"
   [message signature match-info]
   (let [address (str (:address match-info) ", " (:city match-info) " " (:state match-info) ", " (:zip_code match-info))]
     (str
@@ -383,7 +347,7 @@
       "</table>")))
 
 (defn send-avail-email
-  "docstring"
+  "Send a lineup availabiility email for a match"
   [{:keys [message signature match_id send_subs]}]
   (try
     (let [match-info (nth (sched/match-info match_id) 0)

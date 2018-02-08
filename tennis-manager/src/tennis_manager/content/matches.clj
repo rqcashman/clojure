@@ -5,7 +5,8 @@
         [tennis-manager.data.season-data-handler :as season]
         [tennis-manager.data.user-info :as usr]
         [tennis-manager.content.page-layout :as layout]
-        [hiccup.page :only (html5 include-css include-js)]))
+        [hiccup.page :only (html5 include-css include-js)])
+  (:require [tennis-manager.data.schedule-data-handler :as sched]))
 
 (def form-span 4)
 (def sched-form-span 8)
@@ -25,11 +26,17 @@
      [:td [:input.form-control-sm options init-data]])
    [:td {:width "5%"} "&nbsp;"]])
 
+(def RED-X "&#10060;")
+(def GREEN-CHECK "&#9989;")
+
 (defn schedule-row
   "docstring"
   [rows sched-row]
   (let [home-team-id (:home_team_id sched-row)
-        avail-func (if (= (:availability_sent sched-row) nil) "change_to_email_form" "change_to_avail_form")]
+        avail-func (if (= (:availability_sent sched-row) nil) "change_to_email_form" "change_to_avail_form")
+        lineup-valid (sched/lineup-set? (:match_id sched-row))
+        send-lineup-func (if (= lineup-valid true) "change_to_email_lineup_form" "set_lineup")]
+    (println "lineup good: " lineup-valid)
     (conj rows [:tr
                 [:td (:match_date sched-row)]
                 [:td (:match_time sched-row)]
@@ -37,8 +44,10 @@
                 [:td (:home_club_name sched-row)]
                 [:td {:align "center"} (if (= usr/users_team_id home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
                 [:td {:align "center"} (if (= usr/users_team_id home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
-                [:td {:align "center"} [:span.avail-cursor {:onclick (str avail-func "('" (:match_id sched-row) "');")} (if (= (:availability_sent sched-row) nil) "&#10060;" "&#9989;")]]
-                [:td {:align "center"} [:span.avail-cursor {:onclick (str "set_lineup('" (:match_id sched-row) "');")} (if (= (:lineup_sent sched-row) nil) "&#10060;" "&#9989;")]]])))
+                [:td {:align "center"} [:span.avail-cursor {:onclick (str avail-func "('" (:match_id sched-row) "');")} (if (= (:availability_sent sched-row) nil) RED-X GREEN-CHECK)]]
+                [:td {:align "center"} [:span.avail-cursor {:onclick (str "set_lineup('" (:match_id sched-row) "');")} (if (= lineup-valid false) RED-X GREEN-CHECK)]]
+                [:td {:align "center"} [:span.avail-cursor {:onclick (str send-lineup-func "('" (:match_id sched-row) "');")} (if (= (:lineup_sent sched-row) nil) RED-X GREEN-CHECK)]]
+                ])))
 
 (defn get-team-schedule
   "docstring"
@@ -70,6 +79,7 @@
         [:td {:name "team-name"} "Points"]
         [:td "Opponent Points"]
         [:td "Availability Email Sent"]
+        [:td "Lineup Set"]
         [:td "Lineup Sent"]]]
       [:tbody#match-sched-body]
       (get-team-schedule)]]
@@ -118,7 +128,6 @@
         [:input.hidden-control {:id "av_team_id" :name "team_id"}]
         [:input.hidden-control {:id "av_match_id" :name "match_id"}]]]
       (layout/empty-row form-span)]]))
-
 
 (defn show-availability-form
   "docstring"
@@ -195,7 +204,7 @@
              "&nbsp;&nbsp;" [:input {:type "radio" :value "2" :id opp-forfeit :name btn-grp :disabled btn-disabled :onclick "updateForfeitBtns(this)"} "&nbsp;&nbsp;Opponent"] [:br]]]])))
 
 (defn lineup-form
-  "docstring"
+  "Sets up the lineup page."
   [team-name]
   [:form#updatelineup.form-horizontal {:method "post" :action "/update-lineup"}
    (let [title "Update Match Lineup"]
@@ -236,35 +245,79 @@
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"}
             [:table
-             [:td {:width "50%"} "&nbsp;"]
+             [:td {:width "30%"} "&nbsp;"]
              [:td {:align "right" :nowrap "true"}
               [:button {:type "button" :onclick (str "return processRequest('#updatelineup', '/update-lineup', '" title "')")} title]]
              [:td {:align "left" :nowrap "true"}
               [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
-             [:td {:width "5%"} "&nbsp;"]]]]
+             [:td {:align "left" :nowrap "true"}
+              [:button#lineuptoavail {:type "button"} "Go to Availability"]]
+             [:td {:width "30%"} "&nbsp;"]]]]
       [:tr.hidden-control
        [:td {:colspan form-span :align "center"}
         [:input.hidden-control {:id "ml_team_id" :name "team_id" :value usr/users_team_id}]
         [:input.hidden-control {:id "ml_match_id" :name "match_id"}]]]
       (layout/hr-row form-span "90%")])])
 
-(defn select-form
-  [match-actions]
-  (list
-    [:div#matches-form-div.panel.panel-default
-     [:table.table.table-sm.match-form
-      [:thead
-       (layout/empty-row 3)
-       [:tr [:td {:colspan 3 :align "center"} [:h4 "Select Match Function"]]]
-       (layout/hr-row 3 "90%")]
-      [:tbody
-       (layout/add-select #(layout/actions match-actions) layout/option "match-list" "Match Action:" 1 (str "change_form(this.value);"))
-       (layout/hr-row 3 "90%")
-       (layout/empty-row 3)]]]
-    [:br] [:hr] [:br]))
+(defn show-lineup-email-form
+  "docstring"
+  [team-name]
+  (let [title "Send Lineup Email"]
+    [:form#sendlineupemail.form-horizontal {:method "post" :action "/send-lineup-email"}
+     [:table.table.table-sm
+      [:tr [:td {:colspan form-span :align "center"} [:h4 title " for " team-name]]]
+      (layout/hr-row form-span "90%")
+      [:tr
+       [:td {:width "50%"} "&nbsp;"]
+       [:td {:colspan 2 :align "center"}
+        [:table.table.table-sm.table-compact
+         [:tr [:td] [:td {:colspan 3 :align "center"} [:h5 "Email Header"]]]
+         [:tr [:td]
+          [:td [:span.bold-text "Match Date:"]]
+          [:td {:colspan 2} [:span#av_match_date "January 3"]]]
+         [:tr [:td]
+          [:td [:span.bold-text "Match Time:"]]
+          [:td {:colspan 2} [:span#av_match_time "02:30 PM"]]]
+         [:tr [:td]
+          [:td [:span.bold-text "Location:"]]
+          [:td {:colspan 2} [:span#av_match_location "Harpers"]]]]]
+       [:td {:width "50%"} "&nbsp;"]]
+      (layout/hr-row form-span "90%")
+      [:tr
+       [:td {:width "5%:"}]
+       [:td {:colspan 2}
+        [:table#email-lineup.table.table-striped.table-sm
+         [:thead.table-inverse
+          [:tr {:align "left"}
+           [:td ""]
+           [:td "Player 1"]
+           [:td "Player 2"]
+           [:td "Forfeit"]]]
+         [:tbody#email-lineup-body]
+         (layout/empty-row 4)]
+        [:td {:width "5%:"}]]]
+      (layout/empty-row form-span)
+      (add-form-control "Message:" {:id "li_message" :name "message" :cols 45 :maxlength 2000 :rows 7 :type "text-area"} "Please arrive 10 to 15 minutes before the match starts.")
+      (add-form-control "Signature:" {:id "li_signature" :name "signature" :cols 45 :maxlength 200 :rows 3 :type "text-area"} "Rick Cashman\n513.227.9278")
+      (add-form-control "Send to Subs:" {:id "li_send_subs" :name "send_subs" :type "checkbox"} nil)
+      (layout/hr-row form-span "90%")
+      (layout/empty-row form-span)
+      [:tr [:td {:colspan form-span :align "center"}
+            [:table
+             [:td {:width "50%"} "&nbsp;"]
+             [:td {:align "right" :nowrap "true"}
+              [:button {:type "button" :onclick (str "return processRequest('#sendavailabilityemail', '/send-lineup-email', '" title "')")} title]]
+             [:td {:align "left" :nowrap "true"}
+              [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
+             [:td {:width "5%"} "&nbsp;"]]]]
+      [:tr.hidden-control
+       [:td {:colspan form-span :align "center"}
+        [:input.hidden-control {:id "li_team_id" :name "team_id" :value usr/users_team_id}]
+        [:input.hidden-control {:id "li_match_id" :name "match_id"}]]]
+      (layout/empty-row form-span)]]))
 
 (defn matches
-  "docstring"
+  "Sets up the intial matches page."
   []
   (let [team-name (:name (nth (team/team usr/users_team_id) 0))
         match-actions
@@ -272,6 +325,7 @@
          {:id "send-availability-email" :name "Send Availability Email" :content (availability-email-form team-name)}
          {:id "show-availability" :name "Send Availability Email" :content (show-availability-form team-name)}
          {:id "set-lineup" :name "Set Lineup" :content (lineup-form team-name)}
+         {:id "send-lineup-email" :name "Send Lineup Email" :content (show-lineup-email-form team-name)}
          ]]
     (list
       ;(select-form match-actions)

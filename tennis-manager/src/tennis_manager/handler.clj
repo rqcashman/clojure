@@ -32,6 +32,7 @@
            (GET "/match-info/:match-id" [& params] (rr/response (sched/match-info (:match-id params))))
            (GET "/match-availability/:match-id" [& params] (rr/response (sched/match-availability (:match-id params))))
            (GET "/match-forfeits/:match-id" [& params] (rr/response (sched/match-forfeits (:match-id params))))
+           (GET "/match-lineup/:match-id" [& params] (rr/response (sched/match-lineup (:match-id params))))
            (GET "/player/:player-id" [& params] (rr/response (player/player (:player-id params))))
            (GET "/season/:season-id" [& params] (rr/response (season/season (:season-id params))))
            (GET "/seasons" [] (rr/response (season/seasons)))

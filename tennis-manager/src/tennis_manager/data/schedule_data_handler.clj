@@ -48,7 +48,7 @@
             left join player_communication pc on pc.player_id = p.id and pc.match_id = ?
             left join match_availability ma on ma.player_id = p.id and ma.match_id = ?
             left join match_courts mc on mc.match_id = ?
-            and (home_player1 = p.id or home_player2 = p.id or away_player1 = p.id or away_player1 = p.id)
+            and (home_player1 = p.id or home_player2 = p.id or away_player1 = p.id or away_player2 = p.id)
             where p.team_id = ?
             order by p.last_name, p.first_name") match-id match-id match-id usr/users_team_id]))
 
@@ -59,7 +59,7 @@
            [(str "select match_id, court_number, forfeit_team_id
            from match_courts
            where match_id =?
-           order by court_number") match-id ]))
+           order by court_number") match-id]))
 
 (defn reset-match-availability
   "docstring"
@@ -129,5 +129,61 @@
                   [(str "update match_availability set available=? where match_id=? and player_id=?") avail_flag match_id player_id])
       (j/execute! sys/db-cred
                   [(str "insert into match_availability values (?,?,?)") match_id player_id avail_flag]))))
+(def court-null-list #{nil 0})
+
+(defn court-valid
+  "docstring"
+  [valid court]
+  (println "court valid: " valid " court: " court)
+  (if (= valid false)
+    false
+    (let [p1 (:player1 court)
+          p2 (:player2 court)
+          forfeit (:forfeit_team_id court)]
+      (if (not (contains? court-null-list forfeit))
+        true
+        (if (and
+              (not (contains? court-null-list p1))
+              (not (contains? court-null-list p2)))
+          true
+          false)))))
+
+
+(defn lineup-set?
+  "docstring"
+  [match-id]
+  (let [match (nth (match-info match-id) 0)
+        player1-col (if (= (:home_team_id match) (int usr/users_team_id)) "home_player1 as player1," "away_player1 as player1,")
+        player2-col (s/replace player1-col #"1" "2")
+        sql (str "select " player1-col player2-col "forfeit_team_id
+                 from match_courts
+                 where match_id = ? order by court_number")
+        results (j/query sys/db-cred
+                         [sql match-id])]
+    (if (< (count results) 4)
+      false
+      (reduce #(court-valid %1 %2) true results))))
+
+(defn match-lineup
+  "docstring"
+  [match-id]
+  (let [match (nth (match-info match-id) 0)
+        player1-col (if (= (:home_team_id match) (int usr/users_team_id)) "home_player1" "away_player1")
+        player2-col (s/replace player1-col #"1" "2")
+        sql (str "select court_number," player1-col " as player1," player2-col " as player2,forfeit_team_id,t.name as forfeit_team_name,
+                 concat (p1.last_name, ', ', p1.first_name) as player1_name,
+                 concat (p2.last_name, ', ', p2.first_name) as player2_name
+                 from match_courts mc
+                 left join team t on t.id = mc.forfeit_team_id
+                 left join player p1 on p1.id = " player1-col
+                 " left join player p2 on p2.id = " player2-col
+                 " where mc.match_id = ? order by court_number")]
+    (println (str sql))
+    (println (str "p1: " player1-col " p2: " player2-col))
+    (j/query sys/db-cred
+             [sql match-id])))
+
+
+
 
 

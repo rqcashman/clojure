@@ -2,22 +2,21 @@
   (:require-macros [cljs.core.async.macros :refer [go]]
                    [enfocus.macros :as em])
   (:require [clojure.browser.repl :as repl]
+            [clojure.string :as s]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [cljs.pprint :as pp]
             [enfocus.core :as ef]
             [enfocus.events :as events]
-            [enfocus.effects :as effects]
-            [clojure.string :as s]))
-
+            [enfocus.effects :as effects]))
 
 (defn not-found-row
-  "generate a not found row"
+  "Generate a row when there are no players on the roster for the team"
   []
   (str "<tr><td colspan='5' align='center'><h2 style='color:red'>No players added to roster</h2></td></tr>"))
 
 (defn availability-row
-  "generate an availability row"
+  "Generate a player availability row"
   [row active?]
   (let [sent_flag (if (= (:date_sent row) nil) "N", "Y")
         player_response (case (:response row)
@@ -66,7 +65,7 @@
            "</tr>"))))
 
 (defn set-match-info
-  "docstring"
+  "Adds the date, time and location of the match displayed at the top of a few of the pages."
   [match-id prefix]
   (go
     (let [response (<! (http/get (str "match-info/" match-id)))
@@ -83,10 +82,46 @@
           (ef/at
             (str "#" prefix "_match_location") (ef/content (:club_name row))))))))
 
-(defn ^:export email_form [match-id]
+(defn ^:export email_form
+  "Load the email availability form.  Not much to do here."
+  [match-id]
   (set-match-info match-id "av"))
 
-(defn ^:export availability [match-id]
+(defn send-lineup-row
+  "docstring"
+  [lineup-row]
+  (ef/html
+    [:tr
+     [:td [:b "Court " (:court_number lineup-row)]]
+     [:td (:player1_name lineup-row)]
+     [:td (:player2_name lineup-row)]
+     [:td (:forfeit_team_name lineup-row)]]))
+
+(defn ^:export lineup_email_form
+  "Load the email lineup form."
+  [match-id]
+  (ef/at
+    "#email-lineup-body tr:not(:first-child)" (ef/remove-node))
+  (go
+    (let [response (<! (http/get (str "match-lineup/" match-id)))
+          body (:body response)
+          rowCt (count body)]
+      (if (> rowCt 0)
+        (do
+          (reduce
+            (fn [db-rows row]
+              (ef/at
+                "#email-lineup-body tr:last-child" (ef/after (send-lineup-row row))))
+            []
+            body))))
+    (ef/at
+      "#email-lineup-body tr:first-child" (ef/remove-node)))
+  (set-match-info match-id "li"))
+
+(defn ^:export availability
+  "Loads the Update Availability form"
+  [match-id]
+  (comment "We process the data twice so that Inactive players are at the bottom.")
   (ef/at
     "#av-details-body tr:not(:first-child)" (ef/remove-node))
   (go
@@ -95,12 +130,14 @@
           rowCt (count body)]
       (if (> rowCt 0)
         (do
+          ;Add active players
           (reduce
             (fn [db-rows row]
               (ef/at
                 "#av-details-body tr:last-child" (ef/after (availability-row row true))))
             []
             body)
+          ;Add inactive players
           (reduce
             (fn [db-rows row]
               (ef/at
@@ -111,26 +148,21 @@
       "#av-details-body tr:first-child" (ef/remove-node)))
   (set-match-info match-id "pa"))
 
-(defn add-options
-  "docstring"
-  [list elem]
-  )
-
-(defn add-option
-  "docstring"
+(defn add-player-to-select-list
+  "Adds a players to the drop down if they are available to play that week."
   [list row]
   (if (= (:available row) 1)
     (conj list (str "<option value='" (:id row) "'>" (:last_name row) ", " (:first_name row) "</option>"))
     list))
 
-(defn set-option
-  "docstring"
+(defn select-player
+  "Sets a player to selected in the player dropdown on the Update Lineup form."
   [court_number player_number player_id]
   (ef/at (str "#c" court_number "-p" player_number " option[value='" player_id "']") (ef/set-prop "selected" "selected"))
   )
 
 (defn init-player-options
-  "docstring"
+  "Selects the players in the dropdown that are assingned to a court in the DB in the Update Lineup form."
   [rcds]
   (doseq [row rcds]
     (let [court_number (:court_number row)]
@@ -141,11 +173,12 @@
               away_p2 (:away_player2 row)
               player_id (:id row)]
           (if (or (= home_p1 player_id) (= away_p1 player_id))
-            (set-option court_number 1 player_id))
+            (select-player court_number 1 player_id))
           (if (or (= home_p2 player_id) (= away_p2 player_id))
-            (set-option court_number 2 player_id)))))))
+            (select-player court_number 2 player_id)))))))
 
 (defn updatePlayerControls
+  "Update the player select drop down.  Used to disable the dropdowns if a court was forfeited."
   [court disabled]
   (let [player1 (str "#c" court "-p1")
         player2 (str "#c" court "-p2")]
@@ -154,6 +187,7 @@
       (ef/at player2 (ef/set-prop "disabled" disabled)))))
 
 (defn updateForfeitControls
+  "Update the forfeit radio buttons"
   [court disabled]
   (let [no-forfeit (str "#c" court "-forfeit-none")
         team-forfeit (str "#c" court "-forfeit")
@@ -164,9 +198,10 @@
       (ef/at opp-forfeit (ef/set-prop "disabled" disabled)))))
 
 (defn ^:export forfeit_selected
+  "This is called when a forfeit button is selected on the UI and when the page loads.  It updates the other forfeit buttons based on the selected value."
   [elem-name elem-value]
-  ;elem-name is c4-forfeit-none (0) c4-forfeit (1) or c4-forfeit-opp (2).  Second character is the court number
-  ;forfeits must start from court 4 so we enable/disable the controls accordingly
+  (comment "elem-name is c4-forfeit-none (0) c4-forfeit (1) or c4-forfeit-opp (2).  Second character is the court number
+  forfeits must start from court 4 so we enable/disable the controls accordingly")
   (let [court (int (nth elem-name 1))
         playerControlEnabled (if (not= elem-value "0") "disabled" "")
         higherRadioGrpEnabled (if (not= elem-value "0") "disabled" "")
@@ -178,64 +213,71 @@
       (updateForfeitControls (dec court) lowerRadioGrpEnabled))))
 
 (defn get-btn-val
-  "docstring"
+  "Calculate the value of a forfeit button based on what is in the DB"
   [forfeit-val team-id]
   (cond
     (or (= forfeit-val "0") (= forfeit-val nil)) "0"
     (= forfeit-val (int team-id)) "1"
     :else "2"))
 
-;(defn init-forfeit-btnsxxx
-;  "docstring"
-;  [rcds]
-;  (go
-;    (dotimes [x 4]
-;      (let [court (inc x)
-;            btn-val (get-btn-val (:forfeit_team_id rds) (ef/at "ml_team_id" (ef/get-attr "value")))]
-;        (js/alert "btn val: " btn-val)
-;        ; (ef/at "#c2-forfeit-opp" (ef/set-prop "selected" "selected"))
-;        (case btn-val
-;          "2" (ef/at (str "#c" court "-forfeit-none") (ef/set-prop "selected" "selected"))
-;          "1" (ef/at (str "#c" court "-forfeit") (ef/set-prop "selected" "selected"))
-;          "0" (ef/at (str "#c" court "-forfeit-opp") (ef/set-prop "selected" "selected")))))))
-
 (defn select-forfeit-btn
-  "docstring"
+  "This sets the value of a forfeit button and calls forfeit selected to updated the other forfeit buttons"
   [btn-id value]
   (ef/at (str "#" btn-id) (ef/set-prop "checked" "checked"))
   (forfeit_selected btn-id value)
   )
 
 (defn init-forfeit-btns
-  "docstring"
+  "this intiializes the forfeit buttons.  It sets the value from the DB and sets the other forfeit buttons accordingly."
   [match-id]
   (go
     (let [response (<! (http/get (str "match-forfeits/" match-id)))
           body (:body response)
           rowCt (count body)]
-      ;using reverse because we must process from court 4 to court and the SQL is sorted by court number
-      (doseq [row (reverse body)]
-        (let [court_number (:court_number row)
-              btn-val (get-btn-val (:forfeit_team_id row) (:team_id (ef/from "#updatelineup" (ef/read-form))))]
-          (case btn-val
-            "0" (select-forfeit-btn (str "c" court_number "-forfeit-none") btn-val)
-            "1" (select-forfeit-btn (str "c" court_number "-forfeit") btn-val)
-            "2" (select-forfeit-btn(str "c" court_number "-forfeit-opp") btn-val)))))))
+      (comment "Need to reset all of the forfeit radio buttons to none.
+                If the previously selected match had more forfeits than the current match
+                then the radio buttons could be incorrect.")
+      (doseq [court_number (range 1 5)]
+        (ef/at (str "c" court_number "-forfeit-none")
+               (ef/set-attr "checked" "checked")
+               (if (< court_number 4)
+                 (ef/set-attr "disabled" "disabled"))))
+      ;using reverse because we must process from court 4 to court 1 and the SQL is sorted by court number
+      (if (> rowCt 0)
+        (doseq [row (reverse body)]
+          (let [court_number (:court_number row)
+                btn-val (get-btn-val (:forfeit_team_id row) (:team_id (ef/from "#updatelineup" (ef/read-form))))]
+            (case btn-val
+              "0" (select-forfeit-btn (str "c" court_number "-forfeit-none") btn-val)
+              "1" (select-forfeit-btn (str "c" court_number "-forfeit") btn-val)
+              "2" (select-forfeit-btn (str "c" court_number "-forfeit-opp") btn-val))))))))
 
-(defn ^:export set_lineup [match-id]
+(defn lineup-to-availability-form
+  "Call the js to change the form to the availability form"
+  [match-id]
+  (js/change_to_avail_form match-id))
+
+(em/defaction avail-setup [match-id]
+              ["#lineuptoavail"] (events/remove-listeners :click)
+              ["#lineuptoavail"] (events/listen :click #(lineup-to-availability-form match-id)))
+
+(defn ^:export set_lineup
+  "load the set lineup form"
+  [match-id]
   (ef/at "option" (ef/remove-node))
   (go
-    ;calling the match-availability function and will only use player marked as available
-    ;doing this rather than writing an available players method
+    (comment "calling the match-availability function and will only use player marked as available
+    doing this rather than writing an available players method")
     (let [response (<! (http/get (str "match-availability/" match-id)))
           body (:body response)
           rowCt (count body)]
       (if (> rowCt 0)
         (let [first-opt (list (str "<option value='0'></option>"))
-              options (reduce #(add-option %1 %2) first-opt body)]
+              options (reduce #(add-player-to-select-list %1 %2) first-opt body)]
           (ef/at "select" (ef/content (s/join (reverse options))))
           (init-player-options body)
           (init-forfeit-btns match-id)))))
+  (avail-setup match-id)
   (set-match-info match-id "ml"))
 
 ;(def select-ids (list "c1-p1" "c1-p2" "c2-p1" "c2-p2" "c3-p1" "c3-p2" "c4-p1" "c4-p2"))
