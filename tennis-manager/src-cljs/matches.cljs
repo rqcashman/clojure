@@ -227,7 +227,7 @@
   (forfeit_selected btn-id value)
   )
 
-(defn enable-disable-buttons
+(defn enable-disable-forfeit-buttons
   [court-number enable-value]
   (go
     (ef/at (str "#c" court-number "-forfeit-none")
@@ -241,18 +241,18 @@
   "this intiializes the forfeit buttons.  It sets the value from the DB and sets the other forfeit buttons accordingly."
   [match-id]
   (go
+    (comment "Need to reset all of the forfeit radio buttons to none and disable all but court 4 buttons.
+              If the previously selected match had more forfeits than the current match
+              then the radio buttons could be incorrect.")
+    (doseq [court-number (range 1 5)]
+      (ef/at (str "#c" court-number "-forfeit-none")
+             (ef/set-prop "checked" "checked"))
+      (if (< court-number 4)
+        (enable-disable-forfeit-buttons court-number "disabled")
+        (enable-disable-forfeit-buttons court-number "")))
     (let [response (<! (http/get (str "match-forfeits/" match-id)))
           body (:body response)
           rowCt (count body)]
-      (comment "Need to reset all of the forfeit radio buttons to none.
-                If the previously selected match had more forfeits than the current match
-                then the radio buttons could be incorrect.")
-      (doseq [court-number (range 1 5)]
-        (ef/at (str "#c" court-number "-forfeit-none")
-               (ef/set-prop "checked" "checked"))
-        (if (< court-number 4)
-          (enable-disable-buttons court-number "disabled")
-          (enable-disable-buttons court-number "")))
       ;using reverse because we must process from court 4 to court 1 and the SQL is sorted by court number
       (if (> rowCt 0)
         (doseq [row (reverse body)]

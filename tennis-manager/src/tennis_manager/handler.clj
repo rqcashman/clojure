@@ -16,6 +16,7 @@
             [tennis-manager.data.schedule-data-handler :as sched]
             [tennis-manager.data.season-data-handler :as season]
             [tennis-manager.data.team-data-handler :as team]
+            [tennis-manager.processors.send-email-processor :as em]
             [tennis-manager.processors.service-processor :as pr]))
 
 (defroutes app-routes
@@ -51,7 +52,8 @@
            (POST "/update-availability" [& params] (rr/response (pr/update-player-availability params)))
            (POST "/update-lineup" [& params] (rr/response (pr/update-lineup params)))
            (POST "/update-player" [& params] (rr/response (pr/update-player-info params)))
-           (POST "/send-availability-email" [& params] (rr/response (pr/send-avail-email params)))
+           (POST "/send-availability-email" [& params] (rr/response (em/send-avail-email params)))
+           (POST "/send-lineup-email" [& params] (rr/response (em/send-lineup-email params)))
 
            (GET "/" [] "Hello World")
            (route/not-found "Not Found"))

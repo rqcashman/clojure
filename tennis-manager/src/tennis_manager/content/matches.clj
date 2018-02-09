@@ -36,7 +36,6 @@
         avail-func (if (= (:availability_sent sched-row) nil) "change_to_email_form" "change_to_avail_form")
         lineup-valid (sched/lineup-set? (:match_id sched-row))
         send-lineup-func (if (= lineup-valid true) "change_to_email_lineup_form" "set_lineup")]
-    (println "lineup good: " lineup-valid)
     (conj rows [:tr
                 [:td (:match_date sched-row)]
                 [:td (:match_time sched-row)]
@@ -306,7 +305,7 @@
             [:table
              [:td {:width "50%"} "&nbsp;"]
              [:td {:align "right" :nowrap "true"}
-              [:button {:type "button" :onclick (str "return processRequest('#sendavailabilityemail', '/send-lineup-email', '" title "')")} title]]
+              [:button {:type "button" :onclick (str "return processRequest('#sendlineupemail', '/send-lineup-email', '" title "')")} title]]
              [:td {:align "left" :nowrap "true"}
               [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
              [:td {:width "5%"} "&nbsp;"]]]]

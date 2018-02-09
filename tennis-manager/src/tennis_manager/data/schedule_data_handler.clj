@@ -134,7 +134,6 @@
 (defn court-valid
   "docstring"
   [valid court]
-  (println "court valid: " valid " court: " court)
   (if (= valid false)
     false
     (let [p1 (:player1 court)
@@ -165,7 +164,7 @@
       (reduce #(court-valid %1 %2) true results))))
 
 (defn match-lineup
-  "docstring"
+  "Get the match lineup for the logged in user"
   [match-id]
   (let [match (nth (match-info match-id) 0)
         player1-col (if (= (:home_team_id match) (int usr/users_team_id)) "home_player1" "away_player1")
@@ -178,10 +177,31 @@
                  left join player p1 on p1.id = " player1-col
                  " left join player p2 on p2.id = " player2-col
                  " where mc.match_id = ? order by court_number")]
-    (println (str sql))
-    (println (str "p1: " player1-col " p2: " player2-col))
     (j/query sys/db-cred
              [sql match-id])))
+
+(def line-email-address-sql
+  (str "SELECT last_name, first_name, email, status"
+       "  FROM player"
+       "  WHERE team_id = ? AND status = (--status--)"
+       "  UNION SELECT last_name, first_name, email, status"
+       "  FROM schedule s"
+       "  JOIN match_courts mc ON mc.match_id = s.match_id"
+       "  JOIN player p ON p.team_id = ?"
+       "       AND (mc.home_player1 = p.id"
+       "       OR mc.home_player2 = p.id"
+       "       OR mc.away_player1 = p.id"
+       "       OR mc.away_player2 = p.id)"
+       "  WHERE s.match_id = ?"
+       "  ORDER BY last_name"))
+
+(defn get-lineup-email-addresses
+  "docstring"
+  [match-id team-id send-subs]
+  (let [status (if (= (s/blank? send-subs) true) "'A'", "'A','S'")
+        sql (s/replace line-email-address-sql #"--status--" status)]
+    (j/query sys/db-cred
+             [sql team-id team-id match-id])))
 
 
 

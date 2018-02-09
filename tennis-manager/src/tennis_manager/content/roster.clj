@@ -56,6 +56,14 @@
       (add-form-control "Last name:" {:id "ap_last_name" :name "last_name" :maxlength 45 :size 45 :type= "text"})
       (add-form-control "Email:" {:id "ap_email" :name "email" :maxlength 45 :size 45 :type= "text"})
       (add-form-control "Phone number:" {:id "ap_phone_number" :name "phone_number" :maxlength 10 :size 10 :onkeypress "return isNumberKey(event)"})
+      [:tr
+       [:td {:width "5%"} "&nbsp;"]
+       [:td {:nowrap true} [:label.control-label {:for "up_status"} "Status"]]
+       [:td [:select#ap_status {:name "status"}
+             [:option {:value "A"} "Active"]
+             [:option {:value "I"} "Inactive"]
+             [:option {:value "S"} "Sub"]]]
+       [:td {:width "5%"} "&nbsp;"]]
       (layout/hr-row form-span "90%")
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"}
