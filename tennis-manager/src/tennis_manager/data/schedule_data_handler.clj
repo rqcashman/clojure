@@ -88,7 +88,6 @@
 (defn upsert-match-lineup
   "docstring"
   [match-id team-id court player1 player2 forfeit]
-  (println "upsert:" match-id team-id court player1 player2 forfeit)
   (let [match (nth (match-info match-id) 0)
         forfeit_team_id (case forfeit
                           "0" nil
@@ -170,8 +169,8 @@
         player1-col (if (= (:home_team_id match) (int usr/users_team_id)) "home_player1" "away_player1")
         player2-col (s/replace player1-col #"1" "2")
         sql (str "select court_number," player1-col " as player1," player2-col " as player2,forfeit_team_id,t.name as forfeit_team_name,
-                 concat (p1.last_name, ', ', p1.first_name) as player1_name,
-                 concat (p2.last_name, ', ', p2.first_name) as player2_name
+                 concat (p1.last_name, ', ', p1.first_name) as player1_name, p1.id as player1_id,
+                 concat (p2.last_name, ', ', p2.first_name) as player2_name, p2.id as player2_id
                  from match_courts mc
                  left join team t on t.id = mc.forfeit_team_id
                  left join player p1 on p1.id = " player1-col
@@ -181,10 +180,10 @@
              [sql match-id])))
 
 (def line-email-address-sql
-  (str "SELECT last_name, first_name, email, status"
+  (str "SELECT last_name, first_name, email, status, id"
        "  FROM player"
        "  WHERE team_id = ? AND status = (--status--)"
-       "  UNION SELECT last_name, first_name, email, status"
+       "  UNION SELECT last_name, first_name, email, status, p.id"
        "  FROM schedule s"
        "  JOIN match_courts mc ON mc.match_id = s.match_id"
        "  JOIN player p ON p.team_id = ?"

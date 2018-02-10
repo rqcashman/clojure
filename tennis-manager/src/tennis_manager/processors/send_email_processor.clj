@@ -28,7 +28,7 @@
   [match-info]
   (let [address (str (:address match-info) ", " (:city match-info) " " (:state match-info) ", " (:zip_code match-info))]
     (str
-      "<table width='100%' align='left' cellpadding='0' cellspacing='0'>"
+      "<table width='100%' align='left'>"
       "   <tr> "
       "      <td nowrap style='font-weight:bold'>Match date:</td>"
       "      <td width='5%'>&nbsp;</td>"
@@ -96,22 +96,22 @@
               "   <td width='5%'>&nbsp;</td>"
               (if (= (:forfeit_team_name court) nil)
                 (do
-                  (str "<td>" (:player1_name court) "</td>"
+                  (str "<td---" (:player1_id court) "--->" (:player1_name court) "</td>"
                        "<td width='5%'>&nbsp;</td>"
-                       "<td>" (:player2_name court) "</td>"))
+                       "<td---" (:player2_id court) "--->" (:player2_name court) "</td>"))
                 (str "<td colspan='3' align='left' style='color:red;font-weight:bold'>" (:forfeit_team_name court) " forfeit</td>"))
               "</tr>")))
 
 (defn get-lineup-email-body
   "Generate html to use as rich text email"
-  [message signature match-info lineup]
+  [message signature match-info]
   (str
     (match-header match-info)
     "<table width='70%' align='left'>"
     "   <tr>"
     "      <td align='left' colspan='2'>---salutation---,</td>"
     "   </tr>"
-    "   <tr><td></td><td><table>" (s/join (reduce #(get-lineup-row %1 %2) () (reverse lineup))) "</table></td></tr>"
+    "   <tr><td></td><td><table>---courts---</table></td></tr>"
     "   <tr><td colspan='2'>&nbsp;</td></tr>"
     "   <tr>"
     "      <td width='5%'></td>"
@@ -145,21 +145,30 @@
       (println "Error sending availability email.  Msg" (.getMessage e))
       (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e)))))
 
+(defn style-courts
+  "docstring"
+  [court-assignments player-id]
+  (println player-id " =========================================== style courtsxxxx")
+  (println (s/replace court-assignments (re-pattern (str "---" player-id "---")) " style='font-weight:bold'"))
+  (println (s/replace court-assignments #"---\d+---" " style='font-weight:bold'"))
+  (println (s/replace (s/replace court-assignments (re-pattern (str "---" player-id "---")) " style='font-weight:bold'") #"---\d+---" ""))
+  (s/replace (s/replace court-assignments (re-pattern (str "---" player-id "---")) " style='font-weight:bold'") #"---\d+---" ""))
+
+
 (defn send-lineup-email
   "Send a match lineup email"
   [{:keys [message signature match_id send_subs]}]
   (try
-    (println "==================================")
     (let [match-info (nth (sched/match-info match_id) 0)
-          lineup (sched/match-lineup match_id)
-          email-body (get-lineup-email-body message signature match-info lineup)
+          court-assignments (s/join (reduce #(get-lineup-row %1 %2) () (reverse (sched/match-lineup match_id))))
+          email-body (get-lineup-email-body message signature match-info)
           subject (str "Lineup for " (:match_date match-info))
           parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text email-body})]
       (doseq [player (sched/get-lineup-email-addresses match_id usr/users_team_id send_subs)]
         (if (= (s/blank? (:email player)) false)
-          (let [email-msg (s/replace email-body #"---salutation---" (str (:first_name player) " " (:last_name player)))
+          (let [msg-courts (s/replace email-body "---courts---" (style-courts court-assignments (:id player)))
+                email-msg (s/replace msg-courts #"---salutation---" (str (:first_name player) " " (:last_name player)))
                 email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
-            (println email-msg)
             (mail/send-gmail email-parms))))
       (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Lineup email sent"))
     (catch Exception e
