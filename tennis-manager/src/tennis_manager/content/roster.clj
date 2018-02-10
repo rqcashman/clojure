@@ -129,7 +129,7 @@
 (defn roster []
   (let [roster-actions
         [{:id "add-player" :name "Add player" :content (add-player)}
-         {:id "show-roster" :name "Show roster" :content (show-roster)}]]
+         {:id "show-roster" :name "Show roster" :content (show-roster) :selected "selected"}]]
     (list
       (select-form roster-actions)
       (map add-div roster-actions)

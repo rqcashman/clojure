@@ -122,4 +122,3 @@ function processRequest(form_id, uri, title) {
 function team_schedule_all() {
     tennis_manager.core.schedule-all($("#season-id option:selected").val(), $("#team-id option:selected").val());
 };
-

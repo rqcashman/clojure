@@ -96,7 +96,6 @@
             [:button {:type "button" :onclick (str "return processRequest('#loadscheduleform', '/load-schedule', '" title "')")} title]]]
       (layout/empty-row form-span)]]))
 
-
 (defn load-schedule-file
   []
   (let [title "Load Schedule File"]
@@ -114,16 +113,6 @@
       [:tr [:td {:colspan form-span :align "center"}
             [:button {:type "button" :onclick (str "return processRequest('#loadschedulefileform', '/load-schedule-file', '" title "')")} title]]]
       (layout/empty-row form-span)]]))
-
-
-
-;(def admin-actions
-;  [{:id "add-club" :name "Add club" :content (club-content)}
-;   {:id "add-season" :name "Add season" :content (season-content)}
-;   {:id "add-team" :name "Add team" :content (team-content)}
-;   {:id "manage-schedule" :name "Manage schedule" :content (load-schedule)}])
-
-
 
 (defn select-form
   [admin-actions]

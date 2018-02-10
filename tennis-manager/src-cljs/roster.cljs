@@ -7,10 +7,6 @@
             [enfocus.core :as ef]
             [clojure.string :as s]))
 
-(defn ^:export rosterxx [team-id]
-  (js/alert "hi there rick " team-id)
-  )
-
 (defn not-found-row
   "generate a not found row"
   []

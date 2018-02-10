@@ -42,7 +42,6 @@
    [:button {:type "button" :onclick "show_select_form();"} "Return to select form"]])
 
 (defn schedule []
-  (println "in schedule")
   (list [:div#sched-form-div.panel.panel-default
          [:table.table.table-sm.schedule-form
           [:thead

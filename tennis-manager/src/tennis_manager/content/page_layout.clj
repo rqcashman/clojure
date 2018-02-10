@@ -59,7 +59,7 @@
 (defn option
   "this work for both season and team because both have id and name in their maps"
   [curr]
-  [:option {:value (:id curr)} (:name curr)])
+  [:option {:value (:id curr) :selected (:selected curr)} (:name curr)])
 
 (defn add-select
   ([data-fn option-fn id title colspan]

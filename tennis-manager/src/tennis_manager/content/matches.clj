@@ -2,11 +2,11 @@
   (:use [hiccup.form]
         [hiccup.element :only (link-to)]
         [tennis-manager.data.team-data-handler :as team]
+        [tennis-manager.data.schedule-data-handler :as sched]
         [tennis-manager.data.season-data-handler :as season]
         [tennis-manager.data.user-info :as usr]
         [tennis-manager.content.page-layout :as layout]
-        [hiccup.page :only (html5 include-css include-js)])
-  (:require [tennis-manager.data.schedule-data-handler :as sched]))
+        [hiccup.page :only (html5 include-css include-js)]))
 
 (def form-span 4)
 (def sched-form-span 8)

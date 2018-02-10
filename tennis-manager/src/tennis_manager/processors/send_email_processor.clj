@@ -88,7 +88,7 @@
     "</table>"))
 
 (defn get-lineup-row
-  "docstring"
+  "Puts out the lineup for a court.  Each player TD has ---id--- which is used to hilight a players name in the lineup email they receive"
   [out court]
   (conj out (str
               "<tr>"
@@ -146,12 +146,8 @@
       (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e)))))
 
 (defn style-courts
-  "docstring"
+  "Hilights a player if they are in the lineup"
   [court-assignments player-id]
-  (println player-id " =========================================== style courtsxxxx")
-  (println (s/replace court-assignments (re-pattern (str "---" player-id "---")) " style='font-weight:bold'"))
-  (println (s/replace court-assignments #"---\d+---" " style='font-weight:bold'"))
-  (println (s/replace (s/replace court-assignments (re-pattern (str "---" player-id "---")) " style='font-weight:bold'") #"---\d+---" ""))
   (s/replace (s/replace court-assignments (re-pattern (str "---" player-id "---")) " style='font-weight:bold'") #"---\d+---" ""))
 
 

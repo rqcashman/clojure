@@ -1,7 +1,7 @@
 /**
  * Created by Richard on 6/5/2017.
  */
-var current_form_id = "add-player";
+var current_form_id = "show-roster";
 
 function change_form(new_form_id) {
     $("#status-panel").css("display", "none");

@@ -5,5 +5,6 @@ function statusOK(evt) {
     else {
         change_form(current_form_id);
     }
+    $("#status-content").text("Processing...");
     evt.preventDefault();
 }

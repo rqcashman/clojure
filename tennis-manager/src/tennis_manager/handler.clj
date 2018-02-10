@@ -11,6 +11,7 @@
             [tennis-manager.content.player-availability :as avail]
             [tennis-manager.content.roster :as rost]
             [tennis-manager.content.schedule :as schedule]
+            [tennis-manager.content.tabs :as tabs]
             [tennis-manager.data.club-data-handler :as club]
             [tennis-manager.data.player-data-handler :as player]
             [tennis-manager.data.schedule-data-handler :as sched]
@@ -55,7 +56,7 @@
            (POST "/send-availability-email" [& params] (rr/response (em/send-avail-email params)))
            (POST "/send-lineup-email" [& params] (rr/response (em/send-lineup-email params)))
 
-           (GET "/" [] "Hello World")
+           (GET "/" [] (layout/application "Team Roster" "tabs.js" (tabs/tabs)))
            (route/not-found "Not Found"))
 
 (def app
