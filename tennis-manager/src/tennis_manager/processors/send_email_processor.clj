@@ -166,6 +166,7 @@
                 email-msg (s/replace msg-courts #"---salutation---" (str (:first_name player) " " (:last_name player)))
                 email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
             (mail/send-gmail email-parms))))
+      (comm/upsert_match_lineup_email_sent match_id)
       (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Lineup email sent"))
     (catch Exception e
       (println "Error sending lineup email.  Msg" (.getMessage e))

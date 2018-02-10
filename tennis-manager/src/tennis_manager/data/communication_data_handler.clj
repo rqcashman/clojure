@@ -24,7 +24,7 @@
   (j/execute! sys/db-cred
               [(str "update match_communication set availability_sent = current_timestamp() where match_id=? and team_id = ?") match_id, usr/users_team_id]))
 
-(defn match_avail_email_sent
+(defn match_communication_sent
   "docstring"
   [match_id]
   (j/query sys/db-cred
@@ -32,6 +32,18 @@
            {:as-arrays?    false
             :result-set-fn (fn [rs]
                              (if (> (:ct (nth rs 0)) 0) true false))}))
+
+(defn add_match_lineup_email_sent
+  "should never get here"
+  [match_id]
+  (j/execute! sys/db-cred
+              [(str "insert into match_communication values (?,?,null,current_timestamp())") match_id, usr/users_team_id]))
+
+(defn update_match_lineup_email_sent_date
+  "docstring"
+  [match_id]
+  (j/execute! sys/db-cred
+              [(str "update match_communication set lineup_sent = current_timestamp() where match_id=? and team_id = ?") match_id, usr/users_team_id]))
 
 
 (defn get_communication_detail
@@ -55,9 +67,17 @@
 (defn upsert_match_avail_email_sent
   "docstring"
   [match_id]
-  (if (match_avail_email_sent match_id)
+  (if (match_communication_sent match_id)
     (update_match_avail_email_sent_date match_id)
     (add_match_avail_email_sent match_id))
+  )
+
+(defn upsert_match_lineup_email_sent
+  "docstring"
+  [match_id]
+  (if (match_communication_sent match_id)
+    (update_match_lineup_email_sent_date match_id)
+    (add_match_lineup_email_sent match_id))
   )
 
 
