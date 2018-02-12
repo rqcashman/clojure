@@ -11,17 +11,24 @@
   [comm_detail available]
   (let [avail_text (if (= available "Y") [:span {:style "color:green;font-weight:bold"} "available"] [:span {:style "color:red;font-weight:bold"} "unavailable"])]
     [:br] [:br]
-    [:table.table-sm {:width "40%"}
-     [:tr [:td {:colspan 3} "&nbsp;"]]
-     [:tr [:td {:colspan 3} "&nbsp;"]]
+    [:table.table-sm {:width "20%" :border "2px" :align "center"}
      [:tr
-      [:td {:width "25px"} "&nbsp;"]
-      [:td {:nowrap "true"} (:first_name comm_detail) " " (:last_name comm_detail) ","]
-      [:td]]
-     [:tr
-      [:td "&nbsp;"]
-      [:td]
-      [:td {:nowrap "true"}  "You have been marked as " avail_text " for the match on " (:match_date comm_detail) " at " (:match_time comm_detail)]]]
+      [:td
+       [:table
+        [:thead.table-inverse
+         [:tr
+          [:td {:colspan 4} "Availability Updated"]]]
+        [:tr
+         [:td {:width "25px"} "&nbsp;"]
+         [:td {:nowrap "true"} (:first_name comm_detail) " " (:last_name comm_detail) ","]
+         [:td]
+         [:td {:width "25px"} "&nbsp;"]]
+        [:tr
+         [:td "&nbsp;"]
+         [:td]
+         [:td {:nowrap "true"} "You have been marked as " avail_text " for the match on " [:b (:match_date comm_detail) " at " (:match_time comm_detail)]]
+         [:td {:width "25px"} "&nbsp;"]]
+        [:tr [:td {:colspan 4} "&nbsp;"]]]]]]
     ))
 
 (defn update_availability

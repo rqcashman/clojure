@@ -1,12 +1,12 @@
 (ns tennis-manager.content.matches
   (:use [hiccup.form]
         [hiccup.element :only (link-to)]
+        [hiccup.page :only (html5 include-css include-js)]
+        [tennis-manager.content.page-layout :as layout]
         [tennis-manager.data.team-data-handler :as team]
         [tennis-manager.data.schedule-data-handler :as sched]
         [tennis-manager.data.season-data-handler :as season]
-        [tennis-manager.data.user-info :as usr]
-        [tennis-manager.content.page-layout :as layout]
-        [hiccup.page :only (html5 include-css include-js)]))
+        [tennis-manager.data.user-info :as usr]))
 
 (def form-span 4)
 (def sched-form-span 8)
@@ -285,13 +285,12 @@
       [:tr
        [:td {:width "5%:"}]
        [:td {:colspan 2}
-        [:table#email-lineup.table.table-striped.table-sm
+        [:table#email-lineup.table
          [:thead.table-inverse
           [:tr {:align "left"}
            [:td ""]
            [:td "Player 1"]
-           [:td "Player 2"]
-           [:td "Forfeit"]]]
+           [:td "Player 2"]]]
          [:tbody#email-lineup-body]
          (layout/empty-row 4)]
         [:td {:width "5%:"}]]]

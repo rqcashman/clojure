@@ -31,7 +31,7 @@
 (defn empty-row
   [colspan]
   []
-  [:tr [:td {:colspan colspan}]])
+  [:tr [:td {:colspan colspan}] "&nbsp;"])
 
 (defn hr-row
   "docstring"

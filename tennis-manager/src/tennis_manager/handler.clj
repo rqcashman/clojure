@@ -1,11 +1,17 @@
 (ns tennis-manager.handler
-  (:require [compojure.core :refer :all]
+  (:require [buddy.auth.accessrules :refer [wrap-access-rules]]
+            [buddy.auth.backends :as backends]
+            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
+            [compojure.core :refer :all]
             [compojure.route :as route]
+            [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [ring.middleware.params :as parms]
             [ring.middleware.json :as ring-json]
+            [ring.middleware.params :as parms]
+            [ring.middleware.session :refer [wrap-session]]
             [ring.util.response :as rr]
             [tennis-manager.content.admin :as admin]
+            [tennis-manager.content.login :as login]
             [tennis-manager.content.matches :as match]
             [tennis-manager.content.page-layout :as layout]
             [tennis-manager.content.player-availability :as avail]
@@ -17,6 +23,7 @@
             [tennis-manager.data.schedule-data-handler :as sched]
             [tennis-manager.data.season-data-handler :as season]
             [tennis-manager.data.team-data-handler :as team]
+            [tennis-manager.processors.auth-processor :as auth]
             [tennis-manager.processors.send-email-processor :as em]
             [tennis-manager.processors.service-processor :as pr]))
 
@@ -26,8 +33,8 @@
            (GET "/matches" [] (layout/application "Matches" "matches.js" (match/matches)))
            (GET "/schedule" [] (layout/application "Tennis Schedule" "schedule.js" (schedule/schedule)))
            (GET "/roster" [] (layout/application "Team Roster" "roster.js" (rost/roster)))
-           (GET "/availability-reply*" {params :query-params} (layout/application "Availability Response" "blank.js" (avail/update_availability (get  params "player-token") (get  params "available"))))
-           ;(GET "/availability-reply/:available/:player-token" [& params] (layout/application "Availability Response" "" (avail/update_availability)))
+           (GET "/login" [] (layout/application "User Login" "blank.js" (login/login)))
+           (GET "/availability-reply*" {params :query-params} (layout/application "Availability Response" "blank.js" (avail/update_availability (get params "player-token") (get params "available"))))
 
            ;rest APIs
            (GET "/clubs" [] (rr/response (club/clubs)))
@@ -55,12 +62,19 @@
            (POST "/update-player" [& params] (rr/response (pr/update-player-info params)))
            (POST "/send-availability-email" [& params] (rr/response (em/send-avail-email params)))
            (POST "/send-lineup-email" [& params] (rr/response (em/send-lineup-email params)))
+           (POST "/login" [& params] (rr/response "Login post page"))
 
-           (GET "/" [] (layout/application "Team Roster" "tabs.js" (tabs/tabs)))
+           (GET "/" [] (layout/application "Tennis Manager" "tabs.js" (tabs/tabs)))
            (route/not-found "Not Found"))
 
 (def app
   (-> app-routes
       (ring-json/wrap-json-response)
       (parms/wrap-params)
+      (wrap-access-rules {:rules auth/rules :on-error auth/on-error})
+      (wrap-authentication auth/auth-backend)
+      (wrap-authorization auth/auth-backend)
+      (wrap-session)
+      (wrap-content-type)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))))
+

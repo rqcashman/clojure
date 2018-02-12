@@ -1,10 +1,10 @@
 (ns tennis-manager.content.admin
   (:use [hiccup.form]
         [hiccup.element :only (link-to)]
-        [tennis-manager.data.club-data-handler :as club]
-        [tennis-manager.data.season-data-handler :as season]
+        [hiccup.page :only (html5 include-css include-js)]
         [tennis-manager.content.page-layout :as layout]
-        [hiccup.page :only (html5 include-css include-js)]))
+        [tennis-manager.data.club-data-handler :as club]
+        [tennis-manager.data.season-data-handler :as season]))
 
 (def form-span 4)
 
@@ -106,7 +106,7 @@
       (layout/hr-row form-span "90%")
       (layout/add-select season/seasons layout/option "season_id" "Season:" (- form-span 2))
       (add-form-control "Select file:" {:class "required" :id "schedule" :name "schedule" :type "file" :size 100})
-     ; [:tr [:td {:colspan form-span :align "center"}
+      ; [:tr [:td {:colspan form-span :align "center"}
       ;      [:input {:name "schedule" :type "file"}]]]
       (layout/hr-row form-span "90%")
       (layout/empty-row form-span)

@@ -92,10 +92,11 @@
   [lineup-row]
   (ef/html
     [:tr
-     [:td [:b "Court " (:court_number lineup-row)]]
-     [:td (:player1_name lineup-row)]
-     [:td (:player2_name lineup-row)]
-     [:td (:forfeit_team_name lineup-row)]]))
+     [:td [:b "Court " (:court_number lineup-row)] ":"]
+     (if (= (nil? (:forfeit_team_name lineup-row)) true)
+       (list [:td (:player1_name lineup-row)]
+             [:td (:player2_name lineup-row)])
+       [:td {:colspan 2 :align "left" :style "font-weight:bold;color:red"} (:forfeit_team_name lineup-row) " forfeit"])]))
 
 (defn ^:export lineup_email_form
   "Load the email lineup form."
