@@ -10,8 +10,8 @@
 (defn tabs []
   [:div#tabs
    [:ul
-    [:li [:a {:href "/matches"} "Matches"]]
-    [:li [:a {:href "/schedule"} "Schedule"]]
-    [:li [:a {:href "/roster"} "Roster"]]
-    [:li [:a {:href "/admin"} "Admin"]]]])
+    [:li [:a#matches {:href "/mgr/matches"} "Matches"]]
+    [:li [:a#schedule {:href "/mgr/schedule"} "Schedule"]]
+    [:li [:a#roster {:href "/mgr/roster"} "Roster"]]
+    [:li [:a#admin {:href "/mgr/admin" :name "admin"} "Admin"]]]])
 

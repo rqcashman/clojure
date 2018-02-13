@@ -29,12 +29,13 @@
 
 (defroutes app-routes
            ;HTML pages
-           (GET "/admin" [] (layout/application "Admin Functions" "admin.js" (admin/admin)))
-           (GET "/matches" [] (layout/application "Matches" "matches.js" (match/matches)))
-           (GET "/schedule" [] (layout/application "Tennis Schedule" "schedule.js" (schedule/schedule)))
-           (GET "/roster" [] (layout/application "Team Roster" "roster.js" (rost/roster)))
-           (GET "/login" [] (layout/application "User Login" "blank.js" (login/login)))
-           (GET "/availability-reply*" {params :query-params} (layout/application "Availability Response" "blank.js" (avail/update_availability (get params "player-token") (get params "available"))))
+           (GET "/login"  {params :query-params}  (layout/application "User Login" "" (login/login (get params "err") (get params "username") (get params "msg"))))
+           (GET "/mgr" [] (layout/application "Tennis Manager" "tabs.js" (tabs/tabs)))
+           (GET "/mgr/admin" [] (layout/application "Admin Functions" "admin.js" (admin/admin)))
+           (GET "/mgr/matches" [] (layout/application "Matches" "matches.js" (match/matches)))
+           (GET "/mgr/schedule" [] (layout/application "Tennis Schedule" "schedule.js" (schedule/schedule)))
+           (GET "/mgr/roster" [] (layout/application "Team Roster" "roster.js" (rost/roster)))
+           (GET "/availability-reply*" {params :query-params} (layout/application "Availability Response" "" (avail/update_availability (get params "player-token") (get params "available"))))
 
            ;rest APIs
            (GET "/clubs" [] (rr/response (club/clubs)))
@@ -62,9 +63,15 @@
            (POST "/update-player" [& params] (rr/response (pr/update-player-info params)))
            (POST "/send-availability-email" [& params] (rr/response (em/send-avail-email params)))
            (POST "/send-lineup-email" [& params] (rr/response (em/send-lineup-email params)))
-           (POST "/login" [& params] (rr/response "Login post page"))
+           (POST "/login" [& params] "Login post page")
 
-           (GET "/" [] (layout/application "Tennis Manager" "tabs.js" (tabs/tabs)))
+           (GET "/" [] {:status  200
+                        :headers {"Content-Type" "text/html"}
+                        :body    "<br><br><h1 align='center'>Tennis Manager</h1>"})
+           ;Return an HTML page without JSON.  "Content-Type is what prevents the JSON conversion"
+           (GET "/xxx" [] {:status  400
+                           :headers {"Content-Type" "text/html"}
+                           :body    "<h1 align='center'>Non-JSON test page</h1>"})
            (route/not-found "Not Found"))
 
 (def app
@@ -75,6 +82,5 @@
       (wrap-authentication auth/auth-backend)
       (wrap-authorization auth/auth-backend)
       (wrap-session)
-      (wrap-content-type)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))))
 
