@@ -46,6 +46,6 @@
                         :source-paths ["src-cljs"]
                         :compiler     {
                                        :output-to     "resources/public/main.js"
-                                       :optimizations :whitespace
+                                       :optimizations :advanced
                                        :pretty-print  true}}]})
 

@@ -17,58 +17,8 @@
       <file leaf-file-name="auth_processor.clj" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/tennis_manager/processors/auth_processor.clj">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="35" column="28" lean-forward="false" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="web.clj" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/AppData/Local/Temp/Temp1_buddy-auth-c085a8323a6ecaa89ed2e5c1fa129e41b8536afb.zip/buddy-auth-c085a8323a6ecaa89ed2e5c1fa129e41b8536afb/examples/session/src/authexample/web.clj">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="78" column="45" lean-forward="false" selection-start-line="78" selection-start-column="12" selection-end-line="78" selection-end-column="45" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="auth_handler.clj" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tennis_manager/data/auth_handler.clj">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="251">
-              <caret line="15" column="71" lean-forward="false" selection-start-line="15" selection-start-column="71" selection-end-line="15" selection-end-column="71" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="login.clj" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/login.clj">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-58">
-              <caret line="25" column="23" lean-forward="false" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="handler.clj" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tennis_manager/handler.clj">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="31" column="134" lean-forward="true" selection-start-line="31" selection-start-column="134" selection-end-line="31" selection-end-column="134" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="core.clj" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/clojure/clojure/1.8.0/clojure-1.8.0.jar!/clojure/core.clj">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="594" column="6" lean-forward="false" selection-start-line="594" selection-start-column="6" selection-end-line="594" selection-end-column="6" />
+            <state relative-caret-position="242">
+              <caret line="85" column="86" lean-forward="true" selection-start-line="85" selection-start-column="86" selection-end-line="85" selection-end-column="86" />
               <folding />
             </state>
           </provider>
@@ -88,9 +38,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>roster</find>
-      <find>selected</find>
-      <find>in schedule</find>
       <find>desc</find>
       <find>match-line</find>
       <find>Forfeit</find>
@@ -105,7 +52,6 @@
       <find>wrap</find>
       <find>contains</find>
       <find>u</find>
-      <find>mgr</find>
       <find>assoc</find>
       <find>ssl</find>
       <find>data-h</find>
@@ -118,6 +64,10 @@
       <find>====</find>
       <find>user not</find>
       <find>not autho</find>
+      <find>&lt;! (http/get</find>
+      <find>mgr</find>
+      <find>Error</find>
+      <find>goog.debug.Error</find>
     </findStrings>
     <replaceStrings>
       <replace>add-club</replace>
@@ -181,7 +131,6 @@
         <option value="$PROJECT_DIR$/src/tennis_manager/data/team_data_handler.clj" />
         <option value="$PROJECT_DIR$/src/tennis_manager/content/gmail.clj" />
         <option value="$PROJECT_DIR$/src-resources/tennis.css" />
-        <option value="$PROJECT_DIR$/src-cljs/core.cljs" />
         <option value="$PROJECT_DIR$/src-resources/matches.js" />
         <option value="$PROJECT_DIR$/src/tennis_manager/data/user_info.clj" />
         <option value="$PROJECT_DIR$/src/tennis_manager/processors/service_processor.clj" />
@@ -190,7 +139,6 @@
         <option value="$PROJECT_DIR$/src/tennis_manager/data/schedule_data_handler.clj" />
         <option value="$PROJECT_DIR$/src-resources/status.js" />
         <option value="$PROJECT_DIR$/src-resources/admin.js" />
-        <option value="$PROJECT_DIR$/src-cljs/roster.cljs" />
         <option value="$PROJECT_DIR$/src-resources/roster.js" />
         <option value="$PROJECT_DIR$/src/tennis_manager/content/roster.clj" />
         <option value="$PROJECT_DIR$/src-resources/tabs.js" />
@@ -198,7 +146,6 @@
         <option value="$PROJECT_DIR$/src/tennis_manager/data/season_data_handler.clj" />
         <option value="$PROJECT_DIR$/src/tennis_manager/processors/send_email_processor.clj" />
         <option value="$PROJECT_DIR$/src/tennis_manager/data/communication_data_handler.clj" />
-        <option value="$PROJECT_DIR$/src-cljs/matches.cljs" />
         <option value="$PROJECT_DIR$/src/tennis_manager/content/player_availability.clj" />
         <option value="$PROJECT_DIR$/src/tennis_manager/data/Authorization.clj" />
         <option value="$PROJECT_DIR$/src/tennis_manager/content/Login.clj" />
@@ -206,13 +153,16 @@
         <option value="$PROJECT_DIR$/src/tennis_manager/content/admin.clj" />
         <option value="$PROJECT_DIR$/src/tennis_manager/content/xx.html" />
         <option value="$PROJECT_DIR$/src/tennis_manager/data/system_info.clj" />
-        <option value="$PROJECT_DIR$/project.clj" />
-        <option value="$PROJECT_DIR$/src/tennis_manager/content/tabs.clj" />
-        <option value="$PROJECT_DIR$/src/tennis_manager/content/page_layout.clj" />
-        <option value="$PROJECT_DIR$/src/tennis_manager/handler.clj" />
         <option value="$PROJECT_DIR$/src/tennis_manager/content/login.clj" />
         <option value="$PROJECT_DIR$/src/tennis_manager/data/auth_handler.clj" />
         <option value="$USER_HOME$/AppData/Local/Temp/Temp1_buddy-auth-c085a8323a6ecaa89ed2e5c1fa129e41b8536afb.zip/buddy-auth-c085a8323a6ecaa89ed2e5c1fa129e41b8536afb/examples/session/src/authexample/web.clj" />
+        <option value="$PROJECT_DIR$/src-cljs/core.cljs" />
+        <option value="$PROJECT_DIR$/src-cljs/roster.cljs" />
+        <option value="$PROJECT_DIR$/src-cljs/matches.cljs" />
+        <option value="$PROJECT_DIR$/src/tennis_manager/content/page_layout.clj" />
+        <option value="$PROJECT_DIR$/src/tennis_manager/handler.clj" />
+        <option value="$PROJECT_DIR$/src/tennis_manager/content/tabs.clj" />
+        <option value="$PROJECT_DIR$/project.clj" />
         <option value="$PROJECT_DIR$/src/tennis_manager/processors/auth_processor.clj" />
       </list>
     </option>
@@ -328,180 +278,12 @@
             <path>
               <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
               <item name="tennis-manager" type="462c0819:PsiDirectoryNode" />
+              <item name="src-cljs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tennis-manager" type="462c0819:PsiDirectoryNode" />
               <item name="src-resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: buddy/buddy-auth:2.1.0" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: buddy/buddy-auth:2.1.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="buddy-auth-2.1.0.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: buddy/buddy-auth:2.1.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="buddy-auth-2.1.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="buddy" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: buddy/buddy-auth:2.1.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="buddy-auth-2.1.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="buddy" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: buddy/buddy-auth:2.1.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="buddy-auth-2.1.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="buddy" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="backends" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: domina:1.0.3" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: domina:1.0.3" type="70bed36:NamedLibraryElementNode" />
-              <item name="domina-1.0.3.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: domina:1.0.3" type="70bed36:NamedLibraryElementNode" />
-              <item name="domina-1.0.3.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="domina" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: enfocus:2.1.1" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: enfocus:2.1.1" type="70bed36:NamedLibraryElementNode" />
-              <item name="enfocus-2.1.1.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: enfocus:2.1.1" type="70bed36:NamedLibraryElementNode" />
-              <item name="enfocus-2.1.1.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="enfocus" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: hiccup:1.0.4" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: hiccup:1.0.4" type="70bed36:NamedLibraryElementNode" />
-              <item name="hiccup-1.0.4.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: hiccup:1.0.4" type="70bed36:NamedLibraryElementNode" />
-              <item name="hiccup-1.0.4.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="hiccup" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: org.clojure/clojure:1.8.0" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: org.clojure/clojure:1.8.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="clojure-1.8.0.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: org.clojure/clojure:1.8.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="clojure-1.8.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="clojure" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: ring/ring-codec:1.1.0" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: ring/ring-codec:1.1.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="ring-codec-1.1.0.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: ring/ring-codec:1.1.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="ring-codec-1.1.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: ring/ring-core:1.6.0" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: ring/ring-core:1.6.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="ring-core-1.6.0.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: ring/ring-core:1.6.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="ring-core-1.6.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="ring" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: ring/ring-core:1.6.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="ring-core-1.6.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="ring" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: ring/ring-json:0.4.0" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: ring/ring-json:0.4.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="ring-json-0.4.0.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Leiningen: ring/ring-json:0.4.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="ring-json-0.4.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="middleware" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -813,12 +595,12 @@
       <workItem from="1516060732580" duration="140000" />
       <workItem from="1516062562270" duration="1066000" />
       <workItem from="1516100366636" duration="68997000" />
-      <workItem from="1516900487910" duration="330701000" />
+      <workItem from="1516900487910" duration="335280000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="555803000" />
+    <option name="totallyTimeSpent" value="560382000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -936,46 +718,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/email_body.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="4" lean-forward="false" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/gmail.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="10" lean-forward="false" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/sched.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src-cljs/roster.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src-resources/roster.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="40" lean-forward="true" selection-start-line="22" selection-start-column="40" selection-end-line="22" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tennis_manager/data/team_data_handler.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -1040,14 +782,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src-cljs/matches.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-874">
-          <caret line="120" column="0" lean-forward="false" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/ring/ring-core/1.5.0/ring-core-1.5.0.jar!/ring/middleware/params.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1076,14 +810,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-4951">
           <caret line="8" column="47" lean-forward="false" selection-start-line="8" selection-start-column="47" selection-end-line="8" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/admin.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="103">
-          <caret line="47" column="18" lean-forward="true" selection-start-line="47" selection-start-column="18" selection-end-line="47" selection-end-column="18" />
           <folding />
         </state>
       </provider>
@@ -1152,14 +878,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-17">
-          <caret line="17" column="46" lean-forward="false" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/hiccup/hiccup/1.0.4/hiccup-1.0.4.jar!/hiccup/page.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="268">
@@ -1191,14 +909,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="4" lean-forward="false" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/page_layout.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="33" lean-forward="true" selection-start-line="8" selection-start-column="33" selection-end-line="8" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1235,26 +945,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/tabs.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="66" lean-forward="true" selection-start-line="15" selection-start-column="66" selection-end-line="15" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/ring/ring-codec/1.1.0/ring-codec-1.1.0.jar!/ring/util/codec.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="61">
           <caret line="59" column="16" lean-forward="false" selection-start-line="59" selection-start-column="6" selection-end-line="59" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/data/club_data_handler.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="42" selection-end-column="71" />
           <folding />
         </state>
       </provider>
@@ -1299,34 +993,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/handler.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="31" column="134" lean-forward="true" selection-start-line="31" selection-start-column="134" selection-end-line="31" selection-end-column="134" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/login.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-58">
-          <caret line="25" column="23" lean-forward="false" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/clojure/clojure/1.8.0/clojure-1.8.0.jar!/clojure/core.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="594" column="6" lean-forward="false" selection-start-line="594" selection-start-column="6" selection-end-line="594" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tennis_manager/data/auth_handler.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="15" column="71" lean-forward="false" selection-start-line="15" selection-start-column="71" selection-end-line="15" selection-end-column="71" />
           <folding />
         </state>
       </provider>
@@ -1339,10 +1009,122 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/login.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="42" column="55" lean-forward="true" selection-start-line="42" selection-start-column="55" selection-end-line="42" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src-resources/matches.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-255">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src-cljs/core.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="57" column="29" lean-forward="true" selection-start-line="57" selection-start-column="29" selection-end-line="57" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src-cljs/roster.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="47" column="39" lean-forward="false" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src-cljs/matches.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="77" column="16" lean-forward="true" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tennis_manager/data/club_data_handler.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="42" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tennis_manager/handler.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="36" column="18" lean-forward="false" selection-start-line="36" selection-start-column="18" selection-end-line="36" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/tabs.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="48" column="63" lean-forward="false" selection-start-line="48" selection-start-column="63" selection-end-line="48" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src-resources/status.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/admin.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="144" column="70" lean-forward="false" selection-start-line="144" selection-start-column="70" selection-end-line="144" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.cljs_rhino_repl/goog/asserts/asserts.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tennis_manager/data/auth_handler.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="15" column="71" lean-forward="false" selection-start-line="15" selection-start-column="71" selection-end-line="15" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tennis_manager/content/page_layout.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="32" lean-forward="false" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/tennis_manager/processors/auth_processor.clj">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="35" column="28" lean-forward="false" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
+        <state relative-caret-position="242">
+          <caret line="85" column="86" lean-forward="true" selection-start-line="85" selection-start-column="86" selection-end-line="85" selection-end-column="86" />
           <folding />
         </state>
       </provider>

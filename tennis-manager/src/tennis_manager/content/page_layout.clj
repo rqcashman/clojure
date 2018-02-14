@@ -6,20 +6,20 @@
   (html5 {:ng-app "myApp" :lang "en"}
          [:head
           [:title title]
-          (include-js "/main.js")
-          (include-js "/status.js")
+          (include-js "main.js")
+          (include-js "status.js")
           (include-js "https://code.jquery.com/jquery-3.2.1.min.js")
           (include-js "https://code.jquery.com/ui/1.12.1/jquery-ui.min.js")
           (include-js "https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js")
           (include-js "https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js")
           (include-js "https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.js")
           (if-not (= (s/blank? js-file) true)
-            (include-js (str "/" js-file)))
+            (include-js js-file))
           (include-css "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css")
           (include-css "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css")
           (include-css "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.css")
           (include-css "https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css")
-          (include-css "/tennis.css")
+          (include-css "tennis.css")
           [:body
            [:div content]]]))
 
