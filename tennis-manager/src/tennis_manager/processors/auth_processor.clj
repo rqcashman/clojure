@@ -22,26 +22,19 @@
   [request]
   true)
 
-(defn authenticated-access2
-  [request]
-  (println "========== access2 request =================")
-  (println request)
-  (println "========== access2 session =================")
-  (println (:session request))
-  (error "No authorization"))
-
 (defn authenticated-access
   [request]
   (println "------------ " request)
   (println "-----session ------- " (:session request))
   (let [session (:session request)]
     (if-not (= (s/blank? (:identity session)) true)
-      true
-      (error "User not logged in")))
-  )
+      (if (= (auth/session-valid? (:identity session)) true)
+        true
+        (error "User session expired"))
+      (error "User not logged in"))))
 
 (def authentication-error-list {:0    {:url "/mgr" :msg "Success"}
-                                :1000 {:url "/login?err=loginfailure" :msg "Login failedxx"}
+                                :1000 {:url "/login?err=loginfailure" :msg "Login failed"}
                                 :1001 {:url "/login?err=acctlocked" :msg "Account locked"}
                                 :1002 {:url "/login?err=acctdisabled" :msg "Account disabled"}
                                 :1003 {:url "/login?err=chgpassword" :msg "Force password change"}})
@@ -51,15 +44,13 @@
   [request]
   (let [username (:username (:params request))
         password (:password (:params request))
-        user (auth/get-user username password)]
+        user (auth/get-user-with-password username password)]
     (if user
-      (if (> (:account_locked user) 0)
-        (error "1001")
-        (if (> (:account_disabled user) 0)
-          (error "1002")
-          (if (> (:force_password_change user) 0)
-            (error "1003")
-            (error "0"))))
+      (cond
+        (> (:account_locked user) 0) (error "1001")
+        (> (:account_disabled user) 0) (error "1002")
+        (> (:force_password_change user) 0) (error "1003")
+        :else (error "0"))
       (error "1000"))))
 
 (defn on-error
@@ -79,14 +70,25 @@
 (defn login-redirect
   [request value]
   (println "on error: " value)
-  (if value
-    (let [error ((keyword value) authentication-error-list)]
-      (if (= value "0")
+  (let [username (:username (:params request))]
+    (auth/insert-login-attempt username value)
+    (if (= value "1000")
+      (auth/lock-account? username))
+    (if value
+      (if (or (= value "0") (and (= value "1001") (= (auth/account-unlocked? username) true)))
         (let [session (:session request)
-              updated-session (assoc session :identity (:username (:params request)))]
-          (-> (rr/redirect (:url error))
+              session-id (s/replace (str (java.util.UUID/randomUUID)) #"-" "")
+              error (:0 authentication-error-list)
+              updated-session (assoc session :identity session-id)
+              url (:url error)]
+          (println "=== SUCCESS ===")
+          (println "ERROR" error)
+          (println "URL" url)
+          (auth/persist-session-id username session-id)
+          (-> (rr/redirect url)
               (assoc :session updated-session)))
-        (rr/redirect (str (:url error) "&username=" (codec/url-encode (:username (:params request))) "&msg=" (codec/url-encode (:msg error))))))))
+        (let [error ((keyword value) authentication-error-list)]
+          (rr/redirect (str (:url error) "&username=" (codec/url-encode (:username (:params request))) "&msg=" (codec/url-encode (:msg error)))))))))
 
 (defn authenticated-access3
   "docstring"
