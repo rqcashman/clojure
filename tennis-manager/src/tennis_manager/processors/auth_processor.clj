@@ -19,6 +19,16 @@
 (def NOT_AUTHENTICATED "1005")
 (def NOT_AUTHORIZED "1006")
 
+(def ADMIN_USER 1)
+
+(def authentication-error-list {(keyword LOGIN_SUCCESS)     {:url "/mgr"}
+                                (keyword LOGIN_FAILED)      {:url "/login" :err "loginfailure" :msg "Login failed"}
+                                (keyword LOGIN_LOCKED)      {:url "/login" :err "acctlocked" :msg "Account locked"}
+                                (keyword LOGIN_DISABLED)    {:url "/login" :err "acctdisabled" :msg "Account disabled"}
+                                (keyword CHG_PASSWORD)      {:url "/chgpassword" :err "chgpassword" :msg "Password change required"}
+                                (keyword SESSION_EXPIRED)   {:url "/login" :err "sessionexpired" :msg "Login session timed out due to inactivity"}
+                                (keyword NOT_AUTHENTICATED) {:url "/login"}
+                                (keyword NOT_AUTHORIZED)    {:url "/notauth"}})
 (defn unauthorized-handler
   [request metadata]
   (rr/response "Unauthorized request"))
@@ -49,21 +59,11 @@
       (let [session (:session request)
             session-id (:identity session)
             user (auth/get-user-from-session-id session-id)]
-        (if (= (:user_type user) 1)
+        (if (= (:user_type user) ADMIN_USER)
           true
           (error NOT_AUTHORIZED)))
       auth)))
 
-(def authentication-error-list {(keyword LOGIN_SUCCESS)     {:url "/mgr"}
-                                (keyword LOGIN_FAILED)      {:url "/login" :err "loginfailure" :msg "Login failed"}
-                                (keyword LOGIN_LOCKED)      {:url "/login" :err "acctlocked" :msg "Account locked"}
-                                (keyword LOGIN_DISABLED)    {:url "/login" :err "acctdisabled" :msg "Account disabled"}
-                                (keyword CHG_PASSWORD)      {:url "/login" :err "chgpassword" :msg "Force password change"}
-                                (keyword SESSION_EXPIRED)   {:url "/login" :err "sessionexpired" :msg "Login session timed out due to inactivity"}
-                                (keyword NOT_AUTHENTICATED) {:url "/login"}
-                                (keyword NOT_AUTHORIZED)    {:url "/notauth"}})
-
-;TODO change url for 10003 to change password page - not created yet
 (defn authenticate-user
   [request]
   (let [username (:username (:params request))
@@ -107,8 +107,8 @@
       (:url url-hash))))
 
 (defn login-redirect
+  "redirect to next page depending on the outcome of the login attempt"
   [request value]
-
   (let [username (:username (:params request))]
     (auth/insert-login-attempt username value)
     (if (= value LOGIN_FAILED)
@@ -131,6 +131,7 @@
 (defn not-authenticated
   "Redirect if not authenticated"
   [request value]
+  (println "Not authed: " value " request: " request)
   (if value
     (let [error ((keyword value) authentication-error-list)]
       (if (= value SESSION_EXPIRED)
@@ -139,8 +140,23 @@
             (rr/redirect (get-redirect-url (conj error {:username (:email user)})))))
         (rr/redirect (str (:url error)))))))
 
+(defn check-login-status
+  "See if a user is already logged in.  It seems backwards but we want to fire the error handler if they are logged in so they get re-directed to the first landing page"
+  [request]
+  (if (= (authenticated-access request) true)
+    (error LOGIN_SUCCESS)
+    true))
+
+(defn redirect-to-main-page
+  "redirects to the main landing page if a user request the login page but is already logged in"
+  [request value]
+  (let [error ((keyword value) authentication-error-list)
+        redirect-url (get-redirect-url error)]
+    (rr/redirect redirect-url)))
+
 (def rules [{:pattern        #"(^/login*)|(^/availability-reply*)"
-             :handler        any-access
+             :handler        check-login-status
+             :on-error       redirect-to-main-page
              :request-method :get}
             {:pattern        #"(^/login$)"
              :handler        authenticate-user
