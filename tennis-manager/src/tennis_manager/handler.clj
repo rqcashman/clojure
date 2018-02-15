@@ -65,6 +65,9 @@
            (POST "/send-lineup-email" [& params] (rr/response (em/send-lineup-email params)))
            (POST "/login" [& params] "Login post page")
 
+           (GET "/noauth" [] {:status  200
+                        :headers {"Content-Type" "text/html"}
+                        :body    "<br><br><h1 align='center'>Tennis Manager</h1><br><br><h2 align='center' style='color:red'>You are not authorized to view this page</h2>"})
            (GET "/" [] {:status  200
                         :headers {"Content-Type" "text/html"}
                         :body    "<br><br><h1 align='center'>Tennis Manager</h1>"})

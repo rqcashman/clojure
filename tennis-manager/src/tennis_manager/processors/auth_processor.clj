@@ -36,13 +36,26 @@
         (error "1004"))
       (error "1005"))))
 
+(defn admin-access
+  [request]
+  (let [auth (authenticated-access request)]
+    (if (= auth true)
+      (let [session (:session request)
+            session-id (:identity session)
+            user (auth/get-user-from-session-id session-id)]
+        (if (= (:user_type user) 1)
+          true
+          (error "1006")))
+      auth)))
+
 (def authentication-error-list {:0    {:url "/mgr" :msg "Success"}
                                 :1000 {:url "/login?err=loginfailure" :msg "Login failed"}
                                 :1001 {:url "/login?err=acctlocked" :msg "Account locked"}
                                 :1002 {:url "/login?err=acctdisabled" :msg "Account disabled"}
                                 :1003 {:url "/login?err=chgpassword" :msg "Force password change"}
                                 :1004 {:url "/login?err=sessionexpired" :msg "Login session timed out due to inactivity"}
-                                :1005 {:url "/login" :msg ""}})
+                                :1005 {:url "/login" :msg ""}
+                                :1006 {:url "/noauth" :msg ""}})
 
 ;TODO change url for 10003 to change password page - not created yet
 (defn authenticate-user
@@ -118,8 +131,12 @@
              :handler        authenticate-user
              :on-error       login-redirect
              :request-method :post}
-            {:pattern        #"(^/mgr$)|(^/admin)|(^/matches$)|(^/schedule$)|(^/roster$)"
+            {:pattern        #"(^/mgr$)|(^/matches$)|(^/schedule$)|(^/roster$)"
              :handler        authenticated-access
+             :on-error       not-authenticated
+             :request-method :get}
+            {:pattern        #"(^/admin)"
+             :handler        admin-access
              :on-error       not-authenticated
              :request-method :get}
             {:pattern        #"^/.*"

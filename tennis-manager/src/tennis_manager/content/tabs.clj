@@ -9,10 +9,6 @@
 
 (defn tabs [session]
   (let [user (auth/get-user-from-session-id (:identity session))]
-    (println "===: " user)
-    (println "===: " session)
-    (println "===: " (:identity session))
-    (println "===: " (:user_type user))
     [:div#tabs
      [:ul
       [:li [:a#matches {:href "/matches"} "Matches"]]
