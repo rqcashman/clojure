@@ -132,7 +132,7 @@
     [:br])
   )
 
-(defn admin []
+(defn admin [session]
   (let [admin-actions
         [{:id "add-club" :name "Add club" :content (club-content)}
          {:id "add-season" :name "Add season" :content (season-content)}

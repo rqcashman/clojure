@@ -43,7 +43,7 @@
    (hr-row 1 "80%'")
    [:button {:type "button" :onclick "show_select_form();"} "Return to select form"]])
 
-(defn schedule []
+(defn schedule [session]
   (list [:div#sched-form-div.panel.panel-default
          [:table.table.table-sm.schedule-form
           [:thead

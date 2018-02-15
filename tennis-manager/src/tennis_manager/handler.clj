@@ -30,11 +30,11 @@
 (defroutes app-routes
            ;HTML pages
            (GET "/login"  {params :query-params}  (layout/application "User Login" "" (login/login (get params "err") (get params "username") (get params "msg"))))
-           (GET "/mgr" [] (layout/application "Tennis Manager" "tabs.js" (tabs/tabs)))
-           (GET "/admin" [] (layout/application "Admin Functions" "admin.js" (admin/admin)))
-           (GET "/matches" [] (layout/application "Matches" "matches.js" (match/matches)))
-           (GET "/schedule" [] (layout/application "Tennis Schedule" "schedule.js" (schedule/schedule)))
-           (GET "/roster" [] (layout/application "Team Roster" "roster.js" (rost/roster)))
+           (GET "/mgr" {session :session} (layout/application "Tennis Manager" "tabs.js" (tabs/tabs session)))
+           (GET "/admin" {session :session} (layout/application "Admin Functions" "admin.js" (admin/admin session)))
+           (GET "/matches" {session :session} (layout/application "Matches" "matches.js" (match/matches session)))
+           (GET "/schedule" {session :session}(layout/application "Tennis Schedule" "schedule.js" (schedule/schedule session)))
+           (GET "/roster" {session :session}(layout/application "Team Roster" "roster.js" (rost/roster session)))
            (GET "/availability-reply*" {params :query-params} (layout/application "Availability Response" "" (avail/update_availability (get params "player-token") (get params "available"))))
 
            ;rest APIs

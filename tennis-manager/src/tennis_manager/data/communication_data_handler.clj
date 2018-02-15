@@ -76,8 +76,7 @@
   [match_id]
   (if (match_communication_sent match_id)
     (update_match_lineup_email_sent_date match_id)
-    (add_match_lineup_email_sent match_id))
-  )
+    (add_match_lineup_email_sent match_id)))
 
 
 

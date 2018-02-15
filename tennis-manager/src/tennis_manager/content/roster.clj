@@ -126,7 +126,7 @@
     [:br])
   )
 
-(defn roster []
+(defn roster [session]
   (let [roster-actions
         [{:id "add-player" :name "Add player" :content (add-player)}
          {:id "show-roster" :name "Show roster" :content (show-roster) :selected "selected"}]

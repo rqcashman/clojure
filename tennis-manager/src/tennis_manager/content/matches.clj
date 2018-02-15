@@ -3,10 +3,10 @@
         [hiccup.element :only (link-to)]
         [hiccup.page :only (html5 include-css include-js)]
         [tennis-manager.content.page-layout :as layout]
-        [tennis-manager.data.team-data-handler :as team]
+        [tennis-manager.data.auth-handler :as auth]
         [tennis-manager.data.schedule-data-handler :as sched]
         [tennis-manager.data.season-data-handler :as season]
-        [tennis-manager.data.user-info :as usr])
+        [tennis-manager.data.team-data-handler :as team])
   (:require [clojure.string :as s]))
 
 (def form-span 4)
@@ -32,7 +32,7 @@
 
 (defn schedule-row
   "docstring"
-  [rows sched-row]
+  [rows sched-row user]
   (let [home-team-id (:home_team_id sched-row)
         avail-func (if (:availability_sent sched-row) "change_to_avail_form" "change_to_email_form")
         lineup-valid (sched/lineup-set? (:match_id sched-row))
@@ -40,10 +40,10 @@
     (conj rows [:tr
                 [:td (:match_date sched-row)]
                 [:td (:match_time sched-row)]
-                [:td (if (= usr/users_team_id home-team-id) (:away_team sched-row) (:home_team sched-row))]
+                [:td (if (= (:team_id user) home-team-id) (:away_team sched-row) (:home_team sched-row))]
                 [:td (:home_club_name sched-row)]
-                [:td {:align "center"} (if (= usr/users_team_id home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
-                [:td {:align "center"} (if (= usr/users_team_id home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
+                [:td {:align "center"} (if (= (:team_id user) home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
+                [:td {:align "center"} (if (= (:team_id user) home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
                 [:td {:align "center"} [:span.avail-cursor {:onclick (str avail-func "('" (:match_id sched-row) "');")} (if (:availability_sent sched-row) GREEN-CHECK RED-X)]]
                 [:td {:align "center"} [:span.avail-cursor {:onclick (str "set_lineup('" (:match_id sched-row) "');")} (if lineup-valid GREEN-CHECK RED-X)]]
                 [:td {:align "center"} [:span.avail-cursor {:onclick (str send-lineup-func "('" (:match_id sched-row) "');")} (if (:lineup_sent sched-row) GREEN-CHECK RED-X)]]
@@ -51,17 +51,17 @@
 
 (defn get-team-schedule
   "docstring"
-  []
+  [user]
   (try
     ;data is sorted by date.  Need to use reverse because conj is adding the data to the beginning of the list
-    (reduce #(schedule-row %1 %2) () (reverse (team/team-schedule (:id (season/current-season)) usr/users_team_id)))
+    (reduce #(schedule-row %1 %2 (:team_id user)) () (reverse (team/team-schedule (:id (season/current-season)) (:team_id user))))
     (catch Exception e
       (println "Exception in get-team-schedule.  Message: " + e)
       [:tr [:td.error {:colspan sched-form-span :align "center"} "Error getting team schedule"]])))
 
 (defn schedule-form
   "docstring"
-  [team-name]
+  [team-name user]
   [:table.table.table-sm
    (layout/empty-row form-span)
    [:tr [:td {:colspan form-span :align "center"} [:h4 team-name " Team Schedule"]]]
@@ -72,7 +72,7 @@
      [:table#match-sched.table.table-striped.table-sm
       [:thead.table-inverse
        [:tr {:align "center"}
-        [:td "Datexxx"]
+        [:td "Date"]
         [:td "Time"]
         [:td "Opponent"]
         [:td "Location"]
@@ -82,7 +82,7 @@
         [:td "Lineup Set"]
         [:td "Lineup Sent"]]]
       [:tbody#match-sched-body]
-      (get-team-schedule)]]
+      (get-team-schedule user)]]
     [:td {:width "5%:"}]]
    (layout/hr-row form-span "90%")])
 
@@ -205,7 +205,7 @@
 
 (defn lineup-form
   "Sets up the lineup page."
-  [team-name]
+  [team-name user]
   [:form#updatelineup.form-horizontal {:method "post" :action "/update-lineup"}
    (let [title "Update Match Lineup"]
      [:table.table.table-sm
@@ -255,13 +255,13 @@
              [:td {:width "30%"} "&nbsp;"]]]]
       [:tr.hidden-control
        [:td {:colspan form-span :align "center"}
-        [:input.hidden-control {:id "ml_team_id" :name "team_id" :value usr/users_team_id}]
+        [:input.hidden-control {:id "ml_team_id" :name "team_id" :value (:team_id user)}]
         [:input.hidden-control {:id "ml_match_id" :name "match_id"}]]]
       (layout/hr-row form-span "90%")])])
 
 (defn show-lineup-email-form
   "docstring"
-  [team-name]
+  [team-name user]
   (let [title "Send Lineup Email"]
     [:form#sendlineupemail.form-horizontal {:method "post" :action "/send-lineup-email"}
      [:table.table.table-sm
@@ -311,22 +311,22 @@
              [:td {:width "5%"} "&nbsp;"]]]]
       [:tr.hidden-control
        [:td {:colspan form-span :align "center"}
-        [:input.hidden-control {:id "li_team_id" :name "team_id" :value usr/users_team_id}]
+        [:input.hidden-control {:id "li_team_id" :name "team_id" :value (:team_id user)}]
         [:input.hidden-control {:id "li_match_id" :name "match_id"}]]]
       (layout/empty-row form-span)]]))
 
 (defn matches
   "Sets up the intial matches page."
-  []
-  (let [team-name (:name (team/team usr/users_team_id))
+  [session]
+  (let [user (auth/get-user-from-session-id (:identity session))
+        prefix "match"
+        team-name (:name (team/team (:team_id user)))
         match-actions
-        [{:id "show-schedule" :name "Match Schedule" :content (schedule-form team-name)}
+        [{:id "show-schedule" :name "Match Schedule" :content (schedule-form team-name user)}
          {:id "send-availability-email" :name "Send Availability Email" :content (availability-email-form team-name)}
          {:id "show-availability" :name "Send Availability Email" :content (show-availability-form team-name)}
-         {:id "set-lineup" :name "Set Lineup" :content (lineup-form team-name)}
-         {:id "send-lineup-email" :name "Send Lineup Email" :content (show-lineup-email-form team-name)}]
-        prefix "match"]
+         {:id "set-lineup" :name "Set Lineup" :content (lineup-form team-name user)}
+         {:id "send-lineup-email" :name "Send Lineup Email" :content (show-lineup-email-form team-name user)}]]
     (list
-      ;(select-form match-actions)
       (map add-div match-actions)
       (add-div {:id (str prefix "-status-panel") :name "Status" :content (layout/status-content form-span prefix)}))))

@@ -199,6 +199,7 @@
 (defn update-lineup
   "Process an update lineup request"
   [inparms]
+  (println "update lineup: " inparms)
   (comment "Chrome is sending values for disabled items.  Need to remove players from the parm list if they are
             assigned to a court that is being forfeited")
   (let [parms (reduce #(removePlayersFromForfeitedCourts %1 %2) inparms (range 1 5))

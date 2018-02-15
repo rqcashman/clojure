@@ -90,7 +90,7 @@
   "Get the user info using the session id"
   [session-id]
   (-> (j/query sys/db-cred
-               [(str "select u.iduser_login, u.email, u.last_name, u.first_name, u.team_id, u.last_login_date,
+               [(str "select u.iduser_login,u.user_type, u.email, u.last_name, u.first_name, u.team_id, u.last_login_date,
                       u.account_locked, u.account_disabled, u.force_password_change
                       from user_session s
                       join user_login u on u.iduser_login = s.iduser_login
