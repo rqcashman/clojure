@@ -10,6 +10,14 @@
             [tennis-manager.content.admin :as admin]
             [tennis-manager.data.auth-handler :as auth]))
 
+(def LOGIN_SUCCESS "0")
+(def LOGIN_FAILED "1000")
+(def LOGIN_LOCKED "1001")
+(def LOGIN_DISABLED "1002")
+(def CHG_PASSWORD "1003")
+(def SESSION_EXPIRED "1004")
+(def NOT_AUTHENTICATED "1005")
+(def NOT_AUTHORIZED "1006")
 
 (defn unauthorized-handler
   [request metadata]
@@ -24,8 +32,6 @@
 
 (defn authenticated-access
   [request]
-  (println "------------ " request)
-  (println "-----session ------- " (:session request))
   (let [session (:session request)
         session-id (:identity session)]
     (if-not (= (s/blank? session-id) true)
@@ -33,8 +39,8 @@
         (do
           (auth/update-session-used-time session-id)
           true)
-        (error "1004"))
-      (error "1005"))))
+        (error SESSION_EXPIRED))
+      (error NOT_AUTHENTICATED))))
 
 (defn admin-access
   [request]
@@ -45,17 +51,17 @@
             user (auth/get-user-from-session-id session-id)]
         (if (= (:user_type user) 1)
           true
-          (error "1006")))
+          (error NOT_AUTHORIZED)))
       auth)))
 
-(def authentication-error-list {:0    {:url "/mgr" :msg "Success"}
-                                :1000 {:url "/login?err=loginfailure" :msg "Login failed"}
-                                :1001 {:url "/login?err=acctlocked" :msg "Account locked"}
-                                :1002 {:url "/login?err=acctdisabled" :msg "Account disabled"}
-                                :1003 {:url "/login?err=chgpassword" :msg "Force password change"}
-                                :1004 {:url "/login?err=sessionexpired" :msg "Login session timed out due to inactivity"}
-                                :1005 {:url "/login" :msg ""}
-                                :1006 {:url "/noauth" :msg ""}})
+(def authentication-error-list {(keyword LOGIN_SUCCESS)     {:url "/mgr"}
+                                (keyword LOGIN_FAILED)      {:url "/login" :err "loginfailure" :msg "Login failed"}
+                                (keyword LOGIN_LOCKED)      {:url "/login" :err "acctlocked" :msg "Account locked"}
+                                (keyword LOGIN_DISABLED)    {:url "/login" :err "acctdisabled" :msg "Account disabled"}
+                                (keyword CHG_PASSWORD)      {:url "/login" :err "chgpassword" :msg "Force password change"}
+                                (keyword SESSION_EXPIRED)   {:url "/login" :err "sessionexpired" :msg "Login session timed out due to inactivity"}
+                                (keyword NOT_AUTHENTICATED) {:url "/login"}
+                                (keyword NOT_AUTHORIZED)    {:url "/notauth"}})
 
 ;TODO change url for 10003 to change password page - not created yet
 (defn authenticate-user
@@ -65,11 +71,11 @@
         user (auth/get-user-with-password username password)]
     (if user
       (cond
-        (> (:account_locked user) 0) (error "1001")
-        (> (:account_disabled user) 0) (error "1002")
-        (> (:force_password_change user) 0) (error "1003")
-        :else (error "0"))
-      (error "1000"))))
+        (> (:account_locked user) 0) (error LOGIN_LOCKED)
+        (> (:account_disabled user) 0) (error LOGIN_DISABLED)
+        (> (:force_password_change user) 0) (error CHG_PASSWORD)
+        :else (error LOGIN_SUCCESS))
+      (error LOGIN_FAILED))))
 
 (defn on-error
   [request value]
@@ -85,43 +91,52 @@
      :headers {"Content-Type" "text/plain"}
      :body    (str {:status "failed" :status-code 400 :msg "User not logged in"})}))
 
+(defn get-qs-parm
+  "get a qs parm"
+  [query-string elem]
+  (if (= (s/blank? (val elem)) false)
+    (conj query-string (str (subs (str (key elem)) 1) "=" (codec/url-encode (val elem))))
+    query-string))
+
+(defn get-redirect-url
+  "create redirect URL from the error list hash map"
+  [url-hash]
+  (let [qs (s/join "&" (reduce #(get-qs-parm %1 %2) () (dissoc url-hash :url)))]
+    (if (= (s/blank? qs) false)
+      (str (:url url-hash) "?" qs)
+      (:url url-hash))))
+
 (defn login-redirect
   [request value]
-  (println "on error: " value)
+
   (let [username (:username (:params request))]
     (auth/insert-login-attempt username value)
-    (if (= value "1000")
+    (if (= value LOGIN_FAILED)
       (auth/lock-account? username))
     (if value
-      (if (or (= value "0") (and (= value "1001") (= (auth/account-unlocked? username) true)))
+      (if (or (= value LOGIN_SUCCESS) (and (= value LOGIN_LOCKED) (= (auth/account-unlocked? username) true)))
         (let [session (:session request)
               session-id (s/replace (str (java.util.UUID/randomUUID)) #"-" "")
               error (:0 authentication-error-list)
               updated-session (assoc session :identity session-id)
-              url (:url error)]
+              redirect-url (get-redirect-url error)]
           (auth/update-user-last-login-time username)
           (auth/persist-session-id username session-id)
-          (-> (rr/redirect url)
+          (-> (rr/redirect redirect-url)
               (assoc :session updated-session)))
-        (let [error ((keyword value) authentication-error-list)]
-          (rr/redirect (str (:url error) "&username=" (codec/url-encode username) "&msg=" (codec/url-encode (:msg error)))))))))
-
-(defn get-expired-session-url
-  "Return expired session URL.  Puts username in login box if the session id is still in the DB"
-  [session error]
-  (let [user (auth/get-user-from-session-id (:identity session))
-        username (:email user)]
-    (if (s/blank? username)
-      (str (:url error) "&msg=" (codec/url-encode (:msg error)))
-      (str (:url error) "&username=" (codec/url-encode username) "&msg=" (codec/url-encode (:msg error))))))
+        (let [error ((keyword value) authentication-error-list)
+              redirect-url (get-redirect-url (conj error {:username username}))]
+          (rr/redirect redirect-url))))))
 
 (defn not-authenticated
   "Redirect if not authenticated"
   [request value]
   (if value
     (let [error ((keyword value) authentication-error-list)]
-      (if (= value "1004")
-        (rr/redirect (get-expired-session-url (:session request) error))
+      (if (= value SESSION_EXPIRED)
+        (do
+          (let [user (auth/get-user-from-session-id (:identity (:session request)))]
+            (rr/redirect (get-redirect-url (conj error {:username (:email user)})))))
         (rr/redirect (str (:url error)))))))
 
 (def rules [{:pattern        #"(^/login*)|(^/availability-reply*)"
