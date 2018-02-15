@@ -8,43 +8,39 @@
 (defn player
   "docstring"
   [player-id]
-  (j/query sys/db-cred
-           [(str "select id, team_id, last_name, first_name, email, phone_number, status"
-                 " from player "
-                 " where id=?") player-id]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (reduce (fn [rcds curr_rcd]
-                                       (conj rcds curr_rcd))
-                                     [],
-                                     rs))}))
+  (-> (j/query sys/db-cred
+               [(str "select id, team_id, last_name, first_name, email, phone_number, status"
+                     " from player "
+                     " where id=?") player-id]
+               {:as-arrays?    false
+                :result-set-fn (fn [rs]
+                                 (reduce (fn [rcds curr_rcd]
+                                           (conj rcds curr_rcd))
+                                         [],
+                                         rs))})
+      first))
 
 (defn player-exists?
   "docstring"
   [team_id first_name last_name]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from player where team_id=? and first_name=? and last_name=?") team_id first_name last_name]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (if (> (:ct (nth rs 0)) 0) true false))}))
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from player where team_id=? and first_name=? and last_name=?") team_id first_name last_name])
+      first :ct pos?))
 
 (defn player-id-exists?
   "docstring"
   [player-id]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from player where id=?") player-id]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (if (> (:ct (nth rs 0)) 0) true false))}))
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from player where id=?") player-id])
+      first :ct pos?))
 
 (defn player-name-available?
   "check to make sure a player with the name is not already on that team excluding the one we are updating"
   [team_id player-id first_name last_name]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from player where team_id=? and first_name=? and last_name=? and id <>?") team_id first_name last_name player-id]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (if (= (:ct (nth rs 0)) 0) true false))}))
+  (println team_id player-id first_name last_name)
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from player where team_id=? and first_name=? and last_name=? and id <>?") team_id first_name last_name player-id])
+      first :ct (= 0)))
 
 (defn add_player
   "docstring"

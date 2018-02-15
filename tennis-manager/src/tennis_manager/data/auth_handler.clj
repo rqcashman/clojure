@@ -8,12 +8,10 @@
 (defn login-valid?
   "docstring"
   [username password]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from user_login u where u.email=? and trim(u.password)=trim(sha1(?))") (s/trim username) (s/trim password)]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (println rs)
-                             (if (> (:ct (nth rs 0)) 0) true false))}))
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from user_login u where u.email=? and trim(u.password)=trim(sha1(?))") (s/trim username) (s/trim password)])
+      first :ct pos?))
+
 (defn get-user-with-password
   "docstring"
   [username password]
@@ -106,15 +104,14 @@
     (println "Persist session.  User: " user " id: " session-id)
     (if user
       (j/execute! sys/db-cred
-                  [(str "insert into user_session values (?,?,current_timestamp(), current_timestamp())") (:iduser_login user) session-id]))))
+                  [(str "insert into user_session values (?,?,current_timestamp(), current_timestamp())") session-id (:iduser_login user)]))))
 
 (defn session-valid?
   "Check to see if the session id exists and if it has timed out"
   [session-id]
   (let [parms (get-system-parms "AUTHENTICATION")
         session-timeout (:SESSION_TIMEOUT_MINUTES parms)]
-    (let [session-ct (-> (j/query sys/db-cred
-                                  [(str "select count(1) as ct from user_session where session_id=?
+    (-> (j/query sys/db-cred
+                 [(str "select count(1) as ct from user_session where session_id=?
                                        and last_used_time > date_sub(current_timestamp(), INTERVAL " session-timeout " MINUTE)") session-id])
-                         first :ct)]
-      (if (= session-ct 0) false true))))
+        first :ct pos?)))

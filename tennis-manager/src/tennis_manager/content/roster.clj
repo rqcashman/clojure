@@ -67,7 +67,7 @@
       (layout/hr-row form-span "90%")
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"}
-            [:button {:type "button" :onclick (str "return processRequest('#addplayerform', '/add-player', '" title "')")} title]]]
+            [:button {:type "button" :onclick (str "return processRosterRequest('#addplayerform', '/add-player', '" title "')")} title]]]
       [:tr.hidden-control [:td {:colspan form-span :align "center"} [:input.hidden-control {:id "ap_team_id" :name "team_id"}]]]
       (layout/empty-row form-span)]]))
 
@@ -98,9 +98,9 @@
             [:table
              [:td {:width "50%"} "&nbsp;"]
              [:td {:align "right" :nowrap "true"}
-              [:button {:type "button" :onclick (str "return processRequest('#updateplayerform', '/update-player', '" title "')")} title]]
+              [:button {:type "button" :onclick (str "return processRosterRequest('#updateplayerform', '/update-player', '" title "')")} title]]
              [:td {:align "left" :nowrap "true"}
-              [:button {:type "button" :onclick "change_form('show-roster');"} "Cancel"]]
+              [:button {:type "button" :onclick "change_roster_form('show-roster');"} "Cancel"]]
              [:td {:width "5%"} "&nbsp;"]]]]
       [:tr.hidden-control [:td {:colspan form-span :align "center"} [:input.hidden-control {:id "up_team_id" :name "team_id"}] [:input.hidden-control {:id "up_player_id" :name "player_id"}]]]
       (layout/empty-row form-span)]]))
@@ -118,7 +118,7 @@
        (layout/hr-row 3 "90%")]
       [:tbody
        (layout/add-select team/teams layout/option "team_id" "Team:" 1 (str "team_changed(this.value);"))
-       (layout/add-select #(layout/actions roster-actions) layout/option "roster-list" "Roster Action:" 1 (str "change_form(this.value);"))
+       (layout/add-select #(layout/actions roster-actions) layout/option "roster-list" "Roster Action:" 1 (str "change_roster_form(this.value);"))
        (layout/hr-row 3 "90%")
        (layout/empty-row 3)]]]
     [:br]
@@ -129,9 +129,10 @@
 (defn roster []
   (let [roster-actions
         [{:id "add-player" :name "Add player" :content (add-player)}
-         {:id "show-roster" :name "Show roster" :content (show-roster) :selected "selected"}]]
+         {:id "show-roster" :name "Show roster" :content (show-roster) :selected "selected"}]
+        prefix "roster"]
     (list
       (select-form roster-actions)
       (map add-div roster-actions)
       (add-div {:id "update-player" :name "Update player" :content (update-player-form)})
-      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span)}))))
+      (add-div {:id (str prefix "-status-panel") :name "Status" :content (layout/status-content form-span prefix)}))))

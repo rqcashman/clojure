@@ -9,6 +9,11 @@ thead {
     text-align: center
 }
 
+hr {
+    border: 1px solid black;
+    width: 90%;
+}
+
 .table {
     border: 2px solid black;
 }
@@ -62,6 +67,7 @@ thead {
 .roster-view {
     width: 75%;
 }
+
 
 .schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td, .roster-form tr td, .roster-action tr td, .match-form tr td, .matches-action tr td {
     border-top: none;

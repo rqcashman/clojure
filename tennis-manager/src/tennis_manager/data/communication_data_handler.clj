@@ -27,11 +27,9 @@
 (defn match_communication_sent
   "docstring"
   [match_id]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from match_communication where match_id=? and team_id=?") match_id usr/users_team_id]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (if (> (:ct (nth rs 0)) 0) true false))}))
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from match_communication where match_id=? and team_id=?") match_id usr/users_team_id])
+      first :ct pos?))
 
 (defn add_match_lineup_email_sent
   "should never get here"
@@ -49,13 +47,14 @@
 (defn get_communication_detail
   "docstring"
   [uuid]
-  (j/query sys/db-cred
-           [(str "select c.player_id, c.match_id, c.team_id, c.response, c.response_date, p.first_name, p.last_name,
-           DATE_FORMAT(s.match_date,'%M %D, %Y') as match_date,DATE_FORMAT(s.match_date,'%h:%i %p') as match_time
-           from player_communication c
-           left join player p on p.id = c.player_id
-           left join schedule s on s.match_id = c.match_id
-           where uuid=?") uuid]))
+  (-> (j/query sys/db-cred
+               [(str "select c.player_id, c.match_id, c.team_id, c.response, c.response_date, p.first_name, p.last_name,
+                      DATE_FORMAT(s.match_date,'%M %D, %Y') as match_date,DATE_FORMAT(s.match_date,'%h:%i %p') as match_time
+                      from player_communication c
+                      left join player p on p.id = c.player_id
+                      left join schedule s on s.match_id = c.match_id
+                      where uuid=?") uuid])
+      first))
 
 (defn update_player_commuication_response
   "docstring"

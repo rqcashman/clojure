@@ -90,8 +90,8 @@ $().ready(function () {
     });
 });
 
-function change_form(new_form_id) {
-    $("#status-panel").css("display", "none");
+function change_admin_form(new_form_id) {
+    $("#admin-status-panel").css("display", "none");
     $("#" + current_form_id).css("display", "none");
     $("#" + new_form_id).css("display", "block");
     current_form_id = new_form_id;
@@ -104,17 +104,17 @@ function isNumberKey(evt) {
     return true;
 }
 
-function dismissStatusForm() {
-    $("#status-panel").css("display", "none");
+function dismissAdminStatusForm() {
+    $("#admin-status-panel").css("display", "none");
     $("#status-content").text("Processing...");
     $("#" + current_form_id).css("display", "block");
 }
 
-function processRequest(form_id, uri, title) {
+function processAdminRequest(form_id, uri, title) {
     if ($(form_id).valid()) {
-        tennis_manager.core.db_update_request(form_id, uri, title);
+        tennis_manager.core.db_update_request(form_id, uri, title, "admin");
         $("#" + current_form_id).css("display", "none");
-        $("#status-panel").css("display", "block");
+        $("#admin-status-panel").css("display", "block");
     }
     return false;
 }
@@ -122,3 +122,16 @@ function processRequest(form_id, uri, title) {
 function team_schedule_all() {
     tennis_manager.core.schedule-all($("#season-id option:selected").val(), $("#team-id option:selected").val());
 };
+
+function adminStatusOK(evt) {
+    if($("#admin-status-content").hasClass("success") ) {
+        $("#tabs").tabs();
+        var current_index = $("#tabs").tabs("option","selected");
+        $("#tabs").tabs('load',current_index);
+    }
+    else {
+        change_form(roster_current_form_id);
+    }
+    $("#admin-status-content").text("Processing...");
+    evt.preventDefault();
+}

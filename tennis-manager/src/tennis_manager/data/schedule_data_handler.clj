@@ -15,13 +15,14 @@
 (defn match-info
   "docstring"
   [match-id]
-  (j/query sys/db-cred
-           [(str "select DATE_FORMAT(s.match_date,'%M %D, %Y') as match_date,DATE_FORMAT(s.match_date,'%h:%i %p') as match_time"
-                 " ,cl.name as club_name, cl.address, cl.city, cl.state, cl.zip_code, cl.phone_number, s.home_team_id, s.away_team_id"
-                 " from schedule s"
-                 " join team t on t.id = s.home_team_id"
-                 " join club cl on cl.id = t.club_id"
-                 " where s.match_id=?") match-id]))
+  (-> (j/query sys/db-cred
+               [(str "select DATE_FORMAT(s.match_date,'%M %D, %Y') as match_date,DATE_FORMAT(s.match_date,'%h:%i %p') as match_time"
+                     " ,cl.name as club_name, cl.address, cl.city, cl.state, cl.zip_code, cl.phone_number, s.home_team_id, s.away_team_id"
+                     " from schedule s"
+                     " join team t on t.id = s.home_team_id"
+                     " join club cl on cl.id = t.club_id"
+                     " where s.match_id=?") match-id])
+      first))
 
 
 (defn team-schedule-abbreviations
@@ -80,15 +81,14 @@
 (defn match_court_exists?
   "docstring"
   [match-id court]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from match_courts where match_id=? and court_number=?") match-id court]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (if (> (:ct (nth rs 0)) 0) true false))}))
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from match_courts where match_id=? and court_number=?") match-id court])
+      first :ct pos?))
+
 (defn upsert-match-lineup
   "docstring"
   [match-id team-id court player1 player2 forfeit]
-  (let [match (nth (match-info match-id) 0)
+  (let [match (match-info match-id)
         forfeit_team_id (case forfeit
                           "0" nil
                           "1" (if (= team-id (:home_team_id match)) (:home_team_id match) (:away_team_id match))
@@ -112,12 +112,9 @@
 (defn match_availability_exists?
   "docstring"
   [match_id player_id]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from match_availability where match_id=? and player_id=?") match_id player_id]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (if (> (:ct (nth rs 0)) 0) true false))}))
-
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from match_availability where match_id=? and player_id=?") match_id player_id])
+      first :ct pos?))
 
 (defn upsert_player_availability
   "docstring"
@@ -150,7 +147,7 @@
 (defn lineup-set?
   "docstring"
   [match-id]
-  (let [match (nth (match-info match-id) 0)
+  (let [match (match-info match-id)
         player1-col (if (= (:home_team_id match) (int usr/users_team_id)) "home_player1 as player1," "away_player1 as player1,")
         player2-col (s/replace player1-col #"1" "2")
         sql (str "select " player1-col player2-col "forfeit_team_id
@@ -165,7 +162,7 @@
 (defn match-lineup
   "Get the match lineup for the logged in user"
   [match-id]
-  (let [match (nth (match-info match-id) 0)
+  (let [match (match-info match-id)
         player1-col (if (= (:home_team_id match) (int usr/users_team_id)) "home_player1" "away_player1")
         player2-col (s/replace player1-col #"1" "2")
         sql (str "select court_number," player1-col " as player1," player2-col " as player2,forfeit_team_id,t.name as forfeit_team_name,

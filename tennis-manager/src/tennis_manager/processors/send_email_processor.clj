@@ -126,7 +126,7 @@
   "Send a lineup availabiility email for a match"
   [{:keys [message signature match_id send_subs]}]
   (try
-    (let [match-info (nth (sched/match-info match_id) 0)
+    (let [match-info (sched/match-info match_id)
           email-body (get-availability-email-body message signature match-info)
           subject (str "Match availability for " (:match_date match-info))
           parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text email-body})]
@@ -155,7 +155,7 @@
   "Send a match lineup email"
   [{:keys [message signature match_id send_subs]}]
   (try
-    (let [match-info (nth (sched/match-info match_id) 0)
+    (let [match-info (sched/match-info match_id)
           court-assignments (s/join (reduce #(get-lineup-row %1 %2) () (reverse (sched/match-lineup match_id))))
           email-body (get-lineup-email-body message signature match-info)
           subject (str "Lineup for " (:match_date match-info))

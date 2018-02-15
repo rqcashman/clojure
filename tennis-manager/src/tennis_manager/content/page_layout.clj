@@ -7,7 +7,6 @@
          [:head
           [:title title]
           (include-js "main.js")
-          (include-js "status.js")
           (include-js "https://code.jquery.com/jquery-3.2.1.min.js")
           (include-js "https://code.jquery.com/ui/1.12.1/jquery-ui.min.js")
           (include-js "https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js")
@@ -36,23 +35,23 @@
 (defn hr-row
   "docstring"
   [colspan width]
-  [:tr [:td {:colspan colspan} [:hr {:color "black" :width width}]]])
+  [:tr [:td {:colspan colspan} [:hr ]]])
 
 (defn status-content
-  [form-span]
-   [:table.table.table-sm
-    (empty-row form-span)
-    [:tr [:td {:colspan form-span :align "center"} [:h4 "Status of " [:span#status-title]]]]
-    (hr-row form-span "90%")
-    [:tr
-     [:td {:width "5%"} "&nbsp;"]
-     [:td "Status:"]
-     [:td {:align "left"} [:span#status-content]]
-     [:td {:width "5%"} "&nbsp;"]]
-    (hr-row form-span "90%")
-    (empty-row form-span)
-    [:tr [:td {:colspan form-span :align "center"}
-          [:button#status-btn {:value "ok" :onclick (str "statusOK(event);return false")} "OK"]]]
+  [form-span id-prefix]
+  [:table.table.table-sm
+   (empty-row form-span)
+   [:tr [:td {:colspan form-span :align "center"} [:h4 "Status of " [:span {:id (str id-prefix "-status-title")}]]]]
+   (hr-row form-span "90%")
+   [:tr
+    [:td {:width "5%"} "&nbsp;"]
+    [:td "Status:"]
+    [:td {:align "left"} [:span {:id (str id-prefix "-status-content")}]]
+    [:td {:width "5%"} "&nbsp;"]]
+   (hr-row form-span "90%")
+   (empty-row form-span)
+   [:tr [:td {:colspan form-span :align "center"}
+         [:button#status-btn {:value "ok" :onclick (str id-prefix "StatusOK(event);return false")} "OK"]]]
    (empty-row form-span)])
 
 

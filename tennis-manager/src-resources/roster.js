@@ -1,14 +1,14 @@
 /**
  * Created by Richard on 6/5/2017.
  */
-var current_form_id = "show-roster";
+var roster_current_form_id = "show-roster";
 
-function change_form(new_form_id) {
-    $("#status-panel").css("display", "none");
-    $("#" + current_form_id).css("display", "none");
-    current_form_id = new_form_id;
+function change_roster_form(new_form_id) {
+    $("#roster-status-panel").css("display", "none");
+    $("#" + roster_current_form_id).css("display", "none");
+    roster_current_form_id = new_form_id;
     team_changed($("#team_id option:selected").val());
-    if(current_form_id == "update-player") {
+    if(roster_current_form_id == "update-player") {
         $("#team_id").prop("disabled", true);
         $("#updateplayerform").data('validator').resetForm();
         $("#updateplayerform").data('validator').reset();
@@ -21,7 +21,7 @@ function change_form(new_form_id) {
 
 function team_changed(selected_team) {
     $("#ap_team_id").val(selected_team);
-    if(current_form_id == "show-roster") {
+    if(roster_current_form_id == "show-roster") {
         get_roster_data();
     }
 
@@ -34,11 +34,11 @@ function get_roster_data() {
 
 function update_player_form(player_id) {
     tennis_manager.roster.load_update_player_form(player_id);
-    change_form("update-player");
+    change_roster_form("update-player");
 }
 
 $().ready(function () {
-    change_form(current_form_id);
+    change_roster_form(roster_current_form_id);
     $("#addplayerform").validate({
         focusCleanup: true,
         rules: {
@@ -94,12 +94,23 @@ function isNumberKey(evt) {
     return true;
 }
 
-
-function processRequest(form_id, uri, title) {
+function processRosterRequest(form_id, uri, title) {
     if ($(form_id).valid()) {
-        tennis_manager.core.db_update_request(form_id, uri, title);
-        $("#" + current_form_id).css("display", "none");
-        $("#status-panel").css("display", "block");
+        tennis_manager.core.db_update_request(form_id, uri, title, "roster");
+        $("#" + roster_current_form_id).css("display", "none");
+        $("#roster-status-panel").css("display", "block");
     }
     return false;
+}
+
+function rosterStatusOK(evt) {
+    if($("#roster-status-content").hasClass("success") ) {
+        $("#tabs").tabs();
+        var current_index = $("#tabs").tabs("option","selected");
+        $("#tabs").tabs('load',current_index);    }
+    else {
+        change_form(roster_current_form_id);
+    }
+    $("#status-content").text("Processing...");
+    evt.preventDefault();
 }

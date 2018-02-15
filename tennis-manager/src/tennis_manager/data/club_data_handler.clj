@@ -36,9 +36,7 @@
 (defn club_exists?
   "docstring"
   [name]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from club where name=?") name]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (if (> (:ct (nth rs 0)) 0) true false))}))
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from club where name=?") name])
+      first :ct pos?))
 

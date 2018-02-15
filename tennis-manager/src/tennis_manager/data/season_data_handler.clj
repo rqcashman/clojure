@@ -25,12 +25,9 @@
 (defn season-exists?
   "docstring"
   [name]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from season where name=?") name]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (if (> (:ct (nth rs 0)) 0) true false))}))
-
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from season where name=?") name])
+      first :ct pos?))
 
 (defn add_season
   "docstring"
@@ -41,6 +38,7 @@
 (defn current-season
   "docstring"
   []
-  (j/query sys/db-cred
-           [(str "select id, name from season where start_date <= date_sub(current_date(), interval 10 day) and end_date >= current_date()")]))
+  (-> (j/query sys/db-cred
+               [(str "select id, name from season where start_date <= date_sub(current_date(), interval 10 day) and end_date >= current_date()")])
+      first))
 

@@ -15,7 +15,7 @@
      [:tr
       [:td
        [:table
-        [:thead.table-inverse
+        [:thead.tab
          [:tr
           [:td {:colspan 4} "Availability Updated"]]]
         [:tr
@@ -26,7 +26,7 @@
         [:tr
          [:td "&nbsp;"]
          [:td]
-         [:td {:nowrap "true"} "You have been marked as " avail_text " for the match on " [:b (:match_date comm_detail) " at " (:match_time comm_detail)]]
+         [:td {:nowrap "true" :colspan 2} "You have been marked as " avail_text " for the match on " (:match_date comm_detail) " at " (:match_time comm_detail)]
          [:td {:width "25px"} "&nbsp;"]]
         [:tr [:td {:colspan 4} "&nbsp;"]]]]]]
     ))
@@ -37,12 +37,11 @@
   (let [comm_detail (comm/get_communication_detail player-token)]
     (list
       (try
-        (if (and (> (count comm_detail) 0) (contains? #{"Y" "N"} available))
+        (if (and comm_detail (contains? #{"Y" "N"} available))
           (do
-            (let [comm_rcd (nth comm_detail 0)]
-              (comm/update_player_commuication_response player-token available)
-              (sched/upsert_player_availability (:match_id comm_rcd) (:player_id comm_rcd) available)
-              (show_update_status comm_rcd available)))
+            (comm/update_player_commuication_response player-token available)
+            (sched/upsert_player_availability (:match_id comm_detail) (:player_id comm_detail) available)
+            (show_update_status comm_detail available))
           [:h2 "Invalid link.  The link was invalid.  If you copied and pasted the link make sure you copied the complete link"])
         (catch Exception e
           (println "Error in update_availability.  Msg: " (.getMessage e))

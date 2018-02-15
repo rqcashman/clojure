@@ -58,11 +58,12 @@
 (defn team
   "docstring"
   [team-id]
-  (j/query sys/db-cred
-           [(str "select id, name, club_id, default_match_time"
-                 " from team "
-                 " where id = ?"
-                 " order by name") team-id]))
+  (-> (j/query sys/db-cred
+               [(str "select id, name, club_id, default_match_time"
+                     " from team "
+                     " where id = ?"
+                     " order by name") team-id])
+      first))
 
 (defn add-team
   "docstring"
@@ -73,9 +74,6 @@
 (defn team-exists?
   "docstring"
   [club-id name]
-  (j/query sys/db-cred
-           [(str "select count(*) as ct from team where club_id=? and name=?") club-id name]
-           {:as-arrays?    false
-            :result-set-fn (fn [rs]
-                             (if (> (:ct (nth rs 0)) 0) true false))}))
-
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from team where club_id=? and name=?") club-id name])
+      first :ct pos?))

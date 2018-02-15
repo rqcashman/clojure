@@ -42,7 +42,7 @@
       (layout/hr-row form-span "90%")
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"}
-            [:button {:type "button" :onclick (str "return processRequest('#addclubform', '/add-club', '" title "')")} title]]]
+            [:button {:type "button" :onclick (str "return processAdminRequest('#addclubform', '/add-club', '" title "')")} title]]]
       (layout/empty-row form-span)]]))
 
 (defn team-content
@@ -59,7 +59,7 @@
       (layout/hr-row form-span "90%")
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"}
-            [:button {:type "button" :onclick (str "return processRequest('#addteamform', '/add-team', '" title "')")} title]]]
+            [:button {:type "button" :onclick (str "return processAdminRequest('#addteamform', '/add-team', '" title "')")} title]]]
       (layout/empty-row form-span)]]))
 
 (defn season-content
@@ -76,7 +76,7 @@
       (layout/hr-row form-span "90%")
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"}
-            [:button {:type "button" :onclick (str "return processRequest('#addseasonform', '/add-season', '" title "')")} title]]]
+            [:button {:type "button" :onclick (str "return processAdminRequest('#addseasonform', '/add-season', '" title "')")} title]]]
       (layout/empty-row form-span)]]))
 
 (defn load-schedule
@@ -93,7 +93,7 @@
       (layout/hr-row form-span "90%")
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"}
-            [:button {:type "button" :onclick (str "return processRequest('#loadscheduleform', '/load-schedule', '" title "')")} title]]]
+            [:button {:type "button" :onclick (str "return processAdminRequest('#loadscheduleform', '/load-schedule', '" title "')")} title]]]
       (layout/empty-row form-span)]]))
 
 (defn load-schedule-file
@@ -111,7 +111,7 @@
       (layout/hr-row form-span "90%")
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"}
-            [:button {:type "button" :onclick (str "return processRequest('#loadschedulefileform', '/load-schedule-file', '" title "')")} title]]]
+            [:button {:type "button" :onclick (str "return processAdminRequest('#loadschedulefileform', '/load-schedule-file', '" title "')")} title]]]
       (layout/empty-row form-span)]]))
 
 (defn select-form
@@ -124,7 +124,7 @@
        [:tr [:td {:colspan 3 :align "center"} [:h4 "Select Admin Function"]]]
        (layout/hr-row 3 "90%")]
       [:tbody
-       (layout/add-select #(layout/actions admin-actions) layout/option "admin-list" "Admin Action:" 1 (str "change_form(this.value);"))
+       (layout/add-select #(layout/actions admin-actions) layout/option "admin-list" "Admin Action:" 1 (str "change_admin_form(this.value);"))
        (layout/hr-row 3 "90%")
        (layout/empty-row 3)]]]
     [:br]
@@ -138,8 +138,9 @@
          {:id "add-season" :name "Add season" :content (season-content)}
          {:id "add-team" :name "Add team" :content (team-content)}
          {:id "load-schedule" :name "Load schedule" :content (load-schedule)}
-         {:id "load-schedule-file" :name "Load schedule file" :content (load-schedule-file)}]]
+         {:id "load-schedule-file" :name "Load schedule file" :content (load-schedule-file)}]
+        prefix "admin"]
     (list
       (select-form admin-actions)
       (map add-div admin-actions)
-      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span)}))))
+      (add-div {:id (str prefix "-status-panel") :name "Status" :content (layout/status-content form-span prefix)}))))

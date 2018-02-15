@@ -69,18 +69,17 @@
   [match-id prefix]
   (go
     (let [response (<! (http/get (str "match-info/" match-id)))
-          body (:body response)
-          rowCt (count body)]
-      (if (> rowCt 0)
-        (doseq [row body]
+          match (:body response)]
+      (if match
+        (do
           (ef/at
             (str "#" prefix "_match_id") (ef/set-form-input match-id))
           (ef/at
-            (str "#" prefix "_match_date") (ef/content (:match_date row)))
+            (str "#" prefix "_match_date") (ef/content (:match_date match)))
           (ef/at
-            (str "#" prefix "_match_time") (ef/content (:match_time row)))
+            (str "#" prefix "_match_time") (ef/content (:match_time match)))
           (ef/at
-            (str "#" prefix "_match_location") (ef/content (:club_name row))))))))
+            (str "#" prefix "_match_location") (ef/content (:club_name match))))))))
 
 (defn ^:export email_form
   "Load the email availability form.  Not much to do here."

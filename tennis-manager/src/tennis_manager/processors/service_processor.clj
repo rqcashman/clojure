@@ -181,7 +181,7 @@
 (defn get-player-names
   "Convert player id to player name"
   [player-id-list]
-  (reduce (fn [list id] (let [p (nth (player/player id) 0)]
+  (reduce (fn [list id] (let [p (player/player id)]
                           (println "player: " p)
                           (conj list (str (:last_name p) ", " (:first_name p)))))
           ()
@@ -194,7 +194,7 @@
     (if (= (check-for-null-player-assignment parms) true)
       (hash-map :status "failed" :status-code 200 :msg (str "Not all courts have players assigned."))
       (let [dupe-list (check-for-duplicate-player-assignment parms)]
-        (if (> (count dupe-list) 0)
+        (if (pos? (count dupe-list))
           (hash-map :status "failed" :status-code 200 :msg (str "Some players assigned to muliptle courts. " (get-player-names dupe-list))))))
     (catch Exception e
       (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e)))))

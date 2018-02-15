@@ -53,7 +53,7 @@
   []
   (try
     ;data is sorted by date.  Need to use reverse because conj is adding the data to the beginning of the list
-    (reduce #(schedule-row %1 %2) () (reverse (team/team-schedule (:id (nth (season/current-season) 0)) usr/users_team_id)))
+    (reduce #(schedule-row %1 %2) () (reverse (team/team-schedule (:id (season/current-season)) usr/users_team_id)))
     (catch Exception e
       (println "Exception in get-team-schedule.  Message: " + e)
       [:tr [:td.error {:colspan sched-form-span :align "center"} "Error getting team schedule"]])))
@@ -118,9 +118,9 @@
             [:table
              [:td {:width "50%"} "&nbsp;"]
              [:td {:align "right" :nowrap "true"}
-              [:button {:type "button" :onclick (str "return processRequest('#sendavailabilityemail', '/send-availability-email', '" title "')")} title]]
+              [:button {:type "button" :onclick (str "return processMatchRequest('#sendavailabilityemail', '/send-availability-email', '" title "')")} title]]
              [:td {:align "left" :nowrap "true"}
-              [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
+              [:button {:type "button" :onclick "change_match_form('show-schedule');"} "Return to Schedule"]]
              [:td {:width "5%"} "&nbsp;"]]]]
       [:tr.hidden-control
        [:td {:colspan form-span :align "center"}
@@ -171,9 +171,9 @@
             [:table
              [:td {:width "50%"} "&nbsp;"]
              [:td {:align "right" :nowrap "true"}
-              [:button {:type "button" :onclick (str "return processRequest('#updateavailability', '/update-availability', '" title "')")} title]]
+              [:button {:type "button" :onclick (str "return processMatchRequest('#updateavailability', '/update-availability', '" title "')")} title]]
              [:td {:align "left" :nowrap "true"}
-              [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
+              [:button {:type "button" :onclick "change_match_form('show-schedule');"} "Return to Schedule"]]
              [:td {:width "5%"} "&nbsp;"]]]]
       [:tr.hidden-control
        [:td {:colspan form-span :align "center"}
@@ -246,9 +246,9 @@
             [:table
              [:td {:width "30%"} "&nbsp;"]
              [:td {:align "right" :nowrap "true"}
-              [:button {:type "button" :onclick (str "return processRequest('#updatelineup', '/update-lineup', '" title "')")} title]]
+              [:button {:type "button" :onclick (str "return processMatchRequest('#updatelineup', '/update-lineup', '" title "')")} title]]
              [:td {:align "left" :nowrap "true"}
-              [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
+              [:button {:type "button" :onclick "change_match_form('show-schedule');"} "Return to Schedule"]]
              [:td {:align "left" :nowrap "true"}
               [:button#lineuptoavail {:type "button"} "Go to Availability"]]
              [:td {:width "30%"} "&nbsp;"]]]]
@@ -304,9 +304,9 @@
             [:table
              [:td {:width "50%"} "&nbsp;"]
              [:td {:align "right" :nowrap "true"}
-              [:button {:type "button" :onclick (str "return processRequest('#sendlineupemail', '/send-lineup-email', '" title "')")} title]]
+              [:button {:type "button" :onclick (str "return processMatchRequest('#sendlineupemail', '/send-lineup-email', '" title "')")} title]]
              [:td {:align "left" :nowrap "true"}
-              [:button {:type "button" :onclick "change_form('show-schedule');"} "Return to Schedule"]]
+              [:button {:type "button" :onclick "change_match_form('show-schedule');"} "Return to Schedule"]]
              [:td {:width "5%"} "&nbsp;"]]]]
       [:tr.hidden-control
        [:td {:colspan form-span :align "center"}
@@ -317,15 +317,15 @@
 (defn matches
   "Sets up the intial matches page."
   []
-  (let [team-name (:name (nth (team/team usr/users_team_id) 0))
+  (let [team-name (:name (team/team usr/users_team_id))
         match-actions
         [{:id "show-schedule" :name "Match Schedule" :content (schedule-form team-name)}
          {:id "send-availability-email" :name "Send Availability Email" :content (availability-email-form team-name)}
          {:id "show-availability" :name "Send Availability Email" :content (show-availability-form team-name)}
          {:id "set-lineup" :name "Set Lineup" :content (lineup-form team-name)}
-         {:id "send-lineup-email" :name "Send Lineup Email" :content (show-lineup-email-form team-name)}
-         ]]
+         {:id "send-lineup-email" :name "Send Lineup Email" :content (show-lineup-email-form team-name)}]
+        prefix "match"]
     (list
       ;(select-form match-actions)
       (map add-div match-actions)
-      (add-div {:id "status-panel" :name "Status" :content (layout/status-content form-span)}))))
+      (add-div {:id (str prefix "-status-panel") :name "Status" :content (layout/status-content form-span prefix)}))))

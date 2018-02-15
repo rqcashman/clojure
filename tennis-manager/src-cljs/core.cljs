@@ -121,15 +121,15 @@
       (ef/at
         "#team-list option:first-child" (ef/remove-node)))))
 
-(defn ^:export db_update_request [form_id uri status_title]
+(defn ^:export db_update_request [form_id uri status_title id-prefix]
   (go
     (let [values (ef/from form_id (ef/read-form))
           response (<! (http/post uri {:form-params values}))
           body (:body response)]
       (let [status-class (if (= (:status body) "success") "success" "error")]
         (ef/at
-          "#status-title" (ef/content status_title)
-          "#status-content" (ef/do->
-                              (ef/content (:msg body))
-                              (ef/set-class status-class)))))))
+          (str "#" id-prefix "-status-title") (ef/content status_title)
+          (str "#" id-prefix "-status-content") (ef/do->
+                                                  (ef/content (:msg body))
+                                                  (ef/set-class status-class)))))))
 
