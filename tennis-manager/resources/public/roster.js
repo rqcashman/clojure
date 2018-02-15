@@ -109,7 +109,7 @@ function rosterStatusOK(evt) {
         var current_index = $("#tabs").tabs("option","selected");
         $("#tabs").tabs('load',current_index);    }
     else {
-        change_form(roster_current_form_id);
+        change_roster_form(roster_current_form_id);
     }
     $("#status-content").text("Processing...");
     evt.preventDefault();

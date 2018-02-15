@@ -97,7 +97,7 @@ function matchStatusOK(evt) {
         var current_index = $("#tabs").tabs("option","selected");
         $("#tabs").tabs('load',current_index);    }
     else {
-        change_form(roster_current_form_id);
+        change_match_form(match_current_form_id);
     }
     $("#match-status-content").text("Processing...");
     evt.preventDefault();

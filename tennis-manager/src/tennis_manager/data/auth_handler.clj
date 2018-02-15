@@ -113,5 +113,17 @@
         session-timeout (:SESSION_TIMEOUT_MINUTES parms)]
     (-> (j/query sys/db-cred
                  [(str "select count(1) as ct from user_session where session_id=?
-                                       and last_used_time > date_sub(current_timestamp(), INTERVAL " session-timeout " MINUTE)") session-id])
+                        and last_used_time > date_sub(current_timestamp(), INTERVAL " session-timeout " MINUTE)") session-id])
         first :ct pos?)))
+
+(defn update-session-used-time
+  "update last used time for session"
+  [session-id]
+  (j/execute! sys/db-cred
+              [(str "update user_session set last_used_time = current_timestamp() where session_id=?") session-id]))
+
+(defn update-user-last-login-time
+  "update user's last login date"
+  [username]
+  (j/execute! sys/db-cred
+              [(str "update user_login set last_login_date = current_timestamp() where email=?") username]))

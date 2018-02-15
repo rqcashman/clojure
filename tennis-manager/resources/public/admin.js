@@ -2,10 +2,10 @@
  * Created by Richard on 6/5/2017.
  */
 
-var current_form_id = "add-club";
+var admin_current_form_id = "add-club";
 
 $().ready(function () {
-    $("#" + current_form_id).css("display", "block");
+    $("#" + admin_current_form_id).css("display", "block");
     $("#addclubform").validate({
         rules: {
             club_name: {
@@ -92,9 +92,9 @@ $().ready(function () {
 
 function change_admin_form(new_form_id) {
     $("#admin-status-panel").css("display", "none");
-    $("#" + current_form_id).css("display", "none");
+    $("#" + admin_current_form_id).css("display", "none");
     $("#" + new_form_id).css("display", "block");
-    current_form_id = new_form_id;
+    admin_current_form_id = new_form_id;
 }
 
 function isNumberKey(evt) {
@@ -107,13 +107,13 @@ function isNumberKey(evt) {
 function dismissAdminStatusForm() {
     $("#admin-status-panel").css("display", "none");
     $("#status-content").text("Processing...");
-    $("#" + current_form_id).css("display", "block");
+    $("#" + admin_current_form_id).css("display", "block");
 }
 
 function processAdminRequest(form_id, uri, title) {
     if ($(form_id).valid()) {
         tennis_manager.core.db_update_request(form_id, uri, title, "admin");
-        $("#" + current_form_id).css("display", "none");
+        $("#" + admin_current_form_id).css("display", "none");
         $("#admin-status-panel").css("display", "block");
     }
     return false;
@@ -130,7 +130,7 @@ function adminStatusOK(evt) {
         $("#tabs").tabs('load',current_index);
     }
     else {
-        change_form(roster_current_form_id);
+        change_admin_form(admin_current_form_id);
     }
     $("#admin-status-content").text("Processing...");
     evt.preventDefault();

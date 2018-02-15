@@ -26,10 +26,13 @@
   [request]
   (println "------------ " request)
   (println "-----session ------- " (:session request))
-  (let [session (:session request)]
-    (if-not (= (s/blank? (:identity session)) true)
-      (if (= (auth/session-valid? (:identity session)) true)
-        true
+  (let [session (:session request)
+        session-id (:identity session)]
+    (if-not (= (s/blank? session-id) true)
+      (if (auth/session-valid? session-id)
+        (do
+          (auth/update-session-used-time session-id)
+          true)
         (error "User session expired"))
       (error "User not logged in"))))
 
@@ -81,21 +84,12 @@
               error (:0 authentication-error-list)
               updated-session (assoc session :identity session-id)
               url (:url error)]
-          (println "=== SUCCESS ===")
-          (println "ERROR" error)
-          (println "URL" url)
+          (auth/update-user-last-login-time username)
           (auth/persist-session-id username session-id)
           (-> (rr/redirect url)
               (assoc :session updated-session)))
         (let [error ((keyword value) authentication-error-list)]
           (rr/redirect (str (:url error) "&username=" (codec/url-encode (:username (:params request))) "&msg=" (codec/url-encode (:msg error)))))))))
-
-(defn authenticated-access3
-  "docstring"
-  [request]
-  (println "+++++++++++ access 3 +++++++++++++++++++++++")
-  (println request)
-  false)
 
 (defn not-authenticated
   "docstring"

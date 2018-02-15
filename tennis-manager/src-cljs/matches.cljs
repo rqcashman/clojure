@@ -73,12 +73,9 @@
       (if match
         (do
           (ef/at
-            (str "#" prefix "_match_id") (ef/set-form-input match-id))
-          (ef/at
-            (str "#" prefix "_match_date") (ef/content (:match_date match)))
-          (ef/at
-            (str "#" prefix "_match_time") (ef/content (:match_time match)))
-          (ef/at
+            (str "#" prefix "_match_id") (ef/set-form-input match-id)
+            (str "#" prefix "_match_date") (ef/content (:match_date match))
+            (str "#" prefix "_match_time") (ef/content (:match_time match))
             (str "#" prefix "_match_location") (ef/content (:club_name match))))))))
 
 (defn ^:export email_form
@@ -183,8 +180,8 @@
   (let [player1 (str "#c" court "-p1")
         player2 (str "#c" court "-p2")]
     (go
-      (ef/at player1 (ef/set-prop "disabled" disabled))
-      (ef/at player2 (ef/set-prop "disabled" disabled)))))
+      (ef/at player1 (ef/set-prop "disabled" disabled)
+             player2 (ef/set-prop "disabled" disabled)))))
 
 (defn updateForfeitControls
   "Update the forfeit radio buttons"
@@ -193,9 +190,9 @@
         team-forfeit (str "#c" court "-forfeit")
         opp-forfeit (str "#c" court "-forfeit-opp")]
     (go
-      (ef/at no-forfeit (ef/set-prop "disabled" disabled))
-      (ef/at team-forfeit (ef/set-prop "disabled" disabled))
-      (ef/at opp-forfeit (ef/set-prop "disabled" disabled)))))
+      (ef/at no-forfeit (ef/set-prop "disabled" disabled)
+             team-forfeit (ef/set-prop "disabled" disabled)
+             opp-forfeit (ef/set-prop "disabled" disabled)))))
 
 (defn ^:export forfeit_selected
   "This is called when a forfeit button is selected on the UI and when the page loads.  It updates the other forfeit buttons based on the selected value."
@@ -230,12 +227,9 @@
 (defn enable-disable-forfeit-buttons
   [court-number enable-value]
   (go
-    (ef/at (str "#c" court-number "-forfeit-none")
-           (ef/set-prop "disabled" enable-value))
-    (ef/at (str "#c" court-number "-forfeit")
-           (ef/set-prop "disabled" enable-value))
-    (ef/at (str "#c" court-number "-forfeit-opp")
-           (ef/set-prop "disabled" enable-value))))
+    (ef/at (str "#c" court-number "-forfeit-none") (ef/set-prop "disabled" enable-value)
+           (str "#c" court-number "-forfeit") (ef/set-prop "disabled" enable-value)
+           (str "#c" court-number "-forfeit-opp") (ef/set-prop "disabled" enable-value))))
 
 (defn init-forfeit-btns
   "this intiializes the forfeit buttons.  It sets the value from the DB and sets the other forfeit buttons accordingly."
