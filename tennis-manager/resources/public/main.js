@@ -92,7 +92,7 @@ function xa(a, b, c) {
   xa = Function.prototype.bind && -1 != Function.prototype.bind.toString().indexOf("native code") ? va : wa;
   return xa.apply(null, arguments);
 }
-var za = Date.now || function() {
+var Aa = Date.now || function() {
   return +new Date;
 };
 function Ba(a, b) {
@@ -205,7 +205,7 @@ function Oa(a, b) {
 };
 function Ta(a) {
   a: {
-    var b = Ua;
+    var b = Wa;
     for (var c = a.length, d = da(a) ? a.split("") : a, e = 0; e < c; e++) {
       if (e in d && b.call(void 0, d[e], e, a)) {
         b = e;
@@ -2704,7 +2704,7 @@ h.call = function() {
     return a.l ? a.l() : a.call(null);
   }
   var J = null;
-  J = function(X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J, rb, aa, zb, Ib, Pb, Pc, pd, De, ed) {
+  J = function(X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J, rb, aa, zb, Ib, Pb, Pc, pd, De, ed) {
     switch(arguments.length) {
       case 1:
         return sa.call(this, X);
@@ -2721,35 +2721,35 @@ h.call = function() {
       case 7:
         return D.call(this, X, fa, ia, oa, ma, ka, ya);
       case 8:
-        return A.call(this, X, fa, ia, oa, ma, ka, ya, Aa);
+        return A.call(this, X, fa, ia, oa, ma, ka, ya, za);
       case 9:
-        return w.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb);
+        return w.call(this, X, fa, ia, oa, ma, ka, ya, za, pb);
       case 10:
-        return u.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka);
+        return u.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka);
       case 11:
-        return t.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va);
+        return t.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua);
       case 12:
-        return p.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa);
+        return p.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va);
       case 13:
-        return n.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J);
+        return n.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J);
       case 14:
-        return l.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J, rb);
+        return l.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J, rb);
       case 15:
-        return k.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J, rb, aa);
+        return k.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J, rb, aa);
       case 16:
-        return g.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J, rb, aa, zb);
+        return g.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J, rb, aa, zb);
       case 17:
-        return f.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J, rb, aa, zb, Ib);
+        return f.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J, rb, aa, zb, Ib);
       case 18:
-        return e.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J, rb, aa, zb, Ib, Pb);
+        return e.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J, rb, aa, zb, Ib, Pb);
       case 19:
-        return d.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J, rb, aa, zb, Ib, Pb, Pc);
+        return d.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J, rb, aa, zb, Ib, Pb, Pc);
       case 20:
-        return c.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J, rb, aa, zb, Ib, Pb, Pc, pd);
+        return c.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J, rb, aa, zb, Ib, Pb, Pc, pd);
       case 21:
-        return b.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J, rb, aa, zb, Ib, Pb, Pc, pd, De);
+        return b.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J, rb, aa, zb, Ib, Pb, Pc, pd, De);
       case 22:
-        return a.call(this, X, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, J, rb, aa, zb, Ib, Pb, Pc, pd, De, ed);
+        return a.call(this, X, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, J, rb, aa, zb, Ib, Pb, Pc, pd, De, ed);
     }
     throw Error("Invalid arity: " + (arguments.length - 1));
   };
@@ -3759,7 +3759,7 @@ h.call = function() {
     return a.A.l ? a.A.l() : a.A.call(null);
   }
   var J = null;
-  J = function(X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb, Pc, pd, De, ed) {
+  J = function(X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb, Pc, pd, De, ed) {
     switch(arguments.length) {
       case 1:
         return sa.call(this, X);
@@ -3776,35 +3776,35 @@ h.call = function() {
       case 7:
         return D.call(this, X, fa, ia, oa, ma, ka, ya);
       case 8:
-        return A.call(this, X, fa, ia, oa, ma, ka, ya, Aa);
+        return A.call(this, X, fa, ia, oa, ma, ka, ya, za);
       case 9:
-        return w.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J);
+        return w.call(this, X, fa, ia, oa, ma, ka, ya, za, J);
       case 10:
-        return u.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka);
+        return u.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka);
       case 11:
-        return t.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va);
+        return t.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua);
       case 12:
-        return p.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa);
+        return p.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va);
       case 13:
-        return n.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub);
+        return n.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub);
       case 14:
-        return l.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub, rb);
+        return l.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub, rb);
       case 15:
-        return k.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub, rb, aa);
+        return k.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub, rb, aa);
       case 16:
-        return g.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub, rb, aa, zb);
+        return g.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub, rb, aa, zb);
       case 17:
-        return f.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub, rb, aa, zb, Ib);
+        return f.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub, rb, aa, zb, Ib);
       case 18:
-        return e.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb);
+        return e.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb);
       case 19:
-        return d.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb, Pc);
+        return d.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb, Pc);
       case 20:
-        return c.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb, Pc, pd);
+        return c.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb, Pc, pd);
       case 21:
-        return b.call(this, X, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb, Pc, pd, De);
+        return b.call(this, X, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb, Pc, pd, De);
       case 22:
-        return a.call(this, 0, fa, ia, oa, ma, ka, ya, Aa, J, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb, Pc, pd, De, ed);
+        return a.call(this, 0, fa, ia, oa, ma, ka, ya, za, J, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb, Pc, pd, De, ed);
     }
     throw Error("Invalid arity: " + (arguments.length - 1));
   };
@@ -11325,7 +11325,7 @@ h.call = function() {
     return c.l ? c.l() : c.call(null);
   }
   var J = null;
-  J = function(J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb, Pc, pd, De, ed) {
+  J = function(J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb, Pc, pd, De, ed) {
     switch(arguments.length) {
       case 1:
         return sa.call(this, J);
@@ -11342,35 +11342,35 @@ h.call = function() {
       case 7:
         return D.call(this, J, fa, ia, oa, ma, ka, ya);
       case 8:
-        return A.call(this, J, fa, ia, oa, ma, ka, ya, Aa);
+        return A.call(this, J, fa, ia, oa, ma, ka, ya, za);
       case 9:
-        return w.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb);
+        return w.call(this, J, fa, ia, oa, ma, ka, ya, za, pb);
       case 10:
-        return u.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka);
+        return u.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka);
       case 11:
-        return t.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va);
+        return t.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua);
       case 12:
-        return p.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa);
+        return p.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va);
       case 13:
-        return n.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub);
+        return n.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub);
       case 14:
-        return l.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub, rb);
+        return l.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub, rb);
       case 15:
-        return k.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub, rb, aa);
+        return k.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub, rb, aa);
       case 16:
-        return g.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub, rb, aa, zb);
+        return g.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub, rb, aa, zb);
       case 17:
-        return f.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub, rb, aa, zb, Ib);
+        return f.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub, rb, aa, zb, Ib);
       case 18:
-        return e.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb);
+        return e.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb);
       case 19:
-        return d.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb, Pc);
+        return d.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb, Pc);
       case 20:
-        return c.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb, Pc, pd);
+        return c.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb, Pc, pd);
       case 21:
-        return b.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb, Pc, pd, De);
+        return b.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb, Pc, pd, De);
       case 22:
-        return a.call(this, J, fa, ia, oa, ma, ka, ya, Aa, pb, Ka, Va, Wa, ub, rb, aa, zb, Ib, Pb, Pc, pd, De, ed);
+        return a.call(this, J, fa, ia, oa, ma, ka, ya, za, pb, Ka, Ua, Va, ub, rb, aa, zb, Ib, Pb, Pc, pd, De, ed);
     }
     throw Error("Invalid arity: " + (arguments.length - 1));
   };
@@ -11631,7 +11631,7 @@ os.prototype.Ug = null;
 var ps = 0;
 os.prototype.reset = function(a, b, c, d, e) {
   "number" == typeof e || ps++;
-  d || za();
+  d || Aa();
   this.we = a;
   this.Oi = b;
   delete this.Ug;
@@ -12653,7 +12653,7 @@ h.send = function(a, b, c, d) {
 function mu(a) {
   return qb && Lb(9) && ea(a.timeout) && void 0 !== a.ontimeout;
 }
-function Ua(a) {
+function Wa(a) {
   return "content-type" == a.toLowerCase();
 }
 h.Vc = function() {
@@ -13155,13 +13155,13 @@ var Vu = [], Wu = xa(function() {
       return;
     }
   }
-  a = za();
+  a = Aa();
   b && (Hu = a);
   Iu = window.setTimeout(Wu, 1000 > a - Hu ? 10 : 100);
 }, Gu);
 function Xu() {
   Fs(Ds, "starting receive-timer");
-  Hu = za();
+  Hu = Aa();
   Iu && window.clearTimeout(Iu);
   Iu = window.setTimeout(Wu, 10);
 }
@@ -13813,7 +13813,7 @@ function Mv(a, b) {
 var Nv = 0;
 Mv.prototype.send = function(a, b, c, d) {
   a = a || null;
-  d = d || "_" + (Nv++).toString(36) + za().toString(36);
+  d = d || "_" + (Nv++).toString(36) + Aa().toString(36);
   var e = "_callbacks___" + d, f = this.ij.clone();
   if (a) {
     for (var g in a) {
@@ -17996,11 +17996,11 @@ function XA(a) {
                           break a;
                         }
                       }
-                    } catch (Aa) {
-                      if (Aa instanceof Object) {
-                        b[5] = Aa, GA(b), d = Z;
+                    } catch (za) {
+                      if (za instanceof Object) {
+                        b[5] = za, GA(b), d = Z;
                       } else {
-                        throw Aa;
+                        throw za;
                       }
                     }
                   }
@@ -18657,8 +18657,8 @@ var LB = function() {
     return b[c] ? 0 : b[c] = 1;
   }
   function d(a, b) {
-    if (Wa) {
-      var c = Va[a];
+    if (Va) {
+      var c = Ua[a];
       if (c && !b) {
         return c;
       }
@@ -18669,7 +18669,7 @@ var LB = function() {
     c = a.charAt(0);
     var f = -1 == a.indexOf(" ");
     0 <= a.indexOf("#") && f && (b = !0);
-    if (!Wa || b || -1 != "\x3e~+".indexOf(c) || sa && -1 != a.indexOf(":") || pa && 0 <= a.indexOf(".") || -1 != a.indexOf(":contains") || -1 != a.indexOf("|\x3d")) {
+    if (!Va || b || -1 != "\x3e~+".indexOf(c) || sa && -1 != a.indexOf(":") || pa && 0 <= a.indexOf(".") || -1 != a.indexOf(":contains") || -1 != a.indexOf("|\x3d")) {
       var g = a.split(/\s*,\s*/);
       return Ka[a] = 2 > g.length ? e(a) : function(a) {
         for (var b = 0, c = [], d; d = g[b++];) {
@@ -18679,7 +18679,7 @@ var LB = function() {
       };
     }
     var k = 0 <= "\x3e~+".indexOf(a.charAt(a.length - 1)) ? a + " *" : a;
-    return Va[a] = function(b) {
+    return Ua[a] = function(b) {
       try {
         if (9 != b.nodeType && !f) {
           throw Error("");
@@ -18830,7 +18830,7 @@ var LB = function() {
     });
     b.Je || Qa(a.Je, function(a) {
       var b, d = a.attr;
-      a.type && fa[a.type] ? b = fa[a.type](d, a.Tf) : d.length && (b = Aa(d));
+      a.type && fa[a.type] ? b = fa[a.type](d, a.Tf) : d.length && (b = za(d));
       b && (c = M(c, b));
     });
     b.id || a.id && (c = M(c, function(b) {
@@ -19005,7 +19005,7 @@ var LB = function() {
     return function(a) {
       return u(a) == k;
     };
-  }}, Aa = sa ? function(a) {
+  }}, za = sa ? function(a) {
     var b = a.toLowerCase();
     "class" == b && (a = "className");
     return function(c) {
@@ -19015,7 +19015,7 @@ var LB = function() {
     return function(b) {
       return b && b.getAttribute && b.hasAttribute(a);
     };
-  }, pb = {}, Ka = {}, Va = {}, Wa = !!document.querySelectorAll && (!vb || Lb("526")), ub = 0, rb = sa ? function(a) {
+  }, pb = {}, Ka = {}, Ua = {}, Va = !!document.querySelectorAll && (!vb || Lb("526")), ub = 0, rb = sa ? function(a) {
     return X ? a.getAttribute("_uid") || a.setAttribute("_uid", ++ub) || ub : a.uniqueID;
   } : function(a) {
     return a._uid || (a._uid = ++ub);
@@ -19106,7 +19106,7 @@ var PB = function PB(a) {
               if (l) {
                 var n = l, p = K(n);
                 if (l = H(function(a, c, d, e, f, g, k, l, n) {
-                  return function Wa(p) {
+                  return function Va(p) {
                     return new Tg(null, function(a, c) {
                       return function() {
                         for (;;) {
@@ -19128,13 +19128,13 @@ var PB = function PB(a) {
                                   }
                                 }
                               }
-                              return d ? Zg(f.ra(), Wa(Ve(a))) : Zg(f.ra(), null);
+                              return d ? Zg(f.ra(), Va(Ve(a))) : Zg(f.ra(), null);
                             }
                             d = K(a);
                             f = Rf;
                             xk(G([c, d]));
                             d = Wf.g(d, c);
-                            return f(d, Wa(sf(a)));
+                            return f(d, Va(sf(a)));
                           }
                           return null;
                         }
@@ -24883,8 +24883,8 @@ function kG(a) {
               return Z;
             }
             if (39 === c) {
-              var ma = b[17], ka = b[18], ya = ["c", x.a(ka), "-forfeit-none"].join(""), Aa = iG(ya, ma), pb = f = b;
-              pb[2] = Aa;
+              var ma = b[17], ka = b[18], ya = ["c", x.a(ka), "-forfeit-none"].join(""), za = iG(ya, ma), pb = f = b;
+              pb[2] = za;
               pb[1] = 38;
               return Z;
             }
@@ -24892,8 +24892,8 @@ function kG(a) {
               X = b[14];
               d = b[7];
               sa = b[15];
-              var Ka = Yd.g(sa, X), Va = ["#c", x.a(Ka), "-forfeit-none"].join(""), Wa = qC.j(Va, G([cC(G(["checked", "checked"]))])), ub = 4 > Ka;
-              b[19] = Wa;
+              var Ka = Yd.g(sa, X), Ua = ["#c", x.a(Ka), "-forfeit-none"].join(""), Va = qC.j(Ua, G([cC(G(["checked", "checked"]))])), ub = 4 > Ka;
+              b[19] = Va;
               b[7] = Ka;
               f = b;
               f[1] = v(ub) ? 7 : 8;
@@ -25432,9 +25432,9 @@ Ba("tennis_manager.roster.roster", function(a) {
               var f = c[7], g = c[8], t = c[9];
               e = c[2];
               var u = sr.a(e), w = O(u);
-              c[7] = u;
-              c[8] = w;
-              c[9] = e;
+              c[7] = w;
+              c[8] = e;
+              c[9] = u;
               c[1] = v(0 < w) ? 3 : 4;
               return Z;
             }
@@ -25443,8 +25443,8 @@ Ba("tennis_manager.roster.roster", function(a) {
                 return function(a, b) {
                   return qC.j("#sr-details-body tr:last-child", G([gC(G([eH(b)]))]));
                 };
-              }(t, f, g, f, g, t, d, b);
-            }(), Xf, f), c[2] = e, c[1] = 5, Z) : 4 === d ? (e = gC(G(["\x3ctr\x3e\x3ctd colspan\x3d'5' align\x3d'center'\x3e\x3ch2 style\x3d'color:red'\x3eNo players added to roster\x3c/h2\x3e\x3c/td\x3e\x3c/tr\x3e"])), e = qC.j("#sr-details-body tr:last-child", G([e])), c[2] = e, c[1] = 5, Z) : 5 === d ? (e = c[2], u = hC(), u = qC.j("#sr-details-body tr:first-child", G([u])), c[10] = e, EA(c, u)) : null;
+              }(g, t, f, f, g, t, d, b);
+            }(), Xf, t), c[2] = e, c[1] = 5, Z) : 4 === d ? (e = gC(G(["\x3ctr\x3e\x3ctd colspan\x3d'5' align\x3d'center'\x3e\x3ch2 style\x3d'color:red'\x3eNo players added to roster\x3c/h2\x3e\x3c/td\x3e\x3c/tr\x3e"])), e = qC.j("#sr-details-body tr:last-child", G([e])), c[2] = e, c[1] = 5, Z) : 5 === d ? (e = c[2], u = hC(), u = qC.j("#sr-details-body tr:first-child", G([u])), c[10] = e, EA(c, u)) : null;
           };
         }(b), b);
       }(), e = function() {
@@ -25489,7 +25489,7 @@ Ba("tennis_manager.roster.load_update_player_form", function(a) {
               }
             }
             function c() {
-              var a = [null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+              var a = [null, null, null, null, null, null, null, null];
               a[0] = d;
               a[1] = 1;
               return a;
@@ -25518,28 +25518,22 @@ Ba("tennis_manager.roster.load_update_player_form", function(a) {
               return c = sr.a(b[2]), b[7] = c, b[1] = v(c) ? 3 : 4, Z;
             }
             if (3 === c) {
-              var d = b[7];
-              c = Dl.a(d);
-              c = qC.j("#up_first_name", G([iC(c)]));
-              var e = iq.a(d);
-              e = qC.j("#up_last_name", G([iC(e)]));
-              var f = xl.a(d);
-              f = qC.j("#up_email", G([iC(f)]));
-              var p = Ll.a(d);
-              p = qC.j("#up_phone_number", G([iC(p)]));
-              var t = op.a(d);
-              t = qC.j("#up_status", G([iC(t)]));
-              var u = Aq.a(d);
-              u = qC.j("#up_team_id", G([iC(u)]));
-              d = xp.a(d);
-              d = qC.j("#up_player_id", G([iC(d)]));
-              b[8] = t;
-              b[9] = p;
-              b[10] = e;
-              b[11] = c;
-              b[12] = u;
-              b[13] = f;
-              b[2] = d;
+              c = b[7];
+              var d = Dl.a(c);
+              d = iC(d);
+              var e = iq.a(c);
+              e = iC(e);
+              var f = xl.a(c);
+              f = iC(f);
+              var p = Ll.a(c);
+              p = iC(p);
+              var t = op.a(c);
+              t = iC(t);
+              var u = Aq.a(c);
+              u = iC(u);
+              c = xp.a(c);
+              c = qC.j("#up_first_name", G([d, "#up_last_name", e, "#up_email", f, "#up_phone_number", p, "#up_status", t, "#up_team_id", u, "#up_player_id", iC(c)]));
+              b[2] = c;
               b[1] = 5;
               return Z;
             }
@@ -25630,8 +25624,8 @@ Ba("tennis_manager.core.schedule", function(a, b) {
               f = d[2];
               var w = sr.a(f), A = O(w);
               d[7] = w;
-              d[8] = A;
-              d[9] = f;
+              d[8] = f;
+              d[9] = A;
               d[1] = v(0 < A) ? 3 : 4;
               return Z;
             }
@@ -25640,7 +25634,7 @@ Ba("tennis_manager.core.schedule", function(a, b) {
                 return function(a, b) {
                   return qC.j("#schedule-body tr:last-child", G([gC(G([fH(b)]))]));
                 };
-              }(u, g, k, g, k, u, e, c);
+              }(k, g, u, g, k, u, e, c);
             }(), Xf, g), w = ["#schedule-body td[name\x3d'id-", x.a(b), "']"].join(""), A = dC(), w = qC.j(w, G([A])), d[10] = f, d[2] = w, d[1] = 5, Z) : 4 === e ? (f = gC(G(["\x3ctr\x3e\x3ctd colspan\x3d'6' align\x3d'center'\x3e\x3ch2 style\x3d'color:red'\x3eNo schedule found for team\x3c/h2\x3e\x3c/td\x3e\x3c/tr\x3e"])), f = qC.j("#schedule-body tr:last-child", G([f])), d[2] = f, d[1] = 5, Z) : 5 === e ? (f = d[2], w = hC(), w = qC.j("#schedule-body tr:first-child", G([w])), A = show_schedule(), 
             d[11] = w, d[12] = f, EA(d, A)) : null;
           };
@@ -25703,26 +25697,10 @@ Ba("tennis_manager.core.schedule", function(a, b) {
             d.a = b;
             return d;
           }();
-        }(function(a) {
-          return function(c) {
-            var d = c[1];
-            if (1 === d) {
-              var e = ["team/", x.a(b)].join("");
-              e = kB(e);
-              return CA(c, 2, e);
-            }
-            if (2 === d) {
-              var f = c[2], g = sr.a(f);
-              e = Qd(function() {
-                return function() {
-                  return function(a, b) {
-                    return qC.j("#sched-hdr td[id\x3d'sched-team-name']", G([bC(G([Dm.a(b)]))]));
-                  };
-                }(f, g, f, g, d, a);
-              }(), Xf, g);
-              return EA(c, e);
-            }
-            return null;
+        }(function() {
+          return function(a) {
+            var c = a[1];
+            return 1 === c ? (c = ["team/", x.a(b)].join(""), c = kB(c), CA(a, 2, c)) : 2 === c ? (c = sr.a(a[2]), c = Dm.a(c), c = bC(G([c])), c = qC.j("#sched-hdr td[id\x3d'sched-team-name']", G([c])), EA(a, c)) : null;
           };
         }(a), a);
       }(), d = function() {
@@ -25783,24 +25761,22 @@ Ba("tennis_manager.core.schedule", function(a, b) {
             d.a = b;
             return d;
           }();
-        }(function(b) {
-          return function(c) {
-            var d = c[1];
-            if (1 === d) {
-              var e = ["season/", x.a(a)].join("");
-              e = kB(e);
-              return CA(c, 2, e);
+        }(function() {
+          return function(b) {
+            var c = b[1];
+            if (1 === c) {
+              return c = ["season/", x.a(a)].join(""), c = kB(c), CA(b, 2, c);
             }
-            if (2 === d) {
-              var f = c[2], g = sr.a(f);
-              e = Qd(function() {
-                return function() {
-                  return function(a, b) {
-                    return qC.j("#sched-hdr td[id\x3d'sched-season-name']", G([bC(G([Dm.a(b)])), "#sched-hdr td[id\x3d'sched-season-start']", bC(G([mp.a(b)])), "#sched-hdr td[id\x3d'sched-season-end']", bC(G([Wo.a(b)]))]));
-                  };
-                }(f, g, f, g, d, b);
-              }(), Xf, g);
-              return EA(c, e);
+            if (2 === c) {
+              var d = sr.a(b[2]);
+              c = Dm.a(d);
+              c = bC(G([c]));
+              var e = mp.a(d);
+              e = bC(G([e]));
+              d = Wo.a(d);
+              d = bC(G([d]));
+              c = qC.j("#sched-hdr td[id\x3d'sched-season-name']", G([c, "#sched-hdr td[id\x3d'sched-season-start']", e, "#sched-hdr td[id\x3d'sched-season-end']", d]));
+              return EA(b, c);
             }
             return null;
           };

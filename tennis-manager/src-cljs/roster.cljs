@@ -69,20 +69,14 @@
       (if player
         (do
           (ef/at
-            "#up_first_name" (ef/set-form-input (:first_name player)))
-          (ef/at
-            "#up_last_name" (ef/set-form-input (:last_name player)))
-          (ef/at
-            "#up_email" (ef/set-form-input (:email player)))
-          (ef/at
-            "#up_phone_number" (ef/set-form-input (:phone_number player)))
-          (ef/at
-            "#up_status" (ef/set-form-input (:status player)))
-          (ef/at
-            "#up_team_id" (ef/set-form-input (:team_id player)))
-          (ef/at
-            "#up_player_id" (ef/set-form-input (:id player)))
-          )
+            "#up_first_name" (ef/set-form-input (:first_name player))
+            "#up_last_name" (ef/set-form-input (:last_name player))
+            "#up_email" (ef/set-form-input (:email player))
+            "#up_phone_number" (ef/set-form-input (:phone_number player))
+            "#up_status" (ef/set-form-input (:status player))
+            "#up_team_id" (ef/set-form-input (:team_id player))
+            "#up_player_id" (ef/set-form-input (:id player))
+            ))
         (ef/at
           (js/alert "Player not found"))))))
 

@@ -75,25 +75,16 @@
       (js/show_schedule)))
   (go
     (let [response (<! (http/get (str "team/" team-id)))
-          body (:body response)]
-      (reduce
-        (fn [db-rows row]
-          (ef/at
-            "#sched-hdr td[id='sched-team-name']" (ef/content (:name row))))
-        []
-        body)))
+          team (:body response)]
+      (ef/at
+        "#sched-hdr td[id='sched-team-name']" (ef/content (:name team)))))
   (go
     (let [response (<! (http/get (str "season/" season-id)))
-          body (:body response)]
-      (reduce
-        (fn [db-rows row]
-          (ef/at
-            "#sched-hdr td[id='sched-season-name']" (ef/content (:name row))
-            "#sched-hdr td[id='sched-season-start']" (ef/content (:start_date row))
-            "#sched-hdr td[id='sched-season-end']" (ef/content (:end_date row))
-            ))
-        []
-        body))))
+          season (:body response)]
+      (ef/at
+        "#sched-hdr td[id='sched-season-name']" (ef/content (:name season))
+        "#sched-hdr td[id='sched-season-start']" (ef/content (:start_date season))
+        "#sched-hdr td[id='sched-season-end']" (ef/content (:end_date season))))))
 
 (defn ^:export load_schedule_form []
   (go

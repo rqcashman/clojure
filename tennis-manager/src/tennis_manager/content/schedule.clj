@@ -14,18 +14,20 @@
      [:hr {:color "black"}]
      [:table#sched-hdr.schedule-hdr
       [:tr
+       [:td {:width "10%"} "&nbsp;"]
        [:td "Team:"]
-       [:td "&nbsp;"]
-       [:td#sched-team-name]
+       [:td {:width "5%"}"&nbsp;"]
+       [:td#sched-team-name {:style "font-weight:bold"}]
        [:td {:colspan 4}]
        (layout/empty-row 5)]
       [:tr
+       [:td "&nbsp;"]
        [:td "Season:"]
        [:td "&nbsp;"]
-       [:td#sched-season-name]
-       [:td "&nbsp;"]
+       [:td#sched-season-name {:style "font-weight:bold"}]
+       [:td {:width "5%"}"&nbsp;"]
        [:td#sched-season-start]
-       [:td "-"]
+       [:td {:width "5%"} "&nbsp;&nbsp;-&nbsp;&nbsp;"]
        [:td#sched-season-end]]]]]
    [:hr {:color "black"}]
    [:table#sched-details.table.table-striped.table-sm

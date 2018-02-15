@@ -9,18 +9,16 @@
   "docstring"
   []
   (j/query sys/db-cred
-           [(str "select id, name, DATE_FORMAT(start_date,'%m-%d-%Y') as start_date,DATE_FORMAT(end_date,'%m-%d-%Y') as end_date"
-                 " from season "
-                 " order by start_date")]))
+           [(str "select id, name, DATE_FORMAT(start_date,'%M %D, %Y') as start_date,DATE_FORMAT(end_date,'%m-%d-%Y') as end_date
+                  from season order by start_date desc")]))
 
 (defn season
   "docstring"
   [season-id]
-  (j/query sys/db-cred
-           [(str "select id, name, DATE_FORMAT(start_date,'%Y-%m-%d') as start_date,DATE_FORMAT(end_date,'%Y-%m-%d') as end_date"
-                 " from season "
-                 " where id = ?"
-                 " order by name") season-id]))
+  (-> (j/query sys/db-cred
+               [(str "select id, name, DATE_FORMAT(start_date,'%M %D, %Y') as start_date,DATE_FORMAT(end_date,'%M %D, %Y') as end_date
+                      from season  where id = ?") season-id])
+      first))
 
 (defn season-exists?
   "docstring"
