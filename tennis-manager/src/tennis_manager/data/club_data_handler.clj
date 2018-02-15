@@ -9,9 +9,8 @@
   "docstring"
   []
   (j/query sys/db-cred
-           [(str "select id, name, address, city, state, zip_code, phone_number"
-                 " from club "
-                 " order by name")]
+           [(str "select id, name, address, city, state, zip_code, phone_number
+                  from club order by name")]
            {:as-arrays?    false
             :result-set-fn (fn [rs]
                              (reduce (fn [rcds curr_rcd]
@@ -23,9 +22,8 @@
   "docstring"
   []
   (j/query sys/db-cred
-           [(str "select id, name, address, city, state, zip_code, phone_number"
-                 " from club "
-                 " order by name")]))
+           [(str "select id, name, address, city, state, zip_code, phone_number
+                  from club order by name")]))
 
 (defn add_club
   "docstring"

@@ -6,7 +6,8 @@
         [tennis-manager.data.team-data-handler :as team]
         [tennis-manager.data.schedule-data-handler :as sched]
         [tennis-manager.data.season-data-handler :as season]
-        [tennis-manager.data.user-info :as usr]))
+        [tennis-manager.data.user-info :as usr])
+  (:require [clojure.string :as s]))
 
 (def form-span 4)
 (def sched-form-span 8)
@@ -33,9 +34,9 @@
   "docstring"
   [rows sched-row]
   (let [home-team-id (:home_team_id sched-row)
-        avail-func (if (= (:availability_sent sched-row) nil) "change_to_email_form" "change_to_avail_form")
+        avail-func (if (:availability_sent sched-row) "change_to_avail_form" "change_to_email_form")
         lineup-valid (sched/lineup-set? (:match_id sched-row))
-        send-lineup-func (if (= lineup-valid true) "change_to_email_lineup_form" "set_lineup")]
+        send-lineup-func (if lineup-valid "change_to_email_lineup_form" "set_lineup")]
     (conj rows [:tr
                 [:td (:match_date sched-row)]
                 [:td (:match_time sched-row)]
@@ -43,9 +44,9 @@
                 [:td (:home_club_name sched-row)]
                 [:td {:align "center"} (if (= usr/users_team_id home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
                 [:td {:align "center"} (if (= usr/users_team_id home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
-                [:td {:align "center"} [:span.avail-cursor {:onclick (str avail-func "('" (:match_id sched-row) "');")} (if (= (:availability_sent sched-row) nil) RED-X GREEN-CHECK)]]
-                [:td {:align "center"} [:span.avail-cursor {:onclick (str "set_lineup('" (:match_id sched-row) "');")} (if (= lineup-valid false) RED-X GREEN-CHECK)]]
-                [:td {:align "center"} [:span.avail-cursor {:onclick (str send-lineup-func "('" (:match_id sched-row) "');")} (if (= (:lineup_sent sched-row) nil) RED-X GREEN-CHECK)]]
+                [:td {:align "center"} [:span.avail-cursor {:onclick (str avail-func "('" (:match_id sched-row) "');")} (if (:availability_sent sched-row) GREEN-CHECK RED-X)]]
+                [:td {:align "center"} [:span.avail-cursor {:onclick (str "set_lineup('" (:match_id sched-row) "');")} (if lineup-valid GREEN-CHECK RED-X)]]
+                [:td {:align "center"} [:span.avail-cursor {:onclick (str send-lineup-func "('" (:match_id sched-row) "');")} (if (:lineup_sent sched-row) GREEN-CHECK RED-X)]]
                 ])))
 
 (defn get-team-schedule
@@ -71,7 +72,7 @@
      [:table#match-sched.table.table-striped.table-sm
       [:thead.table-inverse
        [:tr {:align "center"}
-        [:td "Date"]
+        [:td "Datexxx"]
         [:td "Time"]
         [:td "Opponent"]
         [:td "Location"]

@@ -68,9 +68,6 @@
         start-date (:start_date p)
         end-date (:end_date p)]
     (try
-      (println "season: " season)
-      (println "start-date: " start-date)
-      (println "end-date" end-date)
       (if (s/blank? season)
         (hash-map :status "failed" :status-code 200 :msg (str "Season name required"))
         (if (season/season-exists? season)

@@ -36,11 +36,9 @@
 
 (defn login
   "docstring"
-  [ error username error-msg]
-  (println "=============== login qstring =======================")
-  (println error username error-msg)
+  [error username error-msg]
   [:form#addclubform.form-horizontal {:method "post" :action "/login"}
-   [:table {:align "center" :border "2px" :width "20%"}
+   [:table {:align "center" :border "2px" :width "30%"}
     [:tr
      [:td
       [:table {:width "100%"}

@@ -194,7 +194,7 @@
 (defn get-lineup-email-addresses
   "docstring"
   [match-id team-id send-subs]
-  (let [status (if (= (s/blank? send-subs) true) "'A'", "'A','S'")
+  (let [status (if (s/blank? send-subs) "'A'", "'A','S'")
         sql (s/replace line-email-address-sql #"--status--" status)]
     (j/query sys/db-cred
              [sql team-id team-id match-id])))

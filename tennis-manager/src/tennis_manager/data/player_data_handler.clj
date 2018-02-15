@@ -9,15 +9,8 @@
   "docstring"
   [player-id]
   (-> (j/query sys/db-cred
-               [(str "select id, team_id, last_name, first_name, email, phone_number, status"
-                     " from player "
-                     " where id=?") player-id]
-               {:as-arrays?    false
-                :result-set-fn (fn [rs]
-                                 (reduce (fn [rcds curr_rcd]
-                                           (conj rcds curr_rcd))
-                                         [],
-                                         rs))})
+               [(str "select id, team_id, last_name, first_name, email, phone_number, status
+                      from player where id=?") player-id])
       first))
 
 (defn player-exists?
@@ -37,7 +30,6 @@
 (defn player-name-available?
   "check to make sure a player with the name is not already on that team excluding the one we are updating"
   [team_id player-id first_name last_name]
-  (println team_id player-id first_name last_name)
   (-> (j/query sys/db-cred
                [(str "select count(*) as ct from player where team_id=? and first_name=? and last_name=? and id <>?") team_id first_name last_name player-id])
       first :ct (= 0)))
@@ -53,8 +45,7 @@
   "docstring"
   [player-id last_name first_name email phone_number status]
   (j/execute! sys/db-cred
-              [(str "update player set last_name=?,first_name=?,
-              email=?,phone_number=?,status=?
-              where id=?") last_name, first_name, email, phone_number, status player-id]))
+              [(str "update player set last_name=?,first_name=?, email=?,phone_number=?,status=?
+                     where id=?") last_name, first_name, email, phone_number, status player-id]))
 
 

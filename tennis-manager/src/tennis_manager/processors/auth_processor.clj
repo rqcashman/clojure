@@ -33,14 +33,16 @@
         (do
           (auth/update-session-used-time session-id)
           true)
-        (error "User session expired"))
-      (error "User not logged in"))))
+        (error "1004"))
+      (error "1005"))))
 
 (def authentication-error-list {:0    {:url "/mgr" :msg "Success"}
                                 :1000 {:url "/login?err=loginfailure" :msg "Login failed"}
                                 :1001 {:url "/login?err=acctlocked" :msg "Account locked"}
                                 :1002 {:url "/login?err=acctdisabled" :msg "Account disabled"}
-                                :1003 {:url "/login?err=chgpassword" :msg "Force password change"}})
+                                :1003 {:url "/login?err=chgpassword" :msg "Force password change"}
+                                :1004 {:url "/login?err=sessionexpired" :msg "Login session timed out due to inactivity"}
+                                :1005 {:url "/login" :msg ""}})
 
 ;TODO change url for 10003 to change password page - not created yet
 (defn authenticate-user
@@ -89,14 +91,25 @@
           (-> (rr/redirect url)
               (assoc :session updated-session)))
         (let [error ((keyword value) authentication-error-list)]
-          (rr/redirect (str (:url error) "&username=" (codec/url-encode (:username (:params request))) "&msg=" (codec/url-encode (:msg error)))))))))
+          (rr/redirect (str (:url error) "&username=" (codec/url-encode username) "&msg=" (codec/url-encode (:msg error)))))))))
+
+(defn get-expired-session-url
+  "Return expired session URL.  Puts username in login box if the session id is still in the DB"
+  [session error]
+  (let [user (auth/get-user-from-session-id (:identity session))
+        username (:email user)]
+    (if (s/blank? username)
+      (str (:url error) "&msg=" (codec/url-encode (:msg error)))
+      (str (:url error) "&username=" (codec/url-encode username) "&msg=" (codec/url-encode (:msg error))))))
 
 (defn not-authenticated
-  "docstring"
+  "Redirect if not authenticated"
   [request value]
   (if value
-    (rr/redirect "/login"))
-  )
+    (let [error ((keyword value) authentication-error-list)]
+      (if (= value "1004")
+        (rr/redirect (get-expired-session-url (:session request) error))
+        (rr/redirect (str (:url error)))))))
 
 (def rules [{:pattern        #"(^/login*)|(^/availability-reply*)"
              :handler        any-access
@@ -115,5 +128,4 @@
              :on-error       on-err-from-get}
             {:pattern  #"^/.*"
              :handler  authenticated-access
-             :on-error not-authenticated
-             }])
+             :on-error not-authenticated}])
