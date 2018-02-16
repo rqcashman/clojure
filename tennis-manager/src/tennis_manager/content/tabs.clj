@@ -9,7 +9,7 @@
 
 (defn tabs [session]
   (let [user (auth/get-user-from-session-id (:identity session))]
-    [:div#tabs
+    [:div#tabs.tennis-tabs  {:align "center" :width "40%"}
      [:ul
       [:li [:a#matches {:href "/matches"} "Matches"]]
       [:li [:a#roster {:href "/roster"} "Roster"]]

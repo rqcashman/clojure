@@ -34,7 +34,7 @@
       [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
       (layout/hr-row form-span "90%")
       (add-form-control "Club name:" {:id "club_name" :name "club_name" :maxlength 45 :size 45 :type= "text"})
-      (add-form-control "Street:" {:id "street" :name "street" :maxlength 100 :size 70})
+      (add-form-control "Street:" {:id "street" :name "street" :maxlength 100 :size 60})
       (add-form-control "City:" {:id "city" :name "city" :maxlength 45 :size 45})
       (layout/add-select states layout/option "club_state" "State:" (- form-span 2))
       (add-form-control "Zip code:" {:id "zip_code" :name "zip_code" :maxlength 5 :size 5 :onkeypress "return isNumberKey(event)"})

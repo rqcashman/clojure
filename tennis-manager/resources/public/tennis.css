@@ -34,11 +34,20 @@ hr {
     display: none;
 }
 
-.table-compact tr td {
+.tennis-tabs {
+    padding: 0px;
+    margin: 0px;
+    width: 70%;
+    align: center;
+    background-color: #B8B8B8;
+}
+
+.table-compact tr td, tabs {
     padding: 0px;
     margin: 0px;
     background-color: #efefef;
 }
+
 .points {
     text-align: center;
 }
@@ -50,8 +59,11 @@ hr {
 
 .schedule, .roster {
     margin: auto;
-    width: 40%;
+    width: 70%;
     visibility: hidden;
+}
+
+.roster {: width 80 %
 }
 
 .roster {
@@ -59,15 +71,18 @@ hr {
 }
 
 .schedule-form, .admin-form, .admin-action, .roster-form, .roster-action, .roster-view, .match-form, .matches-action {
-    width: 25%;
+    width: 50%;
     visibility: visible;
     background-color: #e6e6e6;
 }
 
-.roster-view {
-    width: 75%;
+.admin-action {
+    width: 100%;
 }
 
+.roster-view {
+    width: 90%;
+}
 
 .schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td, .roster-form tr td, .roster-action tr td, .match-form tr td, .matches-action tr td {
     border-top: none;
@@ -88,7 +103,7 @@ hr {
 .admin-form, .roster-form, .match-form {
     visibility: visible;
     color: #2B4408;
-    width: 30%;
+    width: 50%;
 }
 
 .admin-action, .roster-action, .matches-action {
@@ -98,11 +113,15 @@ hr {
 }
 
 .matches-action {
-    width: 75%;
+    width: 90%;
+}
+
+.roster-action {
+    width: 70%;
 }
 
 .avail-small {
-    width: 40%;
+    width: 60%;
 }
 
 .form-error {
