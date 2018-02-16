@@ -92,22 +92,22 @@
   (let [title "Send Availability Email"]
     [:form#sendavailabilityemail.form-horizontal {:method "post" :action "/send-availability-email"}
      [:table.table.table-sm
+      (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title " for " team-name]]]
       (layout/hr-row form-span "90%")
       [:tr
        [:td {:width "50%"} "&nbsp;"]
        [:td {:colspan 2 :align "center"}
         [:table.table.table-sm.table-compact
-         [:tr [:td] [:td {:colspan 3 :align "center"} [:h5 "Email Header"]]]
          [:tr [:td]
           [:td [:span.bold-text "Match Date:"]]
-          [:td {:colspan 2} [:span#av_match_date "January 3"]]]
+          [:td {:colspan 2} [:span#av_match_date "January 32"]]]
          [:tr [:td]
           [:td [:span.bold-text "Match Time:"]]
-          [:td {:colspan 2} [:span#av_match_time "02:30 PM"]]]
+          [:td {:colspan 2} [:span#av_match_time "55:30 PM"]]]
          [:tr [:td]
           [:td [:span.bold-text "Location:"]]
-          [:td {:colspan 2} [:span#av_match_location "Harpers"]]]]]
+          [:td {:colspan 2} [:span#av_match_location "AV Nowhere"]]]]]
        [:td {:width "50%"} "&nbsp;"]]
       (layout/hr-row form-span "90%")
       (add-form-control "Message:" {:id "av_message" :name "message" :cols 45 :maxlength 2000 :rows 7 :type "text-area"} "Let me know if you are available to play.")
@@ -147,10 +147,10 @@
           [:td {:colspan 2 :align "left"} [:span#pa_match_date "January 32nd"]]]
          [:tr [:td]
           [:td {:nowrap "true"} [:span.bold-text "Match Time:"]]
-          [:td {:colspan 2 :align "left"} [:span#pa_match_time "25:30 PM"]]]
+          [:td {:colspan 2 :align "left"} [:span#pa_match_time "55:30 PM"]]]
          [:tr [:td]
           [:td {:nowrap "true"} [:span.bold-text "Location:"]]
-          [:td {:colspan 2 :align "left"} [:span#pa_match_location "No where"]]]]]
+          [:td {:colspan 2 :align "left"} [:span#pa_match_location "PA Nowhere"]]]]]
        [:td {:width "5%"} "&nbsp;"]]
       (layout/hr-row form-span "90%")
       [:tr
@@ -222,10 +222,10 @@
           [:td {:colspan 2 :align "left"} [:span#ml_match_date "January 32nd"]]]
          [:tr [:td]
           [:td {:nowrap "true"} [:span.bold-text "Match Time:"]]
-          [:td {:colspan 2 :align "left"} [:span#ml_match_time "25:30 PM"]]]
+          [:td {:colspan 2 :align "left"} [:span#ml_match_time "55:30 PM"]]]
          [:tr [:td]
           [:td {:nowrap "true"} [:span.bold-text "Location:"]]
-          [:td {:colspan 2 :align "left"} [:span#ml_match_location "No where"]]]]]
+          [:td {:colspan 2 :align "left"} [:span#ml_match_location "ML Nowhere"]]]]]
        [:td {:width "5%"} "&nbsp;"]]
       (layout/empty-row form-span)
       [:tr
@@ -266,22 +266,22 @@
   (let [title "Send Lineup Email"]
     [:form#sendlineupemail.form-horizontal {:method "post" :action "/send-lineup-email"}
      [:table.table.table-sm
+      (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title " for " team-name]]]
       (layout/hr-row form-span "90%")
       [:tr
        [:td {:width "50%"} "&nbsp;"]
        [:td {:colspan 2 :align "center"}
         [:table.table.table-sm.table-compact
-         [:tr [:td] [:td {:colspan 3 :align "center"} [:h5 "Email Header"]]]
          [:tr [:td]
           [:td [:span.bold-text "Match Date:"]]
-          [:td {:colspan 2} [:span#av_match_date "January 3"]]]
+          [:td {:colspan 2} [:span#li_match_date "January 32nd"]]]
          [:tr [:td]
           [:td [:span.bold-text "Match Time:"]]
-          [:td {:colspan 2} [:span#av_match_time "02:30 PM"]]]
+          [:td {:colspan 2} [:span#li_match_time "55:30 PM"]]]
          [:tr [:td]
           [:td [:span.bold-text "Location:"]]
-          [:td {:colspan 2} [:span#av_match_location "Harpers"]]]]]
+          [:td {:colspan 2} [:span#li_match_location "LI Nowhere"]]]]]
        [:td {:width "50%"} "&nbsp;"]]
       (layout/hr-row form-span "90%")
       [:tr
