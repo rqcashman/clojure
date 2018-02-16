@@ -45,11 +45,14 @@
   (let [session (:session request)
         session-id (:identity session)]
     (if-not (= (s/blank? session-id) true)
-      (if (auth/session-valid? session-id)
-        (do
-          (auth/update-session-used-time session-id)
-          true)
-        (error SESSION_EXPIRED))
+      (do
+        (println "CASHXX authenticated-access session id found: " session-id)
+        (if (auth/session-valid? session-id)
+          (do
+            (println "CASHXX authenticated-access session valid: " session-id)
+            (auth/update-session-used-time session-id)
+            true)
+          (error SESSION_EXPIRED)))
       (error NOT_AUTHENTICATED))))
 
 (defn admin-access
@@ -131,7 +134,10 @@
 (defn not-authenticated
   "Redirect if not authenticated"
   [request value]
-  (println "Not authed: " value " request: " request)
+  (println "=========================================================")
+  (println "Not authed value: " value)
+  (println "Not authed request: " request)
+  (println " ")
   (if value
     (let [error ((keyword value) authentication-error-list)]
       (if (= value SESSION_EXPIRED)
@@ -148,7 +154,7 @@
     true))
 
 (defn redirect-to-main-page
-  "redirects to the main landing page if a user request the login page but is already logged in"
+  "redirects to the main landing page if a user requests the login page but is already logged in"
   [request value]
   (let [error ((keyword value) authentication-error-list)
         redirect-url (get-redirect-url error)]

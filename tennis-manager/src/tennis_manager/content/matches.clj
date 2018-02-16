@@ -35,7 +35,7 @@
   [rows sched-row user]
   (let [home-team-id (:home_team_id sched-row)
         avail-func (if (:availability_sent sched-row) "change_to_avail_form" "change_to_email_form")
-        lineup-valid (sched/lineup-set? (:match_id sched-row))
+        lineup-valid (sched/lineup-set? (:match_id sched-row) user)
         send-lineup-func (if lineup-valid "change_to_email_lineup_form" "set_lineup")]
     (conj rows [:tr
                 [:td (:match_date sched-row)]
@@ -54,7 +54,7 @@
   [user]
   (try
     ;data is sorted by date.  Need to use reverse because conj is adding the data to the beginning of the list
-    (reduce #(schedule-row %1 %2 (:team_id user)) () (reverse (team/team-schedule (:id (season/current-season)) (:team_id user))))
+    (reduce #(schedule-row %1 %2 user) () (reverse (team/team-schedule (:id (season/current-season)) (:team_id user))))
     (catch Exception e
       (println "Exception in get-team-schedule.  Message: " + e)
       [:tr [:td.error {:colspan sched-form-span :align "center"} "Error getting team schedule"]])))
@@ -135,6 +135,7 @@
   (let [title "Update Availability"]
     [:form#updateavailability.form-horizontal {:method "post" :action "/update-availability"}
      [:table.table.table-sm
+      (empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title " for " team-name]]]
       (layout/hr-row form-span "90%")
       [:tr
@@ -318,8 +319,8 @@
 (defn matches
   "Sets up the intial matches page."
   [session]
-  (let [user (auth/get-user-from-session-id (:identity session))
-        prefix "match"
+  (let [prefix "match"
+        user (auth/get-user-from-session-id (:identity session))
         team-name (:name (team/team (:team_id user)))
         match-actions
         [{:id "show-schedule" :name "Match Schedule" :content (schedule-form team-name user)}

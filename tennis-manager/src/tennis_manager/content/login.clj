@@ -38,20 +38,20 @@
   "docstring"
   [error username error-msg]
   [:form#addclubform.form-horizontal {:method "post" :action "/login"}
-   [:table {:align "center" :border "2px" :width "30%"}
-    [:tr
-     [:td
-      [:table {:width "100%"}
-       [:thead.table-inverse
-        [:td {:colspan 4} "Login"]]
-       (layout/empty-row 4)
-       (layout/empty-row 4)
-       (add-error-message error error-msg)
-       (add-form-control "User name:" {:id "username" :name "username" :maxlength 45 :size 30 :type "text" :value username})
-       (layout/empty-row 4)
-       (add-form-control "Password:" {:id "password" :name "password" :maxlength 45 :size 30 :type "password"})
-       (layout/empty-row 4)
-       (layout/hr-row 4 "90%")
-       (layout/empty-row 4)
-       (add-form-button)
-       (layout/empty-row 4)]]]]])
+          [:table {:align "center" :border "1px" :width "30%"}
+           [:tr
+            [:td
+             [:table {:width "100%"}
+              [:thead.table-inverse
+               [:td {:colspan 4} "Login"]]
+              (layout/empty-row 4)
+              (layout/empty-row 4)
+              (add-error-message error error-msg)
+              (add-form-control "User name:" {:id "username" :name "username" :maxlength 45 :size 30 :type "text" :value username})
+              (layout/empty-row 4)
+              (add-form-control "Password:" {:id "password" :name "password" :maxlength 45 :size 30 :type "password"})
+              (layout/empty-row 4)
+              (layout/hr-row 4 "90%")
+              (layout/empty-row 4)
+              (add-form-button)
+              (layout/empty-row 4)]]]]])

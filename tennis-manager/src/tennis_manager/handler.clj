@@ -29,20 +29,20 @@
 
 (defroutes app-routes
            ;HTML pages
-           (GET "/login"  {params :query-params}  (layout/application "User Login" "" (login/login (get params "err") (get params "username") (get params "msg"))))
+           (GET "/login" {params :query-params} (layout/application "User Login" "" (login/login (get params "err") (get params "username") (get params "msg"))))
            (GET "/mgr" {session :session} (layout/application "Tennis Manager" "tabs.js" (tabs/tabs session)))
            (GET "/admin" {session :session} (layout/application "Admin Functions" "admin.js" (admin/admin session)))
            (GET "/matches" {session :session} (layout/application "Matches" "matches.js" (match/matches session)))
-           (GET "/schedule" {session :session}(layout/application "Tennis Schedule" "schedule.js" (schedule/schedule session)))
-           (GET "/roster" {session :session}(layout/application "Team Roster" "roster.js" (rost/roster session)))
+           (GET "/schedule" {session :session} (layout/application "Tennis Schedule" "schedule.js" (schedule/schedule session)))
+           (GET "/roster" {session :session} (layout/application "Team Roster" "roster.js" (rost/roster session)))
            (GET "/availability-reply*" {params :query-params} (layout/application "Availability Response" "" (avail/update_availability (get params "player-token") (get params "available"))))
 
            ;rest APIs
            (GET "/clubs" [] (rr/response (club/clubs)))
            (GET "/match-info/:match-id" [& params] (rr/response (sched/match-info (:match-id params))))
-           (GET "/match-availability/:match-id" [& params] (rr/response (sched/match-availability (:match-id params))))
+           (GET "/match-availability/:match-id" {session :session params :params} (rr/response (pr/match-availability session params)))
            (GET "/match-forfeits/:match-id" [& params] (rr/response (sched/match-forfeits (:match-id params))))
-           (GET "/match-lineup/:match-id" [& params] (rr/response (sched/match-lineup (:match-id params))))
+           (GET "/match-lineup/:match-id" {session :session params :params} (rr/response (pr/match-lineup session params)))
            (GET "/player/:player-id" [& params] (rr/response (player/player (:player-id params))))
            (GET "/season/:season-id" [& params] (rr/response (season/season (:season-id params))))
            (GET "/seasons" [] (rr/response (season/seasons)))
@@ -52,22 +52,22 @@
            (GET "/teams" [] (rr/response (team/teams)))
 
            ;POST
-           (POST "/add-club" [& params] (rr/response (pr/add-club params)))
-           (POST "/add-player" [& params] (rr/response (pr/add-player params)))
-           (POST "/add-season" [& params] (rr/response (pr/add-season params)))
-           (POST "/add-team" [& params] (rr/response (pr/add-team params)))
-           (POST "/load-schedule" [& params] (rr/response (pr/load-schedule params)))
-           (POST "/load-schedule-file" [& params] (rr/response (pr/load-schedule-file params)))
-           (POST "/update-availability" [& params] (rr/response (pr/update-player-availability params)))
-           (POST "/update-lineup" [& params] (rr/response (pr/update-lineup params)))
-           (POST "/update-player" [& params] (rr/response (pr/update-player-info params)))
-           (POST "/send-availability-email" [& params] (rr/response (em/send-avail-email params)))
-           (POST "/send-lineup-email" [& params] (rr/response (em/send-lineup-email params)))
-           (POST "/login" [& params] "Login post page")
+           (POST "/add-club" {session :session params :params} (rr/response (pr/add-club session params)))
+           (POST "/add-player" {session :session params :params} (rr/response (pr/add-player session params)))
+           (POST "/add-season" {session :session params :params} (rr/response (pr/add-season session params)))
+           (POST "/add-team" {session :session params :params} (rr/response (pr/add-team session params)))
+           (POST "/load-schedule" {session :session params :params} (rr/response (pr/load-schedule session params)))
+           (POST "/load-schedule-file" {session :session params :params} (rr/response (pr/load-schedule-file session params)))
+           (POST "/update-availability" {session :session params :params} (rr/response (pr/update-player-availability session params)))
+           (POST "/update-lineup" {session :session params :params} (rr/response (pr/update-lineup session params)))
+           (POST "/update-player" {session :session params :params} (rr/response (pr/update-player-info session params)))
+           (POST "/send-availability-email" {session :session params :params} (rr/response (em/send-avail-email session params)))
+           (POST "/send-lineup-email" {session :session params :params} (rr/response (em/send-lineup-email session params)))
+           (POST "/login" {session :session params :params} "Login post page")
 
            (GET "/notauth" [] {:status  200
-                        :headers {"Content-Type" "text/html"}
-                        :body    "<br><br><h1 align='center'>Tennis Manager</h1><br><br><h2 align='center' style='color:red'>You are not authorized to view this page</h2>"})
+                               :headers {"Content-Type" "text/html"}
+                               :body    "<br><br><h1 align='center'>Tennis Manager</h1><br><br><h2 align='center' style='color:red'>You are not authorized to view this page</h2>"})
            (GET "/" [] {:status  200
                         :headers {"Content-Type" "text/html"}
                         :body    "<br><br><h1 align='center'>Tennis Manager</h1>"})

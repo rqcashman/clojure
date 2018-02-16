@@ -3,8 +3,7 @@
             [clj-time.core :as t]
             [clj-time.format :as f]
             [clojure.string :as s]
-            [tennis-manager.data.system-info :as sys]
-            [tennis-manager.data.user-info :as usr]))
+            [tennis-manager.data.system-info :as sys]))
 
 (defn add-match
   "docstring"
@@ -40,7 +39,7 @@
 
 (defn match-availability
   "docstring"
-  [match-id]
+  [match-id user]
   (j/query sys/db-cred
            [(str "select p.id, p.first_name, p.last_name, p.status,
             pc.date_sent, pc.response, DATE_FORMAT(pc.response_date, '%M %D, %Y %h:%i %p') as response_date, ma.available,
@@ -51,7 +50,7 @@
             left join match_courts mc on mc.match_id = ?
             and (home_player1 = p.id or home_player2 = p.id or away_player1 = p.id or away_player2 = p.id)
             where p.team_id = ?
-            order by p.last_name, p.first_name") match-id match-id match-id usr/users_team_id]))
+            order by p.last_name, p.first_name") match-id match-id match-id (:team_id user)]))
 
 (defn match-forfeits
   "docstring"
@@ -125,6 +124,7 @@
                   [(str "update match_availability set available=? where match_id=? and player_id=?") avail_flag match_id player_id])
       (j/execute! sys/db-cred
                   [(str "insert into match_availability values (?,?,?)") match_id player_id avail_flag]))))
+
 (def court-null-list #{nil 0})
 
 (defn court-valid
@@ -146,9 +146,9 @@
 
 (defn lineup-set?
   "docstring"
-  [match-id]
+  [match-id user]
   (let [match (match-info match-id)
-        player1-col (if (= (:home_team_id match) (int usr/users_team_id)) "home_player1 as player1," "away_player1 as player1,")
+        player1-col (if (= (:home_team_id match) (int (:team_id user))) "home_player1 as player1," "away_player1 as player1,")
         player2-col (s/replace player1-col #"1" "2")
         sql (str "select " player1-col player2-col "forfeit_team_id
                  from match_courts
@@ -161,9 +161,9 @@
 
 (defn match-lineup
   "Get the match lineup for the logged in user"
-  [match-id]
+  [match-id user]
   (let [match (match-info match-id)
-        player1-col (if (= (:home_team_id match) (int usr/users_team_id)) "home_player1" "away_player1")
+        player1-col (if (= (:home_team_id match) (:team_id user)) "home_player1" "away_player1")
         player2-col (s/replace player1-col #"1" "2")
         sql (str "select court_number," player1-col " as player1," player2-col " as player2,forfeit_team_id,t.name as forfeit_team_name,
                  concat (p1.last_name, ', ', p1.first_name) as player1_name, p1.id as player1_id,

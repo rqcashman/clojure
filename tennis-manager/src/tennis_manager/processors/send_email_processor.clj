@@ -5,9 +5,9 @@
             [tennis-manager.data.communication-data-handler :as comm]
             [tennis-manager.data.schedule-data-handler :as sched]
             [tennis-manager.data.team-data-handler :as team]
-            [tennis-manager.data.user-info :as usr]
             [tennis-manager.data.system-info :as sys]
-            [ring.util.codec :as codec]))
+            [ring.util.codec :as codec]
+            [tennis-manager.data.auth-handler :as auth]))
 
 (defn format-phone
   "Format phone number"
@@ -124,13 +124,13 @@
 
 (defn send-avail-email
   "Send a lineup availabiility email for a match"
-  [{:keys [message signature match_id send_subs]}]
+  [session {:keys [message signature match_id send_subs user]}]
   (try
     (let [match-info (sched/match-info match_id)
           email-body (get-availability-email-body message signature match-info)
           subject (str "Match availability for " (:match_date match-info))
-          parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text email-body})]
-      (doseq [player (team/team-roster usr/users_team_id)]
+          parms (conj sys/email-cred {:from (:email user) :to [(:email user)] :subject subject :text email-body})]
+      (doseq [player (team/team-roster (:team_id user))]
         (if (and (= (s/blank? (:email player)) false)
                  (not= (:status player) "I")
                  (or (not= (:status player) "S") (not= send_subs nil)))
@@ -138,8 +138,8 @@
                 email-msg (s/replace (s/replace email-body #"---salutation---" (str (:first_name player) " " (:last_name player))) #"--uuid--" uuid)
                 email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
             (mail/send-gmail email-parms)
-            (comm/add_player_communication (:id player) match_id uuid)))))
-    (comm/upsert_match_avail_email_sent match_id)
+            (comm/add_player_communication (:id player) match_id uuid user)))))
+    (comm/upsert_match_avail_email_sent match_id user)
     (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Availability email sent")
     (catch Exception e
       (println "Error sending availability email.  Msg" (.getMessage e))
@@ -153,20 +153,21 @@
 
 (defn send-lineup-email
   "Send a match lineup email"
-  [{:keys [message signature match_id send_subs]}]
+  [session {:keys [message signature match_id send_subs user]}]
   (try
     (let [match-info (sched/match-info match_id)
-          court-assignments (s/join (reduce #(get-lineup-row %1 %2) () (reverse (sched/match-lineup match_id))))
+          user (auth/get-user-from-session-id (:identity session))
+          court-assignments (s/join (reduce #(get-lineup-row %1 %2) () (reverse (sched/match-lineup match_id user))))
           email-body (get-lineup-email-body message signature match-info)
           subject (str "Lineup for " (:match_date match-info))
-          parms (conj sys/email-cred {:from usr/user_email :to [usr/user_email] :subject subject :text email-body})]
-      (doseq [player (sched/get-lineup-email-addresses match_id usr/users_team_id send_subs)]
+          parms (conj sys/email-cred {:from (:email user) :to [(:email user)] :subject subject :text email-body})]
+      (doseq [player (sched/get-lineup-email-addresses match_id (:team_id user) send_subs)]
         (if (= (s/blank? (:email player)) false)
           (let [msg-courts (s/replace email-body "---courts---" (style-courts court-assignments (:id player)))
                 email-msg (s/replace msg-courts #"---salutation---" (str (:first_name player) " " (:last_name player)))
                 email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
             (mail/send-gmail email-parms))))
-      (comm/upsert_match_lineup_email_sent match_id)
+      (comm/upsert_match_lineup_email_sent match_id user)
       (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Lineup email sent"))
     (catch Exception e
       (println "Error sending lineup email.  Msg" (.getMessage e))

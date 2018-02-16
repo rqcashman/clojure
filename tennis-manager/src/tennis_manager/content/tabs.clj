@@ -12,8 +12,8 @@
     [:div#tabs
      [:ul
       [:li [:a#matches {:href "/matches"} "Matches"]]
-      [:li [:a#schedule {:href "/schedule"} "Schedule"]]
       [:li [:a#roster {:href "/roster"} "Roster"]]
+      [:li [:a#schedule {:href "/schedule"} "Schedule"]]
       (if (= (:user_type user) 1)
         [:li [:a#admin {:href "/admin" :name "admin"} "Admin"]])
       ]]))

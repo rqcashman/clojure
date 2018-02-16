@@ -111,6 +111,7 @@
   [session-id]
   (let [parms (get-system-parms "AUTHENTICATION")
         session-timeout (:SESSION_TIMEOUT_MINUTES parms)]
+    (println "CASHXX session-valid? timeout minutes: " session-timeout)
     (-> (j/query sys/db-cred
                  [(str "select count(1) as ct from user_session where session_id=?
                         and last_used_time > date_sub(current_timestamp(), INTERVAL " session-timeout " MINUTE)") session-id])
