@@ -7,6 +7,9 @@
         [tennis-manager.data.season-data-handler :as season])
   (:require [clojure.string :as s]))
 
+(def LOGIN_PAGE 1)
+(def CHANGE_PASSWORD_PAGE 2)
+
 (defn add-form-control
   [label options]
   [:tr
@@ -16,11 +19,11 @@
    [:td {:width "5%"} "&nbsp;"]])
 
 (defn add-form-button
-  []
+  [title]
   [:tr
    [:td {:width "5%"} "&nbsp;"]
    [:td {:colspan 2 :align "center"}
-    [:button {:type "submit"} "Login"]]
+    [:button {:type "submit"} title]]
    [:td {:width "5%"} "&nbsp;"]])
 
 (defn add-error-message
@@ -36,22 +39,29 @@
 
 (defn login
   "docstring"
-  [error username error-msg]
-  [:form#addclubform.form-horizontal {:method "post" :action "/login"}
-          [:table {:align "center" :border "1px" :width "30%"}
-           [:tr
-            [:td
-             [:table {:width "100%"}
-              [:thead.table-inverse
-               [:td {:colspan 4} "Login"]]
-              (layout/empty-row 4)
-              (layout/empty-row 4)
-              (add-error-message error error-msg)
-              (add-form-control "User name:" {:id "username" :name "username" :maxlength 45 :size 30 :type "text" :value username})
-              (layout/empty-row 4)
-              (add-form-control "Password:" {:id "password" :name "password" :maxlength 45 :size 30 :type "password"})
-              (layout/empty-row 4)
-              (layout/hr-row 4 "90%")
-              (layout/empty-row 4)
-              (add-form-button)
-              (layout/empty-row 4)]]]]])
+  [page-type error username error-msg]
+  (let [title (if (= page-type LOGIN_PAGE) "Login" "Change Password")
+        action (if (= page-type LOGIN_PAGE) "/login" "/chgpassword")]
+    [:form#addclubform.form-horizontal {:method "post" :action action}
+     [:table.table.table-sm.login-form {:align "center"}
+      [:tr
+       [:td
+        [:table {:width "100%"}
+         [:thead.table-inverse
+          [:td {:colspan 4} title]]
+         (layout/empty-row 4)
+         (layout/empty-row 4)
+         (add-error-message error error-msg)
+         (add-form-control "User name:" {:id "username" :name "username" :maxlength 45 :size 30 :type "text" :value username})
+         (add-form-control "Password" {:id "password" :name "password" :maxlength 45 :size 30 :type "password"})
+         (if (= page-type CHANGE_PASSWORD_PAGE)
+           (do
+             (list
+               (layout/hr-row 4 "10%")
+               (add-form-control "New password" {:id "new_password" :name "new_password" :maxlength 45 :size 30 :type "password"})
+               (add-form-control "Re-type password" {:id "confirm_password" :name "confirm_password" :maxlength 45 :size 30 :type "password"}))))
+         (layout/empty-row 4)
+         (layout/hr-row 4 "90%")
+         (layout/empty-row 4)
+         (add-form-button title)
+         (layout/empty-row 4)]]]]]))

@@ -27,16 +27,18 @@
             [tennis-manager.processors.send-email-processor :as em]
             [tennis-manager.processors.service-processor :as pr]))
 
+
 (defroutes app-routes
            ;HTML pages
-           (GET "/login" {params :query-params} (layout/application "User Login" "" (login/login (get params "err") (get params "username") (get params "msg"))))
-           (GET "/logout" {params :query-params} (layout/application "User Login" "" (login/login (get params "err") (get params "username") (get params "msg"))))
-           (GET "/mgr" {session :session} (layout/application "Tennis Manager" "tabs.js" (tabs/tabs session)))
            (GET "/admin" {session :session} (layout/application "Admin Functions" "admin.js" (admin/admin session)))
-           (GET "/matches" {session :session} (layout/application "Matches" "matches.js" (match/matches session)))
-           (GET "/schedule" {session :session} (layout/application "Tennis Schedule" "schedule.js" (schedule/schedule session)))
-           (GET "/roster" {session :session} (layout/application "Team Roster" "roster.js" (rost/roster session)))
            (GET "/availability-reply*" {params :query-params} (layout/application "Availability Response" "" (avail/update_availability (get params "player-token") (get params "available"))))
+           (GET "/chgpassword" {params :query-params} (layout/application "Change Password" "" (login/login login/CHANGE_PASSWORD_PAGE (get params "err") (get params "username") (get params "msg"))))
+           (GET "/login" {params :query-params} (layout/application "User Login" "" (login/login login/LOGIN_PAGE (get params "err") (get params "username") (get params "msg"))))
+           (GET "/logout" {params :query-params} (layout/application "User Login" "" (login/login login/LOGIN_PAGE (get params "err") (get params "username") (get params "msg"))))
+           (GET "/matches" {session :session} (layout/application "Matches" "matches.js" (match/matches session)))
+           (GET "/mgr" {session :session} (layout/application "Tennis Manager" "tabs.js" (tabs/tabs session)))
+           (GET "/roster" {session :session} (layout/application "Team Roster" "roster.js" (rost/roster session)))
+           (GET "/schedule" {session :session} (layout/application "Tennis Schedule" "schedule.js" (schedule/schedule session)))
 
            ;rest APIs
            (GET "/clubs" [] (rr/response (club/clubs)))
@@ -65,7 +67,9 @@
            (POST "/send-availability-email" {session :session params :params} (rr/response (em/send-avail-email session params)))
            (POST "/send-lineup-email" {session :session params :params} (rr/response (em/send-lineup-email session params)))
            (POST "/login" {session :session params :params} "Login post page")
-
+           (POST "/chgpassword" {session :session params :params} {:status  200
+                               :headers {"Content-Type" "text/html"}
+                               :body    "<br><br><h1 align='center'>Tennis Manager</h1><br><br><h2 align='center' style='color:red'>Change password page</h2>"})
            (GET "/notauth" [] {:status  200
                                :headers {"Content-Type" "text/html"}
                                :body    "<br><br><h1 align='center'>Tennis Manager</h1><br><br><h2 align='center' style='color:red'>You are not authorized to view this page</h2>"})

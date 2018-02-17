@@ -19,18 +19,20 @@
 (def SESSION_EXPIRED "1004")
 (def NOT_AUTHENTICATED "1005")
 (def NOT_AUTHORIZED "1006")
+(def LOGIN_FAILED_CHG_PWD "1007")
 
 (def ADMIN_USER 1)
 
-(def authentication-error-list {(keyword LOGIN_SUCCESS)     {:url "/mgr"}
-                                (keyword LOGOUT_SUCCESS)    {:url "/login" :err "logoutsuccess" :msg "Logout successful"}
-                                (keyword LOGIN_FAILED)      {:url "/login" :err "loginfailure" :msg "Login failed"}
-                                (keyword LOGIN_LOCKED)      {:url "/login" :err "acctlocked" :msg "Account locked"}
-                                (keyword LOGIN_DISABLED)    {:url "/login" :err "acctdisabled" :msg "Account disabled"}
-                                (keyword CHG_PASSWORD)      {:url "/chgpassword" :err "chgpassword" :msg "Password change required"}
-                                (keyword SESSION_EXPIRED)   {:url "/login" :err "sessionexpired" :msg "Login session timed out due to inactivity"}
-                                (keyword NOT_AUTHENTICATED) {:url "/login"}
-                                (keyword NOT_AUTHORIZED)    {:url "/notauth"}})
+(def authentication-error-list {(keyword LOGIN_SUCCESS)        {:url "/mgr"}
+                                (keyword LOGOUT_SUCCESS)       {:url "/login" :err "logoutsuccess" :msg "Logout successful"}
+                                (keyword LOGIN_FAILED)         {:url "/login" :err "loginfailure" :msg "Login failed"}
+                                (keyword LOGIN_LOCKED)         {:url "/login" :err "acctlocked" :msg "Account locked"}
+                                (keyword LOGIN_DISABLED)       {:url "/login" :err "acctdisabled" :msg "Account disabled"}
+                                (keyword CHG_PASSWORD)         {:url "/chgpassword" :err "chgpassword" :msg "Password change required"}
+                                (keyword SESSION_EXPIRED)      {:url "/login" :err "sessionexpired" :msg "Login session timed out due to inactivity"}
+                                (keyword NOT_AUTHENTICATED)    {:url "/login"}
+                                (keyword NOT_AUTHORIZED)       {:url "/notauth"}
+                                (keyword LOGIN_FAILED_CHG_PWD) {:url "/chgpassword" :err "chgpwdloginfail" :msg "Password invalid"}})
 (defn unauthorized-handler
   [request metadata]
   (rr/response "Unauthorized request"))
@@ -125,6 +127,7 @@
 (defn login-redirect
   "redirect to next page depending on the outcome of the login attempt"
   [request value]
+  (println "login-redirect value: " value " request session: " (:session request))
   (let [username (:username (:params request))]
     (auth/insert-login-attempt username value)
     (if (= value LOGIN_FAILED)
@@ -132,7 +135,7 @@
     (if (or (= value LOGIN_SUCCESS) (and (= value LOGIN_LOCKED) (= (auth/account-unlocked? username) true)))
       (let [session (:session request)
             session-id (s/replace (str (java.util.UUID/randomUUID)) #"-" "")
-            error (:0 authentication-error-list)
+            error ((keyword LOGIN_SUCCESS) authentication-error-list)
             updated-session (assoc session :identity session-id)
             redirect-url (get-redirect-url error)]
         (auth/update-user-last-login-time username)
@@ -165,12 +168,23 @@
     (error LOGIN_SUCCESS)
     true))
 
+
 (defn check-logout-status
   "See if a user is already logged in."
   [request]
   (if (= (authenticated-access request) true)
     (error LOGOUT_SUCCESS)
     true))
+
+
+(defn authenticate-user-chg-password
+  "If user is not authenticated we override the error to put the user back on the login page"
+  [request]
+  (let [auth-val (.get-value (authenticate-user request))]
+    (println "auth val: " auth-val "request: " request)
+    (if (and (not= auth-val LOGIN_SUCCESS) (not= auth-val CHG_PASSWORD))
+      (error LOGIN_FAILED_CHG_PWD)
+      true)))
 
 (defn redirect-to-main-page
   "redirects to the main landing page if a user requests the login page but is already logged in"
@@ -179,12 +193,16 @@
         redirect-url (get-redirect-url error)]
     (rr/redirect redirect-url)))
 
-(def rules [{:pattern        #"(^/login*)|(^/availability-reply*)"
+(def rules [{:pattern        #"(^/login*)|(^/chgpassword*)|(^/availability-reply*)"
              :handler        check-login-status
              :on-error       redirect-to-main-page
              :request-method :get}
             {:pattern        #"(^/login$)"
              :handler        authenticate-user
+             :on-error       login-redirect
+             :request-method :post}
+            {:pattern        #"(^/chgpassword)"
+             :handler        authenticate-user-chg-password
              :on-error       login-redirect
              :request-method :post}
             {:pattern        #"(^/logout)"

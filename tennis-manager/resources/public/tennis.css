@@ -74,10 +74,16 @@ hr {
     visibility: visible;
 }
 
-.schedule-form, .admin-form, .admin-action, .roster-form, .roster-action, .roster-view, .match-form, .matches-action {
+.schedule-form, .admin-form, .admin-action, .roster-form, .roster-action, .roster-view, .match-form, .matches-action, .login-form {
     width: 50%;
     visibility: visible;
     background-color: #e6e6e6;
+}
+
+.login-form {
+    width: 30%;
+    outline-style: inset;
+    border: 1px;
 }
 
 .admin-action {
@@ -88,7 +94,7 @@ hr {
     width: 90%;
 }
 
-.schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td, .roster-form tr td, .roster-action tr td, .match-form tr td, .matches-action tr td {
+.schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td, .roster-form tr td, .roster-action tr td, .match-form tr td, .matches-action tr td, .login-form tr td {
     border-top: none;
     border-bottom: none;
     border: none;

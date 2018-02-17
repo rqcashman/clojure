@@ -41,7 +41,7 @@
 (defn hr-row
   "docstring"
   [colspan width]
-  [:tr [:td {:colspan colspan} [:hr ]]])
+  [:tr [:td {:colspan colspan} [:hr {:width width}]]])
 
 (defn status-content
   [form-span id-prefix]
