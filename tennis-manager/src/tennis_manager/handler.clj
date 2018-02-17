@@ -66,10 +66,6 @@
            (POST "/update-player" {session :session params :params} (rr/response (pr/update-player-info session params)))
            (POST "/send-availability-email" {session :session params :params} (rr/response (em/send-avail-email session params)))
            (POST "/send-lineup-email" {session :session params :params} (rr/response (em/send-lineup-email session params)))
-           (POST "/login" {session :session params :params} "Login post page")
-           (POST "/chgpassword" {session :session params :params} {:status  200
-                               :headers {"Content-Type" "text/html"}
-                               :body    "<br><br><h1 align='center'>Tennis Manager</h1><br><br><h2 align='center' style='color:red'>Change password page</h2>"})
            (GET "/notauth" [] {:status  200
                                :headers {"Content-Type" "text/html"}
                                :body    "<br><br><h1 align='center'>Tennis Manager</h1><br><br><h2 align='center' style='color:red'>You are not authorized to view this page</h2>"})

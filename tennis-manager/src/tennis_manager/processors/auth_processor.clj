@@ -20,6 +20,7 @@
 (def NOT_AUTHENTICATED "1005")
 (def NOT_AUTHORIZED "1006")
 (def LOGIN_FAILED_CHG_PWD "1007")
+(def CHG_PASSWORD_FAILED "1008")
 
 (def ADMIN_USER 1)
 
@@ -32,7 +33,8 @@
                                 (keyword SESSION_EXPIRED)      {:url "/login" :err "sessionexpired" :msg "Login session timed out due to inactivity"}
                                 (keyword NOT_AUTHENTICATED)    {:url "/login"}
                                 (keyword NOT_AUTHORIZED)       {:url "/notauth"}
-                                (keyword LOGIN_FAILED_CHG_PWD) {:url "/chgpassword" :err "chgpwdloginfail" :msg "Password invalid"}})
+                                (keyword LOGIN_FAILED_CHG_PWD) {:url "/chgpassword" :err "chgpwdloginfail" :msg "Password invalid"}
+                                (keyword CHG_PASSWORD_FAILED)  {:url "/chgpassword" :err "chgpasswordfailed"}})
 (defn unauthorized-handler
   [request metadata]
   (rr/response "Unauthorized request"))
@@ -127,7 +129,6 @@
 (defn login-redirect
   "redirect to next page depending on the outcome of the login attempt"
   [request value]
-  (println "login-redirect value: " value " request session: " (:session request))
   (let [username (:username (:params request))]
     (auth/insert-login-attempt username value)
     (if (= value LOGIN_FAILED)
@@ -145,6 +146,30 @@
       (let [error ((keyword value) authentication-error-list)
             redirect-url (get-redirect-url (conj error {:username username}))]
         (rr/redirect redirect-url)))))
+
+(defn change-password-redirect
+  "docstring"
+  [request value]
+  (println "chg pwd redirect value: " value)
+  (println "===============  " (conj ((keyword LOGIN_FAILED_CHG_PWD) authentication-error-list) {:username (:username (:params request))}))
+  (cond
+    (= value CHG_PASSWORD) (let [username (:username (:params request))
+                                 new_password (:new_password (:params request))
+                                 confirm_password (:confirm_password (:params request))]
+                             (if (= (compare new_password confirm_password) 0)
+                               (let [error ((keyword CHG_PASSWORD_FAILED) authentication-error-list)
+                                     redirect-url (get-redirect-url (conj error {:msg "Passwords match" :username username}))]
+                                 (rr/redirect redirect-url))
+                               (let [error ((keyword CHG_PASSWORD_FAILED) authentication-error-list)
+                                     redirect-url (get-redirect-url (conj error {:msg "Passwords do not match" :username username}))]
+                                 (rr/redirect redirect-url))))
+    ;LOGIN_LOCKED is doing a redirect instead of using login redirect
+    ;otherwise a user could logon with their old password if they locked the acct with bad password attempts
+    ;since you have to be authenticated to get to the change password page it would take 2 browsers or tabs
+    (= value LOGIN_LOCKED) (rr/redirect (get-redirect-url ((keyword value) authentication-error-list)))
+    ;leaving this but this is why I like to use  (let [])
+    (= value LOGIN_FAILED) (rr/redirect (get-redirect-url (conj ((keyword LOGIN_FAILED_CHG_PWD) authentication-error-list) {:username (:username (:params request))})))
+    :else (login-redirect request value)))
 
 (defn not-authenticated
   "Redirect if not authenticated"
@@ -176,16 +201,6 @@
     (error LOGOUT_SUCCESS)
     true))
 
-
-(defn authenticate-user-chg-password
-  "If user is not authenticated we override the error to put the user back on the login page"
-  [request]
-  (let [auth-val (.get-value (authenticate-user request))]
-    (println "auth val: " auth-val "request: " request)
-    (if (and (not= auth-val LOGIN_SUCCESS) (not= auth-val CHG_PASSWORD))
-      (error LOGIN_FAILED_CHG_PWD)
-      true)))
-
 (defn redirect-to-main-page
   "redirects to the main landing page if a user requests the login page but is already logged in"
   [request value]
@@ -201,9 +216,9 @@
              :handler        authenticate-user
              :on-error       login-redirect
              :request-method :post}
-            {:pattern        #"(^/chgpassword)"
-             :handler        authenticate-user-chg-password
-             :on-error       login-redirect
+            {:pattern        #"(^/chgpassword$)"
+             :handler        authenticate-user
+             :on-error       change-password-redirect
              :request-method :post}
             {:pattern        #"(^/logout)"
              :handler        check-logout-status
