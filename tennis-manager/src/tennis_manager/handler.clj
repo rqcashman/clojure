@@ -32,9 +32,9 @@
            ;HTML pages
            (GET "/admin" {session :session} (layout/application "Admin Functions" "admin.js" (admin/admin session)))
            (GET "/availability-reply*" {params :query-params} (layout/application "Availability Response" "" (avail/update_availability (get params "player-token") (get params "available"))))
-           (GET "/chgpassword" {params :query-params} (layout/application "Change Password" "" (login/login login/CHANGE_PASSWORD_PAGE (get params "err") (get params "username") (get params "msg"))))
-           (GET "/login" {params :query-params} (layout/application "User Login" "" (login/login login/LOGIN_PAGE (get params "err") (get params "username") (get params "msg"))))
-           (GET "/logout" {params :query-params} (layout/application "User Login" "" (login/login login/LOGIN_PAGE (get params "err") (get params "username") (get params "msg"))))
+           (GET "/chgpassword" {session :session params :params} (layout/application "Change Password" "" (login/login login/CHANGE_PASSWORD_PAGE session params)))
+           (GET "/login" {session :session params :query-params} (layout/application "User Login" "" (login/login login/LOGIN_PAGE session params)))
+           (GET "/logout" {session :session params :query-params} (layout/application "User Login" "" (login/login login/LOGIN_PAGE session params)))
            (GET "/matches" {session :session} (layout/application "Matches" "matches.js" (match/matches session)))
            (GET "/mgr" {session :session} (layout/application "Tennis Manager" "tabs.js" (tabs/tabs session)))
            (GET "/roster" {session :session} (layout/application "Team Roster" "roster.js" (rost/roster session)))

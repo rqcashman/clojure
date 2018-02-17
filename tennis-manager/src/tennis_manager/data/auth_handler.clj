@@ -36,6 +36,13 @@
   (j/execute! sys/db-cred
               [(str "insert into user_login_attempts values (?,current_timestamp(),?)") username status]))
 
+(defn change-password
+  "docstring"
+  [username newpassword]
+  (println "chg password - username: " username " pwd: " newpassword)
+  (j/execute! sys/db-cred
+              [(str "update user_login set password=sha1(?), force_password_change=0 where email=?") newpassword username]))
+
 (defn get-system-parms
   "Returns the system parms for the category"
   [category]
