@@ -39,10 +39,14 @@ hr {
     margin: 0px;
     width: 70%;
     align: center;
-    background-color: #B8B8B8;
+
 }
 
-.table-compact tr td, tabs {
+.ui-tabs, .ui-tabs-panel, .ui-tabs-nav {
+    background: #6c9dc6;
+}
+
+.table-compact tr td {
     padding: 0px;
     margin: 0px;
     background-color: #efefef;
@@ -121,7 +125,7 @@ hr {
 }
 
 .avail-small {
-    width: 60%;
+    width: 70%;
 }
 
 .form-error {

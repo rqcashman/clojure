@@ -2,6 +2,12 @@
   (:use [hiccup.page :only (html5 include-css include-js)]
         [clojure.string :as s]))
 
+(defn logout-btns
+  "docstring"
+  []
+  ([:hr])
+  )
+
 (defn application [title js-file & content]
   (html5 {:ng-app "myApp" :lang "en"}
          [:head

@@ -30,6 +30,7 @@
 (defroutes app-routes
            ;HTML pages
            (GET "/login" {params :query-params} (layout/application "User Login" "" (login/login (get params "err") (get params "username") (get params "msg"))))
+           (GET "/logout" {params :query-params} (layout/application "User Login" "" (login/login (get params "err") (get params "username") (get params "msg"))))
            (GET "/mgr" {session :session} (layout/application "Tennis Manager" "tabs.js" (tabs/tabs session)))
            (GET "/admin" {session :session} (layout/application "Admin Functions" "admin.js" (admin/admin session)))
            (GET "/matches" {session :session} (layout/application "Matches" "matches.js" (match/matches session)))

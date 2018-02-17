@@ -11,6 +11,7 @@
             [tennis-manager.data.auth-handler :as auth]))
 
 (def LOGIN_SUCCESS "0")
+(def LOGOUT_SUCCESS "100")
 (def LOGIN_FAILED "1000")
 (def LOGIN_LOCKED "1001")
 (def LOGIN_DISABLED "1002")
@@ -22,6 +23,7 @@
 (def ADMIN_USER 1)
 
 (def authentication-error-list {(keyword LOGIN_SUCCESS)     {:url "/mgr"}
+                                (keyword LOGOUT_SUCCESS)    {:url "/login" :err "logoutsuccess" :msg "Logout successful"}
                                 (keyword LOGIN_FAILED)      {:url "/login" :err "loginfailure" :msg "Login failed"}
                                 (keyword LOGIN_LOCKED)      {:url "/login" :err "acctlocked" :msg "Account locked"}
                                 (keyword LOGIN_DISABLED)    {:url "/login" :err "acctdisabled" :msg "Account disabled"}
@@ -109,6 +111,17 @@
       (str (:url url-hash) "?" qs)
       (:url url-hash))))
 
+(defn logout-redirect
+  "docstring"
+  [request value]
+
+  (let [error ((keyword value) authentication-error-list)
+        session (:session request)
+        redirect-url (get-redirect-url error)
+        updated-session (dissoc session :identity)]
+    (-> (rr/redirect redirect-url)
+        (assoc :session updated-session))))
+
 (defn login-redirect
   "redirect to next page depending on the outcome of the login attempt"
   [request value]
@@ -116,20 +129,19 @@
     (auth/insert-login-attempt username value)
     (if (= value LOGIN_FAILED)
       (auth/lock-account? username))
-    (if value
-      (if (or (= value LOGIN_SUCCESS) (and (= value LOGIN_LOCKED) (= (auth/account-unlocked? username) true)))
-        (let [session (:session request)
-              session-id (s/replace (str (java.util.UUID/randomUUID)) #"-" "")
-              error (:0 authentication-error-list)
-              updated-session (assoc session :identity session-id)
-              redirect-url (get-redirect-url error)]
-          (auth/update-user-last-login-time username)
-          (auth/persist-session-id username session-id)
-          (-> (rr/redirect redirect-url)
-              (assoc :session updated-session)))
-        (let [error ((keyword value) authentication-error-list)
-              redirect-url (get-redirect-url (conj error {:username username}))]
-          (rr/redirect redirect-url))))))
+    (if (or (= value LOGIN_SUCCESS) (and (= value LOGIN_LOCKED) (= (auth/account-unlocked? username) true)))
+      (let [session (:session request)
+            session-id (s/replace (str (java.util.UUID/randomUUID)) #"-" "")
+            error (:0 authentication-error-list)
+            updated-session (assoc session :identity session-id)
+            redirect-url (get-redirect-url error)]
+        (auth/update-user-last-login-time username)
+        (auth/persist-session-id username session-id)
+        (-> (rr/redirect redirect-url)
+            (assoc :session updated-session)))
+      (let [error ((keyword value) authentication-error-list)
+            redirect-url (get-redirect-url (conj error {:username username}))]
+        (rr/redirect redirect-url)))))
 
 (defn not-authenticated
   "Redirect if not authenticated"
@@ -153,6 +165,13 @@
     (error LOGIN_SUCCESS)
     true))
 
+(defn check-logout-status
+  "See if a user is already logged in."
+  [request]
+  (if (= (authenticated-access request) true)
+    (error LOGOUT_SUCCESS)
+    true))
+
 (defn redirect-to-main-page
   "redirects to the main landing page if a user requests the login page but is already logged in"
   [request value]
@@ -168,6 +187,10 @@
              :handler        authenticate-user
              :on-error       login-redirect
              :request-method :post}
+            {:pattern        #"(^/logout)"
+             :handler        check-logout-status
+             :on-error       logout-redirect
+             :request-method :get}
             {:pattern        #"(^/mgr$)|(^/matches$)|(^/schedule$)|(^/roster$)"
              :handler        authenticated-access
              :on-error       not-authenticated
