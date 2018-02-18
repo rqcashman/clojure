@@ -97,7 +97,7 @@
   (let [val (authenticate-user request)]
     (println "authenticate-user-for-change-password val: " val)
     (if (= (.get-value val) LOGIN_SUCCESS)
-        (error CHG_PASSWORD)
+      (error CHG_PASSWORD)
       val)))
 
 (defn on-error
@@ -183,18 +183,26 @@
     (cond
       (< (count new-password) PASSWORD_MIN_LENGTH) (str "Password must be a least " PASSWORD_MIN_LENGTH " characters long")
       (not= (compare new-password confirm-password) 0) "Passwords do not match"
-      (or (< (:upper pwd-map) 1) (< (:lower pwd-map) 2) (< (:special_chars pwd-map) 1) (< (:digits pwd-map) 1))
+      (or (< (:upper pwd-map) 1)
+          (< (:lower pwd-map) 2)
+          (< (:special_chars pwd-map) 1)
+          (< (:digits pwd-map) 1))
       (str "Password format must contain at least 1 upper case, 2 lower case, 1 number and 1 special character " special-chars))))
 
 (defn redirect-change-password
   "redirect on change password login error"
   [request error]
   (println "redirect-change-password err: " error)
-  (-> ((keyword error) authentication-error-list)
-      (conj {:username (:username (:params request))})
-      get-redirect-url
-      rr/redirect)
-  )
+  (if (and (:session request) (auth/session-valid? (:identity (:session request))))
+      (-> ((keyword error) authentication-error-list)
+          (conj {:username (:username (:params request))})
+          get-redirect-url
+          rr/redirect
+          (assoc :session (:identity (:session request)))))
+    (-> ((keyword error) authentication-error-list)
+        (conj {:username (:username (:params request))})
+        get-redirect-url
+        rr/redirect))
 
 (defn change-password-redirect
   "redirect a change password request as appropriate"
