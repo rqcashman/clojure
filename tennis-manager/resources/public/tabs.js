@@ -1,8 +1,5 @@
 $(function () {
     $("#tabs").tabs();
-    $("#tabs ul").on("tabsload",  function (event, ui) {
-        alert("tabs create");
-    });
 });
 
 // $().ready(function () {

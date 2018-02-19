@@ -76,9 +76,8 @@
           (error NOT_AUTHORIZED)))
       auth)))
 
-(defn authenticate-user
+(defn validate-user-credentials
   [request]
-  (println "auth user: " request)
   (let [username (:username (:params request))
         password (:password (:params request))
         user (auth/get-user-with-password username password)]
@@ -93,8 +92,7 @@
 (defn authenticate-user-for-change-password
   "authenticate password for a change passord request"
   [request]
-  (let [val (authenticate-user request)]
-    (println "authenticate-user-for-change-password val: " val)
+  (let [val (validate-user-credentials request)]
     (if (= (.get-value val) LOGIN_SUCCESS)
       (error CHG_PASSWORD)
       val)))
@@ -142,7 +140,6 @@
 (defn login-redirect
   "redirect to next page depending on the outcome of the login attempt"
   [request value]
-  (println "login redirect: value" value)
   (let [username (:username (:params request))]
     (auth/insert-login-attempt username value)
     (if (= value LOGIN_FAILED)
@@ -177,7 +174,6 @@
 (defn validate-chg-password-input
   "Validates the input from change password.  This happens after validation of current password"
   [req-params]
-  (println req-params)
   (let [new-password (:new_password req-params)
         confirm-password (:confirm_password req-params)
         username (:username req-params)
@@ -199,7 +195,6 @@
 (defn redirect-change-password
   "redirect on change password login error"
   [request error]
-  (println "redirect-change-password err: " error)
   (if (and (:session request) (auth/session-valid? (:identity (:session request))))
     (-> ((keyword error) authentication-error-list)
         (conj {:username (:username (:params request))})
@@ -214,15 +209,13 @@
 (defn change-password-redirect
   "redirect a change password request as appropriate"
   [request value]
-  (println "chg password redirect: val" value)
   (cond
     (= value CHG_PASSWORD) (let [validation-err-msg (validate-chg-password-input (:params request))]
-                             (println "chg pwd error: " validation-err-msg)
                              (if (s/blank? validation-err-msg)
                                (do
                                  (auth/change-password (:username (:params request)) (:new_password (:params request)))
-                                 (->(redirect-change-password request CHG_PASSWORD_SUCCESS)
-                                    (assoc :session (dissoc (:session request) :identity))))
+                                 (-> (redirect-change-password request CHG_PASSWORD_SUCCESS)
+                                     (assoc :session (dissoc (:session request) :identity))))
                                (-> ((keyword CHG_PASSWORD_FAILED) authentication-error-list)
                                    (conj {:username (:username (:params request)) :msg validation-err-msg})
                                    get-redirect-url
@@ -270,7 +263,7 @@
              :handler        any-access
              :request-method :get}
             {:pattern        #"(^/login$)"
-             :handler        authenticate-user
+             :handler        validate-user-credentials
              :on-error       login-redirect
              :request-method :post}
             {:pattern        #"(^/chgpassword$)"
@@ -288,6 +281,9 @@
             {:pattern        #"(^/admin)"
              :handler        admin-access
              :on-error       not-authenticated
+             :request-method :get}
+            {:pattern        #"(^/testpagex)"
+             :handler        admin-access
              :request-method :get}
             {:pattern        #"^/.*"
              :handler        authenticated-access

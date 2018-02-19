@@ -1,14 +1,31 @@
-(ns tennis-manager.data.system-info)
-;plan is to add logins which will give us the team id
-;for now we will just use a hared-code team id
-(def email-cred {:user     "rqcashman@gmail.com"
-                 :password "oitdgcoxpdghplmb"})
+(ns tennis-manager.data.system-info
+  (:require [clojure.java.io :as io]))
+
+(defn get-system-info
+  ""
+  []
+  (println "==== sys dir: " (System/getProperty "user.dir"))
+  (let [file (str (System/getProperty "user.dir") "\\data\\error.txt")
+        data (into {} (with-open [rdr (clojure.java.io/reader file)]
+                        (doall (map #(load-string %) (line-seq rdr)))))]
+    ;(io/delete-file file)
+    data))
+
+(def system-info (get-system-info))
+
+(def email-cred
+  {:email-user     (:email-user system-info)
+   :email-password (:email-password system-info)})
 
 (def db-cred
-  {:dbtype   "mysql"
-   :dbname   "tennis_manager"
-   :host     "localhost"
-   :port     3306
-   :user     "root"
-   :useSSL true
-   :password "Cash1234"})
+  {:dbtype   (:dbtype system-info)
+   :dbname   (:dbname system-info)
+   :host     (:host system-info)
+   :port     (:port system-info)
+   :user     (:user system-info)
+   :useSSL   (:useSSL system-info)
+   :password (:password system-info)})
+
+(println "SYS INFO: " system-info)
+(println "DB INFO: " db-cred)
+(println "EM INFO: " email-cred)
