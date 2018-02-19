@@ -1,9 +1,0 @@
-{:email-password "oitdgcoxpdghplmb"}
-{:email-user "rqcashman@gmail.com"}
-{:dbtype   "mysql"}
-{:dbname   "tennis_manager"}
-{:host     "localhost"}
-{:port     3306}
-{:user     "root"}
-{:useSSL true}
-{:password "Cash1234"}
