@@ -7,8 +7,10 @@
         [tennis-manager.data.club-data-handler :as club]
         [tennis-manager.data.season-data-handler :as season]))
 
-(defn tabs [session]
+(defn tabs [session request]
   (let [user (auth/get-user-from-session-id (:identity session))]
+    (println "session: " session)
+    (println request)
     [:div#tabs.tennis-tabs {:align "center" :width "80%"}
      [:ul
       [:li [:a#matches {:href "/matches"} " Matches"]]
@@ -18,6 +20,5 @@
         [:li [:a#admin {:href " /admin" :name " admin"} " Admin"]])
       [:li [:a#schedule {:href "/chgpassword"} " Change password"]]
       ;;log achived via JS because processing as a link leaves you on the tabbed page
-      [:li [:a#schedule {:href "" :onclick "window.location.href='/logout'"} [:span {:style "color:red"} " Logout "]]]
-      ]]))
+      [:li [:a#schedule {:href "" :onclick "window.location.href='/logout'"} [:span {:style "color:red"} " Logout "]]]]]))
 

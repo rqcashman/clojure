@@ -103,7 +103,6 @@
 (defn update-player-info
   "Updates player info.  "
   [session params]
-  (println "CASHXXX update-player-info session: " session " parms: " params)
   (let [first_name (:first_name params)
         last_name (:last_name params)
         email (:email params)

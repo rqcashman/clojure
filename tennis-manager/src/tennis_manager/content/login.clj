@@ -48,14 +48,12 @@
 (defn login
   "docstring"
   [page-type session request]
-  (println "login session: " session " req: " request)
   (let [title (if (= page-type LOGIN_PAGE) "Login" "Change Password")
         action (if (= page-type LOGIN_PAGE) "/login" "/chgpassword")
         username (get-user-name request session)
         error (:err request)
         error-msg (:msg request)]
-    (println "error: " error " msg: " error-msg " id: " (:identity session))
-    [:form#addclubform.form-horizontal {:method "post" :action action}
+    [:form#loginform.form-horizontal {:method "post" :action action}
      [:table.table.table-sm.login-form {:align "center"}
       [:tr
        [:td

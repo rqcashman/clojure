@@ -41,7 +41,15 @@
   [username newpassword]
   (println "chg password - username: " username " pwd: " newpassword)
   (j/execute! sys/db-cred
-              [(str "update user_login set password=sha1(?), force_password_change=0 where email=?") newpassword username]))
+              [(str "update user_login set password=sha1(?),password_change_date=current_timestamp(),force_password_change=0 where email=?") newpassword username]))
+
+(defn new-password-different?
+  "Make sure the new password is not the same as the old one"
+  [username new-password]
+  (println "un: " username " p: " new-password)
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from user_login l where email=? and sha1(?) = l.password") username new-password])
+      first :ct (= 0)))
 
 (defn get-system-parms
   "Returns the system parms for the category"

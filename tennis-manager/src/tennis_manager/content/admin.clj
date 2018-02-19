@@ -96,23 +96,23 @@
             [:button {:type "button" :onclick (str "return processAdminRequest('#loadscheduleform', '/load-schedule', '" title "')")} title]]]
       (layout/empty-row form-span)]]))
 
-(defn load-schedule-file
-  []
-  (let [title "Load Schedule File"]
-    [:form#loadschedulefileform.form-horizontal {:method "post" :action "/load-schedule-file" :enctype "multipart/form-data"}
-     [:table.table.table-sm
-      (layout/empty-row form-span)
-      [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
-      (layout/hr-row form-span "90%")
-      (layout/add-select season/seasons layout/option "season_id" "Season:" (- form-span 2))
-      (add-form-control "Select file:" {:class "required" :id "schedule" :name "schedule" :type "file" :size 100})
-      ; [:tr [:td {:colspan form-span :align "center"}
-      ;      [:input {:name "schedule" :type "file"}]]]
-      (layout/hr-row form-span "90%")
-      (layout/empty-row form-span)
-      [:tr [:td {:colspan form-span :align "center"}
-            [:button {:type "button" :onclick (str "return processAdminRequest('#loadschedulefileform', '/load-schedule-file', '" title "')")} title]]]
-      (layout/empty-row form-span)]]))
+;(defn load-schedule-file
+;  []
+;  (let [title "Load Schedule File"]
+;    [:form#loadschedulefileform.form-horizontal {:method "post" :action "/load-schedule-file" :enctype "multipart/form-data"}
+;     [:table.table.table-sm
+;      (layout/empty-row form-span)
+;      [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
+;      (layout/hr-row form-span "90%")
+;      (layout/add-select season/seasons layout/option "season_id" "Season:" (- form-span 2))
+;      (add-form-control "Select file:" {:class "required" :id "schedule" :name "schedule" :type "file" :size 100})
+;      ; [:tr [:td {:colspan form-span :align "center"}
+;      ;      [:input {:name "schedule" :type "file"}]]]
+;      (layout/hr-row form-span "90%")
+;      (layout/empty-row form-span)
+;      [:tr [:td {:colspan form-span :align "center"}
+;            [:button {:type "button" :onclick (str "return processAdminRequest('#loadschedulefileform', '/load-schedule-file', '" title "')")} title]]]
+;      (layout/empty-row form-span)]]))
 
 (defn select-form
   [admin-actions]
@@ -137,8 +137,7 @@
         [{:id "add-club" :name "Add club" :content (club-content)}
          {:id "add-season" :name "Add season" :content (season-content)}
          {:id "add-team" :name "Add team" :content (team-content)}
-         {:id "load-schedule" :name "Load schedule" :content (load-schedule)}
-         {:id "load-schedule-file" :name "Load schedule file" :content (load-schedule-file)}]
+         {:id "load-schedule" :name "Load schedule" :content (load-schedule)}]
         prefix "admin"]
     (list
       (select-form admin-actions)

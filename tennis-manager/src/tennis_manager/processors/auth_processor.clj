@@ -47,7 +47,7 @@
 
 (defn any-access
   [request]
-  (println "in any access " request)
+  (println "in any access ")
   true)
 
 (defn authenticated-access
@@ -56,10 +56,9 @@
         session-id (:identity session)]
     (if-not (= (s/blank? session-id) true)
       (do
-        (println "CASHXX authenticated-access session id found: " session-id)
         (if (auth/session-valid? session-id)
           (do
-            (println "CASHXX authenticated-access session valid: " session-id)
+            (println "authenticated-access session valid: " session-id)
             (auth/update-session-used-time session-id)
             true)
           (error SESSION_EXPIRED)))
@@ -161,7 +160,9 @@
       (let [error ((keyword value) authentication-error-list)
             redirect-url (get-redirect-url (conj error {:username username}))]
         (rr/redirect redirect-url)))))
+
 (def special-chars "!@#$%&*")
+
 (defn password-counts
   "docstring"
   [ct-hash char]
@@ -172,37 +173,43 @@
     (Character/isLowerCase char) (update-in ct-hash [:lower] inc)
     :else (update-in ct-hash [:none] inc)))
 
-(comment "Wrote this functioin because I could not get regex to work :-(")
+(comment "Wrote this function because I could not get regex to work :-(")
 (defn validate-chg-password-input
-  "Validates the input from change password.  This happens after password validation"
+  "Validates the input from change password.  This happens after validation of current password"
   [req-params]
+  (println req-params)
   (let [new-password (:new_password req-params)
         confirm-password (:confirm_password req-params)
+        username (:username req-params)
         pwd-map (reduce #(password-counts %1 %2) {:upper 0 :lower 0 :special_chars 0 :digits 0 :none 0} new-password)]
-    (println "password cts: " pwd-map)
     (cond
       (< (count new-password) PASSWORD_MIN_LENGTH) (str "Password must be a least " PASSWORD_MIN_LENGTH " characters long")
       (not= (compare new-password confirm-password) 0) "Passwords do not match"
+      (not (auth/new-password-different? username new-password)) "New password cannot be the same as the current password"
       (or (< (:upper pwd-map) 1)
           (< (:lower pwd-map) 2)
           (< (:special_chars pwd-map) 1)
           (< (:digits pwd-map) 1))
-      (str "Password format must contain at least 1 upper case, 2 lower case, 1 number and 1 special character " special-chars))))
+      (str "Password must contain at least<span style='color:blue'>
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;1 upper case
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;2 lower case
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;1 number
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;1 special character</span><span style='color:purple'> " special-chars "</span>"))))
 
 (defn redirect-change-password
   "redirect on change password login error"
   [request error]
   (println "redirect-change-password err: " error)
   (if (and (:session request) (auth/session-valid? (:identity (:session request))))
-      (-> ((keyword error) authentication-error-list)
-          (conj {:username (:username (:params request))})
-          get-redirect-url
-          rr/redirect
-          (assoc :session (:identity (:session request)))))
     (-> ((keyword error) authentication-error-list)
         (conj {:username (:username (:params request))})
         get-redirect-url
-        rr/redirect))
+        rr/redirect
+        (assoc :session (:identity (:session request)))))
+  (-> ((keyword error) authentication-error-list)
+      (conj {:username (:username (:params request))})
+      get-redirect-url
+      rr/redirect))
 
 (defn change-password-redirect
   "redirect a change password request as appropriate"
@@ -210,11 +217,12 @@
   (println "chg password redirect: val" value)
   (cond
     (= value CHG_PASSWORD) (let [validation-err-msg (validate-chg-password-input (:params request))]
-                             (println "val msg: " validation-err-msg)
+                             (println "chg pwd error: " validation-err-msg)
                              (if (s/blank? validation-err-msg)
                                (do
                                  (auth/change-password (:username (:params request)) (:new_password (:params request)))
-                                 (redirect-change-password request CHG_PASSWORD_SUCCESS))
+                                 (->(redirect-change-password request CHG_PASSWORD_SUCCESS)
+                                    (assoc :session (dissoc (:session request) :identity))))
                                (-> ((keyword CHG_PASSWORD_FAILED) authentication-error-list)
                                    (conj {:username (:username (:params request)) :msg validation-err-msg})
                                    get-redirect-url
@@ -225,10 +233,6 @@
 (defn not-authenticated
   "Redirect if not authenticated"
   [request value]
-  (println "=========================================================")
-  (println "Not authed value: " value)
-  (println "Not authed request: " request)
-  (println " ")
   (if value
     (let [error ((keyword value) authentication-error-list)]
       (if (= value SESSION_EXPIRED)
@@ -243,7 +247,6 @@
   (if (= (authenticated-access request) true)
     (error LOGIN_SUCCESS)
     true))
-
 
 (defn check-logout-status
   "See if a user is already logged in."

@@ -31,12 +31,12 @@
 (defroutes app-routes
            ;HTML pages
            (GET "/admin" {session :session} (layout/application "Admin Functions" "admin.js" (admin/admin session)))
-           (GET "/availability-reply*" {params :query-params} (layout/application "Availability Response" "" (avail/update_availability (get params "player-token") (get params "available"))))
+           (GET "/availability-reply*" {params :params} (layout/application "Availability Response" "" (avail/update_availability (:player-token params) (:available params))))
            (GET "/chgpassword" {session :session params :params} (layout/application "Change Password" "" (login/login login/CHANGE_PASSWORD_PAGE session params)))
-           (GET "/login" {session :session params :query-params} (layout/application "User Login" "" (login/login login/LOGIN_PAGE session params)))
-           (GET "/logout" {session :session params :query-params} (layout/application "User Login" "" (login/login login/LOGIN_PAGE session params)))
+           (GET "/login" {session :session params :params} (layout/application "User Login" "" (login/login login/LOGIN_PAGE session params)))
+           (GET "/logout" {session :session params :params} (layout/application "User Login" "" (login/login login/LOGIN_PAGE session params)))
            (GET "/matches" {session :session} (layout/application "Matches" "matches.js" (match/matches session)))
-           (GET "/mgr" {session :session} (layout/application "Tennis Manager" "tabs.js" (tabs/tabs session)))
+           (GET "/mgr" {session :session request :params} (layout/application "Tennis Manager" "tabs.js" (tabs/tabs session request)))
            (GET "/roster" {session :session} (layout/application "Team Roster" "roster.js" (rost/roster session)))
            (GET "/schedule" {session :session} (layout/application "Tennis Schedule" "schedule.js" (schedule/schedule session)))
 
