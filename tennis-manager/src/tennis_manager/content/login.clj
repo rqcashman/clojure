@@ -1,12 +1,12 @@
 (ns tennis-manager.content.login
-  (:use [hiccup.form]
-        [hiccup.element :only (link-to)]
-        [hiccup.page :only (html5 include-css include-js)]
-        [tennis-manager.content.page-layout :as layout]
-        [tennis-manager.data.club-data-handler :as club]
-        [tennis-manager.data.season-data-handler :as season])
   (:require [clojure.string :as s]
-            [tennis-manager.data.auth-handler :as auth]))
+            [hiccup.form]
+            [hiccup.element :only (link-to)]
+            [hiccup.page :only (html5 include-css include-js)]
+            [tennis-manager.content.page-layout :as layout]
+            [tennis-manager.data.auth-handler :as auth]
+            [tennis-manager.data.club-data-handler :as club]
+            [tennis-manager.data.season-data-handler :as season]))
 
 (def LOGIN_PAGE 1)
 (def CHANGE_PASSWORD_PAGE 2)

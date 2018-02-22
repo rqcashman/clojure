@@ -3,12 +3,14 @@
   :url "http://example.com/FIXME"
   :min-lein-version "2.0.0"
   :dependencies [[buddy/buddy-auth "2.1.0"]
+                 [buddy/buddy-core "1.4.0"]
                  [clj-time "0.13.0"]
                  [cljs-http "0.1.43"]
                  [cljsjs/bootstrap "3.3.6-1"]
                  [cljsjs/jquery "2.2.4-0"]
                  [cljsjs/jquery-ui "1.11.4-0"]
                  [com.sun.mail/javax.mail "1.6.0"]
+                 [com.taoensso/nippy "2.13.0"]
                  [compojure "1.6.0"]
                  [enfocus "2.1.1"]
                  [enlive "1.1.6"]
@@ -21,8 +23,7 @@
                  [org.clojure/java.jdbc "0.7.3"]
                  [ring/ring-codec "1.1.0"]
                  [ring/ring-defaults "0.3.1"]
-                 [ring/ring-json "0.4.0"]
-                 ]
+                 [ring/ring-json "0.4.0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-resource "17.06.1"]

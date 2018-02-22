@@ -303,6 +303,7 @@
 ;
 ;(set! (.-onload js/window) setup)
 
+(effects/resize)
 
 
 
