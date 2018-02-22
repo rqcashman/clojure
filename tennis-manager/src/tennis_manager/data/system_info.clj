@@ -7,15 +7,14 @@
 (defn get-system-info
   "System parms are in an encrypted file.  We determine the password for the file and then read it into a map"
   []
-  (println "=================================================================================================================")
+  (println "**************************************************************************************************************************")
   (let [password-file (str (System/getProperty "user.dir") "\\sys-data\\logs\\log.txt")
         parm-file (str (System/getProperty "user.dir") "\\sys-data\\sys-parms.txt")
         password (pwd/get-password password-file)
         parm-arr (-> (nippy/thaw-from-file parm-file {:password [:salted password]})
                      (s/split #"\n"))
         sys-parms (reduce (fn [parm-map parm]
-                            (let [pm (first (read-string parm))]
-                              (assoc parm-map (key pm) (val pm))))
+                            (conj parm-map (first (read-string parm))))
                           {}
                           parm-arr)]
     ;(io/delete-file password-file)
