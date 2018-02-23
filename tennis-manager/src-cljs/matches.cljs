@@ -28,7 +28,7 @@
                 1 "Y"
                 "N")
         long-status (case (:status row)
-                      "A" "Active"
+                      "A" "Active00"
                       "S" "Sub"
                       "I" "Inactive")
         row-class (if (= avail "Y") "player-avail" (if (= (:status row) "I") "player-inactive" ""))]
@@ -38,31 +38,31 @@
     (if (or
           (and (not= (:status row) "I") (= active? true))
           (and (= (:status row) "I") (= active? false)))
-      ;(let [box-checked (if (= avail "Y") true false)
-      ;      box-disabled (if (= (:status row) "I") true false)]
-      ;(ef/html
-      ;  [:tr {:class row-class :id (:id row)}
-      ;   [:td {:nowrap true} (:last_name row) ", " (:first_name row)]
-      ;   [:td {:align "center"}
-      ;    [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name (str "pl-av-" (:id row)) :onclick "swapClass(this)"}]]
-      ;   [:td {:align "center"} player_response]
-      ;   [:td {:align "center"} sent_flag]
-      ;   [:td (if (= (:response_date row) nil) "" (:response_date row))]
-      ;   [:td {:align "center"} long-status]
-      ;   ])))))
-      (str "<tr class='" row-class "' id='" (:id row) "' onclick=''>"
-           "<td nowrap>" (:last_name row) ", " (:first_name row) "</td>"
-           "<td align='center'>
-               <input type='checkbox' name='pl-av-" (:id row) "'"
-           (if (= avail "Y") " checked")
-           (if (= (:status row) "I") " disabled")
-           " onclick='swapClass(this);'</input>"
-           "</td>"
-           "<td align='center'>" player_response "</td>"
-           "<td align='center'>" sent_flag "</td>"
-           "<td>" (if (= (:response_date row) nil) "" (:response_date row)) "</td>"
-           "<td align='center'>" long-status "</td>"
-           "</tr>"))))
+      (let [box-checked (if (= avail "Y") true false)
+            box-disabled (if (= (:status row) "I") true false)]
+        ;(ef/html
+        ;  [:tr {:class row-class :id (:id row)}
+        ;   [:td {:nowrap true} (:last_name row) ", " (:first_name row)]
+        ;   [:td {:align "center"}
+        ;    [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name (str "pl-av-" (:id row)) :onclick "swapClass(this)"}]]
+        ;   [:td {:align "center"} player_response]
+        ;   [:td {:align "center"} sent_flag]
+        ;   [:td (if (= (:response_date row) nil) "" (:response_date row))]
+        ;   [:td {:align "center"} long-status]
+        ;   ])))))
+        (str "<tr class='" row-class "' id='" (:id row) "' onclick=''>"
+             "<td nowrap>" (:last_name row) ", " (:first_name row) "</td>"
+             "<td align='center'>
+                 <input type='checkbox' name='pl-av-" (:id row) "'"
+             (if (= avail "Y") " checked")
+             (if (= (:status row) "I") " disabled")
+             " onclick='swapClass(this);'</input>"
+             "</td>"
+             "<td align='center'>" player_response "</td>"
+             "<td align='center'>" sent_flag "</td>"
+             "<td>" (if (= (:response_date row) nil) "" (:response_date row)) "</td>"
+             "<td align='center'>" long-status "</td>"
+             "</tr>")))))
 
 (defn set-match-info
   "Adds the date, time and location of the match displayed at the top of a few of the pages."
@@ -303,7 +303,6 @@
 ;
 ;(set! (.-onload js/window) setup)
 
-(effects/resize)
 
 
 

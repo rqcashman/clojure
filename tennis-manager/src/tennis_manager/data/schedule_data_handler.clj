@@ -180,6 +180,7 @@
   (str "SELECT last_name, first_name, email, status, id"
        "  FROM player"
        "  WHERE team_id = ? AND status = (--status--)"
+       "  AND email IS NOT NULL and email <> ' '"
        "  UNION SELECT last_name, first_name, email, status, p.id"
        "  FROM schedule s"
        "  JOIN match_courts mc ON mc.match_id = s.match_id"
@@ -188,7 +189,8 @@
        "       OR mc.home_player2 = p.id"
        "       OR mc.away_player1 = p.id"
        "       OR mc.away_player2 = p.id)"
-       "  WHERE s.match_id = ?"
+       "  WHERE s.match_id = ? "
+       "  AND email IS NOT NULL and email <> ' '"
        "  ORDER BY last_name"))
 
 (defn get-lineup-email-addresses

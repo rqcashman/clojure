@@ -2046,7 +2046,7 @@ var Be = function Be(a, b, c) {
   }
   throw Md("IHash.-hash", a);
 };
-function Fe() {
+function Ee() {
 }
 var Ge = function Ge(a) {
   if (null != a && null != a.Y) {
@@ -2704,7 +2704,7 @@ h.call = function() {
     return a.j ? a.j() : a.call(null);
   }
   var J = null;
-  J = function(X, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, J, rb, aa, zb, Eb, Sb, Qc, qd, Ee, fd) {
+  J = function(X, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, J, rb, aa, zb, Eb, Sb, Qc, qd, Fe, fd) {
     switch(arguments.length) {
       case 1:
         return sa.call(this, X);
@@ -2747,9 +2747,9 @@ h.call = function() {
       case 20:
         return c.call(this, X, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, J, rb, aa, zb, Eb, Sb, Qc, qd);
       case 21:
-        return b.call(this, X, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, J, rb, aa, zb, Eb, Sb, Qc, qd, Ee);
+        return b.call(this, X, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, J, rb, aa, zb, Eb, Sb, Qc, qd, Fe);
       case 22:
-        return a.call(this, X, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, J, rb, aa, zb, Eb, Sb, Qc, qd, Ee, fd);
+        return a.call(this, X, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, J, rb, aa, zb, Eb, Sb, Qc, qd, Fe, fd);
     }
     throw Error("Invalid arity: " + (arguments.length - 1));
   };
@@ -2880,7 +2880,7 @@ function H(a) {
   if (Id(a) || "string" === typeof a) {
     return 0 === a.length ? null : new I(a, 0, null);
   }
-  if (Kd(Fe, a)) {
+  if (Kd(Ee, a)) {
     return Ge(a);
   }
   throw Error([x.a(a), " is not ISeqable"].join(""));
@@ -3759,7 +3759,7 @@ h.call = function() {
     return a.A.j ? a.A.j() : a.A.call(null);
   }
   var J = null;
-  J = function(X, fa, ia, oa, ka, ma, ya, J, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Ee, fd) {
+  J = function(X, fa, ia, oa, ka, ma, ya, J, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Fe, fd) {
     switch(arguments.length) {
       case 1:
         return sa.call(this, X);
@@ -3802,9 +3802,9 @@ h.call = function() {
       case 20:
         return c.call(this, X, fa, ia, oa, ka, ma, ya, J, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd);
       case 21:
-        return b.call(this, X, fa, ia, oa, ka, ma, ya, J, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Ee);
+        return b.call(this, X, fa, ia, oa, ka, ma, ya, J, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Fe);
       case 22:
-        return a.call(this, 0, fa, ia, oa, ka, ma, ya, J, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Ee, fd);
+        return a.call(this, 0, fa, ia, oa, ka, ma, ya, J, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Fe, fd);
     }
     throw Error("Invalid arity: " + (arguments.length - 1));
   };
@@ -11325,7 +11325,7 @@ h.call = function() {
     return c.j ? c.j() : c.call(null);
   }
   var J = null;
-  J = function(J, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Ee, fd) {
+  J = function(J, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Fe, fd) {
     switch(arguments.length) {
       case 1:
         return sa.call(this, J);
@@ -11368,9 +11368,9 @@ h.call = function() {
       case 20:
         return c.call(this, J, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd);
       case 21:
-        return b.call(this, J, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Ee);
+        return b.call(this, J, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Fe);
       case 22:
-        return a.call(this, J, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Ee, fd);
+        return a.call(this, J, fa, ia, oa, ka, ma, ya, eb, Fa, Ja, Ta, Ua, ub, rb, aa, zb, Eb, Sb, Qc, qd, Fe, fd);
     }
     throw Error("Invalid arity: " + (arguments.length - 1));
   };
@@ -18530,7 +18530,7 @@ kB.string = function(a) {
   return ek(kB(a));
 };
 kB._ = function(a) {
-  return null == a ? uf : (null != a ? a.v & 8388608 || q === a.Cd || (a.v ? 0 : Kd(Fe, a)) : Kd(Fe, a)) ? H(a) : v(sB(a)) ? rB(a) : H(new S(null, 1, 5, T, [a], null));
+  return null == a ? uf : (null != a ? a.v & 8388608 || q === a.Cd || (a.v ? 0 : Kd(Ee, a)) : Kd(Ee, a)) ? H(a) : v(sB(a)) ? rB(a) : H(new S(null, 1, 5, T, [a], null));
 };
 v("undefined" != typeof NodeList) && (h = NodeList.prototype, h.Ne = q, h.ca = function() {
   return this.length;
@@ -19040,7 +19040,7 @@ function vB(a, b) {
     return Sh(function() {
       return function(b) {
         b = tB(a.Wg, b);
-        return null == b ? uf : (null != b ? b.v & 8388608 || q === b.Cd || (b.v ? 0 : Kd(Fe, b)) : Kd(Fe, b)) ? H(b) : v(sB(b)) ? rB(b) : H(new S(null, 1, 5, T, [b], null));
+        return null == b ? uf : (null != b ? b.v & 8388608 || q === b.Cd || (b.v ? 0 : Kd(Ee, b)) : Kd(Ee, b)) ? H(b) : v(sB(b)) ? rB(b) : H(new S(null, 1, 5, T, [b], null));
       };
     }(this), G([kB(a.Yc)]));
   }, uB.Eb = function() {
@@ -24212,7 +24212,7 @@ function EF(a) {
     var b = ep.a(a);
     switch(b) {
       case "A":
-        return "Active";
+        return "Active00";
       case "S":
         return "Sub";
       case "I":
@@ -24221,8 +24221,8 @@ function EF(a) {
         throw Error(["No matching clause: ", x.a(b)].join(""));
     }
   }(), g = F.g(e, "Y") ? "player-avail" : F.g(ep.a(a), "I") ? "player-inactive" : "";
-  return qh(ep.a(a), "I") && F.g(b, !0) || F.g(ep.a(a), "I") && F.g(b, !1) ? ["\x3ctr class\x3d'", x.a(g), "' id\x3d'", x.a(jp.a(a)), "' onclick\x3d''\x3e\x3ctd nowrap\x3e", x.a(Sp.a(a)), ", ", x.a(Cl.a(a)), "\x3c/td\x3e\x3ctd align\x3d'center'\x3e\n               \x3cinput type\x3d'checkbox' name\x3d'pl-av-", x.a(jp.a(a)), "'", x.a(F.g(e, "Y") ? " checked" : null), x.a(F.g(ep.a(a), "I") ? " disabled" : null), " onclick\x3d'swapClass(this);'\x3c/input\x3e\x3c/td\x3e\x3ctd align\x3d'center'\x3e", 
-  x.a(d), "\x3c/td\x3e\x3ctd align\x3d'center'\x3e", x.a(c), "\x3c/td\x3e\x3ctd\x3e", x.a(F.g(vl.a(a), null) ? "" : vl.a(a)), "\x3c/td\x3e\x3ctd align\x3d'center'\x3e", x.a(f), "\x3c/td\x3e\x3c/tr\x3e"].join("") : null;
+  return qh(ep.a(a), "I") && F.g(b, !0) || F.g(ep.a(a), "I") && F.g(b, !1) ? (F.g(e, "Y"), F.g(ep.a(a), "I"), ["\x3ctr class\x3d'", x.a(g), "' id\x3d'", x.a(jp.a(a)), "' onclick\x3d''\x3e\x3ctd nowrap\x3e", x.a(Sp.a(a)), ", ", x.a(Cl.a(a)), "\x3c/td\x3e\x3ctd align\x3d'center'\x3e\n                 \x3cinput type\x3d'checkbox' name\x3d'pl-av-", x.a(jp.a(a)), "'", x.a(F.g(e, "Y") ? " checked" : null), x.a(F.g(ep.a(a), "I") ? " disabled" : null), " onclick\x3d'swapClass(this);'\x3c/input\x3e\x3c/td\x3e\x3ctd align\x3d'center'\x3e", 
+  x.a(d), "\x3c/td\x3e\x3ctd align\x3d'center'\x3e", x.a(c), "\x3c/td\x3e\x3ctd\x3e", x.a(F.g(vl.a(a), null) ? "" : vl.a(a)), "\x3c/td\x3e\x3ctd align\x3d'center'\x3e", x.a(f), "\x3c/td\x3e\x3c/tr\x3e"].join("")) : null;
 }
 function JF(a, b) {
   var c = sA(1);
@@ -24894,9 +24894,9 @@ function TF(a) {
               return Z;
             }
             if (31 === c) {
-              var Eb = b[20], Sb = b[21], Qc = ["c", x.a(Eb), "-forfeit-opp"].join(""), qd = RF(Qc, Sb), Ee = f = b;
-              Ee[2] = qd;
-              Ee[1] = 28;
+              var Eb = b[20], Sb = b[21], Qc = ["c", x.a(Eb), "-forfeit-opp"].join(""), qd = RF(Qc, Sb), Fe = f = b;
+              Fe[2] = qd;
+              Fe[1] = 28;
               return Z;
             }
             if (32 === c) {

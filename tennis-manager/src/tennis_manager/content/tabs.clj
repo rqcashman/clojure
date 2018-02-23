@@ -19,6 +19,6 @@
       (if (= (:user_type user) 1)
         [:li [:a#admin {:href " /admin" :name " admin"} " Admin"]])
       [:li [:a#schedule {:href "/chgpassword"} " Change password"]]
-      ;;log achived via JS because processing as a link leaves you on the tabbed page
+      ;;logout achived via JS because processing as a link leaves you on the tabbed page
       [:li [:a#schedule {:href "" :onclick "window.location.href='/logout'"} [:span {:style "color:red"} " Logout "]]]]]))
 

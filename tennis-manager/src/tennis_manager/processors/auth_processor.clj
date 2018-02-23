@@ -55,13 +55,12 @@
   (let [session (:session request)
         session-id (:identity session)]
     (if-not (= (s/blank? session-id) true)
-      (do
-        (if (auth/session-valid? session-id)
-          (do
-            (println "authenticated-access session valid: " session-id)
-            (auth/update-session-used-time session-id)
-            true)
-          (error SESSION_EXPIRED)))
+      (if (auth/session-valid? session-id)
+        (do
+          (println "authenticated-access session valid: " session-id)
+          (auth/update-session-used-time session-id)
+          true)
+        (error SESSION_EXPIRED))
       (error NOT_AUTHENTICATED))))
 
 (defn admin-access
@@ -129,7 +128,6 @@
 (defn logout-redirect
   "docstring"
   [request value]
-
   (let [error ((keyword value) authentication-error-list)
         session (:session request)
         redirect-url (get-redirect-url error)
@@ -210,16 +208,17 @@
   "redirect a change password request as appropriate"
   [request value]
   (cond
-    (= value CHG_PASSWORD) (let [validation-err-msg (validate-chg-password-input (:params request))]
-                             (if (s/blank? validation-err-msg)
-                               (do
-                                 (auth/change-password (:username (:params request)) (:new_password (:params request)))
-                                 (-> (redirect-change-password request CHG_PASSWORD_SUCCESS)
-                                     (assoc :session (dissoc (:session request) :identity))))
-                               (-> ((keyword CHG_PASSWORD_FAILED) authentication-error-list)
-                                   (conj {:username (:username (:params request)) :msg validation-err-msg})
-                                   get-redirect-url
-                                   rr/redirect)))
+    (= value CHG_PASSWORD)
+    (let [validation-err-msg (validate-chg-password-input (:params request))]
+      (if (s/blank? validation-err-msg)
+        (do
+          (auth/change-password (:username (:params request)) (:new_password (:params request)))
+          (-> (redirect-change-password request CHG_PASSWORD_SUCCESS)
+              (assoc :session (dissoc (:session request) :identity))))
+        (-> ((keyword CHG_PASSWORD_FAILED) authentication-error-list)
+            (conj {:username (:username (:params request)) :msg validation-err-msg})
+            get-redirect-url
+            rr/redirect)))
     (= value LOGIN_FAILED) (redirect-change-password request LOGIN_FAILED_CHG_PWD)
     :else (redirect-change-password request value)))
 
@@ -229,10 +228,9 @@
   (if value
     (let [error ((keyword value) authentication-error-list)]
       (if (= value SESSION_EXPIRED)
-        (do
-          (let [user (auth/get-user-from-session-id (:identity (:session request)))]
-            (rr/redirect (get-redirect-url (conj error {:username (:email user)})))))
-        (rr/redirect (str (:url error)))))))
+        (let [user (auth/get-user-from-session-id (:identity (:session request)))]
+          (rr/redirect (get-redirect-url (conj error {:username (:email user)})))))
+      (rr/redirect (str (:url error))))))
 
 (defn check-login-status
   "See if a user is already logged in.  It seems backwards but we want to fire the error handler if they are logged in so they get re-directed to the first landing page"
