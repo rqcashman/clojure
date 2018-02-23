@@ -137,7 +137,7 @@
                  (or (not= (:status player) "S") (not= send_subs nil)))
           (let [uuid (s/replace (str (java.util.UUID/randomUUID)) "-" "")
                 email-msg (-> (s/replace email-body "---salutation---" (str (:first_name player) " " (:last_name player)))
-                              (s/replace #"--uuid--" uuid))
+                              (s/replace "--uuid--" uuid))
                 email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
             (println email-parms)
             (mail/send-gmail email-parms)
