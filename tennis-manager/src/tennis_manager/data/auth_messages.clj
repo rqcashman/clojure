@@ -16,13 +16,12 @@
 (def CHG_PASSWORD_SAME "1010")
 (def CHG_PASSWORD_COMPLEXITY_FAIL "1011")
 
-
 (def ADMIN_USER 1)
 (def PASSWORD_MIN_LENGTH 8)
 
 (def special-chars "!@#$%&*")
 (def NOT_AUTHORIZED_MSG "Not Authorized")
-(def password-complexity-error (str "Password must contain at least<span style='color:blue'>
+(def password-complexity-error (str "New password must contain at least<span style='color:blue'>
             <br>&nbsp;&nbsp;&nbsp;&nbsp;1 upper case
             <br>&nbsp;&nbsp;&nbsp;&nbsp;2 lower case
             <br>&nbsp;&nbsp;&nbsp;&nbsp;1 number
@@ -38,7 +37,7 @@
                   (keyword NOT_AUTHENTICATED)            {:url "/login"}
                   (keyword NOT_AUTHORIZED)               {:url "/notauth"}
                   (keyword LOGIN_FAILED_CHG_PWD)         {:url "/chgpassword" :msg "Password invalid"}
-                  (keyword CHG_PASSWORD_TOO_SHORT)       {:url "/chgpassword" :msg (str "Password must be a least " PASSWORD_MIN_LENGTH " characters long")}
+                  (keyword CHG_PASSWORD_TOO_SHORT)       {:url "/chgpassword" :msg (str "New password must be a least " PASSWORD_MIN_LENGTH " characters long")}
                   (keyword CHG_PASSWORDS_DO_NOT_MATCH)   {:url "/chgpassword" :msg "Passwords do not match"}
                   (keyword CHG_PASSWORD_SAME)            {:url "/chgpassword" :msg "New password cannot be the same as the current password"}
                   (keyword CHG_PASSWORD_COMPLEXITY_FAIL) {:url "/chgpassword" :msg password-complexity-error}
@@ -56,6 +55,3 @@
     (conj errlist err)))
 
 (def authentication-error-list (reduce #(add-error-no %1 %2) {} auth-errors))
-
-
-
