@@ -34,15 +34,15 @@
 (defn update_availability
   "docstring"
   [player-token available]
-  (let [comm_detail (comm/get_communication_detail player-token)]
-    (list
-      (try
+  (try
+    (let [comm_detail (comm/get_communication_detail player-token)]
+      (list
         (if (and comm_detail (contains? #{"Y" "N"} available))
           (do
             (comm/update_player_commuication_response player-token available)
             (sched/upsert_player_availability (:match_id comm_detail) (:player_id comm_detail) available)
             (show_update_status comm_detail available))
-          [:h2 "Invalid link.  The link was invalid.  If you copied and pasted the link make sure you copied the complete link"])
-        (catch Exception e
-          (println "Error in update_availability.  Msg: " (.getMessage e))
-          [:h2 "Server error updating availablitiy"])))))
+          [:h2 "Invalid link.  The link was invalid.  If you copied and pasted the link make sure you copied the complete link"])))
+    (catch Exception e
+      (println "Error in update_availability.  Msg: " (.getMessage e))
+      [:h2 "Server error updating availablitiy"])))

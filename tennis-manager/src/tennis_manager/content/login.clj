@@ -4,6 +4,7 @@
             [hiccup.element :only (link-to)]
             [hiccup.page :only (html5 include-css include-js)]
             [tennis-manager.content.page-layout :as layout]
+            [tennis-manager.data.auth-messages :as am]
             [tennis-manager.data.auth-handler :as auth]
             [tennis-manager.data.club-data-handler :as club]
             [tennis-manager.data.season-data-handler :as season]))
@@ -29,12 +30,12 @@
 
 (defn add-error-message
   "docstring"
-  [error error-msg]
-  (if-not (= (s/blank? error) true)
+  [errorno]
+  (if-not (= (s/blank? errorno) true)
     (list [:tr
            [:td "&nbsp;"]
            [:td [:b "Login error:"]]
-           [:td [:span {:style "font-weight:bold;color:red"} error-msg]]
+           [:td [:span {:style "font-weight:bold;color:red"} (:msg ((keyword errorno) am/authentication-error-list))]]
            [:td "&nbsp;"]]
           (layout/empty-row 4))))
 
@@ -51,8 +52,7 @@
   (let [title (if (= page-type LOGIN_PAGE) "Login" "Change Password")
         action (if (= page-type LOGIN_PAGE) "/login" "/chgpassword")
         username (get-user-name request session)
-        error (:err request)
-        error-msg (:msg request)]
+        errorno (:errno request)]
 
     [:form#loginform.form-horizontal {:method "post" :action action}
      [:table.table.table-sm.login-form {:align "center"}
@@ -63,7 +63,7 @@
           [:td {:colspan 4} title]]
          (layout/empty-row 4)
          (layout/empty-row 4)
-         (add-error-message error error-msg)
+         (add-error-message errorno)
          (add-form-control "User name:" {:id "username" :name "username" :maxlength 45 :size 30 :type "text" :value username})
          (add-form-control "Password" {:id "password" :name "password" :maxlength 45 :size 30 :type "password"})
          (if (= page-type CHANGE_PASSWORD_PAGE)

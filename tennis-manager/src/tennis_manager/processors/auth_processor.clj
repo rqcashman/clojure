@@ -8,36 +8,10 @@
             [ring.util.response :as rr]
             [tennis-manager.content.page-layout :as layout]
             [tennis-manager.content.admin :as admin]
-            [tennis-manager.data.auth-handler :as auth]))
+            [tennis-manager.data.auth-handler :as auth]
+            [tennis-manager.data.auth-messages :as am]))
 
-(def LOGIN_SUCCESS "0")
-(def LOGOUT_SUCCESS "100")
-(def CHG_PASSWORD_SUCCESS "200")
-(def LOGIN_FAILED "1000")
-(def LOGIN_LOCKED "1001")
-(def LOGIN_DISABLED "1002")
-(def CHG_PASSWORD "1003")
-(def SESSION_EXPIRED "1004")
-(def NOT_AUTHENTICATED "1005")
-(def NOT_AUTHORIZED "1006")
-(def LOGIN_FAILED_CHG_PWD "1007")
-(def CHG_PASSWORD_FAILED "1008")
 
-(def ADMIN_USER 1)
-(def PASSWORD_MIN_LENGTH 8)
-
-(def authentication-error-list {(keyword LOGIN_SUCCESS)        {:url "/mgr"}
-                                (keyword LOGOUT_SUCCESS)       {:url "/login" :err "logoutsuccess" :msg "Logout successful"}
-                                (keyword LOGIN_FAILED)         {:url "/login" :err "loginfailure" :msg "Login failed"}
-                                (keyword LOGIN_LOCKED)         {:url "/login" :err "acctlocked" :msg "Account locked"}
-                                (keyword LOGIN_DISABLED)       {:url "/login" :err "acctdisabled" :msg "Account disabled"}
-                                (keyword CHG_PASSWORD)         {:url "/chgpassword" :err "chgpassword" :msg "Password change required"}
-                                (keyword SESSION_EXPIRED)      {:url "/login" :err "sessionexpired" :msg "Login session timed out due to inactivity"}
-                                (keyword NOT_AUTHENTICATED)    {:url "/login"}
-                                (keyword NOT_AUTHORIZED)       {:url "/notauth"}
-                                (keyword LOGIN_FAILED_CHG_PWD) {:url "/chgpassword" :err "chgpwdloginfail" :msg "Password invalid"}
-                                (keyword CHG_PASSWORD_FAILED)  {:url "/chgpassword" :err "chgpasswordfailed"}
-                                (keyword CHG_PASSWORD_SUCCESS) {:url "/login" :err "chgpasswordsuccess" :msg "Password changed"}})
 (defn unauthorized-handler
   [request metadata]
   (rr/response "Unauthorized request"))
@@ -60,8 +34,8 @@
           (println "authenticated-access session valid: " session-id)
           (auth/update-session-used-time session-id)
           true)
-        (error SESSION_EXPIRED))
-      (error NOT_AUTHENTICATED))))
+        (error am/SESSION_EXPIRED))
+      (error am/NOT_AUTHENTICATED))))
 
 (defn admin-access
   [request]
@@ -70,9 +44,9 @@
       (let [session (:session request)
             session-id (:identity session)
             user (auth/get-user-from-session-id session-id)]
-        (if (= (:user_type user) ADMIN_USER)
+        (if (= (:user_type user) am/ADMIN_USER)
           true
-          (error NOT_AUTHORIZED)))
+          (error am/NOT_AUTHORIZED)))
       auth)))
 
 (defn validate-user-credentials
@@ -82,30 +56,30 @@
         user (auth/get-user-with-password username password)]
     (if user
       (cond
-        (> (:account_locked user) 0) (error LOGIN_LOCKED)
-        (> (:account_disabled user) 0) (error LOGIN_DISABLED)
-        (> (:force_password_change user) 0) (error CHG_PASSWORD)
-        :else (error LOGIN_SUCCESS))
-      (error LOGIN_FAILED))))
+        (> (:account_locked user) 0) (error am/LOGIN_LOCKED)
+        (> (:account_disabled user) 0) (error am/LOGIN_DISABLED)
+        (> (:force_password_change user) 0) (error am/CHG_PASSWORD)
+        :else (error am/LOGIN_SUCCESS))
+      (error am/LOGIN_FAILED))))
 
 (defn authenticate-user-for-change-password
   "authenticate password for a change passord request"
   [request]
   (let [val (validate-user-credentials request)]
-    (if (= (.get-value val) LOGIN_SUCCESS)
-      (error CHG_PASSWORD)
+    (if (= (.get-value val) am/LOGIN_SUCCESS)
+      (error am/CHG_PASSWORD)
       val)))
 
 (defn on-error
   [request value]
-  (let [errMsg (if-not (= (s/blank? value) true) value "Not Authorized")]
+  (let [errMsg (if-not (= (s/blank? value) true) value am/NOT_AUTHORIZED_MSG)]
     {:status  200
      :headers {"Content-Type" "text/html"}
      :body    (str "<h1 align='center' style='color:red'>" errMsg "</h1>")}))
 
 (defn on-err-from-get
   [request value]
-  (let [errMsg (if-not (= (s/blank? value) true) value "Not Authorized")]
+  (let [errMsg (if-not (= (s/blank? value) true) value am/NOT_AUTHORIZED_MSG)]
     {:status  200
      :headers {"Content-Type" "text/plain"}
      :body    (str {:status "failed" :status-code 400 :msg "User not logged in"})}))
@@ -120,7 +94,7 @@
 (defn get-redirect-url
   "create redirect URL from the error list hash map"
   [url-hash]
-  (let [qs (s/join "&" (reduce #(get-qs-parm %1 %2) () (dissoc url-hash :url)))]
+  (let [qs (s/join "&" (reduce #(get-qs-parm %1 %2) () (-> (dissoc url-hash :url :msg))))]
     (if (= (s/blank? qs) false)
       (str (:url url-hash) "?" qs)
       (:url url-hash))))
@@ -128,7 +102,7 @@
 (defn logout-redirect
   "docstring"
   [request value]
-  (let [error ((keyword value) authentication-error-list)
+  (let [error ((keyword value) am/authentication-error-list)
         session (:session request)
         redirect-url (get-redirect-url error)
         updated-session (dissoc session :identity)]
@@ -140,23 +114,23 @@
   [request value]
   (let [username (:username (:params request))]
     (auth/insert-login-attempt username value)
-    (if (= value LOGIN_FAILED)
+    (if (= value am/LOGIN_FAILED)
       (auth/lock-account? username))
-    (if (or (= value LOGIN_SUCCESS) (and (= value LOGIN_LOCKED) (= (auth/account-unlocked? username) true)))
+    (if (or (= value am/LOGIN_SUCCESS) (and (= value am/LOGIN_LOCKED) (= (auth/account-unlocked? username) true)))
       (let [session (:session request)
             session-id (s/replace (str (java.util.UUID/randomUUID)) #"-" "")
-            error ((keyword LOGIN_SUCCESS) authentication-error-list)
+            error ((keyword am/LOGIN_SUCCESS) am/authentication-error-list)
             updated-session (assoc session :identity session-id)
             redirect-url (get-redirect-url error)]
         (auth/update-user-last-login-time username)
         (auth/persist-session-id username session-id)
         (-> (rr/redirect redirect-url)
             (assoc :session updated-session)))
-      (let [error ((keyword value) authentication-error-list)
+      (let [error ((keyword value) am/authentication-error-list)
             redirect-url (get-redirect-url (conj error {:username username}))]
         (rr/redirect redirect-url)))))
 
-(def special-chars "!@#$%&*")
+
 
 (defn password-counts
   "docstring"
@@ -177,29 +151,24 @@
         username (:username req-params)
         pwd-map (reduce #(password-counts %1 %2) {:upper 0 :lower 0 :special_chars 0 :digits 0 :none 0} new-password)]
     (cond
-      (< (count new-password) PASSWORD_MIN_LENGTH) (str "Password must be a least " PASSWORD_MIN_LENGTH " characters long")
-      (not= (compare new-password confirm-password) 0) "Passwords do not match"
-      (not (auth/new-password-different? username new-password)) "New password cannot be the same as the current password"
+      (< (count new-password) am/PASSWORD_MIN_LENGTH) am/CHG_PASSWORD_TOO_SHORT
+      (not= (compare new-password confirm-password) 0) am/CHG_PASSWORDS_DO_NOT_MATCH
+      (not (auth/new-password-different? username new-password)) am/CHG_PASSWORD_SAME
       (or (< (:upper pwd-map) 1)
           (< (:lower pwd-map) 2)
           (< (:special_chars pwd-map) 1)
-          (< (:digits pwd-map) 1))
-      (str "Password must contain at least<span style='color:blue'>
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;1 upper case
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;2 lower case
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;1 number
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;1 special character</span><span style='color:purple'> " special-chars "</span>"))))
+          (< (:digits pwd-map) 1)) am/CHG_PASSWORD_COMPLEXITY_FAIL)))
 
 (defn redirect-change-password
   "redirect on change password login error"
   [request error]
   (if (and (:session request) (auth/session-valid? (:identity (:session request))))
-    (-> ((keyword error) authentication-error-list)
+    (-> ((keyword error) am/authentication-error-list)
         (conj {:username (:username (:params request))})
         get-redirect-url
         rr/redirect
         (assoc :session (:identity (:session request)))))
-  (-> ((keyword error) authentication-error-list)
+  (-> ((keyword error) am/authentication-error-list)
       (conj {:username (:username (:params request))})
       get-redirect-url
       rr/redirect))
@@ -208,26 +177,26 @@
   "redirect a change password request as appropriate"
   [request value]
   (cond
-    (= value CHG_PASSWORD)
-    (let [validation-err-msg (validate-chg-password-input (:params request))]
-      (if (s/blank? validation-err-msg)
+    (= value am/CHG_PASSWORD)
+    (let [validation-error (validate-chg-password-input (:params request))]
+      (if-not validation-error
         (do
           (auth/change-password (:username (:params request)) (:new_password (:params request)))
-          (-> (redirect-change-password request CHG_PASSWORD_SUCCESS)
+          (-> (redirect-change-password request am/CHG_PASSWORD_SUCCESS)
               (assoc :session (dissoc (:session request) :identity))))
-        (-> ((keyword CHG_PASSWORD_FAILED) authentication-error-list)
-            (conj {:username (:username (:params request)) :msg validation-err-msg})
+        (-> ((keyword validation-error) am/authentication-error-list)
+            (conj {:username (:username (:params request))})
             get-redirect-url
             rr/redirect)))
-    (= value LOGIN_FAILED) (redirect-change-password request LOGIN_FAILED_CHG_PWD)
+    (= value am/LOGIN_FAILED) (redirect-change-password request am/LOGIN_FAILED_CHG_PWD)
     :else (redirect-change-password request value)))
 
-(defn not-authenticated
+(defn user-validation-failed
   "Redirect if not authenticated"
   [request value]
   (if value
-    (let [error ((keyword value) authentication-error-list)]
-      (if (= value SESSION_EXPIRED)
+    (let [error ((keyword value) am/authentication-error-list)]
+      (if (= value am/SESSION_EXPIRED)
         (let [user (auth/get-user-from-session-id (:identity (:session request)))]
           (rr/redirect (get-redirect-url (conj error {:username (:email user)})))))
       (rr/redirect (str (:url error))))))
@@ -236,20 +205,20 @@
   "See if a user is already logged in.  It seems backwards but we want to fire the error handler if they are logged in so they get re-directed to the first landing page"
   [request]
   (if (= (authenticated-access request) true)
-    (error LOGIN_SUCCESS)
+    (error am/LOGIN_SUCCESS)
     true))
 
 (defn check-logout-status
   "See if a user is already logged in."
   [request]
   (if (= (authenticated-access request) true)
-    (error LOGOUT_SUCCESS)
+    (error am/LOGOUT_SUCCESS)
     true))
 
 (defn redirect-to-main-page
   "redirects to the main landing page if a user requests the login page but is already logged in"
   [request value]
-  (let [error ((keyword value) authentication-error-list)
+  (let [error ((keyword value) am/authentication-error-list)
         redirect-url (get-redirect-url error)]
     (rr/redirect redirect-url)))
 
@@ -274,12 +243,16 @@
              :request-method :get}
             {:pattern        #"(^/mgr$)|(^/matches$)|(^/schedule$)|(^/roster$)"
              :handler        authenticated-access
-             :on-error       not-authenticated
+             :on-error       user-validation-failed
              :request-method :get}
             {:pattern        #"(^/admin)"
              :handler        admin-access
-             :on-error       not-authenticated
+             :on-error       user-validation-failed
              :request-method :get}
+            {:pattern        #"(^/add-club$)|(^/add-season$)|(^/add-team$)|(^/load-schedule$)"
+             :handler        admin-access
+             :on-error       user-validation-failed
+             :request-method :post}
             {:pattern        #"(^/testpagex)"
              :handler        admin-access
              :request-method :get}
@@ -289,4 +262,4 @@
              :on-error       on-err-from-get}
             {:pattern  #"^/.*"
              :handler  authenticated-access
-             :on-error not-authenticated}])
+             :on-error user-validation-failed}])

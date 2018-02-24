@@ -23,7 +23,7 @@
   (j/execute! sys/db-cred
               [(str "update match_communication set availability_sent = current_timestamp() where match_id=? and team_id = ?") match_id, (:team_id user)]))
 
-(defn match_communication_sent
+(defn match_communication_sent?
   "docstring"
   [match_id user]
   (-> (j/query sys/db-cred
@@ -65,14 +65,14 @@
 (defn upsert_match_avail_email_sent
   "docstring"
   [match_id user]
-  (if (match_communication_sent match_id user)
+  (if (match_communication_sent? match_id user)
     (update_match_avail_email_sent_date match_id user)
     (add_match_avail_email_sent match_id user)))
 
 (defn upsert_match_lineup_email_sent
   "docstring"
   [match_id user]
-  (if (match_communication_sent match_id user)
+  (if (match_communication_sent? match_id user)
     (update_match_lineup_email_sent_date match_id user)
     (add_match_lineup_email_sent match_id user)))
 

@@ -60,7 +60,6 @@
            (POST "/add-season" {session :session params :params} (rr/response (pr/add-season session params)))
            (POST "/add-team" {session :session params :params} (rr/response (pr/add-team session params)))
            (POST "/load-schedule" {session :session params :params} (rr/response (pr/load-schedule session params)))
-           (POST "/load-schedule-file" {session :session params :params} (rr/response (pr/load-schedule-file session params)))
            (POST "/update-availability" {session :session params :params} (rr/response (pr/update-player-availability session params)))
            (POST "/update-lineup" {session :session params :params} (rr/response (pr/update-lineup session params)))
            (POST "/update-player" {session :session params :params} (rr/response (pr/update-player-info session params)))

@@ -46,7 +46,6 @@
 (defn new-password-different?
   "Make sure the new password is not the same as the old one"
   [username new-password]
-  (println "un: " username " p: " new-password)
   (-> (j/query sys/db-cred
                [(str "select count(*) as ct from user_login l where email=? and sha1(?) = l.password") username new-password])
       first :ct (= 0)))
@@ -63,11 +62,12 @@
                                      {},
                                      rs))}))
 (def failed-login-status 1000)
+(def system-parm-category# {:auth "AUTHENTICATION"})
 
 (defn too-many-login-failures?
   "returns the number of login failures within the allowable timeframe"
   [username]
-  (let [parms (get-system-parms "AUTHENTICATION")
+  (let [parms (get-system-parms (:auth system-parm-category#))
         max-failed-attempts (:LOGIN_ATTEMPTS parms)
         failure-minutes (:FAILURE_MINUTES parms)]
     (let [failures (-> (j/query sys/db-cred
@@ -124,7 +124,7 @@
 (defn session-valid?
   "Check to see if the session id exists and if it has timed out"
   [session-id]
-  (let [parms (get-system-parms "AUTHENTICATION")
+  (let [parms (get-system-parms (:auth system-parm-category#))
         session-timeout (:SESSION_TIMEOUT_MINUTES parms)]
     (-> (j/query sys/db-cred
                  [(str "select count(1) as ct from user_session where session_id=?

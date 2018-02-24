@@ -127,7 +127,7 @@
 
 (def court-null-list #{nil 0})
 
-(defn court-valid
+(defn court-valid?
   "docstring"
   [valid court]
   (if (= valid false)
@@ -157,7 +157,7 @@
                          [sql match-id])]
     (if (< (count results) 4)
       false
-      (reduce #(court-valid %1 %2) true results))))
+      (reduce #(court-valid? %1 %2) true results))))
 
 (defn match-lineup
   "Get the match lineup for the logged in user"
