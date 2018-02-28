@@ -185,8 +185,8 @@
 (defn add-match-select-controls
   "docstring"
   [list court team-name]
-  (let [player-1 (str "c" court "-p1")
-        player-2 (str "c" court "-p2")
+  (let [player-1 (str "c" court "p1-div")
+        player-2 (str "c" court "p2-div")
         btn-grp (str "c" court "-forfeit-grp")
         no-forfeit (str "c" court "-forfeit-none")
         team-forfeit (str "c" court "-forfeit")
@@ -195,9 +195,8 @@
     (conj list
           [:tr
            [:td [:span {:style "font-weight:bold"} (str "Court " court)]]
-           [:td [:select {:id player-1 :name player-1}
-                 [:option "Rick Cashman"]]]
-           [:td [:select {:id player-2 :name player-2}]]
+           [:td [:div {:id player-1}]]
+           [:td [:div {:id player-2}]]
            [:td
             [:fieldset {:id btn-grp}
              "&nbsp;&nbsp;" [:input {:type "radio" :value "0" :id no-forfeit :name btn-grp :disabled btn-disabled :checked true :onclick "updateForfeitBtns(this)"} "&nbsp;&nbsp;None"] [:br]

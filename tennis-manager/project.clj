@@ -17,6 +17,7 @@
                  [goog-jar "1.0.0"]
                  [hiccup "1.0.4"]
                  [mysql/mysql-connector-java "6.0.6"]
+                 [org.omcljs/om "1.0.0-beta1"]
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.946"]
                  [org.clojure/core.async "0.3.443"]

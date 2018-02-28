@@ -130,10 +130,8 @@
             redirect-url (get-redirect-url (conj error {:username username}))]
         (rr/redirect redirect-url)))))
 
-
-
 (defn password-counts
-  "docstring"
+  "count new password characterstics"
   [ct-hash char]
   (cond
     (s/includes? "!@#$%&*_" (str char)) (update-in ct-hash [:special_chars] inc)

@@ -21,28 +21,30 @@
 
 (def special-chars "!@#$%&*")
 (def NOT_AUTHORIZED_MSG "Not Authorized")
-(def password-complexity-error (str "New password must contain at least<span style='color:blue'>
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;1 upper case
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;2 lower case
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;1 number
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;1 special character</span><span style='color:purple'> " special-chars "</span>"))
+(def password-complexity-error
+  (str "New password must contain at least<span style='color:blue'>
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;1 upper case
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;2 lower case
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;1 number
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;1 special character</span>
+        <span style='color:purple'> " special-chars "</span>"))
 
-(def auth-errors {(keyword LOGIN_SUCCESS)                {:url "/mgr"}
-                  (keyword LOGOUT_SUCCESS)               {:url "/login" :msg "Logout successful"}
-                  (keyword LOGIN_FAILED)                 {:url "/login" :msg "Login failed"}
-                  (keyword LOGIN_LOCKED)                 {:url "/login" :msg "Account locked"}
-                  (keyword LOGIN_DISABLED)               {:url "/login" :msg "Account disabled"}
-                  (keyword CHG_PASSWORD)                 {:url "/chgpassword" :msg "Password change required"}
-                  (keyword SESSION_EXPIRED)              {:url "/login" :msg "Login session timed out due to inactivity"}
-                  (keyword NOT_AUTHENTICATED)            {:url "/login"}
-                  (keyword NOT_AUTHORIZED)               {:url "/notauth"}
-                  (keyword LOGIN_FAILED_CHG_PWD)         {:url "/chgpassword" :msg "Password invalid"}
-                  (keyword CHG_PASSWORD_TOO_SHORT)       {:url "/chgpassword" :msg (str "New password must be a least " PASSWORD_MIN_LENGTH " characters long")}
-                  (keyword CHG_PASSWORDS_DO_NOT_MATCH)   {:url "/chgpassword" :msg "Passwords do not match"}
-                  (keyword CHG_PASSWORD_SAME)            {:url "/chgpassword" :msg "New password cannot be the same as the current password"}
-                  (keyword CHG_PASSWORD_COMPLEXITY_FAIL) {:url "/chgpassword" :msg password-complexity-error}
-                  (keyword CHG_PASSWORD_SUCCESS)         {:url "/login" :msg "Password changed"}})
-
+(def auth-errors
+  {(keyword LOGIN_SUCCESS)                {:url "/mgr"}
+   (keyword LOGOUT_SUCCESS)               {:url "/login" :msg "Logout successful"}
+   (keyword LOGIN_FAILED)                 {:url "/login" :msg "Login failed"}
+   (keyword LOGIN_LOCKED)                 {:url "/login" :msg "Account locked"}
+   (keyword LOGIN_DISABLED)               {:url "/login" :msg "Account disabled"}
+   (keyword CHG_PASSWORD)                 {:url "/chgpassword" :msg "Password change required"}
+   (keyword SESSION_EXPIRED)              {:url "/login" :msg "Login session timed out due to inactivity"}
+   (keyword NOT_AUTHENTICATED)            {:url "/login"}
+   (keyword NOT_AUTHORIZED)               {:url "/notauth"}
+   (keyword LOGIN_FAILED_CHG_PWD)         {:url "/chgpassword" :msg "Password invalid"}
+   (keyword CHG_PASSWORD_TOO_SHORT)       {:url "/chgpassword" :msg (str "New password must be a least " PASSWORD_MIN_LENGTH " characters long")}
+   (keyword CHG_PASSWORDS_DO_NOT_MATCH)   {:url "/chgpassword" :msg "Passwords do not match"}
+   (keyword CHG_PASSWORD_SAME)            {:url "/chgpassword" :msg "New password cannot be the same as the current password"}
+   (keyword CHG_PASSWORD_COMPLEXITY_FAIL) {:url "/chgpassword" :msg password-complexity-error}
+   (keyword CHG_PASSWORD_SUCCESS)         {:url "/login" :msg "Password changed"}})
 
 (comment "if an entry has a msg we add the errno to it.
           This allows us just to send the errno to the redirected page without

@@ -67,11 +67,10 @@
          (add-form-control "User name:" {:id "username" :name "username" :maxlength 45 :size 30 :type "text" :value username})
          (add-form-control "Password" {:id "password" :name "password" :maxlength 45 :size 30 :type "password"})
          (if (= page-type CHANGE_PASSWORD_PAGE)
-           (do
-             (list
-               (layout/hr-row 4 "10%")
-               (add-form-control "New password" {:id "new_password" :name "new_password" :maxlength 45 :size 30 :type "password"})
-               (add-form-control "Re-type password" {:id "confirm_password" :name "confirm_password" :maxlength 45 :size 30 :type "password"}))))
+           (list
+             (layout/hr-row 4 "10%")
+             (add-form-control "New password" {:id "new_password" :name "new_password" :maxlength 45 :size 30 :type "password"})
+             (add-form-control "Re-type password" {:id "confirm_password" :name "confirm_password" :maxlength 45 :size 30 :type "password"})))
          (layout/empty-row 4)
          (layout/hr-row 4 "90%")
          (layout/empty-row 4)

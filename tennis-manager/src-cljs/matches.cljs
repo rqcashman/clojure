@@ -8,7 +8,39 @@
             [cljs.pprint :as pp]
             [enfocus.core :as ef]
             [enfocus.events :as events]
-            [enfocus.effects :as effects]))
+            [enfocus.effects :as effects]
+            [om.core :as om :include-macros true]
+            [om.dom :as dom :include-macros true]))
+
+(enable-console-print!)
+(def courts ["c1p1" "c1p2" "c2p1" "c2p2" "c3p1" "c3p2" "c4p1" "c4p2"])
+(def om-owner# (atom {}))
+(defonce app-state
+         (atom
+           {:c1p1 {:selected {:current  {}
+                              :previous {}}
+                   :players  {}}
+            :c1p2 {:selected {:current  {}
+                              :previous {}}
+                   :players  {}}
+            :c2p1 {:selected {:current  {}
+                              :previous {}}
+                   :players  {}}
+            :c2p2 {:selected {:current  {}
+                              :previous {}}
+                   :players  {}}
+            :c3p1 {:selected {:current  {}
+                              :previous {}}
+                   :players  {}}
+            :c3p2 {:selected {:current  {}
+                              :previous {}}
+                   :players  {}}
+            :c4p1 {:selected {:current  {}
+                              :previous {}}
+                   :players  {}}
+            :c4p2 {:selected {:current  {}
+                              :previous {}}
+                   :players  {}}}))
 
 (defn not-found-row
   "Generate a row when there are no players on the roster for the team"
@@ -159,7 +191,7 @@
   )
 
 (defn init-player-options
-  "Selects the players in the dropdown that are assingned to a court in the DB in the Update Lineup form."
+  "Selects the players in the dropdown that are assigned to a court in the DB in the Update Lineup form."
   [rcds]
   (doseq [row rcds]
     (let [court_number (:court_number row)]
@@ -265,6 +297,128 @@
 (em/defaction avail-setup [match-id]
               ["#lineuptoavail"] (events/remove-listeners :click)
               ["#lineuptoavail"] (events/listen :click #(lineup-to-availability-form match-id)))
+(defn player-option
+  ""
+  [data owner select-id]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+      (let [comma (if (= (:id data) 0) "" ", ")]
+        (dom/option #js {:value (:id data) :id (str select-id "-" (:id data))} (str (:last data) comma (:first data)))))))
+
+(defn update-player
+  [data player-id]
+  (->
+    (assoc-in @data [:selected :previous] (:current (:selected @data)))
+    (assoc-in [:selected :current] ((keyword player-id) (:players @data)))))
+
+(def blank-player-id "0")
+
+(defn update-player-list
+  [tgt-data src-data]
+  (println "==================================================")
+  (println "target " tgt-data)
+  (println "src " src-data)
+  (if (pos? (count (:previous (:selected src-data))))
+    (let [prev-id (keyword (str (:id (:previous (:selected src-data)))))
+          curr-id (keyword (str (:id (:current (:selected src-data)))))]
+      (println "prev exists pid: " curr-id)
+      (if (= (name curr-id) blank-player-id)
+        (do
+          (println "assoc only currid is zero")
+          (assoc-in tgt-data [:players prev-id] (:previous (:selected src-data))))
+        (do
+          (println "dissoc currid")
+          (->
+            (assoc-in tgt-data [:players prev-id] (:previous (:selected src-data)))
+            (update-in [:players] dissoc curr-id)))))
+    (let [curr-id (keyword (str (:id (:current (:selected src-data)))))]
+      (println "prev does not exist pid: " curr-id)
+      (println tgt-data)
+      (if (= (name curr-id) blank-player-id)
+        tgt-data
+        (update-in tgt-data [:players] dissoc curr-id)))))
+
+(defn player-changed
+  [owner data player-id list-id]
+  (println "own: " owner " data: " data " pid: " player-id " lid: " list-id)
+  (om/transact! data #(update-player data player-id))
+  (om/set-state! owner data)
+  (doseq [cur-key (remove #(= list-id %) courts)]
+    (println "processing list " cur-key " list id " list-id " player id " player-id)
+    (let [cur (om/ref-cursor ((keyword cur-key) (om/root-cursor app-state)))]
+      (println "update player result " (update-player-list cur @data))
+      (om/transact! cur #(update-player-list cur @data))
+      (om/set-state! owner cur)
+      (om/set-state! ((keyword cur-key) @om-owner#) cur)))
+  (println "state: " app-state))
+
+(defn player-changed-event [e owner data]
+  (let [player-id (.. e -target -value)
+        list-id (.. e -target -id)]
+    (player-changed owner data player-id list-id)))
+
+
+(defn get-players
+  "return a has of the available players"
+  [players av-pl]
+  (println av-pl)
+  (if (= (:available av-pl) 1)
+    (conj players {(keyword (str (:id av-pl))) {:last (:last_name av-pl) :first (:first_name av-pl) :id (:id av-pl)}})
+    players))
+
+(defn load-state
+  ""
+  [players]
+  (doseq [cur-key courts]
+    (swap! app-state assoc-in [(keyword cur-key) :players] {})
+    (swap! app-state assoc-in [(keyword cur-key) :players] players)
+    (swap! app-state assoc-in [(keyword cur-key) :selected :current] {})
+    (swap! app-state assoc-in [(keyword cur-key) :selected :previous] {})))
+
+(defn load-selected-state
+  ""
+  [players]
+  (doseq [av-pl players]
+    (if-not (nil? (:court_number av-pl))
+      (let [court (str "c" (:court_number av-pl))
+            id (:id av-pl)
+            player (cond
+                     (or (= (:home_player1 av-pl) id) (= (:away_player1 av-pl) id)) "p1"
+                     (or (= (:home_player2 av-pl) id) (= (:away_player2 av-pl) id)) "p2")
+            ct-key (keyword (str court player))
+            id-key (keyword (str (:id av-pl)))]
+        (if-not (nil? player)
+          (do
+            (swap! app-state assoc-in [ct-key :selected :current] (id-key (:players (ct-key @app-state))))
+            (let [cur (om/ref-cursor (ct-key (om/root-cursor app-state)))]
+              (player-changed (ct-key @om-owner#) cur (name id-key) (name ct-key)))))))))
+
+(defn player-list
+  [data owner court-key]
+  (swap! om-owner# assoc (keyword court-key) owner)
+  (reify
+    om/IInitState
+    (init-state [_]
+      {_ (conj data)})
+    om/IRenderState
+    (render-state [this state]
+      (println "Rendering list " court-key)
+      (let [xs (om/ref-cursor ((keyword court-key) (om/root-cursor app-state)))
+            players (vals (:players @xs))]
+        (dom/div nil
+                 (dom/select #js {:id       court-key
+                                  :name     court-key
+                                  :onChange #(player-changed-event % owner xs)
+                                  :value    (:id (:current (:selected @xs)))}
+                             (om/build-all #(player-option %1 %2 court-key)
+                                           (sort-by :last players)
+                                           {:init-state xs})))))))
+
+(defn load-list [list-id]
+  (om/root #(player-list %1 %2 list-id) nil
+           {:target (. js/document (getElementById (str (name list-id) "-div")))}))
+
 
 (defn ^:export set_lineup
   "load the set lineup form"
@@ -275,15 +429,17 @@
     doing this rather than writing an available players method")
     (let [response (<! (http/get (str "match-availability/" match-id)))
           body (:body response)
-          rowCt (count body)]
-      (if (> rowCt 0)
-        (let [first-opt (list (str "<option value='0'></option>"))
-              options (reduce #(add-player-to-select-list %1 %2) first-opt body)]
-          (ef/at "select" (ef/content (s/join (reverse options))))
-          (init-player-options body)
-          (init-forfeit-btns match-id)))))
-  (avail-setup match-id)
-  (set-match-info match-id "ml"))
+          rowCt (count body)
+          players (reduce #(get-players %1 %2) {:0 {:last "  -- none --  " :first "" :id 0}} body)]
+      (load-state players)
+      (doall (map load-list courts))
+      (load-selected-state body)
+      (println "init statexxxxx: " app-state)
+      ;(init-player-options body)
+      )
+    (init-forfeit-btns match-id)
+    (avail-setup match-id)
+    (set-match-info match-id "ml")))
 
 ;(def select-ids (list "c1-p1" "c1-p2" "c2-p1" "c2-p2" "c3-p1" "c3-p2" "c4-p1" "c4-p2"))
 ;
