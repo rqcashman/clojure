@@ -347,9 +347,8 @@
   (doseq [cur-key (remove #(= list-id %) courts)]
     (println "processing list " cur-key " list id " list-id " player id " player-id)
     (let [cur (om/ref-cursor ((keyword cur-key) (om/root-cursor app-state)))]
-      (println "update player result " (update-player-list cur @data))
+      (println "update player resultzz " (update-player-list cur @data))
       (om/transact! cur #(update-player-list cur @data))
-      (om/set-state! owner cur)
       (om/set-state! ((keyword cur-key) @om-owner#) cur)))
   (println "state: " app-state))
 
@@ -412,7 +411,7 @@
                                   :onChange #(player-changed-event % owner xs)
                                   :value    (:id (:current (:selected @xs)))}
                              (om/build-all #(player-option %1 %2 court-key)
-                                           (sort-by :last players)
+                                           (sort-by (juxt :last :first) players)
                                            {:init-state xs})))))))
 
 (defn load-list [list-id]
