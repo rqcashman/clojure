@@ -315,6 +315,8 @@
 (def blank-player-id "0")
 
 (defn update-player-list
+  "Updates the state of a ref cursor based on the change of another ref cursor.
+   Used to add/remove players from the other court lists when a player is selected."
   [tgt-data src-data]
   (println "==================================================")
   (println "target " tgt-data)
@@ -322,24 +324,18 @@
   (if (pos? (count (:previous (:selected src-data))))
     (let [prev-id (keyword (str (:id (:previous (:selected src-data)))))
           curr-id (keyword (str (:id (:current (:selected src-data)))))]
-      (println "prev exists pid: " curr-id)
       (if (= (name curr-id) blank-player-id)
-        (do
-          (println "assoc only currid is zero")
-          (assoc-in tgt-data [:players prev-id] (:previous (:selected src-data))))
-        (do
-          (println "dissoc currid")
+          (assoc-in tgt-data [:players prev-id] (:previous (:selected src-data)))
           (->
             (assoc-in tgt-data [:players prev-id] (:previous (:selected src-data)))
-            (update-in [:players] dissoc curr-id)))))
+            (update-in [:players] dissoc curr-id))))
     (let [curr-id (keyword (str (:id (:current (:selected src-data)))))]
-      (println "prev does not exist pid: " curr-id)
-      (println tgt-data)
       (if (= (name curr-id) blank-player-id)
         tgt-data
         (update-in tgt-data [:players] dissoc curr-id)))))
 
 (defn player-changed
+  "Does the work when a player needs to be set as current.  Called from the onChange event and when the page is loaded"
   [owner data player-id list-id]
   (println "own: " owner " data: " data " pid: " player-id " lid: " list-id)
   (om/transact! data #(update-player data player-id))
@@ -353,13 +349,14 @@
   (println "state: " app-state))
 
 (defn player-changed-event [e owner data]
+  "Process the change event from a list"
   (let [player-id (.. e -target -value)
         list-id (.. e -target -id)]
     (player-changed owner data player-id list-id)))
 
 
 (defn get-players
-  "return a has of the available players"
+  "return a hash of the available players"
   [players av-pl]
   (println av-pl)
   (if (= (:available av-pl) 1)
@@ -367,7 +364,7 @@
     players))
 
 (defn load-state
-  ""
+  "Loads the state.  We reset everything and then load the players from the DB."
   [players]
   (doseq [cur-key courts]
     (swap! app-state assoc-in [(keyword cur-key) :players] {})
@@ -376,7 +373,7 @@
     (swap! app-state assoc-in [(keyword cur-key) :selected :previous] {})))
 
 (defn load-selected-state
-  ""
+  "update the state to reflect which players are assigned to a court in the match"
   [players]
   (doseq [av-pl players]
     (if-not (nil? (:court_number av-pl))

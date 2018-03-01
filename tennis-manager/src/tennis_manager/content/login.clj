@@ -34,7 +34,7 @@
   (if-not (= (s/blank? errorno) true)
     (list [:tr
            [:td "&nbsp;"]
-           [:td [:b "Login error:"]]
+           [:td [:b "Login message:"]]
            [:td [:span {:style "font-weight:bold;color:red"} (:msg ((keyword errorno) am/authentication-error-list))]]
            [:td "&nbsp;"]]
           (layout/empty-row 4))))

@@ -31,7 +31,7 @@
 
 (def auth-errors
   {(keyword LOGIN_SUCCESS)                {:url "/mgr"}
-   (keyword LOGOUT_SUCCESS)               {:url "/login" :msg "Logout successful"}
+   (keyword LOGOUT_SUCCESS)               {:url "/login" :msg "<span style='color:green;font-weight:bold'>Logout successful</span>"}
    (keyword LOGIN_FAILED)                 {:url "/login" :msg "Login failed"}
    (keyword LOGIN_LOCKED)                 {:url "/login" :msg "Account locked"}
    (keyword LOGIN_DISABLED)               {:url "/login" :msg "Account disabled"}
