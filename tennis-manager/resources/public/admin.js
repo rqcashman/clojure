@@ -112,7 +112,7 @@ function dismissAdminStatusForm() {
 
 function processAdminRequest(form_id, uri, title) {
     if ($(form_id).valid()) {
-        tennis_manager.core.db_update_request(form_id, uri, title, "admin");
+        rf_tennis_manager.content_cljs.core.db_update_request(form_id, uri, title, "admin");
         $("#" + admin_current_form_id).css("display", "none");
         $("#admin-status-panel").css("display", "block");
     }
@@ -120,7 +120,7 @@ function processAdminRequest(form_id, uri, title) {
 }
 
 function team_schedule_all() {
-    tennis_manager.core.schedule-all($("#season-id option:selected").val(), $("#team-id option:selected").val());
+    rf_tennis_manager.content_cljs.core.schedule-all($("#season-id option:selected").val(), $("#team-id option:selected").val());
 };
 
 function adminStatusOK(evt) {

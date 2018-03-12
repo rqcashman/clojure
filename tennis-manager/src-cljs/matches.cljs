@@ -2,6 +2,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]]
                    [enfocus.macros :as em])
   (:require [clojure.browser.repl :as repl]
+            [clojure.pprint :as pp]
             [clojure.string :as s]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
@@ -13,6 +14,7 @@
             [om.dom :as dom :include-macros true]))
 
 (enable-console-print!)
+(def blank-player-id "0")
 (def courts ["c1p1" "c1p2" "c2p1" "c2p2" "c3p1" "c3p2" "c4p1" "c4p2"])
 (def om-owner# (atom {}))
 (defonce app-state
@@ -257,6 +259,7 @@
   )
 
 (defn enable-disable-forfeit-buttons
+  "Function name is self documenting"
   [court-number enable-value]
   (go
     (ef/at (str "#c" court-number "-forfeit-none") (ef/set-prop "disabled" enable-value)
@@ -294,11 +297,13 @@
   [match-id]
   (js/change_to_avail_form match-id))
 
+(comment "Replace the listener on the button to go to the availability form to reflect the currently selected match")
 (em/defaction avail-setup [match-id]
               ["#lineuptoavail"] (events/remove-listeners :click)
               ["#lineuptoavail"] (events/listen :click #(lineup-to-availability-form match-id)))
+
 (defn player-option
-  ""
+  "Adds a player option for a list"
   [data owner select-id]
   (reify
     om/IRenderState
@@ -306,47 +311,41 @@
       (let [comma (if (= (:id data) 0) "" ", ")]
         (dom/option #js {:value (:id data) :id (str select-id "-" (:id data))} (str (:last data) comma (:first data)))))))
 
+(defn update-player-list
+  "Updates the state of a ref cursor based on the change of another ref cursor.
+   Used to add/remove players from the other court lists when a player is selected."
+  [tgt-data src-data]
+  (let [prev-id (keyword (str (:id (:previous (:selected src-data)))))
+        curr-id (keyword (str (:id (:current (:selected src-data)))))]
+    (if (pos? (count (:previous (:selected src-data))))
+      (if (= (name curr-id) blank-player-id)
+        (assoc-in tgt-data [:players prev-id] (:previous (:selected src-data)))
+        (->
+          (assoc-in tgt-data [:players prev-id] (:previous (:selected src-data)))
+          (update-in [:players] dissoc curr-id)))
+      (if (= (name curr-id) blank-player-id)
+        tgt-data
+        (update-in tgt-data [:players] dissoc curr-id)))))
+
 (defn update-player
+  "Updates the app-state to reflect the current and previous list selection"
   [data player-id]
   (->
     (assoc-in @data [:selected :previous] (:current (:selected @data)))
     (assoc-in [:selected :current] ((keyword player-id) (:players @data)))))
 
-(def blank-player-id "0")
-
-(defn update-player-list
-  "Updates the state of a ref cursor based on the change of another ref cursor.
-   Used to add/remove players from the other court lists when a player is selected."
-  [tgt-data src-data]
-  (println "==================================================")
-  (println "target " tgt-data)
-  (println "src " src-data)
-  (if (pos? (count (:previous (:selected src-data))))
-    (let [prev-id (keyword (str (:id (:previous (:selected src-data)))))
-          curr-id (keyword (str (:id (:current (:selected src-data)))))]
-      (if (= (name curr-id) blank-player-id)
-          (assoc-in tgt-data [:players prev-id] (:previous (:selected src-data)))
-          (->
-            (assoc-in tgt-data [:players prev-id] (:previous (:selected src-data)))
-            (update-in [:players] dissoc curr-id))))
-    (let [curr-id (keyword (str (:id (:current (:selected src-data)))))]
-      (if (= (name curr-id) blank-player-id)
-        tgt-data
-        (update-in tgt-data [:players] dissoc curr-id)))))
-
 (defn player-changed
   "Does the work when a player needs to be set as current.  Called from the onChange event and when the page is loaded"
   [owner data player-id list-id]
-  (println "own: " owner " data: " data " pid: " player-id " lid: " list-id)
+  ;update state of list to reflect current and previous selections
   (om/transact! data #(update-player data player-id))
   (om/set-state! owner data)
+
+  ;remove current selection and restore previous selection to the other player lists
   (doseq [cur-key (remove #(= list-id %) courts)]
-    (println "processing list " cur-key " list id " list-id " player id " player-id)
     (let [cur (om/ref-cursor ((keyword cur-key) (om/root-cursor app-state)))]
-      (println "update player resultzz " (update-player-list cur @data))
       (om/transact! cur #(update-player-list cur @data))
-      (om/set-state! ((keyword cur-key) @om-owner#) cur)))
-  (println "state: " app-state))
+      (om/set-state! ((keyword cur-key) @om-owner#) cur))))
 
 (defn player-changed-event [e owner data]
   "Process the change event from a list"
@@ -354,14 +353,31 @@
         list-id (.. e -target -id)]
     (player-changed owner data player-id list-id)))
 
+(defn player-list
+  "Get one player list as a React object"
+  [data owner court-key]
+  (swap! om-owner# assoc (keyword court-key) owner)
+  (reify
+    om/IInitState
+    (init-state [_]
+      {_ (conj data)})
+    om/IRenderState
+    (render-state [this state]
+      (let [xs (om/ref-cursor ((keyword court-key) (om/root-cursor app-state)))
+            players (vals (:players @xs))]
+        (dom/div nil
+                 (dom/select #js {:id       court-key
+                                  :name     court-key
+                                  :onChange #(player-changed-event % owner xs)
+                                  :value    (:id (:current (:selected @xs)))}
+                             (om/build-all #(player-option %1 %2 court-key)
+                                           (sort-by (juxt :last :first) players)
+                                           {:init-state xs})))))))
 
-(defn get-players
-  "return a hash of the available players"
-  [players av-pl]
-  (println av-pl)
-  (if (= (:available av-pl) 1)
-    (conj players {(keyword (str (:id av-pl))) {:last (:last_name av-pl) :first (:first_name av-pl) :id (:id av-pl)}})
-    players))
+(defn load-list [list-id]
+  "Loads one player select list"
+  (om/root #(player-list %1 %2 list-id) nil
+           {:target (. js/document (getElementById (str (name list-id) "-div")))}))
 
 (defn load-state
   "Loads the state.  We reset everything and then load the players from the DB."
@@ -390,74 +406,26 @@
             (let [cur (om/ref-cursor (ct-key (om/root-cursor app-state)))]
               (player-changed (ct-key @om-owner#) cur (name id-key) (name ct-key)))))))))
 
-(defn player-list
-  [data owner court-key]
-  (swap! om-owner# assoc (keyword court-key) owner)
-  (reify
-    om/IInitState
-    (init-state [_]
-      {_ (conj data)})
-    om/IRenderState
-    (render-state [this state]
-      (println "Rendering list " court-key)
-      (let [xs (om/ref-cursor ((keyword court-key) (om/root-cursor app-state)))
-            players (vals (:players @xs))]
-        (dom/div nil
-                 (dom/select #js {:id       court-key
-                                  :name     court-key
-                                  :onChange #(player-changed-event % owner xs)
-                                  :value    (:id (:current (:selected @xs)))}
-                             (om/build-all #(player-option %1 %2 court-key)
-                                           (sort-by (juxt :last :first) players)
-                                           {:init-state xs})))))))
-
-(defn load-list [list-id]
-  (om/root #(player-list %1 %2 list-id) nil
-           {:target (. js/document (getElementById (str (name list-id) "-div")))}))
-
+(defn get-players
+  "return a hash of the available players"
+  [players av-pl]
+  (if (= (:available av-pl) 1)
+    (conj players {(keyword (str (:id av-pl))) {:last (:last_name av-pl) :first (:first_name av-pl) :id (:id av-pl)}})
+    players))
 
 (defn ^:export set_lineup
   "load the set lineup form"
   [match-id]
-  (ef/at "option" (ef/remove-node))
+  (comment "calling the match-availability function and will only use players marked as available
+            doing this rather than writing an available players method")
   (go
-    (comment "calling the match-availability function and will only use player marked as available
-    doing this rather than writing an available players method")
     (let [response (<! (http/get (str "match-availability/" match-id)))
           body (:body response)
           rowCt (count body)
           players (reduce #(get-players %1 %2) {:0 {:last "  -- none --  " :first "" :id 0}} body)]
       (load-state players)
       (doall (map load-list courts))
-      (load-selected-state body)
-      (println "init statexxxxx: " app-state)
-      ;(init-player-options body)
-      )
+      (load-selected-state body))
     (init-forfeit-btns match-id)
     (avail-setup match-id)
     (set-match-info match-id "ml")))
-
-;(def select-ids (list "c1-p1" "c1-p2" "c2-p1" "c2-p2" "c3-p1" "c3-p2" "c4-p1" "c4-p2"))
-;
-;(defn ^:export player_selected [selected-val]
-;  (if (> selected-val 0)
-;    (do
-;      (let [form-vals (ef/from "#updatelineup" (ef/read-form))])
-;      false)))
-
-
-;;cannot use as desired until I can figure out how to get a handle to the event
-;(em/defaction change [msg ]
-;              (js/alert msg))
-;
-;(em/defaction setup []
-;              ["input[name*=\"forfeit\"]"] (events/listen-live :click "input" #(change  "clicked" )))
-;
-;(set! (.-onload js/window) setup)
-
-
-
-
-
-
-

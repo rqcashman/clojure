@@ -3,7 +3,7 @@
  */
 
 function team_schedule() {
-    tennis_manager.core.schedule($("#season-list option:selected").val(), $("#team-list option:selected").val());
+    rf_tennis_manager.content_cljs..schedule($("#season-list option:selected").val(), $("#team-list option:selected").val());
 }
 ;
 function show_select_form() {

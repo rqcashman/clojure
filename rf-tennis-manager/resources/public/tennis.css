@@ -1,0 +1,205 @@
+body {
+    margin-top: 30px;
+    margin-right: 50px;
+    margin-bottom: 10px;
+    margin-left: 100px;
+}
+
+thead {
+    text-align: center
+}
+
+hr {
+    border: 1px solid black;
+    width: 90%;
+}
+
+.main-table {
+    border: 2px solid black;
+    width: 90%;
+    visibility: visible;
+    background-color: #e6e6e6;
+}
+
+.div-panel-hide {
+    display: none;
+}
+
+.div-panel-show {
+    display: inline;
+}
+
+.div-panel-call-status {
+    display: inline;
+    position: absolute;
+    top: 200px;
+    left: 30%;
+    width: 40%;
+    height: 30%;
+}
+
+.call-status {
+    background-color: lightyellow;
+    opacity: 0.9;
+}
+
+.table-striped tbody > tr:nth-child(odd) {
+    background-color: #BDC3C7;
+}
+
+.table-striped tbody > tr:nth-child(even) {
+    background-color: #D6DBDF;
+}
+
+.table-bordered tr td {
+    border: 2px solid black;
+}
+
+.hidden-control {
+    display: none;
+}
+
+.tennis-tabs {
+    padding: 0px;
+    margin: 0px;
+    width: 70%;
+    align: center;
+
+}
+
+.ui-tabs, .ui-tabs-panel, .ui-tabs-nav {
+    background: #6c9dc6;
+}
+
+.table-compact tr td {
+    padding: 0px;
+    margin: 0px;
+    background-color: #efefef;
+}
+
+.points {
+    text-align: center;
+}
+
+.panel-heading {
+    font-weight: bold;
+    font-size: 30pt;
+}
+
+.schedule, .roster {
+    margin: auto;
+    width: 70%;
+    visibility: hidden;
+}
+
+.roster {: width 80 %
+}
+
+.roster {
+    visibility: visible;
+}
+
+.main-formx {
+    width: 50%;
+    visibility: visible;
+    background-color: #e6e6e6;
+}
+
+.login-form {
+    width: 30%;
+    outline-style: inset;
+    border: 1px;
+}
+
+.admin-action {
+    width: 100%;
+}
+
+.roster-view {
+    width: 90%;
+}
+
+.schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td, .roster-form tr td, .roster-action tr td, .match-form tr td, .matches-action tr td, .login-form tr td {
+    border-top: none;
+    border-bottom: none;
+    border: none;
+}
+
+.schedule-hdr tr td {
+    border-top: none;
+    border-bottom: none;
+    text-align: left;
+}
+
+.schedule-selected-team {
+    font-weight: bold;
+}
+
+.admin-form, .roster-form, .match-form {
+    visibility: visible;
+    color: #2B4408;
+    width: 50%;
+}
+
+.admin-action, .roster-action, .matches-action {
+    display: none;
+    visibility: visible;
+    width: 45%;
+}
+
+.matches-action {
+    width: 90%;
+}
+
+.roster-action {
+    width: 70%;
+}
+
+.avail-small {
+    width: 70%;
+}
+
+.form-error {
+    color: red;
+}
+
+.form-label {
+    float: right;
+    margin: 0 0 10px 10px;
+}
+
+.test {
+    color: red;
+}
+
+.error {
+    color: red;
+    font-style: italic;
+    margin-left: 10px;
+    #display: block;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.success {
+    color: green;
+    font-style: italic;
+    margin-left: 10px;
+    display: block;
+}
+
+#sr-details-body td:hover, .avail-cursor {
+    cursor: pointer;
+}
+
+.player-avail {
+    color: #006400;
+    font-weight: bold;
+}
+
+.player-inactive {
+    color: #fa8072;
+}
+
