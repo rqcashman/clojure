@@ -37,7 +37,6 @@
     (let [team-id-response (<! (http/get (str "team-info")))
           status-response (<! (http/get (str "team-schedule-status")))]
       (rf/dispatch [::events/team-info (:body team-id-response)])
-      (println "=============== NEW ====================================")
       (reagent/render [main/schedule-form (:body status-response) (:body team-id-response)]
                       (.getElementById js/document "ma_show_schedule"))
       (reagent/render [main/availability-form ]

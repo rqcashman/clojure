@@ -9,7 +9,7 @@
             [cljs.pprint :as pp]
             [enfocus.core :as ef]
             [enfocus.events :as en-events]
-            [rf-tennis-manager.matches-events :as events]
+            [rf-tennis-manager.match-events-set-lineup :as evt-set-lineup]
             [re-frame.core :as rf]
             [rf-tennis-manager.subs :as subs]
             [rf-tennis-manager.db :as db]))
@@ -316,7 +316,7 @@
           rowCt (count body)
           players (reduce #(get-players %1 %2) {:0 {:last "  -- none --  " :first "" :id 0}} body)]
       (sub-test)
-      (rf/dispatch-sync [::events/initialize-player-lists players])
+      (rf/dispatch-sync [::evt-set-lineup/initialize-player-lists players])
       (init-forfeit-btns match-id)
       (avail-setup match-id)
       (set-match-info match-id "ml")
