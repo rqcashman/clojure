@@ -28,11 +28,11 @@
                 [:td (:match_time sched-row)]
                 [:td (if (= team-id home-team-id) (:away_team sched-row) (:home_team sched-row))]
                 [:td (:home_club_name sched-row)]
-                [:td {:style {:text-align "center"}} (if (= team-id home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
-                [:td {:style {:text-align "center"}} (if (= team-id home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
-                [:td {:style {:text-align "center"}} [:span.avail-cursor {:onClick #(re-frame.core/dispatch [avail-func match-id])} (if (:availability_sent sched-row) GREEN-CHECK RED-X)]]
-                [:td {:style {:text-align "center"}} [:span.avail-cursor {:onClick #(re-frame.core/dispatch [send-lineup-func match-id])} (if (:lineup_set sched-row) GREEN-CHECK RED-X)]]
-                [:td {:style {:text-align "center"}} [:span.avail-cursor {:onClick #(re-frame.core/dispatch [::match-events/show-email-lineup-form match-id])} (if (:lineup_sent sched-row) GREEN-CHECK RED-X)]]
+                [:td.text-center (if (= team-id home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
+                [:td.text-center (if (= team-id home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
+                [:td.text-center [:span.avail-cursor {:onClick #(re-frame.core/dispatch [avail-func match-id])} (if (:availability_sent sched-row) GREEN-CHECK RED-X)]]
+                [:td.text-center [:span.avail-cursor {:onClick #(re-frame.core/dispatch [send-lineup-func match-id])} (if (:lineup_set sched-row) GREEN-CHECK RED-X)]]
+                [:td.text-center [:span.avail-cursor {:onClick #(re-frame.core/dispatch [::match-events/show-email-lineup-form match-id])} (if (:lineup_sent sched-row) GREEN-CHECK RED-X)]]
                 ])))
 
 (defn get-team-schedule
@@ -48,7 +48,7 @@
      [:table.main-table.table-sm
       [:tbody
        (layout/empty-row form-span)
-       [:tr [:td {:colSpan form-span :style {:text-align "center"}} [:h4 (:name team-info) " Team Schedule"]]]
+       [:tr [:td.text-center {:colSpan form-span} [:h4 (:name team-info) " Team Schedule"]]]
        (layout/hr-row form-span "90%")
        [:tr
         [:td {:width "5%:"}]
@@ -66,7 +66,6 @@
             [:td "Lineup Set"]
             [:td "Lineup Sent"]]]
           [:tbody#match-sched-body
-           [:tr [:td {:colSpan "9"} "Schedule form"]]
            (get-team-schedule schedule (:team_id team-info))]
           ]]
         [:td {:width "5%:"}]]
@@ -76,22 +75,22 @@
 (defn call-status
   []
   (fn []
-    (let [call-status @(rf/subscribe [::subs/matches_call_status])]
+    (let [call-status @(rf/subscribe [::subs/matches_call_status])
+          cssClass (if (:success? call-status) "success" "form-error")]
       [:div
        [:table.main-table.table-sm.call-status
         [:tbody
          (layout/empty-row form-span)
-         [:tr [:td {:colSpan form-span :style {:text-align "center"}} [:h4#ma-status-title "Getting data"]]]
+         [:tr [:td.text-center {:colSpan form-span} [:h4#ma-status-title "Getting data"]]]
          (layout/hr-row form-span "90%")
          [:tr
           [:td {:width "5%"} (gs/unescapeEntities "&nbsp;")]
           [:td "Status:"]
-          (println "call status " (:message call-status))
-          [:td {:style {:text-align "left"}} (:message call-status)]
+          [:td.text-left {:className cssClass} (:message call-status)]
           [:td {:width "5%"} (gs/unescapeEntities "&nbsp;")]]
          (layout/hr-row form-span "90%")
          (layout/empty-row form-span)
-         [:tr [:td {:colSpan form-span :style {:text-align "center"}}
+         [:tr [:td.text-center {:colSpan form-span}
                [:button#ma-status-btn {:value "ok" :onClick #(re-frame.core/dispatch [])} "OK"]]]
          (layout/empty-row form-span)]]])))
 
@@ -119,15 +118,16 @@
           box-disabled (if (= (:status player) "I") true false)]
       (println "----- write tr " player)
       (conj rows
-            [:tr {:class row-class :id (:id player) :key (:id player)}
-             [:td {:style {:text-align "left"}} (:last_name player) ", " (:first_name player)]
-             [:td {:style {:text-align "center"}}
-              ; [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name (str "pl-av-" (:id player)) :onClick "swapClass(this)"}]]
-              [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name (str "pl-av-" (:id player)) :onChange  #(re-frame.core/dispatch [::match-events/swap-player-class match-id])}]]
-             [:td {:style {:text-align "center"}} player_response]
-             [:td {:style {:text-align "center"}} sent_flag]
-             [:td (if (= (:response_date player) nil) "" (:response_date player))]
-             [:td {:style {:text-align "center"}} long-status]]))
+            (let [cb-id (str "pl-av-" (:id player))
+                  player-id (:id player)]
+              [:tr {:class row-class :id player-id :key player-id}
+               [:td.text-left (:last_name player) ", " (:first_name player)]
+               [:td.text-center
+                [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name cb-id :id cb-id :onChange #((re-frame.core/dispatch [::match-events/swap-player-class cb-id player-id]))}]]
+               [:td.text-center player_response]
+               [:td.text-center sent_flag]
+               [:td (if (= (:response_date player) nil) "" (:response_date player))]
+               [:td.text-center long-status]])))
     rows))
 
 (defn get-player-rows
@@ -147,59 +147,88 @@
          [:tbody
           (layout/empty-row form-span)
           (let [team-info @(rf/subscribe [::subs/team-info])]
-            [:tr [:td {:colSpan form-span :style {:text-align "center"}} [:h4 title " for " (:name team-info)]]])
+            [:tr [:td.text-center {:colSpan form-span} [:h4 title " for " (:name team-info)]]])
           (layout/hr-row form-span "90%")
           [:tr
            [:td {:width "5%"} (gs/unescapeEntities "&nbsp;")]
-           [:td {:colSpan 2 :style {:text-align "center"}}
+           [:td.text-center {:colSpan 2}
             [:table.main-table.table-sm.table-compact
              (let [match @(rf/subscribe [::subs/match-info])]
                [:tbody
                 [:tr
                  [:td {:style {:width "1%"}} (gs/unescapeEntities "&nbsp;")]
-                 [:td {:style {:width "18%" :text-align "left"}} [:span.bold-text "Match Date:"]]
-                 [:td {:colSpan 2 :style {:text-align "left"}} [:span#pa_match_date (:match_date match)]]]
+                 [:td.text-left {:style {:width "18%"}} [:span.bold-text "Match Date:"]]
+                 [:td.text-left {:colSpan 2} [:span#pa_match_date (:match_date match)]]]
                 [:tr
                  [:td]
-                 [:td {:style {:text-align "left"}} [:span.bold-text "Match Time:"]]
-                 [:td {:colSpan 2 :style {:text-align "left"}} [:span#pa_match_time (:match_time match)]]]
+                 [:td.text-left [:span.bold-text "Match Time:"]]
+                 [:td.text-left {:colSpan 2} [:span#pa_match_time (:match_time match)]]]
                 [:tr
                  [:td]
-                 [:td {:style {:text-align "left"}} [:span.bold-text "Location:"]]
-                 [:td {:colSpan 2 :style {:text-align "left"}} [:span#pa_match_location (:club_name match)]]]])]]
+                 [:td.text-left [:span.bold-text "Location:"]]
+                 [:td.text-left {:colSpan 2} [:span#pa_match_location (:club_name match)]]]])]]
            [:td {:width "5%"} (gs/unescapeEntities "&nbsp;")]]
           (layout/hr-row form-span "90%")
           [:tr
            [:td {:width "5%"} (gs/unescapeEntities "&nbsp;")]
-           [:td {:colSpan 2 :style {:text-align "center"}}
+           [:td.text-center {:colSpan 2}
             [:table.main-table.table-sm
              [:thead.table-inverse
               [:tr
-               [:th {:style {:text-align "left"}} "Player name"]
-               [:th {:style {:text-align "center"}} "Available"]
-               [:th {:style {:text-align "center"}} "Email Response"]
-               [:th {:style {:text-align "center"}} "Email Sent"]
-               [:th {:style {:text-align "left"}} "Email Response Time"]
-               [:th {:style {:text-align "center"}} "Status"]]]
+               [:th.text-left "Player name"]
+               [:th.text-center "Available"]
+               [:th.text-center "Email Response"]
+               [:th.text-center "Email Sent"]
+               [:th.text-left "Email Response Time"]
+               [:th.text-center "Status"]]]
              [:tbody
               (let [roster @(rf/subscribe [::subs/roster])]
                 (get-player-rows roster))]]]
            [:td {:width "5%"} (gs/unescapeEntities "&nbsp;")]]
           (layout/hr-row form-span "90%")
           (layout/empty-row form-span)
-          [:tr [:td {:colSpan form-span :style {:text-align "center"}}
+          [:tr [:td.text-center {:colSpan form-span}
                 [:table {:style {:width "90%"}}
                  [:tbody
                   [:tr {:style {:align-items "center"}}
                    [:td {:style {:width "50%"}} (gs/unescapeEntities "&nbsp;")]
                    [:td
-                    ; [:button {:type "button" :onClick (str "return processMatchRequest('#updateavailability', '/update-availability', '" title "')")} title]]
-                    [:button {:type "button" :style {:white-space "nowrap"}} title]]
+                    [:button {:type "button" :onClick #((re-frame.core/dispatch [::match-events/update-match-availability])) :style {:white-space "nowrap"}} title]]
                    [:td
-                    ;[:button {:type "button" :onXlick "change_match_form('show-schedule');"} "Return to Schedule"]]
-                    [:button {:type "button" :style {:white-space "nowrap"}} "Return to Schedule"]]
+                    [:button {:type "button" :onClick #(re-frame.core/dispatch [::match-events/show-schedule]) :style {:white-space "nowrap"}} "Return to Schedule"]]
                    [:td {:style {:width "50%"}} (gs/unescapeEntities "&nbsp;")]]]]]]
           [:tr.hidden-control
-           [:td {:colSpan form-span :style {:text-align "center"}}
-            [:input.hidden-control {:id "pa_match_id" :name "match_id"}]]]
+           [:td.text-center {:colSpan form-span}
+            (let [match-info @(rf/subscribe [::subs/match-info])
+                  match-id (if (:match_id match-info) (:match_id match-info) "-1")]
+              [:input.hidden-control {:id "pa_match_id" :name "match_id" :value match-id :read-only true}])
+            ]]
           (layout/empty-row form-span)]]]])))
+
+(defn availability-email-form
+  "docstring"
+  []
+  (fn []
+    (println "adding availability-email-form")
+    (let [title "Update Availability"]
+      [:div]
+      )))
+
+(defn lineup-email-form
+  "docstring"
+  []
+  (fn []
+    (println "adding lineup-email-form")
+    (let [title "Update Availability"]
+      [:div]
+      )))
+
+(defn set-lineup-form
+  "docstring"
+  []
+  (fn []
+    (println "adding set-lineup-form")
+    (let [title "Update Availability"]
+      [:div]
+      )))
+

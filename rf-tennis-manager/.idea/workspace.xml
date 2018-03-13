@@ -14,11 +14,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="tennis.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/public/tennis.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2381">
+              <caret line="40" column="22" lean-forward="false" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="matches_main.cljs" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches_main.cljs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="149">
-              <caret line="125" column="128" lean-forward="true" selection-start-line="125" selection-start-column="128" selection-end-line="125" selection-end-column="128" />
+            <state relative-caret-position="183">
+              <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -27,18 +37,8 @@
       <file leaf-file-name="matches_events.cljs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches_events.cljs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="412">
-              <caret line="118" column="0" lean-forward="true" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="subs.cljs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/subs.cljs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="49" column="14" lean-forward="true" selection-start-line="49" selection-start-column="14" selection-end-line="49" selection-end-column="14" />
+            <state relative-caret-position="191">
+              <caret line="179" column="83" lean-forward="true" selection-start-line="179" selection-start-column="83" selection-end-line="179" selection-end-column="83" />
               <folding />
             </state>
           </provider>
@@ -55,36 +55,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>subs</find>
-      <find>test</find>
-      <find>unes</find>
-      <find>reg-sub</find>
-      <find>status of</find>
-      <find>nbsp</find>
-      <find>&quot;&amp;nbsp;&quot;</find>
-      <find>align</find>
-      <find>:align &quot;left</find>
-      <find>&quot;left&quot;}&quot;</find>
-      <find>team-name</find>
-      <find>subscr</find>
-      <find>subscribe</find>
-      <find>s/unescapeEntities</find>
-      <find>println</find>
-      <find>{:align &quot;center&quot;}</find>
-      <find>reg</find>
-      <find>now</find>
-      <find>nowrap</find>
-      <find>doseq</find>
-      <find>updateavailability</find>
-      <find>schedule-form</find>
-      <find>schedule-hdr</find>
-      <find>avail-small</find>
-      <find>table</find>
-      <find>class</find>
-      <find>main-for</find>
-      <find>onclick</find>
       <find>team</find>
+      <find>processMatchRequest</find>
       <find>onClic</find>
+      <find>available</find>
+      <find>swap</find>
+      <find>ma_send_availability_email</find>
+      <find>court-player-key</find>
+      <find>ma_send_availability_email</find>
+      <find>ma_show_schedul</find>
+      <find>gete</find>
+      <find>aga</find>
+      <find>onCh</find>
+      <find>update-avail</find>
+      <find>update</find>
+      <find>ef/f</find>
+      <find>as ef</find>
+      <find>hiding</find>
+      <find>::call-update-availability</find>
+      <find>updateava</find>
+      <find>processmatchrequ</find>
+      <find>db_update_request</find>
+      <find>ef/</find>
+      <find>/post</find>
+      <find>updateavailability</find>
+      <find>::update-availability-call-success</find>
+      <find>swa[</find>
+      <find>error</find>
+      <find>call-status</find>
+      <find>text-al</find>
+      <find>schedule form</find>
     </findStrings>
     <replaceStrings>
       <replace>[rf-tennis-manager</replace>
@@ -133,7 +133,6 @@
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/data/communication_data_handler.clj" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/data/crypto.clj" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/data/player_data_handler.clj" />
-        <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/data/schedule_data_handler.clj" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/data/season_data_handler.clj" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/data/system_info.clj" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/processors/send_email_processor.clj" />
@@ -168,9 +167,10 @@
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/content/matches.clj" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/views_common.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs" />
-        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/core.cljs" />
-        <option value="$PROJECT_DIR$/resources/public/tennis.css" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/subs.cljs" />
+        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/core.cljs" />
+        <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/data/schedule_data_handler.clj" />
+        <option value="$PROJECT_DIR$/resources/public/tennis.css" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches_events.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches_main.cljs" />
       </list>
@@ -183,10 +183,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="221" />
-    <option name="y" value="-847" />
-    <option name="width" value="1920" />
-    <option name="height" value="1040" />
+    <option name="x" value="-8" />
+    <option name="y" value="-1088" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -253,22 +253,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="clj" type="462c0819:PsiDirectoryNode" />
               <item name="rf_tennis_manager" type="462c0819:PsiDirectoryNode" />
-              <item name="content" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rf-tennis-manager" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="clj" type="462c0819:PsiDirectoryNode" />
-              <item name="rf_tennis_manager" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rf-tennis-manager" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="clj" type="462c0819:PsiDirectoryNode" />
-              <item name="rf_tennis_manager" type="462c0819:PsiDirectoryNode" />
               <item name="processors" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -305,6 +289,24 @@
               <item name="Leiningen: cljs-http:0.1.43" type="70bed36:NamedLibraryElementNode" />
               <item name="cljs-http-0.1.43.jar" type="462c0819:PsiDirectoryNode" />
               <item name="cljs_http" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Leiningen: enfocus:2.1.1" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Leiningen: enfocus:2.1.1" type="70bed36:NamedLibraryElementNode" />
+              <item name="enfocus-2.1.1.jar" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Leiningen: enfocus:2.1.1" type="70bed36:NamedLibraryElementNode" />
+              <item name="enfocus-2.1.1.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="enfocus" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
@@ -385,6 +387,32 @@
               <item name="Leiningen: reagent:0.7.0" type="70bed36:NamedLibraryElementNode" />
               <item name="reagent-0.7.0.jar" type="462c0819:PsiDirectoryNode" />
               <item name="reagent" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Leiningen: ring/ring-devel:1.4.0" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Leiningen: ring/ring-devel:1.4.0" type="70bed36:NamedLibraryElementNode" />
+              <item name="ring-devel-1.4.0.jar" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Leiningen: ring/ring-devel:1.4.0" type="70bed36:NamedLibraryElementNode" />
+              <item name="ring-devel-1.4.0.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="ring" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Leiningen: ring/ring-devel:1.4.0" type="70bed36:NamedLibraryElementNode" />
+              <item name="ring-devel-1.4.0.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="ring" type="462c0819:PsiDirectoryNode" />
+              <item name="middleware" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -527,7 +555,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="201840000" />
+    <option name="totallyTimeSpent" value="226366000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-1088" width="1936" height="1056" extended-state="6" />
@@ -640,38 +668,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/ring/ring-core/1.4.0/ring-core-1.4.0.jar!/ring/util/response.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="273" column="6" lean-forward="false" selection-start-line="273" selection-start-column="6" selection-end-line="273" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/css/tennis.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="23" lean-forward="false" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/re-frame/re-frame/0.10.5/re-frame-0.10.5.jar!/re_frame/events.cljc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="4" lean-forward="false" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/js/compiled/out/rf_tennis_manager/events.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="23" column="86" lean-forward="true" selection-start-line="23" selection-start-column="64" selection-end-line="23" selection-end-column="86" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../rf-tennis-manager - Copy (2)/src/clj/rf_tennis_manager/content/matches.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-51">
@@ -692,14 +688,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
           <caret line="857" column="15" lean-forward="false" selection-start-line="857" selection-start-column="15" selection-end-line="857" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/tennismgr.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="66" column="24" lean-forward="false" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
           <folding />
         </state>
       </provider>
@@ -808,14 +796,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/cljs-http/cljs-http/0.1.43/cljs-http-0.1.43.jar!/cljs_http/client.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="297" column="15" lean-forward="false" selection-start-line="297" selection-start-column="15" selection-end-line="297" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/cljs-http/cljs-http/0.1.43/cljs-http-0.1.43.jar!/cljs_http/core.cljs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="354">
@@ -848,22 +828,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/clojure/clojurescript/1.9.946/clojurescript-1.9.946.jar!/cljs/core.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="8650" column="6" lean-forward="false" selection-start-line="8650" selection-start-column="6" selection-end-line="8650" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/re-frame/re-frame/0.10.5/re-frame-0.10.5.jar!/re_frame/core.cljc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="39" column="30" lean-forward="false" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/re-frame/re-frame/0.10.5/re-frame-0.10.5.jar!/re_frame/router.cljc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-115">
@@ -872,42 +836,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/processors/service_processor.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="266" column="23" lean-forward="false" selection-start-line="266" selection-start-column="23" selection-end-line="266" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/data/schedule_data_handler.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="39" column="6" lean-forward="false" selection-start-line="39" selection-start-column="6" selection-end-line="39" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/content/tabs.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="58" lean-forward="false" selection-start-line="15" selection-start-column="58" selection-end-line="15" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="72" column="24" lean-forward="true" selection-start-line="72" selection-start-column="24" selection-end-line="72" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/handler.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="69" column="86" lean-forward="true" selection-start-line="69" selection-start-column="86" selection-end-line="69" selection-end-column="86" />
           <folding />
         </state>
       </provider>
@@ -924,14 +856,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
           <caret line="21" column="40" lean-forward="true" selection-start-line="21" selection-start-column="40" selection-end-line="21" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/core.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="17" column="5" lean-forward="false" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -960,14 +884,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/clojure/clojurescript/1.9.946/clojurescript-1.9.946.jar!/cljs/core.cljc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="2400" column="15" lean-forward="false" selection-start-line="2400" selection-start-column="15" selection-end-line="2400" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/content/matches_orig.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -984,14 +900,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/matches.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="49" lean-forward="true" selection-start-line="15" selection-start-column="49" selection-end-line="15" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/public/tennis-orig.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1000,50 +908,170 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/clojure/clojurescript/1.9.946/clojurescript-1.9.946.jar!/cljs/core.cljc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="1364" column="15" lean-forward="false" selection-start-line="1364" selection-start-column="15" selection-end-line="1364" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/content/matches.clj">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="325" column="30" lean-forward="true" selection-start-line="325" selection-start-column="10" selection-end-line="325" selection-end-column="30" />
+        <state relative-caret-position="209">
+          <caret line="321" column="27" lean-forward="false" selection-start-line="321" selection-start-column="10" selection-end-line="321" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/core.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="54" column="0" lean-forward="true" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="72" column="24" lean-forward="true" selection-start-line="72" selection-start-column="24" selection-end-line="72" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches.cljs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3663">
-          <caret line="52" column="23" lean-forward="false" selection-start-line="52" selection-start-column="18" selection-end-line="52" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/tennis.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="16" column="13" lean-forward="true" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        <state relative-caret-position="209">
+          <caret line="272" column="37" lean-forward="true" selection-start-line="272" selection-start-column="37" selection-end-line="272" selection-end-column="37" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/subs.cljs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="49" column="14" lean-forward="true" selection-start-line="49" selection-start-column="14" selection-end-line="49" selection-end-column="14" />
+        <state relative-caret-position="328">
+          <caret line="52" column="40" lean-forward="true" selection-start-line="52" selection-start-column="40" selection-end-line="52" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/re-frame/re-frame/0.10.5/re-frame-0.10.5.jar!/re_frame/interceptor.cljc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="108" column="6" lean-forward="false" selection-start-line="108" selection-start-column="6" selection-end-line="108" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/re-frame/re-frame/0.10.5/re-frame-0.10.5.jar!/re_frame/core.cljc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="146" column="34" lean-forward="false" selection-start-line="146" selection-start-column="34" selection-end-line="146" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/processors/service_processor.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="130" column="53" lean-forward="true" selection-start-line="130" selection-start-column="53" selection-end-line="130" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/data/schedule_data_handler.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/enfocus/enfocus/2.1.1/enfocus-2.1.1.jar!/enfocus/core.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="606" column="42" lean-forward="true" selection-start-line="606" selection-start-column="42" selection-end-line="606" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/matches.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="76" column="52" lean-forward="false" selection-start-line="76" selection-start-column="35" selection-end-line="76" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/roster.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="98" column="52" lean-forward="false" selection-start-line="98" selection-start-column="35" selection-end-line="98" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/tennismgr.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="117" column="31" lean-forward="false" selection-start-line="117" selection-start-column="31" selection-end-line="117" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/clojure/clojurescript/1.9.946/clojurescript-1.9.946.jar!/cljs/core.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="8731" column="6" lean-forward="false" selection-start-line="8731" selection-start-column="6" selection-end-line="8731" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/cljs-http/cljs-http/0.1.43/cljs-http-0.1.43.jar!/cljs_http/client.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1602">
+          <caret line="342" column="16" lean-forward="false" selection-start-line="342" selection-start-column="16" selection-end-line="342" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ring/ring-devel/1.4.0/ring-devel-1.4.0.jar!/ring/middleware/reload.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/handler.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="81" column="38" lean-forward="true" selection-start-line="81" selection-start-column="19" selection-end-line="81" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/tennis.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2381">
+          <caret line="40" column="22" lean-forward="false" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches_events.cljs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="412">
-          <caret line="118" column="0" lean-forward="true" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
+        <state relative-caret-position="191">
+          <caret line="179" column="83" lean-forward="true" selection-start-line="179" selection-start-column="83" selection-end-line="179" selection-end-column="83" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches_main.cljs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="125" column="128" lean-forward="true" selection-start-line="125" selection-start-column="128" selection-end-line="125" selection-end-column="128" />
+        <state relative-caret-position="183">
+          <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
           <folding />
         </state>
       </provider>

@@ -15,7 +15,7 @@
   "docstring"
   [match-id]
   (-> (j/query sys/db-cred
-               [(str "select DATE_FORMAT(s.match_date,'%M %D, %Y') as match_date,DATE_FORMAT(s.match_date,'%h:%i %p') as match_time"
+               [(str "select s.match_id, DATE_FORMAT(s.match_date,'%M %D, %Y') as match_date,DATE_FORMAT(s.match_date,'%h:%i %p') as match_time"
                      " ,cl.name as club_name, cl.address, cl.city, cl.state, cl.zip_code, cl.phone_number, s.home_team_id, s.away_team_id"
                      " from schedule s"
                      " join team t on t.id = s.home_team_id"
