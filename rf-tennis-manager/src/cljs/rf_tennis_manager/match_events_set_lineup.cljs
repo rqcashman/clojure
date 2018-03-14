@@ -59,12 +59,14 @@
   ::show-set-lineup-form
   [(rf/inject-cofx ::evt-common/get-element "ma_set_lineup") (rf/inject-cofx ::evt-common/get-element "ma_call_status")]
   (fn [cofx [_ match-id]]
-    (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] true)
-                     (assoc-in [:matches :call-status :message] "Processing...")
-                     (assoc-in [:matches :selected-match-id] match-id))]
-      (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
-      {::evt-common/get-match-info {:method     :get
-                                    :url        (str "http://localhost:3000/match-info/" match-id)
-                                    :on-success [::email-avail-form]
-                                    :on-fail    [::email-avail-get-data-failed]}
-       :db                         upd-db})))
+    (println "::show-set-lineup-form")
+    ;(let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] true)
+    ;                 (assoc-in [:matches :call-status :message] "Processing...")
+    ;                 (assoc-in [:matches :selected-match-id] match-id))]
+    ;  (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
+    ;  {::evt-common/get-match-info {:method     :get
+    ;                                :url        (str "http://localhost:3000/match-info/" match-id)
+    ;                                :on-success [::email-avail-form]
+    ;                                :on-fail    [::email-avail-get-data-failed]}
+    ;   :db                         upd-db})
+  ))

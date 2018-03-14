@@ -300,9 +300,9 @@
               [:td "Player 1"]
               [:td "Player 2"]]]
             [:tbody#email-lineup-body
-            ;TODO ADD SUBSCRIPTION TO GET LINEUP
-            (layout/empty-row 4)]]]
-           [:td {:style {:width "5%:"}}]]
+             ;TODO ADD SUBSCRIPTION TO GET LINEUP
+             (layout/empty-row 4)]]]
+          [:td {:style {:width "5%:"}}]]
          (layout/empty-row form-span)
          (add-form-control "Message:" {:id "li_message" :name "message" :cols 45 :maxLength 2000 :rows 7 :type "text-area"} "Please arrive 10 to 15 minutes before the match starts.")
          (add-form-control "Signature:" {:id "li_signature" :name "signature" :cols 45 :maxLength 200 :rows 3 :type "text-area"} "Rick Cashman\n513.227.9278")
@@ -328,97 +328,91 @@
            ]]
          (layout/empty-row form-span)]]])))
 
-;
-;(defn add-match-select-controls
-;  []
-;  (fn []
-;    (let [player-1 (str "c" court "p1-div")
-;          player-2 (str "c" court "p2-div")
-;          btn-grp (str "c" court "-forfeit-grp")
-;          no-forfeit (str "c" court "-forfeit-none")
-;          team-forfeit (str "c" court "-forfeit")
-;          opp-forfeit (str "c" court "-forfeit-opp")
-;          btn-disabled (if (= court 4) false true)]
-;      (conj list
-;            [:tr {:key (str "c" court "-line-up-row")}
-;             [:td [:span {:style "font-weight:bold"} (str "Court " court)]]
-;             [:td [:div {:id player-1}]]
-;             [:td [:div {:id player-2}]]
-;             [:td
-;              [:fieldset {:id btn-grp}
-;               (gs/unescapeEntities "&nbsp;")
-;               [:input {:type "radio" :value "0" :id no-forfeit :name btn-grp :disabled btn-disabled :checked true :onClick #(re-frame.core/dispatch [::evt-set-lineup/update-forfeit-btns no-forfeit 0])}
-;                (gs/unescapeEntities "&nbsp;") "None"] [:br]
-;               (gs/unescapeEntities "&nbsp;")
-;               [:input {:type "radio" :value "1" :id team-forfeit :name btn-grp :disabled btn-disabled :onClick #(re-frame.core/dispatch [::evt-set-lineup/update-forfeit-btns team-forfeit 1])}
-;                (gs/unescapeEntities "&nbsp;") team-name] [:br]
-;               (gs/unescapeEntities "&nbsp;")
-;               [:input {:type "radio" :value "2" :id opp-forfeit :name btn-grp :disabled btn-disabled :onClick #(re-frame.core/dispatch [::evt-set-lineup/update-forfeit-btns opp-forfeit 2])}
-;                (gs/unescapeEntities "&nbsp;") "Opponent"] [:br]]]]))))
-;
-;(defn lineup-form
-;  "Sets up the lineup page."
-;  []
-;  [:form#updatelineup.form-horizontal {:method "post" :action "/update-lineup"}
-;   (let [title "Update Match Lineup"]
-;     [:table.table.table-sm
-;      [:tbody
-;       (layout/empty-row form-span)
-;       (let [team-info @(rf/subscribe [::subs/team-info])]
-;         [:tr [:td.text-center {:colSpan form-span} [:h4 title " for " (:name team-info)]]])
-;       (layout/hr-row form-span "90%")
-;       (let [match @(rf/subscribe [::subs/match-info])]
-;         (add-match-info match))
-;       (layout/empty-row form-span)
-;       [:tr
-;        [:td {:style {:width "5%:"}}]
-;        [:td {:colSpan 2}
-;         [:table#match-lineup.table.table-striped.table-sm
-;          [:thead.table-inverse
-;           [:tr.text-left
-;            [:td (gs/unescapeEntities "&nbsp;")]
-;            [:td "Player 1"]
-;            [:td "Player 2"]
-;            [:td "Forfeit"]]]
-;          [:tbody#match-lineup-body]
-;          (layout/empty-row 4)
-;          (let [team-info @(rf/subscribe [::subs/team-info])]
-;            (reduce #(add-match-select-controls %1 %2 (:name team-info)) () (reverse (range 1 5))))
-;          (layout/empty-row 4)]
-;         [:td {:style {:width "5%:"}}]]]
-;       (layout/empty-row form-span)
-;       [:tr [:td {:colSpan form-span :align "center"}
-;             [:table
-;              [:tbody
-;               [:td {:width "30%"} "&nbsp;"]
-;               [:td {:align "right" :nowrap "true"}
-;                [:button {:type "button" :onclick (str "return processMatchRequest('#updatelineup', '/update-lineup', '" title "')")} title]]
-;               [:td {:align "left" :nowrap "true"}
-;                [:button {:type "button" :onclick "change_match_form('show-schedule');"} "Return to Schedule"]]
-;               [:td {:align "left" :nowrap "true"}
-;                [:button#lineuptoavail {:type "button"} "Go to Availability"]]
-;               [:td {:width "30%"} "&nbsp;"]]]]]
-;       [:tr [:td.text-center {:colSpan form-span}
-;             [:table {:style {:width "90%"}}
-;              [:tbody
-;               [:tr
-;                [:td {:style {:width "30%"}} (gs/unescapeEntities "&nbsp;")]
-;                [:td.text-right {:style {:white-space "nowrap"}}
-;                 [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-set-lineup/update-lineup])} title]]
-;                [:td.text-left {:style {:white-space "nowrap"}}
-;                 [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-common/show-schedule])} "Return to Schedule"]]
-;                [:td.text-left {:style {:white-space "nowrap"}}
-;                 [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-common/show-availability])} "Go to Availability"]]
-;                [:td {:style {:width "30%"}} (gs/unescapeEntities "&nbsp;")]]]]]]
-;       [:tr.hidden-control
-;        [:td {:colSpan form-span}
-;         (let [match-info @(rf/subscribe [::subs/match-info])
-;               match-id (if (:match_id match-info) (:match_id match-info) "-1")]
-;           [:input.hidden-control {:id "ml_match_id" :name "match_id" :value match-id :read-only true}])
-;         ]]
-;       (layout/hr-row form-span "90%")]])])))
-;
+
+(defn add-match-select-controls
+  [list court team-name]
+  (let [player-1 (str "c" court "p1-div")
+        player-2 (str "c" court "p2-div")
+        btn-grp (str "c" court "-forfeit-grp")
+        no-forfeit (str "c" court "-forfeit-none")
+        team-forfeit (str "c" court "-forfeit")
+        opp-forfeit (str "c" court "-forfeit-opp")
+        btn-disabled (if (= court 4) false true)]
+    (conj list
+          [:tr {:key (str "c" court "-line-up-row")}
+           [:td [:span {:style {:font-weight "bold"}} (str "Court " court)]]
+           [:td [:div {:id player-1}]]
+           [:td [:div {:id player-2}]]
+           [:td
+            ;[:fieldset {:id btn-grp}
+            ; (gs/unescapeEntities "&nbsp;")
+            ; [:input {:type "radio" :value "0" :id no-forfeit :name btn-grp :disabled btn-disabled :checked true :onClick #(re-frame.core/dispatch [::evt-set-lineup/update-forfeit-btns no-forfeit 0])}
+            ;  (gs/unescapeEntities "&nbsp;") "None"] [:br]
+            ; (gs/unescapeEntities "&nbsp;")
+            ; [:input {:type "radio" :value "1" :id team-forfeit :name btn-grp :disabled btn-disabled :onClick #(re-frame.core/dispatch [::evt-set-lineup/update-forfeit-btns team-forfeit 1])}
+            ;  (gs/unescapeEntities "&nbsp;") team-name] [:br]
+            ; (gs/unescapeEntities "&nbsp;")
+            ; [:input {:type "radio" :value "2" :id opp-forfeit :name btn-grp :disabled btn-disabled :onClick #(re-frame.core/dispatch [::evt-set-lineup/update-forfeit-btns opp-forfeit 2])}
+            ;  (gs/unescapeEntities "&nbsp;") "Opponent"] [:br]]
+            ]])))
+
 (defn set-lineup-form
+  "Sets up the lineup page."
+  []
+  (fn []
+    [:form#updatelineup.form-horizontal {:method "post" :action "/update-lineup"}
+     (let [title "Update Match Lineup"]
+       [:table.table.table-sm
+        [:tbody
+         (layout/empty-row form-span)
+         (let [team-info @(rf/subscribe [::subs/team-info])]
+           [:tr [:td.text-center {:colSpan form-span} [:h4 title " for " (:name team-info)]]])
+         (layout/hr-row form-span "90%")
+         [:tr
+          [:td {:style {:width "5%:"}}]
+          [:td {:colSpan 2}
+           (let [match @(rf/subscribe [::subs/match-info])]
+             (add-match-info match))]
+          [:td {:style {:width "5%:"}}]]
+         (layout/empty-row form-span)
+         [:tr
+          [:td {:style {:width "5%:"}}]
+          [:td {:colSpan 2}
+           [:table#match-lineup.table.table-striped.table-sm
+            [:thead.table-inverse
+             [:tr.text-left
+              [:td (gs/unescapeEntities "&nbsp;")]
+              [:td "Player 1"]
+              [:td "Player 2"]
+              [:td "Forfeit"]]]
+            [:tbody#match-lineup-body
+             (layout/empty-row 4)
+             (let [team-info @(rf/subscribe [::subs/team-info])]
+               (reduce #(add-match-select-controls %1 %2 (:name team-info)) () (reverse (range 1 5))))
+             (layout/empty-row 4)]]]
+          [:td {:style {:width "5%:"}}]]
+         (layout/empty-row form-span)
+         [:tr [:td.text-center {:colSpan form-span}
+               [:table {:style {:width "90%"}}
+                [:tbody
+                 [:tr
+                  [:td {:style {:width "30%"}} (gs/unescapeEntities "&nbsp;")]
+                  [:td.text-right {:style {:white-space "nowrap"}}
+                   [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-set-lineup/update-lineup])} title]]
+                  [:td.text-left {:style {:white-space "nowrap"}}
+                   [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-common/show-schedule])} "Return to Schedule"]]
+                  [:td.text-left {:style {:white-space "nowrap"}}
+                   [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-common/show-availability])} "Go to Availability"]]
+                  [:td {:style {:width "30%"}} (gs/unescapeEntities "&nbsp;")]]]]]]
+         [:tr.hidden-control
+          [:td {:colSpan form-span}
+           (let [match-info @(rf/subscribe [::subs/match-info])
+                 match-id (if (:match_id match-info) (:match_id match-info) "-1")]
+             [:input.hidden-control {:id "ml_match_id" :name "match_id" :value match-id :read-only true}])
+           ]]
+         (layout/hr-row form-span "90%")]])]))
+
+(defn set-lineup-formx
   []
   (fn []
     (println "set lineup")))
