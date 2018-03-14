@@ -4,6 +4,7 @@
             [re-frame.core :as rf]
             [rf-tennis-manager.db :as db]
             [rf-tennis-manager.events :as events]
+            [rf-tennis-manager.match-events-schedule :as sched]
             [rf-tennis-manager.views :as views]
             [rf-tennis-manager.config :as config]
             [rf-tennis-manager.subs :as subs]
@@ -34,21 +35,20 @@
 
 (defn ^:export init_matches []
   (go
-    (let [team-id-response (<! (http/get (str "team-info")))
-          status-response (<! (http/get (str "team-schedule-status")))]
-      (rf/dispatch [::events/team-info (:body team-id-response)])
-      (reagent/render [main/schedule-form (:body status-response) (:body team-id-response)]
-                      (.getElementById js/document "ma_show_schedule"))
-      (reagent/render [main/availability-form ]
-                      (.getElementById js/document "ma_show_availability"))
-      (reagent/render [main/availability-email-form ]
-                      (.getElementById js/document "ma_send_availability_email"))
-      (reagent/render [main/lineup-email-form ]
-                      (.getElementById js/document "ma_send_lineup_email"))
-      (reagent/render [main/set-lineup-form ]
-                      (.getElementById js/document "ma_set_lineup"))
-      (reagent/render [main/call-status ]
-                      (.getElementById js/document "ma_call_status")))))
+    (reagent/render [main/call-status]
+                    (.getElementById js/document "ma_call_status"))
+    (reagent/render [main/schedule-form]
+                    (.getElementById js/document "ma_show_schedule"))
+    (reagent/render [main/availability-form]
+                    (.getElementById js/document "ma_show_availability"))
+    (reagent/render [main/availability-email-form]
+                    (.getElementById js/document "ma_send_availability_email"))
+    (reagent/render [main/lineup-email-form]
+                    (.getElementById js/document "ma_send_lineup_email"))
+    (reagent/render [main/set-lineup-form]
+                    (.getElementById js/document "ma_set_lineup"))
+    (rf/dispatch [::sched/init-schedule-page])))
+
 
 
 

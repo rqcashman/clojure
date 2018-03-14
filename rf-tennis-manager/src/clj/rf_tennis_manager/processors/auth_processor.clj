@@ -21,11 +21,12 @@
 
 (defn any-access
   [request]
-  (println "in any access ")
+  (println "======= any-access =======")
   true)
 
 (defn authenticated-access
   [request]
+  (println "======= authenticated-access =======")
   (let [session (:session request)
         session-id (:identity session)]
     (if-not (= (s/blank? session-id) true)
@@ -39,6 +40,7 @@
 
 (defn admin-access
   [request]
+  (println "======= admin-access =======")
   (let [auth (authenticated-access request)]
     (if (= auth true)
       (let [session (:session request)
@@ -51,6 +53,7 @@
 
 (defn validate-user-credentials
   [request]
+  (println "======= validate-user-credentials-access =======")
   (let [username (:username (:params request))
         password (:password (:params request))
         user (auth/get-user-with-password username password)]
@@ -65,6 +68,7 @@
 (defn authenticate-user-for-change-password
   "authenticate password for a change passord request"
   [request]
+  (println "======= authenticate-user-for-change-password =======")
   (let [val (validate-user-credentials request)]
     (if (= (.get-value val) am/LOGIN_SUCCESS)
       (error am/CHG_PASSWORD)
@@ -72,6 +76,7 @@
 
 (defn on-error
   [request value]
+  (println "======= on-error =======")
   (let [errMsg (if-not (= (s/blank? value) true) value am/NOT_AUTHORIZED_MSG)]
     {:status  200
      :headers {"Content-Type" "text/html"}
@@ -79,6 +84,7 @@
 
 (defn on-err-from-get
   [request value]
+  (println "=======on-err-from-get =======")
   (let [errMsg (if-not (= (s/blank? value) true) value am/NOT_AUTHORIZED_MSG)]
     {:status  200
      :headers {"Content-Type" "text/plain"}
@@ -87,6 +93,7 @@
 (defn get-qs-parm
   "get a qs parm"
   [query-string elem]
+  (println "======= get-qs-parm =======")
   (if (= (s/blank? (val elem)) false)
     (conj query-string (str (subs (str (key elem)) 1) "=" (codec/url-encode (val elem))))
     query-string))
@@ -94,6 +101,8 @@
 (defn get-redirect-url
   "create redirect URL from the error list hash map"
   [url-hash]
+  (println "====== get-redirect-url =======")
+  (println "get redirect url - input hash: " url-hash)
   (let [qs (s/join "&" (reduce #(get-qs-parm %1 %2) () (-> (dissoc url-hash :url :msg))))]
     (if (= (s/blank? qs) false)
       (str (:url url-hash) "?" qs)
@@ -102,6 +111,7 @@
 (defn logout-redirect
   "Redirect back to login page.  Return a logout sucessful message if the user was logged in"
   [request value]
+  (println "======= logout-redirect =======")
   (let [error ((keyword value) am/authentication-error-list)
         session (:session request)
         redirect-url (get-redirect-url error)
@@ -112,6 +122,7 @@
 (defn login-redirect
   "redirect to next page depending on the outcome of the login attempt"
   [request value]
+  (println "======= login-redirect =======")
   (let [username (:username (:params request))]
     (auth/insert-login-attempt username value)
     (if (= value am/LOGIN_FAILED)
@@ -128,11 +139,13 @@
             (assoc :session updated-session)))
       (let [error ((keyword value) am/authentication-error-list)
             redirect-url (get-redirect-url (conj error {:username username}))]
+        (println "login redirect url: " redirect-url)
         (rr/redirect redirect-url)))))
 
 (defn password-counts
   "count new password characterstics"
   [ct-hash char]
+  (println "======= password-counts =======")
   (cond
     (s/includes? "!@#$%&*_" (str char)) (update-in ct-hash [:special_chars] inc)
     (Character/isDigit char) (update-in ct-hash [:digits] inc)
@@ -144,6 +157,7 @@
 (defn validate-chg-password-input
   "Validates the input from change password.  This happens after validation of current password"
   [req-params]
+  (println "======= validate-chg-password-input =======")
   (let [new-password (:new_password req-params)
         confirm-password (:confirm_password req-params)
         username (:username req-params)
@@ -160,6 +174,7 @@
 (defn redirect-change-password
   "redirect on change password login error"
   [request error]
+  (println "======= redirect-change-password =======")
   (if (and (:session request) (auth/session-valid? (:identity (:session request))))
     (-> ((keyword error) am/authentication-error-list)
         (conj {:username (:username (:params request))})
@@ -174,6 +189,7 @@
 (defn change-password-redirect
   "redirect a change password request as appropriate"
   [request value]
+  (println "====== change-password-redirect =======")
   (cond
     (= value am/CHG_PASSWORD)
     (let [validation-error (validate-chg-password-input (:params request))]
@@ -190,24 +206,40 @@
     :else (redirect-change-password request value)))
 
 (defn user-validation-failed
-  "Redirect if not authenticated"
+  "====================== Redirect if not authenticated =================="
   [request value]
-  (if value
+  (println "====== user-validation-failed =======")
+  (println "user-validation-failed value: " value)
+  (if-not (s/blank? value)
     (let [error ((keyword value) am/authentication-error-list)]
+      (println "error: : " error)
       (if (= value am/SESSION_EXPIRED)
         (let [user (auth/get-user-from-session-id (:identity (:session request)))]
-          (rr/redirect (get-redirect-url (conj error {:username (:email user)})))))
-      (rr/redirect (str (:url error))))))
+          (println "session timeout error -----: " error)
+          (println " url: " (get-redirect-url (conj error {:username (:email user)})))
+          (->
+            (rr/redirect (get-redirect-url (conj error {:username (:email user)})))
+            (assoc :session (dissoc (:session request) :identity))))
+        (do
+          (println "error not session expired")
+          (rr/redirect (str (:url error))))))
+    (do
+      (println "==== user-validation-failed no value ===")
+      (rr/redirect "/login"))))
 
 (defn check-login-status
   "See if a user is already logged in.  It seems backwards but we want to fire the error handler if they are logged in so they get re-directed to the first landing page"
   [request]
   (println "============= LOGIN =================")
+  (println "login status uri: " request)
   (println "login status: " (authenticated-access request))
   (if (= (authenticated-access request) true)
     (do
+      (println "check login status returned true")
       (error am/LOGIN_SUCCESS))
-    true))
+    (do
+      (println "check login status returned false")
+      true)))
 
 (defn check-logout-status
   "See if a user is already logged in."

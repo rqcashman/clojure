@@ -48,32 +48,34 @@
   "docstring"
   [schedule team-info]
   (fn []
-    [:div
-     [:table.main-table.table-sm
-      [:tbody
-       (layout/empty-row form-span)
-       [:tr [:td.text-center {:colSpan form-span} [:h4 (:name team-info) " Team Schedule"]]]
-       (layout/hr-row form-span "90%")
-       [:tr
-        [:td {:width "5%:"}]
-        [:td {:colSpan "2"}
-         [:table#match-sched.table-striped.table-sm.table
-          [:thead.table-inverse
-           [:tr
-            [:td "Date"]
-            [:td "Time"]
-            [:td "Opponent"]
-            [:td "Location"]
-            [:td {:name "team-name"} "Points"]
-            [:td "Opponent Points"]
-            [:td "Availability Email Sent"]
-            [:td "Lineup Set"]
-            [:td "Lineup Sent"]]]
-          [:tbody#match-sched-body
-           (get-team-schedule schedule (:team_id team-info))]
-          ]]
-        [:td {:width "5%:"}]]
-       (layout/hr-row form-span "90%")]]]))
+    (let [team-info @(rf/subscribe [::subs/team-info])
+          schedule @(rf/subscribe [::subs/team-schedule])]
+          [:div
+           [:table.main-table.table-sm
+            [:tbody
+             (layout/empty-row form-span)
+             [:tr [:td.text-center {:colSpan form-span} [:h4 (:name team-info) " Team Schedule"]]]
+             (layout/hr-row form-span "90%")
+             [:tr
+              [:td {:width "5%:"}]
+              [:td {:colSpan "2"}
+               [:table#match-sched.table-striped.table-sm.table
+                [:thead.table-inverse
+                 [:tr
+                  [:td "Date"]
+                  [:td "Time"]
+                  [:td "Opponent"]
+                  [:td "Location"]
+                  [:td {:name "team-name"} "Points"]
+                  [:td "Opponent Points"]
+                  [:td "Availability Email Sent"]
+                  [:td "Lineup Set"]
+                  [:td "Lineup Sent"]]]
+                [:tbody#match-sched-body
+                 (get-team-schedule schedule (:team_id team-info))]
+                ]]
+              [:td {:width "5%:"}]]
+             (layout/hr-row form-span "90%")]]])))
 
 
 (defn call-status
@@ -116,7 +118,8 @@
           long-status (case (:status player)
                         "A" "Active"
                         "S" "Sub"
-                        "I" "Inactive")
+                        "I" "Inactive"
+                        "?")
           row-class (if (= avail "Y") "player-avail" (if (= (:status player) "I") "player-inactive" ""))
           box-checked (if (= avail "Y") true false)
           box-disabled (if (= (:status player) "I") true false)]
@@ -212,12 +215,12 @@
 (defn add-form-control
   [label options init-data]
   [:tr
-   [:td {:width "5%"} "&nbsp;"]
-   [:td :style {:white-space "nowrap"} [:label.control-label {:for (:id options)} label]]
+   [:td {:width "5%"} (gs/unescapeEntities "&nbsp;")]
+   [:td {:style {:white-space "nowrap"}} [:label.control-label {:for (:id options)} label]]
    (case (:type options)
      "text-area" [:td [:textarea options init-data]]
      [:td [:input.form-control-sm options init-data]])
-   [:td {:width "5%"} "&nbsp;"]])
+   [:td {:width "5%"} (gs/unescapeEntities "&nbsp;")]])
 
 (defn availability-email-form
   []
@@ -225,31 +228,33 @@
     (println "adding availability-email-form")
     (let [title "Send Availability Email"]
       [:form#sendavailabilityemail.form-horizontal {:method "post" :action "/send-availability-email"}
-       [:table.table.table-sm
+       [:table.main-table.table-sm
         [:tbody
          (layout/empty-row form-span)
          (let [team-info @(rf/subscribe [::subs/team-info])]
+           (println "availability-email-formxxxxxxxxx team-info: " team-info )
            [:tr [:td.text-center {:colSpan form-span} [:h4 title " for " (:name team-info)]]])
          (layout/hr-row form-span "90%")
          [:tr
-          [:td {:width "50%"} "&nbsp;"]
+          [:td {:width "50%"} (gs/unescapeEntities "&nbsp;")]
           [:td.text-center {:colSpan 2}
            [:table.table.table-sm.table-compact
             (let [match @(rf/subscribe [::subs/match-info])]
+              (println "match: " match)
               [:tbody
                [:tr [:td]
                 [:td [:span.bold-text "Match Date:"]]
-                [:td {:colSpan 2} [:span#av_match_date "January 32"]]]
+                [:td {:colSpan 2} [:span#av_match_date (:match_date match)]]]
                [:tr [:td]
                 [:td [:span.bold-text "Match Time:"]]
-                [:td {:colSpan 2} [:span#av_match_time "55:30 PM"]]]
+                [:td {:colSpan 2} [:span#av_match_time (:match_time match)]]]
                [:tr [:td]
                 [:td [:span.bold-text "Location:"]]
-                [:td {:colSpan 2} [:span#av_match_location "AV Nowhere"]]]])]]
-          [:td {:width "50%"} "&nbsp;"]]
+                [:td {:colSpan 2} [:span#av_match_location (:club_name match)]]]])]]
+          [:td {:width "50%"} (gs/unescapeEntities "&nbsp;")]]
          (layout/hr-row form-span "90%")
-         (add-form-control "Message:" {:id "av_message" :name "message" :cols 45 :maxLength 2000 :rows 7 :type "text-area"} "Let me know if you are available to play.")
-         (add-form-control "Signature:" {:id "av_signature" :name "signature" :cols 45 :maxLength 200 :rows 3 :type "text-area"} "Rick Cashman\n513.227.9278")
+         (add-form-control "Message:" {:id "av_message" :name "message" :cols 45 :maxLength 2000 :rows 7 :type "text-area" :value "Let me know if you are available to play."} "")
+         (add-form-control "Signature:" {:id "av_signature" :name "signature" :cols 45 :maxLength 200 :rows 3 :type "text-area" :value "Rick Cashman\n513.227.9278"} "")
          (add-form-control "Send to Subs:" {:id "av_send_subs" :name "send_subs" :type "checkbox"} nil)
          (layout/hr-row form-span "90%")
          (layout/empty-row form-span)
@@ -257,12 +262,12 @@
                [:table
                 [:tbody
                  [:tr
-                  [:td {:width "50%"} "&nbsp;"]
+                  [:td {:width "50%"} (gs/unescapeEntities "&nbsp;")]
                   [:td.text-right {:style {:white-space "nowrap"}}
-                   [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-avail-email/send-availability-email])} title]]
+                   [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-avail-email/show-email-avail-form])} title]]
                   [:td.text-left {:style {:white-space "nowrap"}}
                    [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-common/show-schedule])} "Return to Schedule"]]
-                  [:td {:width "5%"} "&nbsp;"]]]]]]
+                  [:td {:width "5%"} (gs/unescapeEntities "&nbsp;")]]]]]]
          [:tr.hidden-control
           [:td.text-center {:colSpan form-span}
            (let [match-info @(rf/subscribe [::subs/match-info])

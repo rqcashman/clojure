@@ -22,31 +22,21 @@
     (assoc coeffect (keyword el-id) (.getElementById js/document el-id))))
 
 (rf/reg-event-fx
-  ::team-info
-  [(rf/inject-cofx ::get-element "ma_show_schedule") (rf/inject-cofx ::get-element "ma_call_status") (rf/inject-cofx ::get-element "ma_send_availability_email")]
-  (fn [cofx [_ call-response]]
-    ;guard against the call to get match info failing before this call finishes. Miniscule chance of a race condition.  Will take my chances
-    (if (get-in (:db cofx) [:matches :call-status :success?])
-      (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :message] "Success")
-                       (assoc-in [:matches :call-status :success?] true))]
-        (set! (.-className (:ma_show_schedule cofx)) "div-panel-hide")
-        (set! (.-className (:ma_call_status cofx)) "div-panel-hide")
-        (set! (.-className (:ma_send_availability_email cofx)) "div-panel-show")
-        {:db (assoc-in upd-db [:team-info] (:body call-response))}))))
-
-(rf/reg-event-fx
   ::match-info
   (fn [cofx [_ call-response]]
     {:db (assoc-in (:db cofx) [:matches :match-info] (:body call-response))}))
 
+(defn send-get-request
+  [request]
+  (go
+    (println "================================= send-get-request")
+    (let [status (<! (http/get (:url request)))
+          method (if (:success status) (:on-success request) (:on-fail request))]
+      (rf/dispatch (conj method status)))))
+
 (rf/reg-fx
-  ::get-match_info
-  (fn [request]
-    (go
-      (let [status (<! (http/get (:url request)))
-            method (if (:success status) (:on-success request) (:on-fail request))]
-        (println "get match info url: " (:url request) " request: " request " method: " method " status: " status)
-        (rf/dispatch (conj method status))))))
+  ::get-match-info
+  #(send-get-request %1))
 
 (rf/reg-event-fx
   ::hide-panel
@@ -62,3 +52,5 @@
     (doseq [div-id (::other-divs cofx)]
       (set! (.-className (.getElementById js/document div-id)) "div-panel-hide"))
     nil))
+
+

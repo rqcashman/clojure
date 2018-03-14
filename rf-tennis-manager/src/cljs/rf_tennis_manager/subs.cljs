@@ -47,6 +47,12 @@
     (:team-info db)))
 
 (re-frame/reg-sub
+  ::team-schedule
+  (fn [db]
+    (println "::team-schedule: " db)
+    (get-in db [:matches :schedule])))
+
+(re-frame/reg-sub
   ::match-info
   (fn [db]
     (println "match-info: " db)

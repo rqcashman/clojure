@@ -31,11 +31,7 @@
 
 (rf/reg-fx
   ::get-match_availability
-  (fn [request]
-    (go
-      (let [status (<! (http/get (:url request)))
-            method (if (:success status) (:on-success request) (:on-fail request))]
-        (rf/dispatch (conj method status))))))
+  #(evt-common/send-get-request %1))
 
 
 (rf/reg-event-fx
@@ -105,12 +101,12 @@
                      )]
       (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
       (println "::show-email-avail-form: " match-id)
-      {::get-match_availability    {:method     :get
-                                    :url        (str "http://localhost:3000/match-availability/" match-id)
-                                    :on-success [::match-availability]
-                                    :on-fail    [::availability-call-failed]}
-       ::evt-common/get-match_info {:method     :get
-                                    :url        (str "http://localhost:3000/match-info/" match-id)
-                                    :on-success [::evt-common/match-info]
-                                    :on-fail    [::availability-call-failed]}
-       :db                         upd-db})))
+      {::get-match_availability {:method     :get
+                                            :url        (str "http://localhost:3000/match-availability/" match-id)
+                                            :on-success [::match-availability]
+                                            :on-fail    [::availability-call-failed]}
+       ::evt-common/get-match-info         {:method     :get
+                                            :url        (str "http://localhost:3000/match-info/" match-id)
+                                            :on-success [::evt-common/match-info]
+                                            :on-fail    [::availability-call-failed]}
+       :db                                 upd-db})))

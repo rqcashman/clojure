@@ -39,11 +39,11 @@
         long-status (case (:status row)
                       "A" "Active"
                       "S" "Sub"
-                      "I" "Inactive")
+                      "I" "Inactive"
+                      "?")
         row-class (if (= avail "Y") "player-avail" (if (= (:status row) "I") "player-inactive" ""))]
     ;we want the inactive players at the bottom
     ;so we call this twice with the same result set
-
     (if (or
           (and (not= (:status row) "I") (= active? true))
           (and (= (:status row) "I") (= active? false)))

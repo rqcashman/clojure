@@ -25,11 +25,6 @@
     db/tabbed-db))
 
 (rf/reg-event-fx
-  ::team-info
-  (fn [{:keys [db]} [_ team-info]]
-      {:db (assoc db :team-info team-info)}))
-
-(rf/reg-event-fx
   ::main-btn-click
   (fn [{:keys [db]} [_ msg]]
     (println (count (:players db)))
