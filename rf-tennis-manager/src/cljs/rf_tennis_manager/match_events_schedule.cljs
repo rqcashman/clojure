@@ -44,7 +44,6 @@
                      (assoc-in [:matches :call-status :message] "Processing...")
                      )]
       (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
-      (println "::::init-schedule-page ")
       {::get-team-info {:method     :get
                         :url        (str "http://localhost:3000/team-info")
                         :on-success [::team-info]

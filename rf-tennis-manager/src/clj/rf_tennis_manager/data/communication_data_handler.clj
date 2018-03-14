@@ -5,6 +5,7 @@
             [clojure.string :as s]
             [rf-tennis-manager.data.system-info :as sys]))
 
+;TODO CHANGE THESE TO UPSERTS
 (defn add_player_communication
   "docstring"
   [player_id match_id uuid user]

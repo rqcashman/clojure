@@ -7,7 +7,6 @@
 
 (defn add-player
   [player]
-  (println "add xxx: " player)
   [:option {:value (:id player) :key (:id player)} (str (:last player) ", " (:first player))])
 
 (defn add-test

@@ -1,7 +1,8 @@
 (defproject rf-tennis-manager "0.1.0-SNAPSHOT"
   :dependencies [[buddy/buddy-auth "2.1.0"]
                  [buddy/buddy-core "1.4.0"]
-                 [clj-time "0.13.0"]
+                 [clj-time "0.14.2"]
+                 [com.andrewmcveigh/cljs-time "0.5.2"]
                  [cljs-http "0.1.43"]
                  [cljsjs/bootstrap "3.3.6-1"]
                  [cljsjs/jquery "2.2.4-0"]

@@ -14,11 +14,16 @@ hr {
     width: 90%;
 }
 
-.main-table {
+.main-table, .match-info-table {
     border: 2px solid black;
     width: 90%;
     visibility: visible;
     background-color: #e6e6e6;
+}
+
+.match-info-table tr td {
+    white-space: nowrap;
+    text-align: left;
 }
 
 .div-panel-hide {
@@ -167,8 +172,12 @@ hr {
     width: 70%;
 }
 
-.avail-small {
+.availability-panel {
     width: 70%;
+}
+
+.email-avail-panel {
+    width: 45%;
 }
 
 .form-error {

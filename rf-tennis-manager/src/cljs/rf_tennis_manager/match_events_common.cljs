@@ -1,8 +1,9 @@
 (ns rf-tennis-manager.match-events-common
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [re-frame.core :as rf]
-            [cljs-http.client :as http]))
-(def non-sched-divs ["ma_send_availability_email" "ma_show_availability" "ma_set_lineup" "ma_send_lineup_email" "ma_call_status"])
+            [cljs-http.client :as http]
+            [enfocus.core :as ef]))
+(def non-sched-divs ["ma_send_availability_email" "ma_show_availability" "ma_set_lineup" "ma_send_lineup_email" "ma_call_status" "ma_show_schedule"])
 (rf/reg-cofx
   ::datetime
   (fn coeffect-handler
@@ -29,8 +30,15 @@
 (defn send-get-request
   [request]
   (go
-    (println "================================= send-get-request")
     (let [status (<! (http/get (:url request)))
+          method (if (:success status) (:on-success request) (:on-fail request))]
+      (rf/dispatch (conj method status)))))
+
+(defn send-post-request
+  [request]
+  (go
+    (let [values (ef/from (:form-id request) (ef/read-form))
+          status (<! (http/post (:url request) {:form-params values}))
           method (if (:success status) (:on-success request) (:on-fail request))]
       (rf/dispatch (conj method status)))))
 
@@ -44,13 +52,22 @@
     (set! (.-className (.getElementById js/document panel-id)) "div-panel-hide")
     {:db (:db cofx)}))
 
+
 (rf/reg-event-fx
   ::show-schedule
   [(rf/inject-cofx ::other-divs non-sched-divs) (rf/inject-cofx ::get-element "ma_show_schedule")]
   (fn [cofx [_]]
     (set! (.-className (:ma_show_schedule cofx)) "div-panel-show")
-    (doseq [div-id (::other-divs cofx)]
-      (set! (.-className (.getElementById js/document div-id)) "div-panel-hide"))
+    (doseq [div-id (remove #(= (str (:ma_show_schedule cofx) %)) (::other-divs cofx))]
+        (set! (.-className (.getElementById js/document div-id)) "div-panel-hide"))
     nil))
 
+(rf/reg-event-fx
+  ::show-availability
+  [(rf/inject-cofx ::other-divs non-sched-divs) (rf/inject-cofx ::get-element "ma_show_availability")]
+  (fn [cofx [_]]
+    (set! (.-className (:ma_show_availability cofx)) "div-panel-show")
+    (doseq [div-id (remove #(= (str (:ma_show_schedule cofx) %)) (::other-divs cofx))]
+      (set! (.-className (.getElementById js/document div-id)) "div-panel-hide"))
+    nil))
 

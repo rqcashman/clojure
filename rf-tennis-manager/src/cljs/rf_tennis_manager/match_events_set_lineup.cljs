@@ -1,5 +1,6 @@
 (ns rf-tennis-manager.match-events-set-lineup
   (:require [re-frame.core :as rf]
+            [rf-tennis-manager.match-events-common :as evt-common]
             [clojure.string :as s]))
 (def court-player-key ["c1p1" "c1p2" "c2p1" "c2p2" "c3p1" "c3p2" "c4p1" "c4p2"])
 
@@ -34,7 +35,18 @@
                                ) (:db cofx) (:courts cofx))]
       {:db updated-db})))
 
+(rf/reg-event-fx
+  ::update-forfeit-btns
+  (fn [{:keys [db]} [_ btn-id value]]
+    (println "::update-forfeit-btns id: " btn-id "value: " value)
+    ))
 
+
+(rf/reg-event-fx
+  ::update-lineup
+  (fn [{:keys [db]} [_]]
+    (println "::update-lineup")
+    ))
 
 (rf/reg-event-fx
   ::forfeits
@@ -43,8 +55,16 @@
                      (assoc-in [:matches :call-status :success?] true))]
       {:db upd-db})))
 
-
 (rf/reg-event-fx
   ::show-set-lineup-form
-  (fn [{:keys [db]} [_ match-id]]
-    (println "::ma_show-set-lineup-form: " match-id)))
+  [(rf/inject-cofx ::evt-common/get-element "ma_set_lineup") (rf/inject-cofx ::evt-common/get-element "ma_call_status")]
+  (fn [cofx [_ match-id]]
+    (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] true)
+                     (assoc-in [:matches :call-status :message] "Processing...")
+                     (assoc-in [:matches :selected-match-id] match-id))]
+      (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
+      {::evt-common/get-match-info {:method     :get
+                                    :url        (str "http://localhost:3000/match-info/" match-id)
+                                    :on-success [::email-avail-form]
+                                    :on-fail    [::email-avail-get-data-failed]}
+       :db                         upd-db})))

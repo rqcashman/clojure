@@ -2,8 +2,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [re-frame.core :as rf]
             [rf-tennis-manager.match-events-common :as evt-common]
-            [cljs-http.client :as http]
-            [enfocus.core :as ef]))
+            [cljs-http.client :as http]))
 
 
 (rf/reg-event-fx
@@ -45,17 +44,13 @@
       {::call-update-availability {:method     :post
                                    :url        (str "http://localhost:3000/update-availability")
                                    :on-success [::update-availability-call-success]
+                                   :form-id    "#updateavailability"
                                    :on-fail    [::update-availability-call-failed]}
        :db                        upd-db})))
 
 (rf/reg-fx
   ::call-update-availability
-  (fn [request]
-    (go
-      (let [values (ef/from "#updateavailability" (ef/read-form))
-            status (<! (http/post (:url request) {:form-params values}))
-            method (if (:success status) (:on-success request) (:on-fail request))]
-        (rf/dispatch (conj method status))))))
+  #(evt-common/send-post-request %1))
 
 (rf/reg-event-fx
   ::swap-player-class
@@ -97,16 +92,14 @@
   (fn [cofx [_ match-id]]
     (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
-                     (assoc-in [:matches :selected-match-id] match-id)
-                     )]
+                     (assoc-in [:matches :selected-match-id] match-id))]
       (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
-      (println "::show-email-avail-form: " match-id)
-      {::get-match_availability {:method     :get
-                                            :url        (str "http://localhost:3000/match-availability/" match-id)
-                                            :on-success [::match-availability]
-                                            :on-fail    [::availability-call-failed]}
-       ::evt-common/get-match-info         {:method     :get
-                                            :url        (str "http://localhost:3000/match-info/" match-id)
-                                            :on-success [::evt-common/match-info]
-                                            :on-fail    [::availability-call-failed]}
-       :db                                 upd-db})))
+      {::get-match_availability    {:method     :get
+                                    :url        (str "http://localhost:3000/match-availability/" match-id)
+                                    :on-success [::match-availability]
+                                    :on-fail    [::availability-call-failed]}
+       ::evt-common/get-match-info {:method     :get
+                                    :url        (str "http://localhost:3000/match-info/" match-id)
+                                    :on-success [::evt-common/match-info]
+                                    :on-fail    [::availability-call-failed]}
+       :db                         upd-db})))

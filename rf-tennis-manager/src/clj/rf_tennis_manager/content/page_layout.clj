@@ -9,12 +9,12 @@
   )
 
 (defn application [title js-file react? & content]
+  (println title " is a react page: " react?)
   (html5 {:ng-app "myApp" :lang "en"}
          [:head
           [:title title]
           (if react?
             (do
-              (println title " is a react page")
               (include-js "js/compiled/app.js")
               (include-js (str "js/compiled/out/rf_tennis_manager/tennismgr.js"))
               (include-js (str "js/compiled/out/rf_tennis_manager/roster.js"))

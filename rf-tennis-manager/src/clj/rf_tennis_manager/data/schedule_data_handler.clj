@@ -50,7 +50,7 @@
             left join match_courts mc on mc.match_id = ?
             and (home_player1 = p.id or home_player2 = p.id or away_player1 = p.id or away_player2 = p.id)
             where p.team_id = ?
-            order by p.last_name, p.first_name") match-id match-id match-id (:team_id user)]))
+            order by p.last_name, p.first_name, pc.date_sent desc") match-id match-id match-id (:team_id user)]))
 
 (defn match-forfeits
   "docstring"

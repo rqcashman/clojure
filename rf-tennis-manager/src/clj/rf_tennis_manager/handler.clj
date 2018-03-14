@@ -42,14 +42,16 @@
   (println (slurp (:body (rr/resource-response "index.html" {:root "public"}))))
   (rr/resource-response "index.html" {:root "public"}))
 
+(def USE-REACT true)
+(def NO-REACT false)
 
 (defroutes app-routes
            ;HTML pages
-           (GET "/availability-reply*" {params :params} (layout/application "Availability Response" "" (avail/update_availability (:player-token params) (:available params))))
-           (GET "/chgpassword" {session :session params :params} (layout/application "Change Password" "" (login/login login/CHANGE_PASSWORD_PAGE session params)))
-           (GET "/login*" {session :session params :params} (layout/application "User Login" "" false (login/login login/LOGIN_PAGE session params)))
-           (GET "/logout" {session :session params :params} (layout/application "User Login" "" false (login/login login/LOGIN_PAGE session params)))
-           (GET "/mgr" {session :session request :params} (layout/application "Tennis Manager" "tabs.js" true (tabs/tabs session request)))
+           (GET "/availability-reply*" {params :params} (layout/application "Availability Response" "" NO-REACT (avail/update_availability (:player-token params) (:available params))))
+           (GET "/chgpassword" {session :session params :params} (layout/application "Change Password" "" NO-REACT (login/login login/CHANGE_PASSWORD_PAGE session params)))
+           (GET "/login*" {session :session params :params} (layout/application "User Login" "" NO-REACT (login/login login/LOGIN_PAGE session params)))
+           (GET "/logout" {session :session params :params} (layout/application "User Login" "" NO-REACT (login/login login/LOGIN_PAGE session params)))
+           (GET "/mgr" {session :session request :params} (layout/application "Tennis Manager" "tabs.js" USE-REACT (tabs/tabs session request)))
 
            ;HTML framgments - these are tabs
            (GET "/admin" {session :session} (layout/fragment "admin.js" (admin/admin session)))

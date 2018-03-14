@@ -25,7 +25,7 @@
     <orderEntry type="library" name="Leiningen: buddy/buddy-sign:2.2.0" level="project" />
     <orderEntry type="library" name="Leiningen: cheshire:5.5.0" level="project" />
     <orderEntry type="library" name="Leiningen: clj-stacktrace:0.2.8" level="project" />
-    <orderEntry type="library" name="Leiningen: clj-time:0.13.0" level="project" />
+    <orderEntry type="library" name="Leiningen: clj-time:0.14.2" level="project" />
     <orderEntry type="library" name="Leiningen: cljs-http:0.1.43" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/bootstrap:3.3.6-1" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/create-react-class:15.5.3-0" level="project" />
@@ -36,6 +36,7 @@
     <orderEntry type="library" name="Leiningen: cljsjs/react:15.5.4-0" level="project" />
     <orderEntry type="library" name="Leiningen: clojure-complete:0.2.4" level="project" />
     <orderEntry type="library" name="Leiningen: clout:2.1.2" level="project" />
+    <orderEntry type="library" name="Leiningen: com.andrewmcveigh/cljs-time:0.5.2" level="project" />
     <orderEntry type="library" name="Leiningen: com.cognitect/transit-clj:0.8.300" level="project" />
     <orderEntry type="library" name="Leiningen: com.cognitect/transit-cljs:0.8.239" level="project" />
     <orderEntry type="library" name="Leiningen: com.cognitect/transit-java:0.8.324" level="project" />
