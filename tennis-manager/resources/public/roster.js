@@ -96,7 +96,7 @@ function isNumberKey(evt) {
 
 function processRosterRequest(form_id, uri, title) {
     if ($(form_id).valid()) {
-        rf_tennis_manager.content_cljs..db_update_request(form_id, uri, title, "roster");
+        tennis_manager.core.db_update_request(form_id, uri, title, "roster");
         $("#" + roster_current_form_id).css("display", "none");
         $("#roster-status-panel").css("display", "block");
     }

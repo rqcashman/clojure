@@ -3,29 +3,17 @@
   (:require [re-frame.core :as rf]
             [cljs-http.client :as http]
             [enfocus.core :as ef]))
-(def non-sched-divs ["ma_send_availability_email" "ma_show_availability" "ma_set_lineup" "ma_send_lineup_email" "ma_call_status" "ma_show_schedule"])
+
 (rf/reg-cofx
   ::datetime
   (fn coeffect-handler
     [coeffect]
     (assoc coeffect :now (js/Date.))))
 
-(rf/reg-cofx
-  ::other-divs
-  (fn coeffect-handler
-    [coeffect div-id]
-    (assoc coeffect ::other-divs div-id)))
-
-(rf/reg-cofx
-  ::get-element
-  (fn coeffect-handler
-    [coeffect el-id]
-    (assoc coeffect (keyword el-id) (.getElementById js/document el-id))))
-
 (rf/reg-event-fx
   ::match-info
-  (fn [cofx [_ call-response]]
-    {:db (assoc-in (:db cofx) [:matches :match-info] (:body call-response))}))
+  (fn [{:keys [db]} [_ call-response]]
+    {:db (assoc-in db [:matches :match-info] (:body call-response))}))
 
 (defn send-get-request
   [request]
@@ -46,28 +34,41 @@
   ::get-match-info
   #(send-get-request %1))
 
-(rf/reg-event-fx
-  ::hide-panel
-  (fn [cofx [_ panel-id]]
-    (set! (.-className (.getElementById js/document panel-id)) "div-panel-hide")
-    {:db (:db cofx)}))
-
+(defn show-div
+  [db show-div-id]
+  (->
+    (reduce (fn [upd-db key]
+              (println "in reduce key: " key " " (get-in upd-db [:matches :panel-visible]))
+              (assoc-in upd-db [:matches :panel-visible key] false)
+              ) db (keys (get-in db [:matches :panel-visible])))
+    (assoc-in [:matches :panel-visible (keyword show-div-id)] true)))
 
 (rf/reg-event-fx
   ::show-schedule
-  [(rf/inject-cofx ::other-divs non-sched-divs) (rf/inject-cofx ::get-element "ma_show_schedule")]
-  (fn [cofx [_]]
-    (set! (.-className (:ma_show_schedule cofx)) "div-panel-show")
-    (doseq [div-id (remove #(= (str (:ma_show_schedule cofx) %)) (::other-divs cofx))]
-        (set! (.-className (.getElementById js/document div-id)) "div-panel-hide"))
-    nil))
+  (fn [{:keys [db]} [_]]
+    (let [upd-db (show-div db "schedule")]
+      (println "::show-schedule " (get-in upd-db [:matches :panel-visible]))
+      {:db upd-db})))
 
 (rf/reg-event-fx
   ::show-availability
-  [(rf/inject-cofx ::other-divs non-sched-divs) (rf/inject-cofx ::get-element "ma_show_availability")]
-  (fn [cofx [_]]
-    (set! (.-className (:ma_show_availability cofx)) "div-panel-show")
-    (doseq [div-id (remove #(= (str (:ma_show_schedule cofx) %)) (::other-divs cofx))]
-      (set! (.-className (.getElementById js/document div-id)) "div-panel-hide"))
-    nil))
+  (fn [{:keys [db]} [_]]
+    (let [upd-db (show-div db "available")]
+      (println "::show-availability " (get-in upd-db [:matches :panel-visible]))
+      {:db upd-db})))
+
+(rf/reg-event-fx
+  ::show-send-avail-email
+  (fn [{:keys [db]} [_]]
+    (let [upd-db (show-div db "send-avail-email")]
+      (println "::show-send-avail-email " (get-in upd-db [:matches :panel-visible]))
+      {:db upd-db})))
+
+(rf/reg-event-fx
+  ::hide-call-status
+  (fn [{:keys [db]} [_]]
+    (println "::hide-call-status")
+    {:db (assoc-in db [:matches :panel-visible :call-status] false)}))
+
+
 

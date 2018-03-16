@@ -201,13 +201,12 @@
         user (auth/get-user-from-session-id (:identity session))]
     (try
       (if (= validation-errors nil)
-        (do
-          (dotimes [x 4]
-            (let [court (inc x)
-                  player1 ((keyword (str "c" court "p1")) parms)
-                  player2 ((keyword (str "c" court "p2")) parms)
-                  forfeit ((keyword (str "c" court "-forfeit-grp")) parms)]
-              (sched/upsert-match-lineup (:match_id parms) (:team_id user) court player1 player2 forfeit)))
+        (dotimes [x 4]
+          (let [court (inc x)
+                player1 ((keyword (str "c" court "p1")) parms)
+                player2 ((keyword (str "c" court "p2")) parms)
+                forfeit ((keyword (str "c" court "-forfeit-grp")) parms)]
+            (sched/upsert-match-lineup (:match_id parms) (:team_id user) court player1 player2 forfeit))
           (hash-map :status "success" :status-code 200 :msg (str "Match lineup updated for team")))
         validation-errors)
       (catch Exception e
@@ -217,7 +216,7 @@
 
 
 (defn load-schedule-file
-  "Loads a season schedule from a file.  Not working because we got the file nmae not the contents"
+  "Loads a season schedule from a file.  Not working because we get the file name not the contents"
   [session params]
   (let [scheduleFile (:schedule params)
         abbrevMap (sched/team-schedule-abbreviations)]

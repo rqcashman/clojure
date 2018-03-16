@@ -319,17 +319,11 @@
   "Sets up the intial matches page."
   [session]
   (list
-    [:div#ma_show_schedule {:class "div-panel-show"}
-     [:h2 "Show schedule"]]
-    [:div#ma_send_availability_email {:class "div-panel-hide"}
-     [:h2 "Send Availability Email"]]
-    [:div#ma_show_availability {:class "div-panel-hide"}
-     [:h2 "Show availability"]]
-    [:div#ma_set_lineup {:class "div-panel-hide"}
-     [:h2 "Set lineup"]]
-    [:div#ma_send_lineup_email {:class "div-panel-hide"}
-     [:h2 "Send lineup email"]]
-    [:div#ma_call_status {:class "div-panel-hide"}
-     [:h2 "Call Status"]]
+    [:div#ma_show_schedule {:class "div-panel-show"}]
+    [:div#ma_send_availability_email {:class "div-panel-show"}]
+    [:div#ma_show_availability {:class "div-panel-show"}]
+    [:div#ma_set_lineup {:class "div-panel-show"}]
+    [:div#ma_send_lineup_email {:class "div-panel-show"}]
+    [:div#ma_call_status {:class "div-panel-show"}]
     [:script "rf_tennis_manager.core.init_matches()"]))
 

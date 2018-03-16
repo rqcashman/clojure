@@ -60,4 +60,11 @@
     (get-in db [:matches :call-status])))
 
 
+(re-frame/reg-sub
+  ::panel-visible
+  (fn [db panel-id]
+    (println "panel visiblezzzz " panel-id " id " (second panel-id))
+    (get-in db [:matches :panel-visible (keyword (second panel-id))])))
+
+
 

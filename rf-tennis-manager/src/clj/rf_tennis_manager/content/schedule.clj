@@ -45,7 +45,7 @@
 
 (defn schedule [session]
   (list [:div#sched-form-div.panel.panel-default
-         [:table.table.table-sm.schedule-form
+         [:table.match-info-table.table-sm.schedule-form
           [:thead
            (layout/empty-row 3)
            [:tr [:td {:colspan 3 :align "center"} [:h4 "Select season and club"]]]

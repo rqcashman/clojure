@@ -17,33 +17,30 @@
 
 (rf/reg-event-fx
   ::init-schedule-page-failed
-  [(rf/inject-cofx ::evt-common/get-element "ma_call_status") (rf/inject-cofx ::evt-common/get-element "ma_show_schedule")]
-  (fn [cofx [_ status]]
-    (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
-    (set! (.-onclick (:ma_call_status cofx)) #(re-frame.core/dispatch [::show-schedule]))
-    (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] false)
-                     (assoc-in [:matches :call-status :message] "Call to get data failed"))]
+  (fn [{:keys [db]} [_ status]]
+    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] false)
+                     (assoc-in [:matches :call-status :message] "Call to get data failed")
+                     (assoc-in [:matches :panel-visible :call-status] true)
+                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule])))]
       {:db upd-db})))
 
 (rf/reg-event-fx
   ::schedule
-  [(rf/inject-cofx ::evt-common/get-element "ma_show_schedule") (rf/inject-cofx ::evt-common/get-element "ma_call_status")]
-  (fn [cofx [_ call-response]]
-    (if (get-in (:db cofx) [:matches :call-status :success?])
-      (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :message] "Success")
-                       (assoc-in [:matches :call-status :success?] true))]
-        (set! (.-className (:ma_show_schedule cofx)) "div-panel-show")
-        (set! (.-className (:ma_call_status cofx)) "div-panel-hide")
+  (fn [{:keys [db]} [_ call-response]]
+    (if (get-in db [:matches :call-status :success?])
+      (let [upd-db (-> (assoc-in db [:matches :call-status :message] "Success")
+                       (assoc-in [:matches :call-status :success?] true)
+                       (evt-common/show-div "schedule"))]
+        (println "::schedule " (get-in upd-db [:matches :panel-visible]))
         {:db (assoc-in upd-db [:matches :schedule] (:body call-response))}))))
 
 (rf/reg-event-fx
   ::init-schedule-page
-  [(rf/inject-cofx ::evt-common/get-element "ma_show_schedule") (rf/inject-cofx ::evt-common/get-element "ma_call_status")]
-  (fn [cofx [_ match-id]]
-    (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] true)
+  (fn [{:keys [db]} [_ match-id]]
+    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
+                     (assoc-in [:matches :panel-visible :call-status] true)
                      )]
-      (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
       {::get-team-info {:method     :get
                         :url        (str "http://localhost:3000/team-info")
                         :on-success [::team-info]

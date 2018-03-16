@@ -29,7 +29,7 @@
   []
   (let [title "Add Club"]
     [:form#addclubform.form-horizontal {:method "post" :action "/add-club"}
-     [:table.table.table-sm
+     [:table.match-info-table.table-sm
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
       (layout/hr-row form-span "90%")
@@ -49,7 +49,7 @@
   []
   (let [title "Add Team"]
     [:form#addteamform.form-horizontal {:method "post" :action "/add-team"}
-     [:table.table.table-sm
+     [:table.match-info-table.table-sm
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
       (layout/hr-row form-span "90%")
@@ -66,7 +66,7 @@
   []
   (let [title "Add Season"]
     [:form#addseasonform.form-horizontal {:method "post" :action "/add-season"}
-     [:table.table.table-sm
+     [:table.match-info-table.table-sm
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
       (layout/hr-row form-span "90%")
@@ -83,7 +83,7 @@
   []
   (let [title "Load Schedule"]
     [:form#loadscheduleform.form-horizontal {:method "post" :action "/load-schedule"}
-     [:table.table.table-sm
+     [:table.match-info-table.table-sm
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
       (layout/hr-row form-span "90%")
@@ -100,7 +100,7 @@
 ;  []
 ;  (let [title "Load Schedule File"]
 ;    [:form#loadschedulefileform.form-horizontal {:method "post" :action "/load-schedule-file" :enctype "multipart/form-data"}
-;     [:table.table.table-sm
+;     [:table.match-info-table.table-sm
 ;      (layout/empty-row form-span)
 ;      [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
 ;      (layout/hr-row form-span "90%")
@@ -118,7 +118,7 @@
   [admin-actions]
   (list
     [:div#admin-form-div.panel.panel-default
-     [:table.table.table-sm.admin-form
+     [:table.match-info-table.table-sm.admin-form
       [:thead
        (layout/empty-row 3)
        [:tr [:td {:colspan 3 :align "center"} [:h4 "Select Admin Function"]]]

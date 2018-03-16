@@ -12,45 +12,45 @@ function change_match_form(new_form_id) {
 
 function change_to_email_form(match_id) {
     $("#send-availability-email").addClass("avail-small");
-    rf_tennis_manager.content_cljs.matches.email_form(match_id);
+    tennis_manager.matches.email_form(match_id);
     change_match_form("send-availability-email");
 }
 
 function change_to_email_lineup_form(match_id) {
     $("#send-lineup-email").addClass("avail-small");
-    rf_tennis_manager.content_cljs.matches.lineup_email_form(match_id);
+    tennis_manager.matches.lineup_email_form(match_id);
     change_match_form("send-lineup-email");
 }
 
 function change_to_avail_form(match_id) {
     //$("#show-availability").addClass("avail-small");
-    rf_tennis_manager.content_cljs.matches.availability(match_id);
+    tennis_manager.matches.availability(match_id);
     change_match_form("show-availability");
 }
 
 
 function set_lineup(match_id) {
     $("#set-lineup").addClass("avail-small");
-    rf_tennis_manager.content_cljs.matches.set_lineup(match_id);
+    tennis_manager.matches.set_lineup(match_id);
     change_match_form("set-lineup");
 }
 
 function player_selected(selected_value) {
-    return rf_tennis_manager.content_cljs.matches.player_selected(selected_value);
+    return tennis_manager.matches.player_selected(selected_value);
 }
 
 function get_roster_data() {
     $("#sr_team_name").text($("#team_id option:selected").text());
-    rf_tennis_manager.content_cljs.roster.roster($("#team_id option:selected").val());
+    tennis_manager.roster.roster($("#team_id option:selected").val());
 }
 
 function update_player_form(player_id) {
-    rf_tennis_manager.content_cljs.roster.load_update_player_form(player_id);
+    tennis_manager.roster.load_update_player_form(player_id);
     change_match_form("update-player");
 }
 
 function updateForfeitBtns(elem) {
-    rf_tennis_manager.content_cljs.matches.forfeit_selected(elem.id, elem.value);
+    tennis_manager.matches.forfeit_selected(elem.id, elem.value);
 }
 
 $().ready(function () {
@@ -58,7 +58,7 @@ $().ready(function () {
 
 
     $("#c1-p2xx").mousedown(function (e) {
-        if (rf_tennis_manager.content_cljs.matches.player_selected(e.target.valueOf().value)) {
+        if (tennis_manager.matches.player_selected(e.target.valueOf().value)) {
             e.preventDefault();
         }
     });
@@ -74,7 +74,7 @@ function isNumberKey(evt) {
 
 function processMatchRequest(form_id, uri, title) {
     if ($(form_id).valid()) {
-        rf_tennis_manager.content_cljs.core.db_update_request(form_id, uri, title, "match");
+        tennis_manager.core.db_update_request(form_id, uri, title, "match");
         $("#" + match_current_form_id).css("display", "none");
         $("#match-status-panel").css("display", "block");
     }

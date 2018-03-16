@@ -4,28 +4,24 @@
             [rf-tennis-manager.match-events-common :as evt-common]
             [cljs-http.client :as http]))
 
-
 (rf/reg-event-fx
   ::update-availability-call-success
-  [(rf/inject-cofx ::evt-common/get-element "ma_show_schedule") (rf/inject-cofx ::evt-common/get-element "ma_call_status") (rf/inject-cofx ::evt-common/get-element "ma_show_availability")]
-  (fn [cofx [_ call-response]]
-    (set! (.-className (:ma_show_availability cofx)) "div-panel-hide")
-    (set! (.-className (:ma_show_schedule cofx)) "div-panel-show")
-    (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
-    (set! (.-onclick (:ma_call_status cofx)) #(re-frame.core/dispatch [::evt-common/hide-panel "ma_call_status"]))
-    (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] true)
-                     (assoc-in [:matches :call-status :message] "Availability updated"))]
+  (fn [{:keys [db]} [_ call-response]]
+    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] true)
+                     (assoc-in [:matches :call-status :message] "Availability updated")
+                     (assoc-in [:matches :panel-visible :availability] false)
+                     (assoc-in [:matches :panel-visible :schedule] true)
+                     (assoc-in [:matches :panel-visible :call-status] true)
+                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))]
       {:db upd-db})))
 
 (rf/reg-event-fx
   ::update-availability-call-failed
-  [(rf/inject-cofx ::evt-common/get-element "ma_call_status")]
-  (fn [cofx [_ status]]
-    (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
-    (set! (.-onclick (:ma_call_status cofx)) #(re-frame.core/dispatch [::evt-common/hide-panel "ma_call_status"]))
-    (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] false)
-                     (assoc-in [:matches :call-status :message] "Call to update availability failed"))]
-      (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
+  (fn [{:keys [db]} [_ status]]
+    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] false)
+                     (assoc-in [:matches :call-status :message] "Call to update availability failed")
+                     (assoc-in [:matches :panel-visible :call-status] true)
+                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))]
       {:db upd-db})))
 
 (rf/reg-fx
@@ -35,12 +31,10 @@
 
 (rf/reg-event-fx
   ::update-match-availability
-  [(rf/inject-cofx ::evt-common/get-element "ma_call_status")]
-  (fn [cofx [_ match-id]]
-    (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] true)
+  (fn [{:keys [db]} [_ match-id]]
+    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
-                     )]
-      (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
+                     (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-update-availability {:method     :post
                                    :url        (str "http://localhost:3000/update-availability")
                                    :on-success [::update-availability-call-success]
@@ -52,6 +46,8 @@
   ::call-update-availability
   #(evt-common/send-post-request %1))
 
+
+;TODO CHANGE THIS
 (rf/reg-event-fx
   ::swap-player-class
   (fn [{:keys [db]} [_ match-id player-id]]
@@ -64,36 +60,34 @@
 
 (rf/reg-event-fx
   ::availability-call-failed
-  [(rf/inject-cofx ::evt-common/get-element "ma_call_status") (rf/inject-cofx ::evt-common/get-element "ma_show_availability")]
-  (fn [cofx [_ status]]
-    (set! (.-className (:ma_show_availability cofx)) "div-panel-hide")
-    (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
-    (set! (.-onclick (:ma_call_status cofx)) #(re-frame.core/dispatch [::show-schedule]))
-    (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] false)
-                     (assoc-in [:matches :call-status :message] "Call to get data failed"))]
+  (fn [{:keys [db]} [_ status]]
+    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] false)
+                     (assoc-in [:matches :call-status :message] "Call to get data failed")
+                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule]))
+                     (evt-common/show-div "call-status"))]
+      (println "::availability-call-failed " (get-in upd-db [:matches :panel-visible]))
       {:db upd-db})))
 
 (rf/reg-event-fx
   ::match-availability
-  [(rf/inject-cofx ::evt-common/get-element "ma_show_schedule") (rf/inject-cofx ::evt-common/get-element "ma_call_status") (rf/inject-cofx ::evt-common/get-element "ma_show_availability")]
-  (fn [cofx [_ call-response]]
+  (fn [{:keys [db]} [_ call-response]]
     ;guard against the call to get match info failing before this call finishes. Miniscule chance of a race condition.  Will take my chances
-    (if (get-in (:db cofx) [:matches :call-status :success?])
-      (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :message] "Success")
-                       (assoc-in [:matches :call-status :success?] true))]
-        (set! (.-className (:ma_show_schedule cofx)) "div-panel-hide")
-        (set! (.-className (:ma_call_status cofx)) "div-panel-hide")
-        (set! (.-className (:ma_show_availability cofx)) "div-panel-show")
-        {:db (assoc-in upd-db [:matches :roster] (:body call-response))}))))
+    (if (get-in db [:matches :call-status :success?])
+      (let [upd-db (-> (assoc-in db [:matches :call-status :message] "Success")
+                       (assoc-in [:matches :call-status :success?] true)
+                       (evt-common/show-div "availability")
+                       (assoc-in [:matches :roster] (:body call-response)))]
+        (println "::match-availability " (get-in upd-db [:matches :panel-visible]))
+        {:db upd-db}))))
 
 (rf/reg-event-fx
   ::show-set-avail-form
-  [(rf/inject-cofx ::evt-common/get-element "ma_show_schedule") (rf/inject-cofx ::evt-common/get-element "ma_call_status")]
-  (fn [cofx [_ match-id]]
-    (let [upd-db (-> (assoc-in (:db cofx) [:matches :call-status :success?] true)
+  (fn [{:keys [db]} [_ match-id]]
+    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
-                     (assoc-in [:matches :selected-match-id] match-id))]
-      (set! (.-className (:ma_call_status cofx)) "div-panel-call-status")
+                     (assoc-in [:matches :selected-match-id] match-id)
+                     (assoc-in [:matches :panel-visible :call-status] true))]
+      (println "show avail form db: " (get-in upd-db [:matches :panel-visible]))
       {::get-match_availability    {:method     :get
                                     :url        (str "http://localhost:3000/match-availability/" match-id)
                                     :on-success [::match-availability]

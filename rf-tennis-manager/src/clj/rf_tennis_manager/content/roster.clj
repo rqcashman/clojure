@@ -22,7 +22,7 @@
 
 (defn show-roster
   []
-  [:table.table.table-sm
+  [:table.match-info-table.table-sm
    (layout/empty-row form-span)
    [:tr [:td {:colspan form-span :align "center"} [:h4 [:span#sr_team_name "Team"] " Roster"]]]
    (layout/hr-row form-span "90%")
@@ -48,7 +48,7 @@
   []
   (let [title "Add Player"]
     [:form#addplayerform.form-horizontal {:method "post" :action "/add-player"}
-     [:table.table.table-sm
+     [:table.match-info-table.table-sm
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
       (layout/hr-row form-span "90%")
@@ -76,7 +76,7 @@
   []
   (let [title "Update Player"]
     [:form#updateplayerform.form-horizontal {:method "post" :action "/add-player"}
-     [:table.table.table-sm
+     [:table.match-info-table.table-sm
       (layout/empty-row form-span)
       [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
       (layout/hr-row form-span "90%")
@@ -111,7 +111,7 @@
   [roster-actions]
   (list
     [:div#roster-form-div.panel.panel-default
-     [:table.table.table-sm.roster-form
+     [:table.match-info-table.table.table-sm.roster-form
       [:thead
        (layout/empty-row 3)
        [:tr [:td {:colspan 3 :align "center"} [:h4 "Select Roster Function"]]]
