@@ -46,17 +46,18 @@
   ::call-update-availability
   #(evt-common/send-post-request %1))
 
+;TODO Ask CK is there is a better way to do this update
+(defn update-player-availability
+  [player-list player update-id]
+  (if (= (:id player) update-id)
+    (conj player-list (assoc player :available (if (= (:available player) 1) 0 1)))
+    (conj player-list player)))
 
-;TODO CHANGE THIS
 (rf/reg-event-fx
-  ::swap-player-class
+  ::player-selection-changed
   (fn [{:keys [db]} [_ match-id player-id]]
-    (let [cb-el (.getElementById js/document match-id)
-          row-el (.getElementById js/document player-id)]
-      (set! (.-className row-el) (if (.-checked cb-el) "player-avail" ""))
-      (.-checked cb-el)
-      {:db db})))
-;(:db (assoc-in db [:matches :roster] (assoc (first (filter #(= player-id (:id %)) (get-in db [:matches :roster]))) :available (if (.-checked cb-el) 1 0)))))))
+    (let [roster (reduce #(update-player-availability %1 %2 player-id) [] (get-in db [:matches :roster]))]
+      {:db (assoc-in db [:matches :roster] roster)})))
 
 (rf/reg-event-fx
   ::availability-call-failed

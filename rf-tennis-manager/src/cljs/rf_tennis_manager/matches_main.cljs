@@ -133,7 +133,7 @@
               [:tr {:class row-class :id player-id :key player-id}
                [:td.text-left (:last_name player) ", " (:first_name player)]
                [:td.text-center
-                [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name cb-id :id cb-id :onChange #((re-frame.core/dispatch [::evt-set-avail/swap-player-class cb-id player-id]))}]]
+                [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name cb-id :id cb-id :onChange #((re-frame.core/dispatch [::evt-set-avail/player-selection-changed cb-id player-id]))}]]
                [:td.text-center player_response]
                [:td.text-center sent_flag]
                [:td (if (= (:response_date player) nil) "" (:response_date player))]
