@@ -116,7 +116,7 @@
                                  (assoc player-list (keyword court-key) (reduce #(add-player-list %1 %2 court-key) init-player-list, (:body players))))
                                {}, (:courts cofx))]
       {:db (->
-             (assoc-in (:db cofx) [:matches :lineup] player-lists)
+             (assoc-in (:db cofx) [:matches :lineup-player-list] player-lists)
              (assoc-in [:matches :call-status :message] "Success")
              (evt-common/show-div "set-lineup"))})))
 
@@ -153,11 +153,11 @@
   [db player-list prev-selection new-selection]
   (if-not (or (= (:id prev-selection) no-selection-player-id) (= (:id new-selection) no-selection-player-id))
     (->
-      (assoc-in db [:matches :lineup (keyword player-list) :players (keyword (str (:id prev-selection)))] prev-selection)
-      (update-in [:matches :lineup (keyword player-list) :players] dissoc (keyword (str (:id new-selection)))))
+      (assoc-in db [:matches :lineup-player-list (keyword player-list) :players (keyword (str (:id prev-selection)))] prev-selection)
+      (update-in [:matches :lineup-player-list (keyword player-list) :players] dissoc (keyword (str (:id new-selection)))))
     (if-not (= (:id prev-selection) no-selection-player-id)
-      (assoc-in db [:matches :lineup (keyword player-list) :players (keyword (str (:id prev-selection)))] prev-selection)
-      (update-in db [:matches :lineup (keyword player-list) :players] dissoc (keyword (str (:id new-selection)))))))
+      (assoc-in db [:matches :lineup-player-list (keyword player-list) :players (keyword (str (:id prev-selection)))] prev-selection)
+      (update-in db [:matches :lineup-player-list (keyword player-list) :players] dissoc (keyword (str (:id new-selection)))))))
 
 (rf/reg-event-fx
   ::update-player-lists
@@ -165,12 +165,12 @@
   (fn [cofx [_ court-key value]]
     (println "::update-player-lists:" court-key " value: " value)
     (let [ct-key (keyword court-key)
-          prev-selection (get-in (:db cofx) [:matches :lineup ct-key :selected])
-          new-selection (get-in (:db cofx) [:matches :lineup ct-key :players (keyword (str value))])
+          prev-selection (get-in (:db cofx) [:matches :lineup-player-list ct-key :selected])
+          new-selection (get-in (:db cofx) [:matches :lineup-player-list ct-key :players (keyword (str value))])
           upd-db (reduce #(update-player-list %1 %2 prev-selection new-selection)
                          (:db cofx)
                          (remove #(= court-key %) (:courts cofx)))]
-      {:db (assoc-in upd-db [:matches :lineup ct-key :selected] new-selection)})))
+      {:db (assoc-in upd-db [:matches :lineup-player-list ct-key :selected] new-selection)})))
 
 (rf/reg-fx
   ::get-match-availability

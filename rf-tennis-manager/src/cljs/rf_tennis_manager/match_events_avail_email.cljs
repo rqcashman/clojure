@@ -76,7 +76,6 @@
                      (assoc-in [:matches :call-status :message] "Processing...")
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]
-      (println "show ::show-email-avail-form db: " upd-db)
       {::evt-common/get-match-info {:method     :get
                                     :url        (str "http://localhost:3000/match-info/" match-id)
                                     :on-success [::email-avail-form]

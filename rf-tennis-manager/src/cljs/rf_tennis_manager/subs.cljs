@@ -59,6 +59,12 @@
   (fn [db]
     (get-in db [:matches :lineup])))
 
+
+(re-frame/reg-sub
+  ::match-player-list
+  (fn [db]
+    (get-in db [:matches :lineup-player-list])))
+
 (re-frame/reg-sub
   ::matches_call_status
   (fn [db]

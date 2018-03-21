@@ -149,6 +149,7 @@
 
 (defn add-match-info
   [match]
+  (println "add match info: " match)
   [:table.match-info-table.table-sm.table-compact
    [:tbody
     [:tr
@@ -282,6 +283,19 @@
             ]]
           (layout/empty-row form-span)]]]])))
 
+(defn add-lineup-row
+  "docstring"
+  [row-list court]
+  (println "add-lineup-row: " court)
+  (conj row-list
+        [:tr {:key (str "lineup-row" (:court_number court))}
+         [:td {:key (str "lineup-court" (:court_number court))} [:b "Court " (:court_number court)] ":"]
+         (if (nil? (:forfeit_team_name court))
+           (list [:td {:key (str "lineup-pl" (:player1 court))} (:player1_name court)]
+                 [:td {:key (str "lineup-pl" (:player2 court))} (:player2_name court)])
+           [:td  {:key (str "forfeit-row" (:court_number court)) :colSpan 2
+                  :style {:text-align "left" :font-weight "bold" :color "red"}} (:forfeit_team_name court) " forfeit"])]))
+
 (defn lineup-email-form
   "docstring"
   []
@@ -291,7 +305,7 @@
           div-visible @(rf/subscribe [::subs/panel-visible "send-lineup-email"])]
       [:div {:className (if div-visible "div-panel-show" "div-panel-hide")}
        [:form#sendlineupemail.form-horizontal {:method "post" :action "/send-lineup-email"}
-        [:table.table.table-sm
+        [:table.main-table.table-sm.email-avail-panel
          [:tbody
           (layout/empty-row form-span)
           (let [team-info @(rf/subscribe [::subs/team-info])]
@@ -307,15 +321,15 @@
           [:tr
            [:td {:style {:width "5%"}}]
            [:td {:colSpan 2}
-            [:table#email-lineup.table
+            [:table#email-lineup.main-table.table-striped
              [:thead.table-inverse
               [:tr.text-left
                [:td (layout/nbsp)]
                [:td "Player 1"]
                [:td "Player 2"]]]
              [:tbody#email-lineup-body
-              ;TODO ADD SUBSCRIPTION TO GET LINEUP
-              (layout/empty-row 4)]]]
+              (let [lineup @(rf/subscribe [::subs/match-lineup])]
+                (reduce #(add-lineup-row %1 %2) () (reverse lineup)))]]]
            [:td {:style {:width "5%:"}}]]
           (layout/empty-row form-span)
           (add-form-control "Message:" {:id "li_message" :name "message" :cols 45 :maxLength 2000 :rows 7 :type "text-area"} "Please arrive 10 to 15 minutes before the match starts.")
@@ -330,7 +344,7 @@
               [:tr
                [:td {:style {:width "50%"}} (layout/nbsp)]
                [:td.text-right {:style {:white-space "nowrap"}}
-                [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-avail-email/call-send-avail-email])} title]]
+                [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-email-lineup/send-lineup-email])} title]]
                [:td.text-left {:style {:white-space "nowrap"}}
                 [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-common/show-schedule])} "Return to Schedule"]]
                [:td {:style {:width "50%"}} (layout/nbsp)]]]]]]
@@ -443,7 +457,7 @@
                [:td "Forfeit"]]]
              [:tbody#match-lineup-body
               (let [team-info @(rf/subscribe [::subs/team-info])
-                    lineup @(rf/subscribe [::subs/match-lineup])
+                    lineup @(rf/subscribe [::subs/match-player-list])
                     forfeits @(rf/subscribe [::subs/match_forfeits])
                     match-info @(rf/subscribe [::subs/match-info])]
                 (reduce #(add-match-select-controls %1 %2 team-info lineup forfeits match-info) () (reverse (range 1 5))))]]]
