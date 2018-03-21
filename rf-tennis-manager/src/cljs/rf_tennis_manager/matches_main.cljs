@@ -293,8 +293,8 @@
          (if (nil? (:forfeit_team_name court))
            (list [:td {:key (str "lineup-pl" (:player1 court))} (:player1_name court)]
                  [:td {:key (str "lineup-pl" (:player2 court))} (:player2_name court)])
-           [:td  {:key (str "forfeit-row" (:court_number court)) :colSpan 2
-                  :style {:text-align "left" :font-weight "bold" :color "red"}} (:forfeit_team_name court) " forfeit"])]))
+           [:td {:key   (str "forfeit-row" (:court_number court)) :colSpan 2
+                 :style {:text-align "left" :font-weight "bold" :color "red"}} (:forfeit_team_name court) " forfeit"])]))
 
 (defn lineup-email-form
   "docstring"
@@ -316,7 +316,7 @@
            [:td {:colSpan 2}
             (let [match @(rf/subscribe [::subs/match-info])]
               (add-match-info match))]
-           [:td {:style {:width "5%:"}}]]
+           [:td {:style {:width "5%"}}]]
           (layout/hr-row form-span "90%")
           [:tr
            [:td {:style {:width "5%"}}]
@@ -330,7 +330,7 @@
              [:tbody#email-lineup-body
               (let [lineup @(rf/subscribe [::subs/match-lineup])]
                 (reduce #(add-lineup-row %1 %2) () (reverse lineup)))]]]
-           [:td {:style {:width "5%:"}}]]
+           [:td {:style {:width "5%"}}]]
           (layout/empty-row form-span)
           (add-form-control "Message:" {:id "li_message" :name "message" :cols 45 :maxLength 2000 :rows 7 :type "text-area"} "Please arrive 10 to 15 minutes before the match starts.")
           (add-form-control "Signature:" {:id "li_signature" :name "signature" :cols 45 :maxLength 200 :rows 3 :type "text-area"} "Rick Cashman\n513.227.9278")
@@ -439,14 +439,14 @@
             [:tr [:td.text-center {:colSpan form-span} [:h4 title " for " (:name team-info)]]])
           (layout/hr-row form-span "90%")
           [:tr
-           [:td {:style {:width "5%:"}}]
+           [:td {:style {:width "10%"}} (layout/nbsp)]
            [:td {:colSpan 2}
             (let [match @(rf/subscribe [::subs/match-info])]
               (add-match-info match))]
-           [:td {:style {:width "5%:"}}]]
+           [:td {:style {:width "5%"}} (layout/nbsp)]]
           (layout/empty-row form-span)
           [:tr
-           [:td {:style {:width "5%:"}}]
+           [:td {:style {:width "10%"}} (layout/nbsp)]
            [:td {:colSpan 2}
             [:table#match-lineup.table.table-striped.table-sm
              [:thead.table-inverse
@@ -461,13 +461,13 @@
                     forfeits @(rf/subscribe [::subs/match_forfeits])
                     match-info @(rf/subscribe [::subs/match-info])]
                 (reduce #(add-match-select-controls %1 %2 team-info lineup forfeits match-info) () (reverse (range 1 5))))]]]
-           [:td {:style {:width "5%:"}}]]
+           [:td {:style {:width "5%"}} (layout/nbsp)]]
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span}
                 [:table {:style {:width "90%"}}
                  [:tbody
                   [:tr
-                   [:td {:style {:width "40%"}} (layout/nbsp)]
+                   [:td {:style {:width "45%"}} (layout/nbsp)]
                    [:td.text-right {:style {:white-space "nowrap"}}
                     [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-set-lineup/update-lineup])} title]]
                    [:td.text-left {:style {:white-space "nowrap"}}
