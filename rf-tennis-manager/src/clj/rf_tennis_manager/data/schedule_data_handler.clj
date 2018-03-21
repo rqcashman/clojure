@@ -86,12 +86,8 @@
 
 (defn upsert-match-lineup
   "docstring"
-  [match-id team-id court player1 player2 forfeit]
-  (let [match (match-info match-id)
-        forfeit_team_id (case forfeit
-                          "0" nil
-                          "1" (if (= team-id (:home_team_id match)) (:home_team_id match) (:away_team_id match))
-                          "2" (if (= team-id (:home_team_id match)) (:away_team_id match) (:home_team_id match)))]
+  [match-id team-id court player1 player2 forfeit_team_id]
+  (let [match (match-info match-id)]
     (if (= (match_court_exists? match-id court) false)
       (j/execute! sys/db-cred
                   [(str "insert into match_courts values (?,?,null,null,null,null,null)") match-id, court]))

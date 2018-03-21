@@ -55,7 +55,7 @@
 
            ;HTML framgments - these are tabs
            (GET "/admin" {session :session} (layout/fragment "admin.js" (admin/admin session)))
-           (GET "/matches" {session :session} (layout/fragment "matches.js" (match/matches session)))
+           (GET "/matches" {session :session} (layout/fragment "" (match/matches session)))
            (GET "/roster" {session :session} (layout/fragment "roster.js" (rost/roster session)))
            (GET "/schedule" {session :session} (layout/fragment "schedule.js" (schedule/schedule session)))
 

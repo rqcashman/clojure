@@ -42,6 +42,7 @@
                     (.getElementById js/document "ma_call_status"))
     (reagent/render [main/schedule-form]
                     (.getElementById js/document "ma_show_schedule"))
+    (rf/dispatch [::sched/init-schedule-page])
     (reagent/render [main/availability-form]
                     (.getElementById js/document "ma_show_availability"))
     (reagent/render [main/availability-email-form]
@@ -49,8 +50,7 @@
     (reagent/render [main/lineup-email-form]
                     (.getElementById js/document "ma_send_lineup_email"))
     (reagent/render [main/set-lineup-form]
-                    (.getElementById js/document "ma_set_lineup"))
-    (rf/dispatch [::sched/init-schedule-page])))
+                    (.getElementById js/document "ma_set_lineup"))))
 
 
 

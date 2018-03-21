@@ -66,7 +66,6 @@
                      (assoc-in [:matches :call-status :message] "Call to get data failed")
                      (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule]))
                      (evt-common/show-div "call-status"))]
-      (println "::availability-call-failed " (get-in upd-db [:matches :panel-visible]))
       {:db upd-db})))
 
 (rf/reg-event-fx

@@ -76,6 +76,8 @@ function processMatchRequest(form_id, uri, title) {
     if ($(form_id).valid()) {
         tennis_manager.core.db_update_request(form_id, uri, title, "match");
         $("#" + match_current_form_id).css("display", "none");
+        $("#match-status-content").attr("class", "success");
+        $("#match-status-content").text("Processing...");
         $("#match-status-panel").css("display", "block");
     }
     return false;
@@ -99,6 +101,7 @@ function matchStatusOK(evt) {
     else {
         change_match_form(match_current_form_id);
     }
+    $("#match-status-content").attr("class", "success");
     $("#match-status-content").text("Processing...");
     evt.preventDefault();
 }

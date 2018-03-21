@@ -182,7 +182,7 @@
   "Validate the input lineup is valid.  All courts have players and no player assigned to multiple courts"
   [parms]
   (try
-    (if (= (check-for-null-player-assignment parms) true)
+    (if (check-for-null-player-assignment parms)
       (hash-map :status "failed" :status-code 200 :msg (str "Not all courts have players assigned."))
       (let [dupe-list (check-for-duplicate-player-assignment parms)]
         (if (pos? (count dupe-list))
@@ -205,8 +205,8 @@
           (let [court (inc x)
                 player1 ((keyword (str "c" court "p1")) parms)
                 player2 ((keyword (str "c" court "p2")) parms)
-                forfeit ((keyword (str "c" court "-forfeit-grp")) parms)]
-            (sched/upsert-match-lineup (:match_id parms) (:team_id user) court player1 player2 forfeit))
+                forfeit-team-id ((keyword (str "c" court "-forfeit-grp")) parms)]
+            (sched/upsert-match-lineup (:match_id parms) (:team_id user) court player1 player2 forfeit-team-id))
           (hash-map :status "success" :status-code 200 :msg (str "Match lineup updated for team")))
         validation-errors)
       (catch Exception e

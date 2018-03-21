@@ -53,7 +53,7 @@
 (rf/reg-event-fx
   ::show-availability
   (fn [{:keys [db]} [_]]
-    (let [upd-db (show-div db "available")]
+    (let [upd-db (show-div db "availability")]
       (println "::show-availability " (get-in upd-db [:matches :panel-visible]))
       {:db upd-db})))
 

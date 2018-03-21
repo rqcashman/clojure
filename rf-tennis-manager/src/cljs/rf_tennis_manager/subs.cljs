@@ -55,15 +55,24 @@
     (get-in db [:matches :match-info])))
 
 (re-frame/reg-sub
+  ::match-lineup
+  (fn [db]
+    (get-in db [:matches :lineup])))
+
+(re-frame/reg-sub
   ::matches_call_status
   (fn [db]
     (get-in db [:matches :call-status])))
+
+(re-frame/reg-sub
+  ::match_forfeits
+  (fn [db]
+    (get-in db [:matches :forfeits])))
 
 
 (re-frame/reg-sub
   ::panel-visible
   (fn [db panel-id]
-    (println "panel visiblezzzz " panel-id " id " (second panel-id))
     (get-in db [:matches :panel-visible (keyword (second panel-id))])))
 
 

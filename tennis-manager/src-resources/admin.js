@@ -106,13 +106,16 @@ function isNumberKey(evt) {
 
 function dismissAdminStatusForm() {
     $("#admin-status-panel").css("display", "none");
-    $("#status-content").text("Processing...");
+    $("#admin-status-content").attr("class", "success");
+    $("#admin-status-content").text("Processing...");
     $("#" + admin_current_form_id).css("display", "block");
 }
 
 function processAdminRequest(form_id, uri, title) {
     if ($(form_id).valid()) {
         tennis_manager.core.db_update_request(form_id, uri, title, "admin");
+        $("#admin-status-content").attr("class", "success");
+        $("#admin-status-content").text("Processing...");
         $("#" + admin_current_form_id).css("display", "none");
         $("#admin-status-panel").css("display", "block");
     }
@@ -132,6 +135,7 @@ function adminStatusOK(evt) {
     else {
         change_admin_form(admin_current_form_id);
     }
+    $("#admin-status-content").attr("class", "success");
     $("#admin-status-content").text("Processing...");
     evt.preventDefault();
 }

@@ -47,7 +47,7 @@
   [form-span id-prefix]
   [:table.table.table-sm
    (empty-row form-span)
-   [:tr [:td {:colspan form-span :align "center"} [:h4 "Status of " [:span {:id (str id-prefix "-status-title")}]]]]
+   [:tr [:td {:colspan form-span :align "center"} [:h4 "Call Status " [:span {:id (str id-prefix "-status-title")}]]]]
    (hr-row form-span "90%")
    [:tr
     [:td {:width "5%"} "&nbsp;"]

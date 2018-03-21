@@ -97,6 +97,8 @@ function isNumberKey(evt) {
 function processRosterRequest(form_id, uri, title) {
     if ($(form_id).valid()) {
         tennis_manager.core.db_update_request(form_id, uri, title, "roster");
+        $("#roster-status-content").attr("class", "success");
+        $("#roster-status-content").text("Processing...");
         $("#" + roster_current_form_id).css("display", "none");
         $("#roster-status-panel").css("display", "block");
     }
@@ -111,6 +113,7 @@ function rosterStatusOK(evt) {
     else {
         change_roster_form(roster_current_form_id);
     }
-    $("#status-content").text("Processing...");
+    $("#roster-status-content").text("Processing...");
+    $("#roster-status-content").attr("class", "success");
     evt.preventDefault();
 }
