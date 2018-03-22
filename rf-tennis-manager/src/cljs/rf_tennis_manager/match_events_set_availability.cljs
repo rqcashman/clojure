@@ -77,7 +77,6 @@
                        (assoc-in [:matches :call-status :success?] true)
                        (evt-common/show-div "availability")
                        (assoc-in [:matches :roster] (:body call-response)))]
-        (println "::match-availability " (get-in upd-db [:matches :panel-visible]))
         {:db upd-db}))))
 
 (rf/reg-event-fx
@@ -87,7 +86,6 @@
                      (assoc-in [:matches :call-status :message] "Processing...")
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]
-      (println "show avail form db: " (get-in upd-db [:matches :panel-visible]))
       {::get-match_availability    {:method     :get
                                     :url        (str "http://localhost:3000/match-availability/" match-id)
                                     :on-success [::match-availability]

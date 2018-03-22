@@ -149,7 +149,6 @@
 
 (defn add-match-info
   [match]
-  (println "add match info: " match)
   [:table.match-info-table.table-sm.table-compact
    [:tbody
     [:tr
@@ -448,7 +447,7 @@
           [:tr
            [:td {:style {:width "10%"}} (layout/nbsp)]
            [:td {:colSpan 2}
-            [:table#match-lineup.table.table-striped.table-sm
+            [:table#match-lineup.main-table.table-striped.table-sm
              [:thead.table-inverse
               [:tr.text-left
                [:td (layout/nbsp)]
@@ -462,7 +461,7 @@
                     match-info @(rf/subscribe [::subs/match-info])]
                 (reduce #(add-match-select-controls %1 %2 team-info lineup forfeits match-info) () (reverse (range 1 5))))]]]
            [:td {:style {:width "5%"}} (layout/nbsp)]]
-          (layout/empty-row form-span)
+          (layout/hr-row form-span "90%")
           [:tr [:td.text-center {:colSpan form-span}
                 [:table {:style {:width "90%"}}
                  [:tbody
@@ -481,4 +480,4 @@
             (let [match-info @(rf/subscribe [::subs/match-info])
                   match-id (if (:match_id match-info) (:match_id match-info) "-1")]
               [:input.hidden-control {:id "ml_match_id" :name "match_id" :value match-id :read-only true}])]]
-          (layout/hr-row form-span "90%")]]]])))
+          (layout/empty-row form-span)]]]])))

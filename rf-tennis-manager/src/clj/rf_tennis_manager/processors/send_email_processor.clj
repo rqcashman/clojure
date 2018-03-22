@@ -60,8 +60,7 @@
       "      <td width='80%'>&nbsp;</td>"
       "   </tr>"
       "   <tr><td colspan='4'>&nbsp;</td></tr>"
-      "</table><br>"
-      )))
+      "</table><br>")))
 
 (defn get-availability-email-body
   "Generate html to use as rich text email"
@@ -73,18 +72,17 @@
     "      <td align='left' colspan='2'>---salutation---,</td>"
     "   </tr>"
     "   <tr>"
-    "      <td width='5%'></td>"
+    "      <td width='5%'>&nbsp;</td>"
     "      <td> " (s/replace message #"\n" "<br>") "</td>"
     "   </tr>"
     "   <tr>"
-    "      <td width='5%'></td> "
+    "      <td width='5%'>&nbsp;</td> "
     "      <td nowrap><a href='http://localhost:3000/availability-reply?available=Y&player-token=--uuid--'>I can play</a> "
     "            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://localhost:3000/availability-reply?available=N&player-token=--uuid--'>I'm out</a>"
     "      </td> "
     "   </tr>"
     "   <tr><td colspan='2'>&nbsp;</td>"
     "   <tr><td colspan='2'><h4>" (s/replace signature #"\n" "<br>") "</h4></td></tr>"
-
     "</table>"))
 
 (defn get-lineup-row
@@ -111,15 +109,14 @@
     "   <tr>"
     "      <td align='left' colspan='2'>Dear ---salutation---,</td>"
     "   </tr>"
-    "   <tr><td></td><td><table>---courts---</table></td></tr>"
+    "   <tr><td>&nbsp;</td><td><table>---courts---</table></td></tr>"
     "   <tr><td colspan='2'>&nbsp;</td></tr>"
     "   <tr>"
-    "      <td width='5%'></td>"
+    "      <td width='5%'>&nbsp;</td>"
     "      <td> " (s/replace message #"\n" "<br>") "</td>"
     "   </tr>"
     "   <tr><td colspan='2'>&nbsp;</td></tr>"
     "   <tr><td colspan='2'><h4>" (s/replace signature #"\n" "<br>") "</h4></td></tr>"
-
     "</table>"))
 
 (defn send-avail-email
@@ -154,7 +151,6 @@
   [court-assignments player-id]
   (s/replace (s/replace court-assignments (re-pattern (str "---" player-id "---")) " style='font-weight:bold'") #"---\d+---" ""))
 
-
 (defn send-lineup-email
   "Send a match lineup email"
   [session {:keys [message signature match_id send_subs]}]
@@ -176,4 +172,3 @@
     (catch Exception e
       (println "Error sending lineup email.  Msg" (.getMessage e))
       (hash-map :status "failed" :status-code 500 :msg (str "Server error sending lineup email.") :support-msg (.getMessage e)))))
-

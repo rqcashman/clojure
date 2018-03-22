@@ -22,6 +22,8 @@
                  [org.clojure/tools.reader "1.1.0"]
                  [reagent "0.7.0"]
                  [re-frame "0.10.5"]
+                 [day8.re-frame/re-frame-10x "0.2.1-react16"]
+                 [re-frisk "0.5.3"]
                  [ring "1.4.0"]
                  [ring/ring-codec "1.1.0"]
                  [ring/ring-defaults "0.3.1"]

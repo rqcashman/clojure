@@ -24,8 +24,7 @@
     (catch Exception e
       (println "System config error message: " (.getMessage e))
       (println e)
-      (throw (Exception. "Error starting server due to configuration error"))
-      )))
+      (throw (Exception. "Error starting server due to configuration error")))))
 
 (def system-info (get-system-info))
 
@@ -42,10 +41,6 @@
    :useSSL   (:useSSL system-info)
    :password (:password system-info)})
 
-
-
 (println "SYS INFO: " system-info)
 (println "DB INFO: " db-cred)
 (println "EM INFO: " email-cred)
-
-

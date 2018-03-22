@@ -3,11 +3,7 @@
             [rf-tennis-manager.match-events-common :as evt-common]
             [clojure.string :as s]))
 (def court-player-key ["c1p1" "c1p2" "c2p1" "c2p2" "c3p1" "c3p2" "c4p1" "c4p2"])
-(def no-forfeits
-  {:c1 0
-   :c2 0
-   :c3 0
-   :c4 0})
+(def no-forfeits {:c1 0 :c2 0 :c3 0 :c4 0})
 
 (rf/reg-cofx
   ::courts
@@ -51,7 +47,7 @@
     (conj list match)))
 
 (comment "Process lineup update success.
-            The backend has editing so we can still call the failed method if there was a data validation error")
+          The backend has editing so we call the failed method if there was a data validation error")
 (rf/reg-event-fx
   ::update-lineup-success
   (fn [{:keys [db]} [_ call-response]]
@@ -70,7 +66,6 @@
 (rf/reg-event-fx
   ::update-lineup-failed
   (fn [{:keys [db]} [_ msg status]]
-    (println "update lineup failed status: " status " msg: " msg)
     (let [upd-db (-> (assoc-in db [:matches :call-status :success?] false)
                      (assoc-in [:matches :call-status :message] msg)
                      (assoc-in [:matches :panel-visible :call-status] true)
@@ -94,7 +89,7 @@
 (def player-available 1)
 
 (defn add-player-list
-  "Add player to list unless they are selected in a different list"
+  "Add available player to list unless they are selected in a different list"
   [list player court-key]
   (if (= player-available (:available player))
     (let [court-assignment (get-player-court-assignment player)
@@ -112,13 +107,14 @@
   ::show-lineup-form
   [(rf/inject-cofx ::courts court-player-key)]
   (fn [cofx [_ players]]
-    (let [player-lists (reduce (fn [player-list court-key]
-                                 (assoc player-list (keyword court-key) (reduce #(add-player-list %1 %2 court-key) init-player-list, (:body players))))
-                               {}, (:courts cofx))]
-      {:db (->
-             (assoc-in (:db cofx) [:matches :lineup-player-list] player-lists)
-             (assoc-in [:matches :call-status :message] "Success")
-             (evt-common/show-div "set-lineup"))})))
+    (if (get-in (:db cofx) [:matches :call-status :success?])
+      (let [player-lists (reduce (fn [player-list court-key]
+                                   (assoc player-list (keyword court-key) (reduce #(add-player-list %1 %2 court-key) init-player-list, (:body players))))
+                                 {}, (:courts cofx))]
+        {:db (->
+               (assoc-in (:db cofx) [:matches :lineup-player-list] player-lists)
+               (assoc-in [:matches :call-status :message] "Success")
+               (evt-common/show-div "set-lineup"))}))))
 
 (rf/reg-event-fx
   ::init-forfeit-btns
@@ -129,7 +125,6 @@
                                    (assoc list (keyword (str "c" (:court_number court))) (if (nil? (:forfeit_team_id court)) 0 (:forfeit_team_id court))))
                                  {} (:body forfeits))
                          (:no-forfeits cofx))]
-      (println "forfeits: " forfeit-hash)
       {:db (assoc-in (:db cofx) [:matches :forfeits] forfeit-hash)})))
 
 (rf/reg-event-fx
@@ -149,7 +144,7 @@
 (def no-selection-player-id 0)
 
 (defn update-player-list
-  "update the player list for each court.  The newly seletect item will be removed and the previously selected item will be restored - excluding the 'none' selection"
+  "update the player list for each court.  The newly selected item will be removed and the previously selected item will be restored - excluding the 'none' selection"
   [db player-list prev-selection new-selection]
   (if-not (or (= (:id prev-selection) no-selection-player-id) (= (:id new-selection) no-selection-player-id))
     (->
@@ -162,11 +157,10 @@
 (rf/reg-event-fx
   ::update-player-lists
   [(rf/inject-cofx ::courts court-player-key)]
-  (fn [cofx [_ court-key value]]
-    (println "::update-player-lists:" court-key " value: " value)
+  (fn [cofx [_ court-key player-id]]
     (let [ct-key (keyword court-key)
           prev-selection (get-in (:db cofx) [:matches :lineup-player-list ct-key :selected])
-          new-selection (get-in (:db cofx) [:matches :lineup-player-list ct-key :players (keyword (str value))])
+          new-selection (get-in (:db cofx) [:matches :lineup-player-list ct-key :players (keyword (str player-id))])
           upd-db (reduce #(update-player-list %1 %2 prev-selection new-selection)
                          (:db cofx)
                          (remove #(= court-key %) (:courts cofx)))]

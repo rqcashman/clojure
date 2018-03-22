@@ -15,12 +15,12 @@
 (rf/reg-event-fx
   ::email-lineup-form
   (fn [{:keys [db]} [_ call-response]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :message] "Success")
-                     (assoc-in [:matches :call-status :success?] true)
-                     (assoc-in [:matches :lineup] (:body call-response))
-                     (evt-common/show-div "send-lineup-email"))]
-      (println "::email-lineup-form " (get-in upd-db [:matches :panel-visible]))
-      {:db upd-db})))
+    (if (get-in db [:matches :call-status :success?])
+      (let [upd-db (-> (assoc-in db [:matches :call-status :message] "Success")
+                       (assoc-in [:matches :call-status :success?] true)
+                       (assoc-in [:matches :lineup] (:body call-response))
+                       (evt-common/show-div "send-lineup-email"))]
+        {:db upd-db}))))
 
 
 (rf/reg-event-fx

@@ -39,37 +39,29 @@
   [db show-div-id]
   (->
     (reduce (fn [upd-db key]
-              (println "in reduce key: " key " " (get-in upd-db [:matches :panel-visible]))
-              (assoc-in upd-db [:matches :panel-visible key] false)
-              ) db (keys (get-in db [:matches :panel-visible])))
+              (assoc-in upd-db [:matches :panel-visible key] false))
+            db (keys (get-in db [:matches :panel-visible])))
     (assoc-in [:matches :panel-visible (keyword show-div-id)] true)))
 
 (rf/reg-event-fx
   ::show-schedule
   (fn [{:keys [db]} [_]]
     (let [upd-db (show-div db "schedule")]
-      (println "::show-schedule " (get-in upd-db [:matches :panel-visible]))
       {:db upd-db})))
 
 (rf/reg-event-fx
   ::show-availability
   (fn [{:keys [db]} [_]]
     (let [upd-db (show-div db "availability")]
-      (println "::show-availability " (get-in upd-db [:matches :panel-visible]))
       {:db upd-db})))
 
 (rf/reg-event-fx
   ::show-send-avail-email
   (fn [{:keys [db]} [_]]
     (let [upd-db (show-div db "send-avail-email")]
-      (println "::show-send-avail-email " (get-in upd-db [:matches :panel-visible]))
       {:db upd-db})))
 
 (rf/reg-event-fx
   ::hide-call-status
   (fn [{:keys [db]} [_]]
-    (println "::hide-call-status")
     {:db (assoc-in db [:matches :panel-visible :call-status] false)}))
-
-
-
