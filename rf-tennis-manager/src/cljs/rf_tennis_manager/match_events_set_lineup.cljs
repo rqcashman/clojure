@@ -47,7 +47,7 @@
     (conj list match)))
 
 (comment "Process lineup update success.
-          The backend has editing so we call the failed method if there was a data validation error")
+          The backend has editing so we dispatch to the failed method if there was a data validation error")
 (rf/reg-event-fx
   ::update-lineup-success
   (fn [{:keys [db]} [_ call-response]]
@@ -61,21 +61,21 @@
                        (assoc-in [:matches :panel-visible :call-status] true)
                        (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))]
         {:db upd-db})
-      (rf/dispatch [::update-lineup-failed (get-in call-response [:body :msg])]))))
+      {:dispatch [::update-lineup-failed  (get-in call-response [:body :msg])]})))
 
 (rf/reg-event-fx
   ::update-lineup-failed
   (fn [{:keys [db]} [_ msg status]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] false)
-                     (assoc-in [:matches :call-status :message] msg)
-                     (assoc-in [:matches :panel-visible :call-status] true)
-                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))]
-      {:db upd-db})))
+    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+             (assoc-in [:matches :call-status :message] msg)
+             (assoc-in [:matches :panel-visible :call-status] true)
+             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))}))
 
 (def no-plyayer-selected {:last_name " ----- none selected -----" :first_name "" :id 0})
 (def init-player-list {
                        :selected no-plyayer-selected
                        :players  {(keyword (str (:id no-plyayer-selected))) no-plyayer-selected}})
+(def player-available 1)
 
 (defn get-player-court-assignment
   "get court assignment for player"
@@ -85,8 +85,6 @@
       (cond
         (or (= player-id (:home_player1 player)) (= player-id (:away_player1 player))) (str "c" (:court_number player) "p1")
         (or (= player-id (:home_player2 player)) (= player-id (:away_player2 player))) (str "c" (:court_number player) "p2")))))
-
-(def player-available 1)
 
 (defn add-player-list
   "Add available player to list unless they are selected in a different list"
@@ -130,11 +128,10 @@
 (rf/reg-event-fx
   ::set-lineup-data-failed
   (fn [{:keys [db]} [_ status]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] false)
-                     (assoc-in [:matches :call-status :message] "Call to get data failed")
-                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule]))
-                     (evt-common/show-div "call-status"))]
-      {:db upd-db})))
+    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+             (assoc-in [:matches :call-status :message] "Call to get data failed")
+             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule]))
+             (evt-common/show-div "call-status"))}))
 
 (rf/reg-event-fx
   ::update-forfeit-btns

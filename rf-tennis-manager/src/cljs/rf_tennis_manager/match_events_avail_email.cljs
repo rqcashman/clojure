@@ -6,22 +6,19 @@
 (rf/reg-event-fx
   ::email-avail-get-data-failed
   (fn [{:keys [db]} [_ status]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] false)
-                     (assoc-in [:matches :call-status :message] "Call to get data failed")
-                     (assoc-in [:matches :call-status :panel-visible :send-avail-email] false)
-                     (assoc-in [:matches :call-status :panel-visible :call-status] true)
-                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule])))]
-      {:db upd-db})))
+    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+             (assoc-in [:matches :call-status :message] "Call to get data failed")
+             (assoc-in [:matches :call-status :panel-visible :send-avail-email] false)
+             (assoc-in [:matches :call-status :panel-visible :call-status] true)
+             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule])))}))
 
 (rf/reg-event-fx
   ::email-avail-form
   (fn [{:keys [db]} [_ call-response]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :message] "Success")
-                     (assoc-in [:matches :call-status :success?] true)
-                     (evt-common/show-div "send-avail-email")
-                     (assoc-in [:matches :match-info] (:body call-response)))]
-      (println "::email-avail-form " (get-in upd-db [:matches :panel-visible]))
-      {:db upd-db})))
+    {:db (-> (assoc-in db [:matches :call-status :message] "Success")
+             (assoc-in [:matches :call-status :success?] true)
+             (evt-common/show-div "send-avail-email")
+             (assoc-in [:matches :match-info] (:body call-response)))}))
 
 
 (rf/reg-event-fx
@@ -63,11 +60,10 @@
 (rf/reg-event-fx
   ::send-avail-email-failed
   (fn [{:keys [db]} [_ status]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] false)
-                     (assoc-in [:matches :call-status :message] "Call to send availability email failed")
-                     (assoc-in [:matches :panel-visible :call-status] true)
-                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))]
-      {:db upd-db})))
+    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+             (assoc-in [:matches :call-status :message] "Call to send availability email failed")
+             (assoc-in [:matches :panel-visible :call-status] true)
+             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))}))
 
 (rf/reg-event-fx
   ::show-email-avail-form

@@ -13,7 +13,6 @@
 (rf/reg-event-fx
   ::match-info
   (fn [{:keys [db]} [_ call-response]]
-    (print "::match-info: " call-response)
     {:db (assoc-in db [:matches :match-info] (:body call-response))}))
 
 (defn send-get-request

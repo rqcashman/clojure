@@ -5,22 +5,20 @@
 (rf/reg-event-fx
   ::email-lineup-get-data-failed
   (fn [{:keys [db]} [_ status]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] false)
-                     (assoc-in [:matches :call-status :message] "Call to get data failed")
-                     (assoc-in [:matches :call-status :panel-visible :send-lineup-email] false)
-                     (assoc-in [:matches :call-status :panel-visible :call-status] true)
-                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule])))]
-      {:db upd-db})))
+    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+             (assoc-in [:matches :call-status :message] "Call to get data failed")
+             (assoc-in [:matches :call-status :panel-visible :send-lineup-email] false)
+             (assoc-in [:matches :call-status :panel-visible :call-status] true)
+             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule])))}))
 
 (rf/reg-event-fx
   ::email-lineup-form
   (fn [{:keys [db]} [_ call-response]]
     (if (get-in db [:matches :call-status :success?])
-      (let [upd-db (-> (assoc-in db [:matches :call-status :message] "Success")
-                       (assoc-in [:matches :call-status :success?] true)
-                       (assoc-in [:matches :lineup] (:body call-response))
-                       (evt-common/show-div "send-lineup-email"))]
-        {:db upd-db}))))
+      {:db (-> (assoc-in db [:matches :call-status :message] "Success")
+               (assoc-in [:matches :call-status :success?] true)
+               (assoc-in [:matches :lineup] (:body call-response))
+               (evt-common/show-div "send-lineup-email"))})))
 
 
 (rf/reg-event-fx
@@ -62,11 +60,10 @@
 (rf/reg-event-fx
   ::send-lineup-email-failed
   (fn [{:keys [db]} [_ status]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] false)
-                     (assoc-in [:matches :call-status :message] "Call to send lineup email failed")
-                     (assoc-in [:matches :panel-visible :call-status] true)
-                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))]
-      {:db upd-db})))
+    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+             (assoc-in [:matches :call-status :message] "Call to send lineup email failed")
+             (assoc-in [:matches :panel-visible :call-status] true)
+             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))}))
 
 (rf/reg-fx
   ::get-match-lineup

@@ -134,7 +134,7 @@
               [:tr {:class row-class :id player-id :key player-id}
                [:td.text-left (:last_name player) ", " (:first_name player)]
                [:td.text-center
-                [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name cb-id :id cb-id :onChange #((re-frame.core/dispatch [::evt-set-avail/player-selection-changed cb-id player-id]))}]]
+                [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name cb-id :key cb-id :onChange #((re-frame.core/dispatch [::evt-set-avail/player-selection-changed (-> % .-target .-value)]))}]]
                [:td.text-center player_response]
                [:td.text-center sent_flag]
                [:td (if (= (:response_date player) nil) "" (:response_date player))]
@@ -393,7 +393,6 @@
 (defn add-match-select-controls
   "add the player lists and forfeit radio buttons for a court"
   [list court team-info lineup forfeits match-info]
-  (println "add-match-select-controls forfeits: " forfeits)
   (let [btn-grp (str "c" court "-forfeit-grp")
         no-forfeit (str "c" court "-forfeit-none")
         team-forfeit (str "c" court "-forfeit")
