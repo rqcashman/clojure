@@ -59,7 +59,7 @@
                        (assoc-in [:matches :panel-visible :set-lineup] false)
                        (assoc-in [:matches :panel-visible :schedule] true)
                        (assoc-in [:matches :panel-visible :call-status] true)
-                       (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))]
+                       (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))]
         {:db upd-db})
       {:dispatch [::update-lineup-failed  (get-in call-response [:body :msg])]})))
 
@@ -69,7 +69,7 @@
     {:db (-> (assoc-in db [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] msg)
              (assoc-in [:matches :panel-visible :call-status] true)
-             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))}))
+             (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))}))
 
 (def no-plyayer-selected {:last_name " ----- none selected -----" :first_name "" :id 0})
 (def init-player-list {
@@ -130,7 +130,7 @@
   (fn [{:keys [db]} [_ status]]
     {:db (-> (assoc-in db [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] "Call to get data failed")
-             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule]))
+             (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/show-schedule]))
              (evt-common/show-div "call-status"))}))
 
 (rf/reg-event-fx

@@ -10,7 +10,7 @@
              (assoc-in [:matches :call-status :message] "Call to get data failed")
              (assoc-in [:matches :call-status :panel-visible :send-avail-email] false)
              (assoc-in [:matches :call-status :panel-visible :call-status] true)
-             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule])))}))
+             (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/show-schedule])))}))
 
 (rf/reg-event-fx
   ::email-avail-form
@@ -54,7 +54,7 @@
                      (assoc-in [:matches :panel-visible :send-avail-email] false)
                      (assoc-in [:matches :panel-visible :schedule] true)
                      (assoc-in [:matches :panel-visible :call-status] true)
-                     (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule])))]
+                     (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/show-schedule])))]
       {:db upd-db})))
 
 (rf/reg-event-fx
@@ -63,7 +63,7 @@
     {:db (-> (assoc-in db [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] "Call to send availability email failed")
              (assoc-in [:matches :panel-visible :call-status] true)
-             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))}))
+             (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))}))
 
 (rf/reg-event-fx
   ::show-email-avail-form

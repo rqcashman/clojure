@@ -12,7 +12,7 @@
              (assoc-in [:matches :panel-visible :availability] false)
              (assoc-in [:matches :panel-visible :schedule] true)
              (assoc-in [:matches :panel-visible :call-status] true)
-             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))}))
+             (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))}))
 
 (rf/reg-event-fx
   ::update-availability-call-failed
@@ -20,7 +20,7 @@
     {:db (-> (assoc-in db [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] "Call to update availability failed")
              (assoc-in [:matches :panel-visible :call-status] true)
-             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/hide-call-status])))}))
+             (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))}))
 
 (rf/reg-fx
   ::get-match_availability
@@ -56,7 +56,7 @@
 (rf/reg-event-fx
   ::player-selection-changed
   (fn [{:keys [db]} [_ player-id]]
-    (println "new ::player-selection-changed")
+    (println "new ::player-selection-changed id: " player-id)
     (let [roster (reduce #(update-player-availability %1 %2 player-id) [] (get-in db [:matches :roster]))]
       {:db (assoc-in db [:matches :roster] roster)})))
 
@@ -65,7 +65,7 @@
   (fn [{:keys [db]} [_ status]]
     {:db (-> (assoc-in db [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] "Call to get data failed")
-             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule]))
+             (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/show-schedule]))
              (evt-common/show-div "call-status"))}))
 
 (rf/reg-event-fx

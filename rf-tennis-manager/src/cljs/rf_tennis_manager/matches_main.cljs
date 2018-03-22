@@ -35,9 +35,9 @@
                 [:td (:home_club_name sched-row)]
                 [:td.text-center (if (= team-id home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
                 [:td.text-center (if (= team-id home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
-                [:td.text-center [:span.avail-cursor {:onClick #(re-frame.core/dispatch [avail-func match-id])} (if (:availability_sent sched-row) GREEN-CHECK RED-X)]]
-                [:td.text-center [:span.avail-cursor {:onClick #(re-frame.core/dispatch [::evt-set-lineup/show-set-lineup-form match-id])} (if (:lineup_set sched-row) GREEN-CHECK RED-X)]]
-                [:td.text-center [:span.avail-cursor {:onClick #(re-frame.core/dispatch [send-lineup-func match-id])} (if (:lineup_sent sched-row) GREEN-CHECK RED-X)]]])))
+                [:td.text-center [:span.avail-cursor {:onClick #(rf/dispatch [avail-func match-id])} (if (:availability_sent sched-row) GREEN-CHECK RED-X)]]
+                [:td.text-center [:span.avail-cursor {:onClick #(rf/dispatch [::evt-set-lineup/show-set-lineup-form match-id])} (if (:lineup_set sched-row) GREEN-CHECK RED-X)]]
+                [:td.text-center [:span.avail-cursor {:onClick #(rf/dispatch [send-lineup-func match-id])} (if (:lineup_sent sched-row) GREEN-CHECK RED-X)]]])))
 
 (defn get-team-schedule
   "docstring"
@@ -86,7 +86,7 @@
     (let [call-status @(rf/subscribe [::subs/matches_call_status])
           cssClass (if (:success? call-status) "success" "form-error")
           div-visible @(rf/subscribe [::subs/panel-visible "call-status"])
-          click-fn (if (:on-click call-status) (:on-click call-status) #(re-frame.core/dispatch [::evt-common/hide-call-status]))]
+          click-fn (if (:on-click call-status) (:on-click call-status) #(rf/dispatch [::evt-common/hide-call-status]))]
       (println "==== call-status ==== visisble? " div-visible " db onclick: " (:on-click call-status) " fn: " click-fn)
       [:div {:className (if div-visible "div-panel-call-status" "div-panel-hide")}
        [:table.main-table.table-sm.call-status
@@ -134,7 +134,7 @@
               [:tr {:class row-class :id player-id :key player-id}
                [:td.text-left (:last_name player) ", " (:first_name player)]
                [:td.text-center
-                [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name cb-id :key cb-id :onChange #((re-frame.core/dispatch [::evt-set-avail/player-selection-changed (-> % .-target .-value)]))}]]
+                [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name cb-id :key cb-id :onChange #(rf/dispatch [::evt-set-avail/player-selection-changed player-id])}]]
                [:td.text-center player_response]
                [:td.text-center sent_flag]
                [:td (if (= (:response_date player) nil) "" (:response_date player))]
@@ -216,9 +216,9 @@
                   [:tr.text-center
                    [:td {:style {:width "55%"}} (layout/nbsp)]
                    [:td
-                    [:button {:type "button" :onClick #((re-frame.core/dispatch [::evt-set-avail/update-match-availability])) :style {:white-space "nowrap"}} title]]
+                    [:button {:type "button" :onClick #(rf/dispatch [::evt-set-avail/update-match-availability]) :style {:white-space "nowrap"}} title]]
                    [:td
-                    [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-common/show-schedule]) :style {:white-space "nowrap"}} "Return to Schedule"]]
+                    [:button {:type "button" :onClick #(rf/dispatch [::evt-common/show-schedule]) :style {:white-space "nowrap"}} "Return to Schedule"]]
                    [:td {:style {:width "40%"}} (layout/nbsp)]]]]]]
           [:tr.hidden-control
            [:td.text-center {:colSpan form-span}
@@ -229,14 +229,15 @@
           (layout/empty-row form-span)]]]])))
 
 (defn add-form-control
-  [label options init-data]
-  [:tr
-   [:td.text-left {:style {:width "5%"}} (layout/nbsp)]
-   [:td.text-left {:style {:white-space "nowrap"}} [:label.control-label {:for (:id options)} label]]
-   (case (:type options)
-     "text-area" [:td [:textarea options init-data]]
-     [:td.text-left [:input.form-control-sm options init-data]])
-   [:td {:style {:width "5%"}} (layout/nbsp)]])
+  ([label options] (add-form-control label options ""))
+  ([label options init-data]
+   [:tr
+    [:td.text-left {:style {:width "5%"}} (layout/nbsp)]
+    [:td.text-left {:style {:white-space "nowrap"}} [:label.control-label {:for (:id options)} label]]
+    (case (:type options)
+      "text-area" [:td [:textarea options]]
+      [:td.text-left [:input.form-control-sm options init-data]])
+    [:td {:style {:width "5%"}} (layout/nbsp)]]))
 
 (defn availability-email-form
   []
@@ -259,8 +260,8 @@
               (add-match-info match))]
            [:td {:style {:width "5%"}} (layout/nbsp)]]
           (layout/hr-row form-span "90%")
-          (add-form-control "Message:" {:id "av_message" :name "message" :cols 45 :maxLength 2000 :rows 7 :type "text-area"} "Let me know if you are available to play.")
-          (add-form-control "Signature:" {:id "av_signature" :name "signature" :cols 45 :maxLength 200 :rows 3 :type "text-area"} "Rick Cashman\n513.227.9278")
+          (add-form-control "Message:" {:id "av_message" :name "message" :cols 45 :maxLength 2000 :rows 7 :type "text-area" :defaultValue "Let me know if you are available to play."})
+          (add-form-control "Signature:" {:id "av_signature" :name "signature" :cols 45 :maxLength 200 :rows 3 :type "text-area" :defaultValue "Rick Cashman\n513.227.9278"})
           (add-form-control "Send to Subs:" {:id "av_send_subs" :name "send_subs" :type "checkbox"} nil)
           (layout/hr-row form-span "90%")
           (layout/empty-row form-span)
@@ -270,9 +271,9 @@
                   [:tr
                    [:td {:style {:width "55%"}} (layout/nbsp)]
                    [:td.text-right {:style {:white-space "nowrap"}}
-                    [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-avail-email/send-availability-email])} title]]
+                    [:button {:type "button" :onClick #(rf/dispatch [::evt-avail-email/send-availability-email])} title]]
                    [:td.text-left {:style {:white-space "nowrap"}}
-                    [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-common/show-schedule])} "Return to Schedule"]]
+                    [:button {:type "button" :onClick #(rf/dispatch [::evt-common/show-schedule])} "Return to Schedule"]]
                    [:td {:style {:width "40%"}} (layout/nbsp)]]]]]]
           [:tr.hidden-control
            [:td.text-center {:colSpan form-span}
@@ -285,7 +286,6 @@
 (defn add-lineup-row
   "docstring"
   [row-list court]
-  (println "add-lineup-row: " court)
   (conj row-list
         [:tr {:key (str "lineup-row" (:court_number court))}
          [:td {:key (str "lineup-court" (:court_number court))} [:b "Court " (:court_number court)] ":"]
@@ -331,8 +331,8 @@
                 (reduce #(add-lineup-row %1 %2) () (reverse lineup)))]]]
            [:td {:style {:width "5%"}}]]
           (layout/empty-row form-span)
-          (add-form-control "Message:" {:id "li_message" :name "message" :cols 45 :maxLength 2000 :rows 7 :type "text-area"} "Please arrive 10 to 15 minutes before the match starts.")
-          (add-form-control "Signature:" {:id "li_signature" :name "signature" :cols 45 :maxLength 200 :rows 3 :type "text-area"} "Rick Cashman\n513.227.9278")
+          (add-form-control "Message:" {:id "li_message" :name "message" :cols 45 :maxLength 2000 :rows 7 :type "text-area" :defaultValue "Please arrive 10 to 15 minutes before the match start time."})
+          (add-form-control "Signature:" {:id "li_signature" :name "signature" :cols 45 :maxLength 200 :rows 3 :type "text-area" :defaultValue "Rick Cashman\n513.227.9278"})
           (add-form-control "Send to Subs:" {:id "li_send_subs" :name "send_subs" :type "checkbox"} nil)
           (layout/hr-row form-span "90%")
           (layout/empty-row form-span)
@@ -343,9 +343,9 @@
               [:tr
                [:td {:style {:width "50%"}} (layout/nbsp)]
                [:td.text-right {:style {:white-space "nowrap"}}
-                [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-email-lineup/send-lineup-email])} title]]
+                [:button {:type "button" :onClick #(rf/dispatch [::evt-email-lineup/send-lineup-email])} title]]
                [:td.text-left {:style {:white-space "nowrap"}}
-                [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-common/show-schedule])} "Return to Schedule"]]
+                [:button {:type "button" :onClick #(rf/dispatch [::evt-common/show-schedule])} "Return to Schedule"]]
                [:td {:style {:width "50%"}} (layout/nbsp)]]]]]]
           [:tr.hidden-control
            [:td.center {:colSpan form-span}
@@ -410,15 +410,15 @@
             [:fieldset {:id btn-grp}
              [:input {:type     "radio" :name btn-grp :value value-no-forfeit :key no-forfeit :disabled btn-disabled
                       :checked  (if (= btn-value value-no-forfeit) true false)
-                      :onChange #(re-frame.core/dispatch [::evt-set-lineup/update-forfeit-btns court value-no-forfeit])}]
+                      :onChange #(rf/dispatch [::evt-set-lineup/update-forfeit-btns court value-no-forfeit])}]
              (layout/nbsp) "None" [:br]
              [:input {:type     "radio" :name btn-grp :value team-id :key team-forfeit :disabled btn-disabled
                       :checked  (if (= btn-value team-id) true false)
-                      :onChange #(re-frame.core/dispatch [::evt-set-lineup/update-forfeit-btns court team-id])}]
+                      :onChange #(rf/dispatch [::evt-set-lineup/update-forfeit-btns court team-id])}]
              (layout/nbsp) (:name team-info) [:br]
              [:input {:type     "radio" :name btn-grp :value opp-id :key opp-forfeit :disabled btn-disabled
                       :checked  (if (= btn-value opp-id) true false)
-                      :onChange #(re-frame.core/dispatch [::evt-set-lineup/update-forfeit-btns court opp-id])}]
+                      :onChange #(rf/dispatch [::evt-set-lineup/update-forfeit-btns court opp-id])}]
              (layout/nbsp) "Opponent" [:br]]]])))
 
 (defn set-lineup-form
@@ -467,12 +467,12 @@
                   [:tr
                    [:td {:style {:width "45%"}} (layout/nbsp)]
                    [:td.text-right {:style {:white-space "nowrap"}}
-                    [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-set-lineup/update-lineup])} title]]
+                    [:button {:type "button" :onClick #(rf/dispatch [::evt-set-lineup/update-lineup])} title]]
                    [:td.text-left {:style {:white-space "nowrap"}}
-                    [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-common/show-schedule])} "Return to Schedule"]]
+                    [:button {:type "button" :onClick #(rf/dispatch [::evt-common/show-schedule])} "Return to Schedule"]]
                    [:td.text-left {:style {:white-space "nowrap"}}
                     (let [match @(rf/subscribe [::subs/match-info])]
-                      [:button {:type "button" :onClick #(re-frame.core/dispatch [::evt-set-avail/show-set-avail-form (:match_id match)])} "Go to Availability"])]
+                      [:button {:type "button" :onClick #(rf/dispatch [::evt-set-avail/show-set-avail-form (:match_id match)])} "Go to Availability"])]
                    [:td {:style {:width "40%"}} (layout/nbsp)]]]]]]
           [:tr.hidden-control
            [:td {:colSpan form-span}

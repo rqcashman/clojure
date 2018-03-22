@@ -21,7 +21,7 @@
     {:db (-> (assoc-in db [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] "Call to get data failed")
              (assoc-in [:matches :panel-visible :call-status] true)
-             (assoc-in [:matches :call-status :on-click] #(re-frame.core/dispatch [::evt-common/show-schedule])))}))
+             (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/show-schedule])))}))
 
 (rf/reg-event-fx
   ::schedule
