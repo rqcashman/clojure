@@ -69,19 +69,19 @@
   [username]
   (let [parms (get-system-parms (:auth system-parm-category#))
         max-failed-attempts (:LOGIN_ATTEMPTS parms)
-        failure-minutes (:FAILURE_MINUTES parms)]
-    (let [failures (-> (j/query sys/db-cred
-                                [(str "select count(1) as ct from user_login_attempts where email=? and login_status=?
+        failure-minutes (:FAILURE_MINUTES parms)
+        failures (-> (j/query sys/db-cred
+                              [(str "select count(1) as ct from user_login_attempts where email=? and login_status=?
              and login_time > date_sub(current_timestamp(), INTERVAL " failure-minutes " MINUTE)") username failed-login-status])
-                       first :ct)]
-      (println "too-many-login-failures? failures: " failures " max failures: " max-failed-attempts)
-      (if (< failures (Integer/parseInt max-failed-attempts)) false true))))
+                     first :ct)]
+    (println "too-many-login-failures? failures: " failures " max failures: " max-failed-attempts)
+    (if (< failures (Integer/parseInt max-failed-attempts)) false true)))
 
 
 (defn account-unlocked?
   "unlock account if the account lockout time has elapsed"
   [username]
-  (if (= (too-many-login-failures? username) false)
+  (if-not (too-many-login-failures? username)
     (do
       (println "unlocking account: " username)
       (j/execute! sys/db-cred
@@ -93,7 +93,7 @@
 (defn lock-account?
   "lock account if the number of failed attempts has been reached in the given timeframe"
   [username]
-  (if (= (too-many-login-failures? username) true)
+  (if (too-many-login-failures? username)
     (do
       (println "locking account: " username)
       (j/execute! sys/db-cred
@@ -127,7 +127,6 @@
   "Save session id to the DB"
   [username session-id]
   (let [user (get-user username)]
-    (println "Persist session.  User: " user " id: " session-id)
     (if user
       (j/execute! sys/db-cred
                   [(str "insert into user_session values (?,?,current_timestamp(), current_timestamp())") session-id (:iduser_login user)]))))

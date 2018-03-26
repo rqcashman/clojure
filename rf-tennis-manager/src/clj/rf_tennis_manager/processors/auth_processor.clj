@@ -102,9 +102,8 @@
   "create redirect URL from the error list hash map"
   [url-hash]
   (println "====== get-redirect-url =======")
-  (println "get redirect url - input hash: " url-hash)
   (let [qs (s/join "&" (reduce #(get-qs-parm %1 %2) () (-> (dissoc url-hash :url :msg))))]
-    (if (= (s/blank? qs) false)
+    (if-not (s/blank? qs)
       (str (:url url-hash) "?" qs)
       (:url url-hash))))
 
@@ -123,6 +122,7 @@
   "redirect to next page depending on the outcome of the login attempt"
   [request value]
   (println "======= login-redirect =======")
+  (println "session:" (:session request))
   (let [username (:username (:params request))]
     (auth/insert-login-attempt username value)
     (if (= value am/LOGIN_FAILED)
@@ -139,7 +139,6 @@
             (assoc :session updated-session)))
       (let [error ((keyword value) am/authentication-error-list)
             redirect-url (get-redirect-url (conj error {:username username}))]
-        (println "login redirect url: " redirect-url)
         (rr/redirect redirect-url)))))
 
 (defn password-counts
@@ -153,7 +152,6 @@
     (Character/isLowerCase char) (update-in ct-hash [:lower] inc)
     :else (update-in ct-hash [:none] inc)))
 
-(comment "Wrote this function because I could not get regex to work :-(")
 (defn validate-chg-password-input
   "Validates the input from change password.  This happens after validation of current password"
   [req-params]
@@ -175,33 +173,37 @@
   "redirect on change password login error"
   [request error]
   (println "======= redirect-change-password =======")
-  (if (and (:session request) (auth/session-valid? (:identity (:session request))))
-    (-> ((keyword error) am/authentication-error-list)
-        (conj {:username (:username (:params request))})
-        get-redirect-url
-        rr/redirect
-        (assoc :session (:identity (:session request)))))
-  (-> ((keyword error) am/authentication-error-list)
-      (conj {:username (:username (:params request))})
-      get-redirect-url
-      rr/redirect))
+  (println "error: " error " session: " request)
+  (cond-> ((keyword error) am/authentication-error-list)
+          true (-> (conj {:username (:username (:params request))})
+                   get-redirect-url)
+          (not (and (:session request) (auth/session-valid? (:identity (:session request))))) rr/redirect
+          (and (:session request) (auth/session-valid? (:identity (:session request)))) (->
+                                                                                          rr/redirect
+                                                                                          (assoc :session (:session request)))))
 
-(defn change-password-redirect
+(defn change-password-login-success
+  "process change password if the current password was correct"
+  [request]
+  (let [validation-error (validate-chg-password-input (:params request))]
+    (println "val error ==== " validation-error)
+    (if-not validation-error
+      (do
+        (auth/change-password (:username (:params request)) (:new_password (:params request)))
+        (-> (redirect-change-password request am/CHG_PASSWORD_SUCCESS)
+            (assoc :session (dissoc (:session request) :identity))))
+      (-> ((keyword validation-error) am/authentication-error-list)
+          (conj {:username (:username (:params request))})
+          get-redirect-url
+          rr/redirect))))
+
+(defn change-password-handler
   "redirect a change password request as appropriate"
   [request value]
   (println "====== change-password-redirect =======")
+  (println "----- value: " value)
   (cond
-    (= value am/CHG_PASSWORD)
-    (let [validation-error (validate-chg-password-input (:params request))]
-      (if-not validation-error
-        (do
-          (auth/change-password (:username (:params request)) (:new_password (:params request)))
-          (-> (redirect-change-password request am/CHG_PASSWORD_SUCCESS)
-              (assoc :session (dissoc (:session request) :identity))))
-        (-> ((keyword validation-error) am/authentication-error-list)
-            (conj {:username (:username (:params request))})
-            get-redirect-url
-            rr/redirect)))
+    (= value am/CHG_PASSWORD) (change-password-login-success request)
     (= value am/LOGIN_FAILED) (redirect-change-password request am/LOGIN_FAILED_CHG_PWD)
     :else (redirect-change-password request value)))
 
@@ -212,34 +214,21 @@
   (println "user-validation-failed value: " value)
   (if-not (s/blank? value)
     (let [error ((keyword value) am/authentication-error-list)]
-      (println "error: : " error)
       (if (= value am/SESSION_EXPIRED)
         (let [user (auth/get-user-from-session-id (:identity (:session request)))]
-          (println "session timeout error -----: " error)
-          (println " url: " (get-redirect-url (conj error {:username (:email user)})))
           (->
             (rr/redirect (get-redirect-url (conj error {:username (:email user)})))
             (assoc :session (dissoc (:session request) :identity))))
-        (do
-          (println "error not session expired")
-          (rr/redirect (str (:url error))))))
-    (do
-      (println "==== user-validation-failed no value ===")
-      (rr/redirect "/login"))))
+        (rr/redirect (str (:url error)))))
+    (rr/redirect "/login")))
 
 (defn check-login-status
   "See if a user is already logged in.  It seems backwards but we want to fire the error handler if they are logged in so they get re-directed to the first landing page"
   [request]
   (println "============= LOGIN =================")
-  (println "login status uri: " request)
-  (println "login status: " (authenticated-access request))
   (if (= (authenticated-access request) true)
-    (do
-      (println "check login status returned true")
-      (error am/LOGIN_SUCCESS))
-    (do
-      (println "check login status returned false")
-      true)))
+    (error am/LOGIN_SUCCESS)
+    true))
 
 (defn check-logout-status
   "See if a user is already logged in."
@@ -271,7 +260,7 @@
              :request-method :post}
             {:pattern        #"(^/chgpassword$)"
              :handler        authenticate-user-for-change-password
-             :on-error       change-password-redirect
+             :on-error       change-password-handler
              :request-method :post}
             {:pattern        #"(^/logout)"
              :handler        check-logout-status

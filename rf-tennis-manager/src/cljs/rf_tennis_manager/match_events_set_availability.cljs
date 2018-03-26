@@ -7,7 +7,8 @@
 (rf/reg-event-fx
   ::update-availability-call-success
   (fn [{:keys [db]} [_ call-response]]
-    {:db (-> (assoc-in db [:matches :call-status :success?] true)
+    {:db (-> db
+             (assoc-in [:matches :call-status :success?] true)
              (assoc-in [:matches :call-status :message] "Availability updated")
              (assoc-in [:matches :panel-visible :availability] false)
              (assoc-in [:matches :panel-visible :schedule] true)
@@ -17,7 +18,8 @@
 (rf/reg-event-fx
   ::update-availability-call-failed
   (fn [{:keys [db]} [_ status]]
-    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+    {:db (-> db
+             (assoc-in [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] "Call to update availability failed")
              (assoc-in [:matches :panel-visible :call-status] true)
              (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))}))
@@ -30,7 +32,8 @@
 (rf/reg-event-fx
   ::update-match-availability
   (fn [{:keys [db]} [_ match-id]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] true)
+    (let [upd-db (-> db
+                     (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-update-availability {:method     :post
@@ -63,7 +66,8 @@
 (rf/reg-event-fx
   ::availability-call-failed
   (fn [{:keys [db]} [_ status]]
-    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+    {:db (-> db
+             (assoc-in [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] "Call to get data failed")
              (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/show-schedule]))
              (evt-common/show-div "call-status"))}))
@@ -73,15 +77,17 @@
   (fn [{:keys [db]} [_ call-response]]
     ;guard against the call to get match info failing before this call finishes. Miniscule chance of a race condition.  Will take my chances
     (if (get-in db [:matches :call-status :success?])
-      {:db (-> (assoc-in db [:matches :call-status :message] "Success")
+      {:db (-> db
+               (assoc-in [:matches :call-status :message] "Success")
                (assoc-in [:matches :call-status :success?] true)
-               (evt-common/show-div "availability")
-               (assoc-in [:matches :roster] (:body call-response)))})))
+               (assoc-in [:matches :roster] (:body call-response))
+               (evt-common/show-div "availability"))})))
 
 (rf/reg-event-fx
   ::show-set-avail-form
   (fn [{:keys [db]} [_ match-id]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] true)
+    (let [upd-db (-> db
+                     (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]

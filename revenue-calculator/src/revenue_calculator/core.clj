@@ -14,12 +14,12 @@
         calc-values (cv/calculation-values-db (str dir "\\input\\input_values.txt"))
         sfx (int (rand 1000))]
     ;(println calc-values)
-    (gm/send-gmail {:from "rqcashman@gmail.com"
-                    :to ["rqcashman@gmail.com"]
-                    :subject "HP Bronze test message"
-                    :text "Message text"
-                    :user "rqcashman@gmail.com"
-                    :password "oitdgcoxpdghplmb"})
+    ;(gm/send-gmail {:from "rqcashman@gmail.com"
+    ;                :to ["rqcashman@gmail.com"]
+    ;                :subject "HP Bronze test message"
+    ;                :text "Message text"
+    ;                :user "rqcashman@gmail.com"
+    ;                :password "oitdgcoxpdghplmb"})
     (sh/create-revenue-spreadsheet calc-values (str dir "\\output\\revenue_" sfx ".xlsx"))
     (di/create-revenue-spreadsheet calc-values (str dir "\\output\\revenue_di_" sfx ".xlsx")))
   )

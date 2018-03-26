@@ -26,7 +26,8 @@
 (rf/reg-event-fx
   ::update-lineup
   (fn [{:keys [db]} [_ match-id]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] true)
+    (let [upd-db (-> db
+                     (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-update-lineup {:method     :post
@@ -52,21 +53,23 @@
   ::update-lineup-success
   (fn [{:keys [db]} [_ call-response]]
     (if-not (= "failed" (get-in call-response [:body :status]))
-      (let [upd-schedule (reduce #(update-lineup-set %1 %2 (get-in db [:matches :selected-match-id])) [] (get-in db [:matches :schedule]))
-            upd-db (-> (assoc-in db [:matches :call-status :success?] true)
-                       (assoc-in [:matches :schedule] upd-schedule)
-                       (assoc-in [:matches :call-status :message] "Lineup updated")
-                       (assoc-in [:matches :panel-visible :set-lineup] false)
-                       (assoc-in [:matches :panel-visible :schedule] true)
-                       (assoc-in [:matches :panel-visible :call-status] true)
-                       (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))]
-        {:db upd-db})
-      {:dispatch [::update-lineup-failed  (get-in call-response [:body :msg])]})))
+      {:db (-> db
+               (assoc-in [:matches :schedule]
+                         (reduce #(update-lineup-set %1 %2 (get-in db [:matches :selected-match-id]))
+                                 [] (get-in db [:matches :schedule])))
+               (assoc-in [:matches :call-status :success?] true)
+               (assoc-in [:matches :call-status :message] "Lineup updated")
+               (assoc-in [:matches :panel-visible :set-lineup] false)
+               (assoc-in [:matches :panel-visible :schedule] true)
+               (assoc-in [:matches :panel-visible :call-status] true)
+               (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))}
+      {:dispatch [::update-lineup-failed (get-in call-response [:body :msg])]})))
 
 (rf/reg-event-fx
   ::update-lineup-failed
   (fn [{:keys [db]} [_ msg status]]
-    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+    {:db (-> db
+             (assoc-in [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] msg)
              (assoc-in [:matches :panel-visible :call-status] true)
              (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))}))
@@ -92,14 +95,11 @@
   (if (= player-available (:available player))
     (let [court-assignment (get-player-court-assignment player)
           add-player {:last_name (:last_name player) :first_name (:first_name player) :id (:id player)}]
-      (if (nil? court-assignment)
-        (assoc-in list [:players (keyword (str (:id add-player)))] add-player)
-        (if (= court-assignment court-key)
-          (->
-            (assoc-in list [:players (keyword (str (:id add-player)))] add-player)
-            (assoc :selected add-player))
-          list)))
+      (cond-> list
+              (or (nil? court-assignment) (= court-assignment court-key)) (assoc-in [:players (keyword (str (:id add-player)))] add-player)
+              (= court-assignment court-key) (assoc :selected add-player)))
     list))
+
 
 (rf/reg-event-fx
   ::show-lineup-form
@@ -109,10 +109,10 @@
       (let [player-lists (reduce (fn [player-list court-key]
                                    (assoc player-list (keyword court-key) (reduce #(add-player-list %1 %2 court-key) init-player-list, (:body players))))
                                  {}, (:courts cofx))]
-        {:db (->
-               (assoc-in (:db cofx) [:matches :lineup-player-list] player-lists)
-               (assoc-in [:matches :call-status :message] "Success")
-               (evt-common/show-div "set-lineup"))}))))
+        {:db (-> (:db cofx)
+                 (assoc-in [:matches :lineup-player-list] player-lists)
+                 (assoc-in [:matches :call-status :message] "Success")
+                 (evt-common/show-div "set-lineup"))}))))
 
 (rf/reg-event-fx
   ::init-forfeit-btns
@@ -128,7 +128,8 @@
 (rf/reg-event-fx
   ::set-lineup-data-failed
   (fn [{:keys [db]} [_ status]]
-    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+    {:db (-> db
+             (assoc-in [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] "Call to get data failed")
              (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/show-schedule]))
              (evt-common/show-div "call-status"))}))
@@ -143,13 +144,9 @@
 (defn update-player-list
   "update the player list for each court.  The newly selected item will be removed and the previously selected item will be restored - excluding the 'none' selection"
   [db player-list prev-selection new-selection]
-  (if-not (or (= (:id prev-selection) no-selection-player-id) (= (:id new-selection) no-selection-player-id))
-    (->
-      (assoc-in db [:matches :lineup-player-list (keyword player-list) :players (keyword (str (:id prev-selection)))] prev-selection)
-      (update-in [:matches :lineup-player-list (keyword player-list) :players] dissoc (keyword (str (:id new-selection)))))
-    (if-not (= (:id prev-selection) no-selection-player-id)
-      (assoc-in db [:matches :lineup-player-list (keyword player-list) :players (keyword (str (:id prev-selection)))] prev-selection)
-      (update-in db [:matches :lineup-player-list (keyword player-list) :players] dissoc (keyword (str (:id new-selection)))))))
+  (cond-> db
+          (not= (:id prev-selection) no-selection-player-id) (assoc-in [:matches :lineup-player-list (keyword player-list) :players (keyword (str (:id prev-selection)))] prev-selection)
+          (not= (:id new-selection) no-selection-player-id) (update-in [:matches :lineup-player-list (keyword player-list) :players] dissoc (keyword (str (:id new-selection))))))
 
 (rf/reg-event-fx
   ::update-player-lists
@@ -169,12 +166,13 @@
 
 (rf/reg-fx
   ::get-match-forfeits
-  #(evt-common/send-get-request %1))
+  evt-common/send-get-request)
 
 (rf/reg-event-fx
   ::show-set-lineup-form
   (fn [{:keys [db]} [_ match-id]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] true)
+    (let [upd-db (-> db
+                     (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]
@@ -191,3 +189,4 @@
                                     :on-success [::set-match-info]
                                     :on-fail    [::set-lineup-data-failed]}
        :db                         upd-db})))
+

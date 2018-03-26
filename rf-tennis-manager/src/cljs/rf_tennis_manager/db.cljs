@@ -43,8 +43,7 @@
 ;           :call-status {:success? false :message "Processing..."}}
 ;:admin    {:loaded?     false
 ;           :call-status {:success? false :message "Processing..."}}})
-
-
+()
 (def default-player {:last_name "----- none -----" :first_name "" :id 0})
 (comment
   ":curent and :previous are a hash map {:first 'Rick' :last 'Cashman' :id 10}

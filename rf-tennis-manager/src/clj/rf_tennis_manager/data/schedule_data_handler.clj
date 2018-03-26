@@ -121,24 +121,14 @@
       (j/execute! sys/db-cred
                   [(str "insert into match_availability values (?,?,?)") match_id player_id avail_flag]))))
 
-(def court-null-list #{nil 0})
-
 (defn court-valid?
-  "docstring"
+  "court is valid if it has a forfeit team id or both player1 and player2 are not nil"
   [valid court]
-  (if (= valid false)
-    false
-    (let [p1 (:player1 court)
-          p2 (:player2 court)
-          forfeit (:forfeit_team_id court)]
-      (if (not (contains? court-null-list forfeit))
-        true
-        (if (and
-              (not (contains? court-null-list p1))
-              (not (contains? court-null-list p2)))
-          true
-          false)))))
-
+  (cond
+    (= valid false) false
+    (not (nil? (:forfeit_team_id court))) true
+    (or (nil? (:player1 court)) (nil? (:player1 court))) false
+    :else true))
 
 (defn lineup-set?
   "docstring"
@@ -169,15 +159,15 @@
                  left join player p1 on p1.id = " player1-col
                  " left join player p2 on p2.id = " player2-col
                  " where mc.match_id = ? order by court_number")]
-    (j/query sys/db-cred
-             [sql match-id])))
+    (j/query sys/db-cred [sql match-id])))
 
-(def line-email-address-sql
+(comment "The union is to ensure that any sub in the lineup gets an email")
+(def lineup-email-address-sql
   (str "SELECT last_name, first_name, email, status, id"
        "  FROM player"
        "  WHERE team_id = ? AND status = (--status--)"
        "  AND email IS NOT NULL and email <> ' '"
-       "  UNION SELECT last_name, first_name, email, status, p.id"
+       " UNION SELECT last_name, first_name, email, status, p.id"
        "  FROM schedule s"
        "  JOIN match_courts mc ON mc.match_id = s.match_id"
        "  JOIN player p ON p.team_id = ?"
@@ -187,15 +177,14 @@
        "       OR mc.away_player2 = p.id)"
        "  WHERE s.match_id = ? "
        "  AND email IS NOT NULL and email <> ' '"
-       "  ORDER BY last_name"))
+       "ORDER BY last_name"))
 
 (defn get-lineup-email-addresses
-  "docstring"
+  "get email addresses for players in the lineup"
   [match-id team-id send-subs]
   (let [status (if (s/blank? send-subs) "'A'", "'A','S'")
-        sql (s/replace line-email-address-sql #"--status--" status)]
-    (j/query sys/db-cred
-             [sql team-id team-id match-id])))
+        sql (s/replace lineup-email-address-sql #"--status--" status)]
+    (j/query sys/db-cred [sql team-id team-id match-id])))
 
 
 

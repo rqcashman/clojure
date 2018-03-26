@@ -9,8 +9,8 @@
 
 (defn add-div
   [func-map]
-  [:div.roster-action {:id (:id func-map)} (:content func-map)]
-  )
+  [:div.roster-action {:id (:id func-map)} (:content func-map)])
+
 
 (defn add-form-control
   [label options]
@@ -123,8 +123,8 @@
        (layout/empty-row 3)]]]
     [:br]
     [:hr]
-    [:br])
-  )
+    [:br]))
+
 
 (defn roster [session]
   (let [roster-actions

@@ -19,7 +19,7 @@
 (defn extract-password-fragement
   "Extract a password segment"
   [pwd idx alpha]
-  (conj pwd (subs alpha (nth idx 0) (nth idx 1))))
+  (conj pwd (subs alpha (first idx) (second idx))))
 
 (defn get-password
   "Generate a password from the input file"
@@ -31,8 +31,7 @@
      (-> (reduce #(extract-password-fragement %1 %2 alpha)
                  ()
                  substring-arr)
-         s/join
-         s/reverse))))
+         s/join s/reverse))))
 
 
 

@@ -168,15 +168,13 @@
   (let [player-list (reduce (fn [list id] (conj list ((keyword id) parms))) () player-id-arr)]
     (some #(= % "0") player-list)))
 
-
 (defn get-player-names
   "Convert player id to player name"
   [player-id-list]
   (reduce (fn [list id] (let [p (player/player id)]
                           (println "player: " p)
                           (conj list (str (:last_name p) ", " (:first_name p)))))
-          ()
-          player-id-list))
+          () player-id-list))
 
 (defn validate-lineup
   "Validate the input lineup is valid.  All courts have players and no player assigned to multiple courts"

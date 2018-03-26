@@ -5,11 +5,10 @@
 (defn logout-btns
   "docstring"
   []
-  ([:hr])
-  )
+  ([:hr]))
+
 
 (defn application [title js-file react? & content]
-  (println title " is a react page: " react?)
   (html5 {:ng-app "myApp" :lang "en"}
          [:head
           [:title title]
@@ -43,8 +42,8 @@
 
 (defn actions
   [actions]
-  actions
-  )
+  actions)
+
 
 (defn empty-row
   [colspan]

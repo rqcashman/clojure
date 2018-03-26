@@ -14,12 +14,12 @@
 
 (defn add-form-control
   [label options]
-  [:tr
+  [:tr]
   [:tr
    [:td {:width "5%"} "&nbsp;"]
    [:td {:nowrap true} [:b [:label.control-label {:for (:id options)} label]]]
    [:td [:input.form-control-sm options]]
-   [:td {:width "5%"} "&nbsp;"]]])
+   [:td {:width "5%"} "&nbsp;"]])
 
 (defn add-form-button
   [title]
@@ -32,7 +32,7 @@
 (defn add-error-message
   "docstring"
   [errorno]
-  (if-not (= (s/blank? errorno) true)
+  (if-not (s/blank? errorno)
     (list [:tr
            [:td "&nbsp;"]
            [:td [:b "Login message:"]]
@@ -55,7 +55,6 @@
         action (if (= page-type LOGIN_PAGE) "/login" "/chgpassword")
         username (get-user-name request session)
         errorno (:errno request)]
-
     [:form#loginform.form-horizontal {:method "post" :action action}
      [:table.table.table-sm.login-form {:align "center"}
       [:tr

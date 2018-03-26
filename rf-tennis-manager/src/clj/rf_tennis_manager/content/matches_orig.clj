@@ -14,8 +14,8 @@
 
 (defn add-div
   [func-map]
-  [:div.matches-action {:id (:id func-map)} (:content func-map)]
-  )
+  [:div.matches-action {:id (:id func-map)} (:content func-map)])
+
 
 (defn add-form-control
   [label options init-data]
@@ -46,8 +46,8 @@
                 [:td {:align "center"} (if (= (:team_id user) home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
                 [:td {:align "center"} [:span.avail-cursor {:onclick (str avail-func "('" (:match_id sched-row) "');")} (if (:availability_sent sched-row) GREEN-CHECK RED-X)]]
                 [:td {:align "center"} [:span.avail-cursor {:onclick (str "set_lineup('" (:match_id sched-row) "');")} (if lineup-valid GREEN-CHECK RED-X)]]
-                [:td {:align "center"} [:span.avail-cursor {:onclick (str send-lineup-func "('" (:match_id sched-row) "');")} (if (:lineup_sent sched-row) GREEN-CHECK RED-X)]]
-                ])))
+                [:td {:align "center"} [:span.avail-cursor {:onclick (str send-lineup-func "('" (:match_id sched-row) "');")} (if (:lineup_sent sched-row) GREEN-CHECK RED-X)]]])))
+
 
 (defn get-team-schedule
   "docstring"

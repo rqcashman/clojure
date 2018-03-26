@@ -51,7 +51,7 @@
   {:builds
    [{:id           "dev"
      :source-paths ["src/cljs" "src/cljs/rf_tennis_manager"]
-     ;:figwheel     {:on-jsload "rf-tennis-manager.core/mount-root"}
+     :figwheel     {:on-jsload "rf-tennis-manager.core/mount-root"}
      :compiler     {
                     :main                 rf-tennis-manager.core
                     :output-to            "resources/public/js/compiled/app.js"

@@ -10,8 +10,7 @@
 
 (defn add-div
   [func-map]
-  [:div.admin-action {:id (:id func-map)} (:content func-map)]
-  )
+  [:div.admin-action {:id (:id func-map)} (:content func-map)])
 
 (defn add-form-control
   [label options]
@@ -96,24 +95,6 @@
             [:button {:type "button" :onclick (str "return processAdminRequest('#loadscheduleform', '/load-schedule', '" title "')")} title]]]
       (layout/empty-row form-span)]]))
 
-;(defn load-schedule-file
-;  []
-;  (let [title "Load Schedule File"]
-;    [:form#loadschedulefileform.form-horizontal {:method "post" :action "/load-schedule-file" :enctype "multipart/form-data"}
-;     [:table.match-info-table.table-sm
-;      (layout/empty-row form-span)
-;      [:tr [:td {:colspan form-span :align "center"} [:h4 title]]]
-;      (layout/hr-row form-span "90%")
-;      (layout/add-select season/seasons layout/option "season_id" "Season:" (- form-span 2))
-;      (add-form-control "Select file:" {:class "required" :id "schedule" :name "schedule" :type "file" :size 100})
-;      ; [:tr [:td {:colspan form-span :align "center"}
-;      ;      [:input {:name "schedule" :type "file"}]]]
-;      (layout/hr-row form-span "90%")
-;      (layout/empty-row form-span)
-;      [:tr [:td {:colspan form-span :align "center"}
-;            [:button {:type "button" :onclick (str "return processAdminRequest('#loadschedulefileform', '/load-schedule-file', '" title "')")} title]]]
-;      (layout/empty-row form-span)]]))
-
 (defn select-form
   [admin-actions]
   (list
@@ -127,10 +108,7 @@
        (layout/add-select #(layout/actions admin-actions) layout/option "admin-list" "Admin Action:" 1 (str "change_admin_form(this.value);"))
        (layout/hr-row 3 "90%")
        (layout/empty-row 3)]]]
-    [:br]
-    [:hr]
-    [:br])
-  )
+    [:br] [:hr] [:br]))
 
 (defn admin [session]
   (let [admin-actions

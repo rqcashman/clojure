@@ -6,7 +6,8 @@
 (rf/reg-event-fx
   ::email-avail-get-data-failed
   (fn [{:keys [db]} [_ status]]
-    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+    {:db (-> db
+             (assoc-in [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] "Call to get data failed")
              (assoc-in [:matches :call-status :panel-visible :send-avail-email] false)
              (assoc-in [:matches :call-status :panel-visible :call-status] true)
@@ -15,7 +16,8 @@
 (rf/reg-event-fx
   ::email-avail-form
   (fn [{:keys [db]} [_ call-response]]
-    {:db (-> (assoc-in db [:matches :call-status :message] "Success")
+    {:db (-> db
+             (assoc-in [:matches :call-status :message] "Success")
              (assoc-in [:matches :call-status :success?] true)
              (evt-common/show-div "send-avail-email")
              (assoc-in [:matches :match-info] (:body call-response)))}))
@@ -24,7 +26,8 @@
 (rf/reg-event-fx
   ::send-availability-email
   (fn [{:keys [db]} [_ match-id]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] true)
+    (let [upd-db (-> db
+                     (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-send-avail-email {:method     :post
@@ -48,7 +51,8 @@
   ::send-avail-email-success
   (fn [{:keys [db]} [_ call-response]]
     (let [upd-schedule (reduce #(update-avail-sent %1 %2 (get-in db [:matches :selected-match-id])) [] (get-in db [:matches :schedule]))
-          upd-db (-> (assoc-in db [:matches :call-status :success?] true)
+          upd-db (-> db
+                     (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Availability email sent")
                      (assoc-in [:matches :schedule] upd-schedule)
                      (assoc-in [:matches :panel-visible :send-avail-email] false)
@@ -60,7 +64,8 @@
 (rf/reg-event-fx
   ::send-avail-email-failed
   (fn [{:keys [db]} [_ status]]
-    {:db (-> (assoc-in db [:matches :call-status :success?] false)
+    {:db (-> db
+             (assoc-in [:matches :call-status :success?] false)
              (assoc-in [:matches :call-status :message] "Call to send availability email failed")
              (assoc-in [:matches :panel-visible :call-status] true)
              (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))}))
@@ -68,7 +73,8 @@
 (rf/reg-event-fx
   ::show-email-avail-form
   (fn [{:keys [db]} [_ match-id]]
-    (let [upd-db (-> (assoc-in db [:matches :call-status :success?] true)
+    (let [upd-db (-> db
+                     (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]

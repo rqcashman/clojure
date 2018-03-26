@@ -33,11 +33,11 @@
                 [:td (:match_time sched-row)]
                 [:td (if (= team-id home-team-id) (:away_team sched-row) (:home_team sched-row))]
                 [:td (:home_club_name sched-row)]
-                [:td.text-center (if (= team-id home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
-                [:td.text-center (if (= team-id home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]
                 [:td.text-center [:span.avail-cursor {:onClick #(rf/dispatch [avail-func match-id])} (if (:availability_sent sched-row) GREEN-CHECK RED-X)]]
                 [:td.text-center [:span.avail-cursor {:onClick #(rf/dispatch [::evt-set-lineup/show-set-lineup-form match-id])} (if (:lineup_set sched-row) GREEN-CHECK RED-X)]]
-                [:td.text-center [:span.avail-cursor {:onClick #(rf/dispatch [send-lineup-func match-id])} (if (:lineup_sent sched-row) GREEN-CHECK RED-X)]]])))
+                [:td.text-center [:span.avail-cursor {:onClick #(rf/dispatch [send-lineup-func match-id])} (if (:lineup_sent sched-row) GREEN-CHECK RED-X)]]
+                [:td.text-center (if (= team-id home-team-id) (:home_team_points sched-row) (:away_team_points sched-row))]
+                [:td.text-center (if (= team-id home-team-id) (:away_team_points sched-row) (:home_team_points sched-row))]])))
 
 (defn get-team-schedule
   "docstring"
@@ -68,11 +68,11 @@
               [:td "Time"]
               [:td "Opponent"]
               [:td "Location"]
-              [:td {:name "team-name"} "Points"]
-              [:td "Opponent Points"]
               [:td "Availability Email Sent"]
               [:td "Lineup Set"]
-              [:td "Lineup Sent"]]]
+              [:td "Lineup Sent"]
+              [:td {:name "team-name"} "Points"]
+              [:td "Opponent Points"]]]
             [:tbody#match-sched-body
              (get-team-schedule schedule (:team_id team-info))]
             ]]

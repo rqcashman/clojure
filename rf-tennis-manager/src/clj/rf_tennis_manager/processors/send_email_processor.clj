@@ -12,11 +12,10 @@
 (defn format-phone
   "Format phone number"
   [phone-number]
-  (if (> (count phone-number) 7)
-    (str (subs phone-number 0 3) "." (subs phone-number 3 6) "." (subs phone-number 6))
-    (if (= (count phone-number) 7)
-      (str (subs phone-number 0 3) "." (subs phone-number 3))
-      phone-number)))
+  (cond
+    (> (count phone-number) 7) (str (subs phone-number 0 3) "." (subs phone-number 3 6) "." (subs phone-number 6))
+    (= (count phone-number) 7) (str (subs phone-number 0 3) "." (subs phone-number 3))
+    :else phone-number))
 
 (defn format-map-link
   "Format a Google maps link to the match location - used in match emails"
@@ -119,6 +118,20 @@
     "   <tr><td colspan='2'><h4>" (s/replace signature #"\n" "<br>") "</h4></td></tr>"
     "</table>"))
 
+(defn send-email-to-player
+  "docstring"
+  [player send-subs email-body parms match-id user]
+  (if (and (= (s/blank? (:email player)) false)
+           (not= (:status player) "I")
+           (or (not= (:status player) "S") (not= send-subs nil)))
+    (let [uuid (s/replace (str (java.util.UUID/randomUUID)) "-" "")
+          email-msg (-> email-body
+                        (s/replace "---salutation---" (str (:first_name player) " " (:last_name player)))
+                        (s/replace "--uuid--" uuid))
+          email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
+      (mail/send-gmail email-parms)
+      (comm/add_player_communication (:id player) match-id uuid user))))
+
 (defn send-avail-email
   "Send a lineup availabiility email for a match"
   [session {:keys [message signature match_id send_subs]}]
@@ -129,16 +142,7 @@
           subject (str "Match availability for " (:match_date match-info))
           parms (conj sys/email-cred {:from (:email user) :subject subject})]
       (doseq [player (team/team-roster (:team_id user))]
-        (if (and (= (s/blank? (:email player)) false)
-                 (not= (:status player) "I")
-                 (or (not= (:status player) "S") (not= send_subs nil)))
-          (let [uuid (s/replace (str (java.util.UUID/randomUUID)) "-" "")
-                email-msg (-> (s/replace email-body "---salutation---" (str (:first_name player) " " (:last_name player)))
-                              (s/replace "--uuid--" uuid))
-                email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
-            (println email-parms)
-            (mail/send-gmail email-parms)
-            (comm/add_player_communication (:id player) match_id uuid user))))
+        (send-email-to-player player send_subs email-body parms match_id user))
       (comm/upsert_match_avail_email_sent match_id user)
       (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Availability email sent"))
     (catch Exception e
@@ -146,25 +150,21 @@
       (println e)
       (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e)))))
 
-(defn style-courts
-  "Hilights a player if they are in the lineup"
-  [court-assignments player-id]
-  (s/replace (s/replace court-assignments (re-pattern (str "---" player-id "---")) " style='font-weight:bold'") #"---\d+---" ""))
-
 (defn send-lineup-email
   "Send a match lineup email"
   [session {:keys [message signature match_id send_subs]}]
   (try
     (let [match-info (sched/match-info match_id)
           user (auth/get-user-from-session-id (:identity session))
+          email-template (get-lineup-email-body message signature match-info)
           court-assignments (s/join (reduce #(get-lineup-row %1 %2) () (reverse (sched/match-lineup match_id user))))
-          email-body (get-lineup-email-body message signature match-info)
-          subject (str "Lineup for " (:match_date match-info))
-          parms (conj sys/email-cred {:from (:email user)  :subject subject})]
+          parms (conj sys/email-cred {:from (:email user) :subject (str "Lineup for " (:match_date match-info))})]
       (doseq [player (sched/get-lineup-email-addresses match_id (:team_id user) send_subs)]
-        (println player)
-        (let [email-msg (-> (s/replace email-body "---courts---" (style-courts court-assignments (:id player)))
-                            (s/replace "---salutation---" (str (:first_name player) " " (:last_name player))))
+        (let [email-msg (-> email-template
+                            (s/replace "---salutation---" (str (:first_name player) " " (:last_name player)))
+                            (s/replace "---courts---" (-> court-assignments
+                                                          (s/replace (re-pattern (str "---" (:id player) "---")) " style='font-weight:bold'")
+                                                          (s/replace #"---\d+---" ""))))
               email-parms (conj parms (hash-map :to [(:email player)] :text email-msg))]
           (mail/send-gmail email-parms)))
       (comm/upsert_match_lineup_email_sent match_id user)

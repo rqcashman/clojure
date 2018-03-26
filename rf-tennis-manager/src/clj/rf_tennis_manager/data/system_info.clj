@@ -16,8 +16,7 @@
                        (s/split #"\n"))
           sys-parms (reduce (fn [parm-map parm]
                               (conj parm-map (first (read-string parm))))
-                            {}
-                            parm-arr)]
+                            {} parm-arr)]
       ;(io/delete-file password-file)
       ;(io/delete-file parm-file)
       sys-parms)

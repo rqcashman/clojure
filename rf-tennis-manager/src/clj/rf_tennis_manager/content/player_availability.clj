@@ -28,8 +28,8 @@
          [:td]
          [:td {:nowrap "true" :colspan 2} "You have been marked as " avail_text " for the match on " (:match_date comm_detail) " at " (:match_time comm_detail)]
          [:td {:width "25px"} "&nbsp;"]]
-        [:tr [:td {:colspan 4} "&nbsp;"]]]]]]
-    ))
+        [:tr [:td {:colspan 4} "&nbsp;"]]]]]]))
+
 
 (defn update_availability
   "docstring"
