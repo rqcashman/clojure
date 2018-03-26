@@ -29,6 +29,7 @@
     (let [upd-db (-> db
                      (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
+                     (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-send-avail-email {:method     :post
                                 :url        (str "http://localhost:3000/send-availability-email")
@@ -39,7 +40,7 @@
 
 (rf/reg-fx
   ::call-send-avail-email
-  #(evt-common/send-post-request %1))
+  evt-common/send-post-request)
 
 (defn update-avail-sent
   [list match match-id]
@@ -76,6 +77,7 @@
     (let [upd-db (-> db
                      (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
+                     (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::evt-common/get-match-info {:method     :get

@@ -15,24 +15,44 @@
   (fn [{:keys [db]} [_ call-response]]
     {:db (assoc-in db [:matches :match-info] (:body call-response))}))
 
+(rf/reg-event-fx
+  ::session-timeout
+  (fn [{:keys [db]} [_ call-response]]
+    (let [upd-db (-> db
+                     (assoc-in [:matches :call-status :success?] false)
+                     (assoc-in [:matches :call-status :message] "Session timed out, please login again")
+                     (assoc-in [:matches :panel-visible :call-status] true)
+                     (assoc-in [:matches :call-status :on-click] nil))]
+      {:db upd-db})))
+
+(def session-expired-errno 400)
 (defn send-get-request
   [request]
   (go
-    (let [status (<! (http/get (:url request)))
-          method (if (:success status) (:on-success request) (:on-fail request))]
-      (rf/dispatch (conj method status)))))
+    (println "send-get-request: " request)
+    (let [response (<! (http/get (:url request)))
+          method (cond
+                   (= (:status response) session-expired-errno) [::session-timeout]
+                   (:success response) (:on-success request)
+                   :else (:on-fail request))]
+      (rf/dispatch (conj method response)))))
 
 (defn send-post-request
   [request]
   (go
+    (println "send-post-request: " request)
     (let [values (ef/from (:form-id request) (ef/read-form))
-          status (<! (http/post (:url request) {:form-params values}))
-          method (if (:success status) (:on-success request) (:on-fail request))]
-      (rf/dispatch (conj method status)))))
+          response (<! (http/post (:url request) {:form-params values}))
+          method (cond
+                   (= (:status response) session-expired-errno) [::session-timeout]
+                   (:success response) (:on-success request)
+                   :else (:on-fail request))]
+      (println "---- post repsonse: " response)
+      (rf/dispatch (conj method response)))))
 
 (rf/reg-fx
   ::get-match-info
-  #(send-get-request %1))
+  send-get-request)
 
 (defn show-div
   [db show-div-id]

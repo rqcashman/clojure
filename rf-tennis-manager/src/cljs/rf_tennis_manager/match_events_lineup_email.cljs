@@ -29,6 +29,7 @@
     (let [upd-db (-> db
                      (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
+                     (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-send-lineup-email {:method     :post
                                  :url        (str "http://localhost:3000/send-lineup-email")
@@ -39,7 +40,7 @@
 
 (rf/reg-fx
   ::call-send-lineup-email
-  #(evt-common/send-post-request %1))
+  evt-common/send-post-request)
 
 (defn update-lineup-sent
   [list match match-id]
@@ -72,7 +73,7 @@
 
 (rf/reg-fx
   ::get-match-lineup
-  #(evt-common/send-get-request %1))
+  evt-common/send-get-request)
 
 (rf/reg-event-fx
   ::show-email-lineup-form
@@ -80,6 +81,7 @@
     (let [upd-db (-> db
                      (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
+                     (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::get-match-lineup          {:method     :get

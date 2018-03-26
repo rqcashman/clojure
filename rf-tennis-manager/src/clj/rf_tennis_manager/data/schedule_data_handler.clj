@@ -127,7 +127,7 @@
   (cond
     (= valid false) false
     (not (nil? (:forfeit_team_id court))) true
-    (or (nil? (:player1 court)) (nil? (:player1 court))) false
+    (or (nil? (:player1 court)) (nil? (:player2 court))) false
     :else true))
 
 (defn lineup-set?

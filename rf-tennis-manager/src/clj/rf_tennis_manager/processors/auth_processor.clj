@@ -85,9 +85,8 @@
 (defn on-err-from-get
   [request value]
   (println "=======on-err-from-get =======")
-  (let [errMsg (if-not (= (s/blank? value) true) value am/NOT_AUTHORIZED_MSG)]
-    {:status  200
-     :headers {"Content-Type" "text/plain"}
+  (let [errMsg (if-not (s/blank? value) value am/NOT_AUTHORIZED_MSG)]
+    {:status  400
      :body    (str {:status "failed" :status-code 400 :msg "User not logged in"})}))
 
 (defn get-qs-parm
@@ -283,8 +282,4 @@
              :request-method :get}
             {:pattern        #"^/.*"
              :handler        authenticated-access
-             :request-method :get
-             :on-error       on-err-from-get}
-            {:pattern  #"^/.*"
-             :handler  authenticated-access
-             :on-error user-validation-failed}])
+             :on-error       on-err-from-get}])

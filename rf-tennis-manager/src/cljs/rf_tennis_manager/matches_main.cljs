@@ -86,7 +86,7 @@
     (let [call-status @(rf/subscribe [::subs/matches_call_status])
           cssClass (if (:success? call-status) "success" "form-error")
           div-visible @(rf/subscribe [::subs/panel-visible "call-status"])
-          click-fn (if (:on-click call-status) (:on-click call-status) #(rf/dispatch [::evt-common/hide-call-status]))]
+          click-fn (if-not (nil? (:on-click call-status)) (:on-click call-status) #(rf/dispatch [::evt-common/hide-call-status]))]
       (println "==== call-status ==== visisble? " div-visible " db onclick: " (:on-click call-status) " fn: " click-fn)
       [:div {:className (if div-visible "div-panel-call-status" "div-panel-hide")}
        [:table.main-table.table-sm.call-status
@@ -101,8 +101,10 @@
           [:td {:style {:width "5%"}} (layout/nbsp)]]
          (layout/hr-row form-span "90%")
          (layout/empty-row form-span)
-         [:tr [:td.text-center {:colSpan form-span}
-               [:button#ma-status-btn {:value "ok" :onClick click-fn} "OK"]]]
+         (println "call status on click: " (:on-click call-status))
+         (if-not (nil? (:on-click call-status))
+           [:tr [:td.text-center {:colSpan form-span}
+                 [:button#ma-status-btn {:value "ok" :onClick click-fn} "OK"]]])
          (layout/empty-row form-span)]]])))
 
 (defn availability-row

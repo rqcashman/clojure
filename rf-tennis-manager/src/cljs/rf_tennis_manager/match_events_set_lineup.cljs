@@ -29,6 +29,7 @@
     (let [upd-db (-> db
                      (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
+                     (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-update-lineup {:method     :post
                              :url        (str "http://localhost:3000/update-lineup")
@@ -39,8 +40,7 @@
 
 (rf/reg-fx
   ::call-update-lineup
-  #(evt-common/send-post-request %1))
-
+  evt-common/send-post-request)
 (defn update-lineup-set
   [list match match-id]
   (if (= match-id (:match_id match))
@@ -162,7 +162,7 @@
 
 (rf/reg-fx
   ::get-match-availability
-  #(evt-common/send-get-request %1))
+  evt-common/send-get-request)
 
 (rf/reg-fx
   ::get-match-forfeits
@@ -174,6 +174,7 @@
     (let [upd-db (-> db
                      (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
+                     (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::get-match-availability    {:method     :get

@@ -26,7 +26,7 @@
 
 (rf/reg-fx
   ::get-match_availability
-  #(evt-common/send-get-request %1))
+  evt-common/send-get-request)
 
 
 (rf/reg-event-fx
@@ -35,6 +35,7 @@
     (let [upd-db (-> db
                      (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
+                     (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-update-availability {:method     :post
                                    :url        (str "http://localhost:3000/update-availability")
@@ -45,7 +46,7 @@
 
 (rf/reg-fx
   ::call-update-availability
-  #(evt-common/send-post-request %1))
+  evt-common/send-post-request)
 
 (def player-available 1)
 (def player-unavailable 0)
@@ -89,6 +90,7 @@
     (let [upd-db (-> db
                      (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
+                     (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::get-match_availability    {:method     :get
