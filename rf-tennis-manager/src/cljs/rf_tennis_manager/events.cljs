@@ -37,7 +37,6 @@
 (rf/reg-event-fx
   ::list-changed
   (fn [{:keys [db]} [evt list]]
-    (println "list changedzzzzz: " list)
     (let [el (.getElementById js/document (str list "-list"))
           other-list-key (if (= list "c1p1") "c1p2" "c1p1")
           current (get-in db [:matches :lineup (keyword list) :selected :current])

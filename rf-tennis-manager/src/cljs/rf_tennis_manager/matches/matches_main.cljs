@@ -13,7 +13,6 @@
             [rf-tennis-manager.matches.match-events-set-availability :as evt-set-avail]
             [rf-tennis-manager.matches.match-events-set-lineup :as evt-set-lineup]
             [rf-tennis-manager.subs :as subs]
-
             [rf-tennis-manager.views-common :as layout]
             [clojure.string :as s]))
 
@@ -65,14 +64,14 @@
            [:table#match-sched.table-striped.table-sm.table
             [:thead.table-inverse
              [:tr
-              [:td "Datezzz"]
+              [:td "Date"]
               [:td "Time"]
               [:td "Opponent"]
               [:td "Location"]
               [:td "Availability Email Sent"]
               [:td "Lineup Set"]
               [:td "Lineup Sent"]
-              [:td {:name "team-name"} "Points"]
+              [:td "Points"]
               [:td "Opponent Points"]]]
             [:tbody#match-sched-body
              (get-team-schedule schedule (:team_id team-info))]
@@ -114,23 +113,15 @@
   (if (or
         (and (not= (:status player) "I") (= active? true))
         (and (= (:status player) "I") (= active? false)))
-    (let [sent_flag (if (= (:date_sent player) nil) "N", "Y")
-          player_response (case (:response player)
-                            0 "N"
-                            1 "Y"
-                            2 "?"
-                            "NA")
-          avail (case (:available player)
-                  1 "Y"
-                  "N")
-          long-status (case (:status player)
-                        "A" "Active"
-                        "S" "Sub"
-                        "I" "Inactive"
-                        "?")
-          row-class (if (= avail "Y") "player-avail" (if (= (:status player) "I") "player-inactive" ""))
+    (let [player_response (case (:response player) 0 "N" 1 "Y" 2 "?" "NA")
+          avail (if (= (:available player) 1) "Y" "N")
+          long-status (case (:status player) "A" "Active" "S" "Sub" "I" "Inactive" "?")
           box-checked (if (= avail "Y") true false)
-          box-disabled (if (= (:status player) "I") true false)]
+          box-disabled (if (= (:status player) "I") true false)
+          row-class (cond
+                      (= avail "Y") "player-avail"
+                      (= (:status player) "I") "player-inactive"
+                      :else "")]
       (conj rows
             (let [cb-id (str "pl-av-" (:id player))
                   player-id (:id player)]
@@ -139,7 +130,6 @@
                [:td.text-center
                 [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name cb-id :key cb-id :onChange #(rf/dispatch [::evt-set-avail/player-selection-changed player-id])}]]
                [:td.text-center player_response]
-               [:td.text-center sent_flag]
                [:td (if (= (:response_date player) nil) "" (:response_date player))]
                [:td.text-center long-status]])))
     rows))
@@ -204,7 +194,6 @@
                [:th.text-left "Player name"]
                [:th.text-center "Available"]
                [:th.text-center "Email Response"]
-               [:th.text-center "Email Sent"]
                [:th.text-left "Email Response Time"]
                [:th.text-center "Status"]]]
              [:tbody
