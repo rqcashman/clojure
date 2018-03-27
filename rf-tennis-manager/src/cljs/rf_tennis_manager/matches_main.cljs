@@ -359,11 +359,11 @@
 
 (defn get-player-list
   "docstring"
-  [lineup court-key]
+  [lineup court-key disable-list]
   (let [court-list ((keyword court-key) lineup)
         id (str court-key "-list")
         sel-id (get-in court-list [:selected :id])]
-    [:select {:name court-key :id id :value sel-id :onChange #(rf/dispatch [::evt-set-lineup/update-player-lists court-key (-> % .-target .-value)])}
+    [:select {:name court-key :id id :value sel-id :disabled disable-list :onChange #(rf/dispatch [::evt-set-lineup/update-player-lists court-key (-> % .-target .-value)])}
      (reduce (fn [list player]
                (let [comma (if (s/blank? (:first_name player)) " " ", ")
                      player-selected (if (= sel-id (:id player)) true false)]
@@ -374,23 +374,16 @@
 (def highest-court-number 4)
 (def lowest-court-number 1)
 
-(defn next-grp-has-no-forfeit
-  "returns true if the next highest court number does NOT have a forfeit"
+(defn disable-btn
   [court forfeits]
-  (if (= court highest-court-number)
+  (if
+    (and
+      (or (= court lowest-court-number) (= value-no-forfeit ((keyword (str "c" (dec court))) forfeits)))
+      (or (= court highest-court-number) (not= value-no-forfeit ((keyword (str "c" (inc court))) forfeits))))
     false
-    (if (= value-no-forfeit ((keyword (str "c" (inc court))) forfeits))
-      true
-      false)))
+    true))
 
-(defn prev-grp-has-forfeit
-  "returns true if the next lowest court number has a forfeit"
-  [court forfeits]
-  (if (= court lowest-court-number)
-    false
-    (if (= value-no-forfeit ((keyword (str "c" (dec court))) forfeits))
-      false
-      true)))
+
 
 (defn add-match-select-controls
   "add the player lists and forfeit radio buttons for a court"
@@ -399,15 +392,16 @@
         no-forfeit (str "c" court "-forfeit-none")
         team-forfeit (str "c" court "-forfeit")
         opp-forfeit (str "c" court "-forfeit-opp")
-        btn-disabled (if (or (next-grp-has-no-forfeit court forfeits) (prev-grp-has-forfeit court forfeits)) true false)
+        btn-disabled (disable-btn court forfeits)
         btn-value ((keyword (str "c" court)) forfeits)
         team-id (:id team-info)
         opp-id (if (= team-id (:home_team_id match-info)) (:away_team_id match-info) (:home_team_id match-info))]
+    (println "disabled? xxxxxxxxxxxxxxxxxxxxxx: " btn-disabled " court: " court)
     (conj list
           [:tr {:key (str "c" court "-line-up-row")}
            [:td [:span {:style {:font-weight "bold"}} (str "Court " court)]]
-           [:td (get-player-list lineup (str "c" court "p1"))]
-           [:td (get-player-list lineup (str "c" court "p2"))]
+           [:td (get-player-list lineup (str "c" court "p1") (pos? btn-value))]
+           [:td (get-player-list lineup (str "c" court "p2") (pos? btn-value))]
            [:td
             [:fieldset {:id btn-grp}
              [:input {:type     "radio" :name btn-grp :value value-no-forfeit :key no-forfeit :disabled btn-disabled

@@ -60,7 +60,6 @@
 (rf/reg-event-fx
   ::player-selection-changed
   (fn [{:keys [db]} [_ player-id]]
-    (println "new ::player-selection-changed id: " player-id)
     (let [roster (reduce #(update-player-availability %1 %2 player-id) [] (get-in db [:matches :roster]))]
       {:db (assoc-in db [:matches :roster] roster)})))
 

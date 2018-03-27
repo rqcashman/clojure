@@ -133,12 +133,6 @@
              (assoc-in [:matches :call-status :message] "Call to get data failed")
              (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/show-schedule]))
              (evt-common/show-div "call-status"))}))
-
-(rf/reg-event-fx
-  ::update-forfeit-btns
-  (fn [{:keys [db]} [_ court value]]
-    {:db (assoc-in db [:matches :forfeits (keyword (str "c" court))] value)}))
-
 (def no-selection-player-id 0)
 
 (defn update-player-list
@@ -147,6 +141,22 @@
   (cond-> db
           (not= (:id prev-selection) no-selection-player-id) (assoc-in [:matches :lineup-player-list (keyword player-list) :players (keyword (str (:id prev-selection)))] prev-selection)
           (not= (:id new-selection) no-selection-player-id) (update-in [:matches :lineup-player-list (keyword player-list) :players] dissoc (keyword (str (:id new-selection))))))
+
+(rf/reg-event-fx
+  ::update-forfeit-btns
+  (fn [{:keys [db]} [_ court value]]
+    (if (pos? value)
+      (let [p1-list (str "c" court "p1")
+            p2-list (str "c" court "p2")
+            p1-select-id (get-in db [:matches :lineup-player-list (keyword p1-list) :selected :id])
+            p2-select-id (get-in db [:matches :lineup-player-list (keyword p2-list) :selected :id])]
+        (println "p1 id: " p1-select-id)
+        (println "p2 id: " p2-select-id)
+        (if (not= p1-select-id no-selection-player-id)
+          (rf/dispatch [::update-player-lists p1-list no-selection-player-id]))
+        (if (not= p2-select-id no-selection-player-id)
+          (rf/dispatch [::update-player-lists p2-list no-selection-player-id]))))
+    {:db (assoc-in db [:matches :forfeits (keyword (str "c" court))] value)}))
 
 (rf/reg-event-fx
   ::update-player-lists

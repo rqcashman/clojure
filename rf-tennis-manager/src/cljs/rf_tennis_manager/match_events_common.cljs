@@ -47,7 +47,6 @@
                    (= (:status response) session-expired-errno) [::session-timeout]
                    (:success response) (:on-success request)
                    :else (:on-fail request))]
-      (println "---- post repsonse: " response)
       (rf/dispatch (conj method response)))))
 
 (rf/reg-fx
