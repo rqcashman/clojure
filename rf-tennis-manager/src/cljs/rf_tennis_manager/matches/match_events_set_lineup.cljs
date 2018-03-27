@@ -1,6 +1,6 @@
-(ns rf-tennis-manager.match-events-set-lineup
+(ns rf-tennis-manager.matches.match-events-set-lineup
   (:require [re-frame.core :as rf]
-            [rf-tennis-manager.match-events-common :as evt-common]
+            [rf-tennis-manager.matches.match-events-common :as evt-common]
             [clojure.string :as s]))
 (def court-player-key ["c1p1" "c1p2" "c2p1" "c2p2" "c3p1" "c3p2" "c4p1" "c4p2"])
 (def no-forfeits {:c1 0 :c2 0 :c3 0 :c4 0})
@@ -150,8 +150,6 @@
             p2-list (str "c" court "p2")
             p1-select-id (get-in db [:matches :lineup-player-list (keyword p1-list) :selected :id])
             p2-select-id (get-in db [:matches :lineup-player-list (keyword p2-list) :selected :id])]
-        (println "p1 id: " p1-select-id)
-        (println "p2 id: " p2-select-id)
         (if (not= p1-select-id no-selection-player-id)
           (rf/dispatch [::update-player-lists p1-list no-selection-player-id]))
         (if (not= p2-select-id no-selection-player-id)

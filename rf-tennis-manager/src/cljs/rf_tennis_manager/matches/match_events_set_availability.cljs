@@ -1,7 +1,7 @@
-(ns rf-tennis-manager.match-events-set-availability
+(ns rf-tennis-manager.matches.match-events-set-availability
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [re-frame.core :as rf]
-            [rf-tennis-manager.match-events-common :as evt-common]
+            [rf-tennis-manager.matches.match-events-common :as evt-common]
             [cljs-http.client :as http]))
 
 (rf/reg-event-fx

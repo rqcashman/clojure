@@ -1,4 +1,4 @@
-(ns rf-tennis-manager.match-events-common
+(ns rf-tennis-manager.matches.match-events-common
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [re-frame.core :as rf]
             [cljs-http.client :as http]

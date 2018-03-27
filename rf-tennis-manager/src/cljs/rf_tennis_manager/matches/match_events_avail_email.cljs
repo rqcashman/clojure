@@ -1,6 +1,6 @@
-(ns rf-tennis-manager.match-events-avail-email
+(ns rf-tennis-manager.matches.match-events-avail-email
   (:require [re-frame.core :as rf]
-            [rf-tennis-manager.match-events-common :as evt-common]
+            [rf-tennis-manager.matches.match-events-common :as evt-common]
             [cljs-time.core :as t]))
 
 (rf/reg-event-fx

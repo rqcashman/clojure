@@ -1,17 +1,17 @@
 (ns rf-tennis-manager.core
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [reagent.core :as reagent]
+  (:require [cljs-http.client :as http]
+            [cljs.core.async :refer [<!]]
+            [reagent.core :as reagent]
             [re-frame.core :as rf]
+            [rf-tennis-manager.config :as config]
             [rf-tennis-manager.db :as db]
             [rf-tennis-manager.events :as events]
-            [rf-tennis-manager.match-events-schedule :as sched]
+            [rf-tennis-manager.matches.match-events-common :as evt-common]
+            [rf-tennis-manager.matches.match-events-schedule :as sched]
+            [rf-tennis-manager.matches.matches-main :as main]
             [rf-tennis-manager.views :as views]
-            [rf-tennis-manager.config :as config]
-            [rf-tennis-manager.subs :as subs]
-            [rf-tennis-manager.matches-main :as main]
-            [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]
-            [rf-tennis-manager.match-events-common :as evt-common]))
+            [rf-tennis-manager.subs :as subs]))
 
 (enable-console-print!)
 (defn dev-setup []

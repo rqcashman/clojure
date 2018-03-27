@@ -1,6 +1,6 @@
-(ns rf-tennis-manager.match-events-lineup-email
+(ns rf-tennis-manager.matches.match-events-lineup-email
   (:require [re-frame.core :as rf]
-            [rf-tennis-manager.match-events-common :as evt-common]))
+            [rf-tennis-manager.matches.match-events-common :as evt-common]))
 
 (rf/reg-event-fx
   ::email-lineup-get-data-failed

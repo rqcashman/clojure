@@ -59,7 +59,6 @@
   (fn [db]
     (get-in db [:matches :lineup])))
 
-
 (re-frame/reg-sub
   ::match-player-list
   (fn [db]
@@ -74,7 +73,6 @@
   ::match_forfeits
   (fn [db]
     (get-in db [:matches :forfeits])))
-
 
 (re-frame/reg-sub
   ::panel-visible

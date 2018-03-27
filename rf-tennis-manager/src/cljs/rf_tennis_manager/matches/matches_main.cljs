@@ -1,4 +1,4 @@
-(ns rf-tennis-manager.matches-main
+(ns rf-tennis-manager.matches.matches-main
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [clojure.browser.repl :as repl]
             [cljs-http.client :as http]
@@ -6,13 +6,14 @@
             [goog.string :as gs]
             [re-frame.core :as rf]
             [rf-tennis-manager.events :as events]
-            [rf-tennis-manager.match-events-avail-email :as evt-avail-email]
-            [rf-tennis-manager.match-events-common :as evt-common]
-            [rf-tennis-manager.match-events-lineup-email :as evt-email-lineup]
-            [rf-tennis-manager.match-events-set-availability :as evt-set-avail]
-            [rf-tennis-manager.match-events-set-lineup :as evt-set-lineup]
-            [rf-tennis-manager.subs :as subs]
             [rf-tennis-manager.db :as db]
+            [rf-tennis-manager.matches.match-events-avail-email :as evt-avail-email]
+            [rf-tennis-manager.matches.match-events-common :as evt-common]
+            [rf-tennis-manager.matches.match-events-lineup-email :as evt-email-lineup]
+            [rf-tennis-manager.matches.match-events-set-availability :as evt-set-avail]
+            [rf-tennis-manager.matches.match-events-set-lineup :as evt-set-lineup]
+            [rf-tennis-manager.subs :as subs]
+
             [rf-tennis-manager.views-common :as layout]
             [clojure.string :as s]))
 
@@ -64,7 +65,7 @@
            [:table#match-sched.table-striped.table-sm.table
             [:thead.table-inverse
              [:tr
-              [:td "Date"]
+              [:td "Datezzz"]
               [:td "Time"]
               [:td "Opponent"]
               [:td "Location"]
@@ -383,8 +384,6 @@
     false
     true))
 
-
-
 (defn add-match-select-controls
   "add the player lists and forfeit radio buttons for a court"
   [list court team-info lineup forfeits match-info]
@@ -396,7 +395,6 @@
         btn-value ((keyword (str "c" court)) forfeits)
         team-id (:id team-info)
         opp-id (if (= team-id (:home_team_id match-info)) (:away_team_id match-info) (:home_team_id match-info))]
-    (println "disabled? xxxxxxxxxxxxxxxxxxxxxx: " btn-disabled " court: " court)
     (conj list
           [:tr {:key (str "c" court "-line-up-row")}
            [:td [:span {:style {:font-weight "bold"}} (str "Court " court)]]
