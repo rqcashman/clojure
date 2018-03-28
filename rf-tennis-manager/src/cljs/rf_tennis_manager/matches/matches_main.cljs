@@ -48,7 +48,6 @@
   "docstring"
   []
   (fn []
-    (println "==== schedule-form ====")
     (let [team-info @(rf/subscribe [::subs/team-info])
           schedule @(rf/subscribe [::subs/team-schedule])
           div-visible @(rf/subscribe [::subs/panel-visible "schedule"])]
@@ -87,7 +86,6 @@
           cssClass (if (:success? call-status) "success" "form-error")
           div-visible @(rf/subscribe [::subs/panel-visible "call-status"])
           click-fn (if-not (nil? (:on-click call-status)) (:on-click call-status) #(rf/dispatch [::evt-common/hide-call-status]))]
-      (println "==== call-status ==== visisble? " div-visible " db onclick: " (:on-click call-status) " fn: " click-fn)
       [:div {:className (if div-visible "div-panel-call-status" "div-panel-hide")}
        [:table.main-table.table-sm.call-status
         [:tbody
@@ -101,7 +99,6 @@
           [:td {:style {:width "5%"}} (layout/nbsp)]]
          (layout/hr-row form-span "90%")
          (layout/empty-row form-span)
-         (println "call status on click: " (:on-click call-status))
          (if-not (nil? (:on-click call-status))
            [:tr [:td.text-center {:colSpan form-span}
                  [:button#ma-status-btn {:value "ok" :onClick click-fn} "OK"]]])
@@ -167,7 +164,6 @@
   "docstring"
   []
   (fn []
-    (println "==== availability-form ====")
     (let [title "Update Availability"
           div-visible @(rf/subscribe [::subs/panel-visible "availability"])]
       [:div {:className (if div-visible "div-panel-show" "div-panel-hide")}
@@ -234,7 +230,6 @@
 (defn availability-email-form
   []
   (fn []
-    (println "==== availability-email-form ====")
     (let [title "Send Availability Email"
           div-visible @(rf/subscribe [::subs/panel-visible "send-avail-email"])]
       [:div {:className (if div-visible "div-panel-show" "div-panel-hide")}
@@ -291,7 +286,6 @@
   "docstring"
   []
   (fn []
-    (println "==== lineup-email-form ====")
     (let [title "Send Lineup Email"
           div-visible @(rf/subscribe [::subs/panel-visible "send-lineup-email"])]
       [:div {:className (if div-visible "div-panel-show" "div-panel-hide")}
@@ -408,7 +402,6 @@
   "Sets up the lineup page."
   []
   (fn []
-    (println "==== set-lineup-form ====")
     (let [div-visible @(rf/subscribe [::subs/panel-visible "set-lineup"])
           title "Update Match Lineup"]
       [:div {:className (if div-visible "div-panel-show" "div-panel-hide")}

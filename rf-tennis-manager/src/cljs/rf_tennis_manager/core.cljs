@@ -9,7 +9,9 @@
             [rf-tennis-manager.events :as events]
             [rf-tennis-manager.matches.match-events-common :as evt-common]
             [rf-tennis-manager.matches.match-events-schedule :as sched]
-            [rf-tennis-manager.matches.matches-main :as main]
+            [rf-tennis-manager.matches.matches-main :as match]
+            [rf-tennis-manager.roster.roster-main :as roster]
+            [ rf-tennis-manager.roster.roster-events-select :as rost-select]
             [rf-tennis-manager.views :as views]
             [rf-tennis-manager.subs :as subs]))
 
@@ -34,23 +36,37 @@
   (dev-setup)
   (rf/clear-subscription-cache!))
 
-
-
 (defn ^:export init_matches []
   (go
-    (reagent/render [main/call-status]
+    (reagent/render [match/call-status]
                     (.getElementById js/document "ma_call_status"))
-    (reagent/render [main/schedule-form]
+    (reagent/render [match/schedule-form]
                     (.getElementById js/document "ma_show_schedule"))
     (rf/dispatch [::sched/init-schedule-page])
-    (reagent/render [main/availability-form]
+    (reagent/render [match/availability-form]
                     (.getElementById js/document "ma_show_availability"))
-    (reagent/render [main/availability-email-form]
+    (reagent/render [match/availability-email-form]
                     (.getElementById js/document "ma_send_availability_email"))
-    (reagent/render [main/lineup-email-form]
+    (reagent/render [match/lineup-email-form]
                     (.getElementById js/document "ma_send_lineup_email"))
-    (reagent/render [main/set-lineup-form]
+    (reagent/render [match/set-lineup-form]
                     (.getElementById js/document "ma_set_lineup"))))
+
+(defn ^:export init_roster []
+  (go
+    (println "===== init_roster =====")
+    (reagent/render [roster/call-status]
+                    (.getElementById js/document "ro_call_status"))
+    (reagent/render [roster/roster-select-form]
+                    (.getElementById js/document "ro_select_form"))
+    (reagent/render [roster/show-roster]
+                    (.getElementById js/document "ro_show_roster"))
+    ;(reagent/render [roster/schedule-form]
+    ;                (.getElementById js/document "ro_update_player"))
+    ;(reagent/render [roster/schedule-form]
+    ;                (.getElementById js/document "ro_add_player"))
+    (rf/dispatch [::rost-select/init-roster-page])))
+
 
 
 

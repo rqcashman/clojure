@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: goog-jar:1.0.0">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/goog-jar/goog-jar/1.0.0/goog-jar-1.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

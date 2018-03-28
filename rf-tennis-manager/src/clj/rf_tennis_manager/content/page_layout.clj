@@ -13,10 +13,11 @@
          [:head
           [:title title]
           (if react?
-            (do
-              (include-js "js/compiled/app.js")
-              (include-js (str "js/compiled/out/rf_tennis_manager/tennismgr.js"))
-              (include-js (str "js/compiled/out/rf_tennis_manager/roster.js"))))
+            (include-js "js/compiled/app.js"))
+            ;(do
+            ;  (include-js "js/compiled/app.js")
+            ;  (include-js (str "js/compiled/out/rf_tennis_manager/tennismgr.js"))
+            ;  (include-js (str "js/compiled/out/rf_tennis_manager/roster.js"))))
           (include-js "https://code.jquery.com/jquery-3.2.1.min.js")
           (include-js "https://code.jquery.com/ui/1.12.1/jquery-ui.min.js")
           (include-js "https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js")

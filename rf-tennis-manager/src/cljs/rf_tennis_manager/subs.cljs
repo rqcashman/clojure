@@ -79,5 +79,37 @@
   (fn [db panel-id]
     (get-in db [:matches :panel-visible (keyword (second panel-id))])))
 
+(re-frame/reg-sub
+  ::roster-call-status
+  (fn [db]
+    (get-in db [:roster :call-status])))
+
+(re-frame/reg-sub
+  ::roster-panel-visible
+  (fn [db panel-id]
+    (println "::roster-panel-visible: " panel-id)
+    (get-in db [:roster :panel-visible (keyword (second panel-id))])))
+
+(re-frame/reg-sub
+  ::roster-action
+  (fn [db]
+    (get-in db [:roster :selected-roster-action])))
+
+(re-frame/reg-sub
+  ::roster-selected-team
+  (fn [db]
+    (get-in db [:roster :selected-team])))
+
+(re-frame/reg-sub
+  ::roster-team-roster
+  (fn [db]
+    (get-in db [:roster :team-roster])))
+
+(re-frame/reg-sub
+  ::team-list
+  (fn [db]
+    (get-in db [:teams :list])))
+
+
 
 

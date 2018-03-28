@@ -29,7 +29,6 @@
 (defn send-get-request
   [request]
   (go
-    (println "send-get-request: " request)
     (let [response (<! (http/get (:url request)))
           method (cond
                    (= (:status response) session-expired-errno) [::session-timeout]
@@ -40,7 +39,6 @@
 (defn send-post-request
   [request]
   (go
-    (println "send-post-request: " request)
     (let [values (ef/from (:form-id request) (ef/read-form))
           response (<! (http/post (:url request) {:form-params values}))
           method (cond

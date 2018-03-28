@@ -55,6 +55,13 @@ hr {
     height: 30%;
 }
 
+.div-panel-roster {
+    display: block;
+    position: relative;
+    width: 60%;
+    height: 40%;
+}
+
 .call-status {
     background-color: lightyellow;
     opacity: 0.9;

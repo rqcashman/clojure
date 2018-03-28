@@ -1,0 +1,1 @@
+web: java $JVM_OPTS -cp target/rf-tennis-manager.jar clojure.main -m rf-tennis-manager.server

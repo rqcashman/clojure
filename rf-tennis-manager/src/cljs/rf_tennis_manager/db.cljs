@@ -76,9 +76,17 @@
                                           :players  {(keyword (str (:id default-player))) default-player}}}
               :roster             []
               :forfeits           {:c1 0 :c2 0 :c3 0 :c4 0}}
-   :roster   {:loaded?     false
-              :call-status {:success? false :message "Processing..."}}
+   :roster   {:panel-visible          {:roster        false
+                                       :add-player    false
+                                       :update-player false
+                                       :call-status   false}
+              :loaded?                false
+              :selected-roster-action ""
+              :selected-team {:id 1 :name "Team name"}
+              :team-roster [{:id 1 :last_name "cashman" :first_name "rick"}]
+              :call-status            {:success? true :message "Processing..." :on-click nil}}
+   :teams    {:list [{:id 0 :name "team name"}]}
    :schedule {:loaded?     false
-              :call-status {:success? false :message "Processing..."}}
+              :call-status {:success? true :message "Processing..." :on-click nil}}
    :admin    {:loaded?     false
-              :call-status {:success? false :message "Processing..."}}})
+              :call-status {:success? true :message "Processing..." :on-click nil}}})
