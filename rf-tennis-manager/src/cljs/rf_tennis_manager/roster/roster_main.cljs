@@ -3,24 +3,28 @@
             [goog.string :as gs]
             [re-frame.core :as rf]
             [rf-tennis-manager.db :as db]
-            [rf-tennis-manager.roster.roster-events-select :as evt-select]
+            [rf-tennis-manager.roster.roster-events-add-player :as evt-add]
             [rf-tennis-manager.roster.roster-events-common :as evt-common]
+            [rf-tennis-manager.roster.roster-events-select :as evt-select]
+            [rf-tennis-manager.roster.roster-events-update-player :as evt-upd]
             [rf-tennis-manager.subs :as subs]
             [rf-tennis-manager.views-common :as layout]))
 
 
 (def form-span 4)
-;(defn add-form-control
-;  [label options]
-;  [:tr
-;   [:td {:style {:width "5%"}} "&nbsp;"]
-;   [:td {:nowrap true} [:label.control-label {:for (:id options)} label]]
-;   [:td [:input.form-control-sm options]]
-;   [:td {:style {:width "5%"}} "&nbsp;"]])
+(def update-player-form-span 5)
+(defn add-form-control
+  [label options error]
+  [:tr.text-left
+   [:td {:style {:width "5%"}} (layout/nbsp)]
+   [:td label]
+   [:td.error error]
+   [:td [:input.form-control-sm options]]
+   [:td {:style {:width "5%"}} (layout/nbsp)]])
 
 (defn roster-row
   [list player]
-  (conj list [:tr.text-left {:key (:id player)}
+  (conj list [:tr.text-left {:key (:id player) :onClick #(rf/dispatch [::evt-select/player-selected (:id player)])}
               [:td (:last_name player)]
               [:td (:first_name player)]
               [:td (:email player)]
@@ -36,89 +40,138 @@
           div-visible @(rf/subscribe [::subs/roster-panel-visible "roster"])]
       [:div {:className (if div-visible "div-panel-roster" "div-panel-hide")}
        [:table.match-info-table.table-sm
+        [:tbody
+         (layout/empty-row form-span)
+         [:tr [:td.text-center {:colSpan form-span} [:h4 (:name selected-team) " Roster"]]]
+         (layout/hr-row form-span "90%")
+         [:tr
+          [:td {:style {:width "5%"}}]
+          [:td {:colSpan 2}
+           [:table#sr-details.table.table-striped.table-sm
+            [:thead.table-inverse
+             [:tr.text-center
+              [:td "Last Name"]
+              [:td "First Name"]
+              [:td "Email"]
+              [:td "Phone Number"]
+              [:td "Status"]]]
+            [:tbody#sr-details-body
+             (reduce #(roster-row %1 %2) () (reverse roster))]]]
+          [:td {:style {:width "5%"}}]]
+         (layout/hr-row form-span "90%")]]])))
+
+(defn add-player
+  []
+  (let [title "Add Player"
+        add-player @(rf/subscribe [::subs/roster-add-player])
+        selected-team @(rf/subscribe [::subs/roster-selected-team])
+        div-visible @(rf/subscribe [::subs/roster-panel-visible "add-player"])]
+    [:div {:className (if div-visible "div-panel-roster" "div-panel-hide")}
+     [:form#addplayerform.form-horizontal {:method "post" :action "/add-player"}
+      [:table.match-info-table.table-sm
+       [:tbody
         (layout/empty-row form-span)
-        [:tr [:td.text-center {:colSpan form-span :align "center"} [:h4 (:name selected-team) " Roster"]]]
+        [:tr [:td.text-center {:colSpan form-span} [:h4 title]]]
         (layout/hr-row form-span "90%")
+        (add-form-control "First name:" {:name     "first_name" :maxLength 45 :size 45 :type "text" :value (:first_name add-player)
+                                         :onChange #(rf/dispatch [::evt-add/update-add-player "first_name" (-> % .-target .-value)])}
+                          (:first_name_error add-player))
+        (add-form-control "Last name:" {:name     "last_name" :maxLength 45 :size 45 :type "text" :value (:last_name add-player)
+                                        :onChange #(rf/dispatch [::evt-add/update-add-player "last_name" (-> % .-target .-value)])}
+                          (:last_name_error add-player))
+        (add-form-control "Email:" {:name     "email" :maxLength 45 :size 45 :type "text" :value (:email add-player)
+                                    :onChange #(rf/dispatch [::evt-add/update-add-player "email" (-> % .-target .-value)])}
+                          (:email_error add-player))
+        (add-form-control "Phone number:" {:name     "phone_number" :maxLength 10 :size 10 :value (:phone_number add-player)
+                                           :onChange #(rf/dispatch [::evt-add/update-add-player "phone_number" (-> % .-target .-value)])}
+                          (:phone_number_error add-player))
         [:tr
-         [:td {:style {:width "5%"}}]
-         [:td {:colSpan 2}
-          [:table#sr-details.table.table-striped.table-sm
-           [:thead.table-inverse
-            [:tr {:align "left"}
-             [:td "Last Name"]
-             [:td "First Name"]
-             [:td "Email"]
-             [:td "Phone Number"]
-             [:td "Status"]]]
-           [:tbody#sr-details-body
-            (reduce #(roster-row %1 %2) () roster)]]]
-         [:td {:style {:width "5%"}}]]
-        (layout/hr-row form-span "90%")]])))
-;
-;
-;(defn add-player
-;  []
-;  (let [title "Add Player"]
-;    [:form#addplayerform.form-horizontal {:method "post" :action "/add-player"}
-;     [:table.match-info-table.table-sm
-;      (layout/empty-row form-span)
-;      [:tr [:td {:colSpan form-span :align "center"} [:h4 title]]]
-;      (layout/hr-row form-span "90%")
-;      (add-form-control "First name:" {:id "ap_first_name" :name "first_name" :maxlength 45 :size 45 :type= "text"})
-;      (add-form-control "Last name:" {:id "ap_last_name" :name "last_name" :maxlength 45 :size 45 :type= "text"})
-;      (add-form-control "Email:" {:id "ap_email" :name "email" :maxlength 45 :size 45 :type= "text"})
-;      (add-form-control "Phone number:" {:id "ap_phone_number" :name "phone_number" :maxlength 10 :size 10 :onkeypress "return isNumberKey(event)"})
-;      [:tr
-;       [:td {:style {:width "5%"}} "&nbsp;"]
-;       [:td {:nowrap true} [:label.control-label {:for "up_status"} "Status"]]
-;       [:td [:select#ap_status {:name "status"}
-;             [:option {:value "A"} "Active"]
-;             [:option {:value "I"} "Inactive"]
-;             [:option {:value "S"} "Sub"]]]
-;       [:td {:style {:width "5%"}} "&nbsp;"]]
-;      (layout/hr-row form-span "90%")
-;      (layout/empty-row form-span)
-;      [:tr [:td {:colSpan form-span :align "center"}
-;            [:button {:type "button" :onclick (str "return processRosterRequest('#addplayerform', '/add-player', '" title "')")} title]]]
-;      [:tr.hidden-control [:td {:colSpan form-span :align "center"} [:input.hidden-control {:id "ap_team_id" :name "team_id"}]]]
-;      (layout/empty-row form-span)]]))
-;
-;(defn update-player-form
-;  []
-;  (let [title "Update Player"]
-;    [:form#updateplayerform.form-horizontal {:method "post" :action "/add-player"}
-;     [:table.match-info-table.table-sm
-;      (layout/empty-row form-span)
-;      [:tr [:td {:colSpan form-span :align "center"} [:h4 title]]]
-;      (layout/hr-row form-span "90%")
-;      (add-form-control "First name:" {:id "up_first_name" :name "first_name" :maxlength 45 :size 45 :type= "text"})
-;      (add-form-control "Last name:" {:id "up_last_name" :name "last_name" :maxlength 45 :size 45 :type= "text"})
-;      (add-form-control "Email:" {:id "up_email" :name "email" :maxlength 45 :size 45 :type= "text"})
-;      (add-form-control "Phone number:" {:id "up_phone_number" :name "phone_number" :maxlength 10 :size 10 :onkeypress "return isNumberKey(event)"})
-;      [:tr
-;       [:td {:style {:width "5%"}} "&nbsp;"]
-;       [:td {:nowrap true} [:label.control-label {:for "up_status"} "Status"]]
-;       [:td [:select#up_status {:name "status"}
-;             [:option {:value "A"} "Active"]
-;             [:option {:value "I"} "Inactive"]
-;             [:option {:value "S"} "Sub"]]]
-;       [:td {:style {:width "5%"}} "&nbsp;"]]
-;      (layout/hr-row form-span "90%")
-;      (layout/empty-row form-span)
-;      [:tr [:td {:colSpan form-span :align "center"}
-;            [:table
-;             [:td {:width "50%"} "&nbsp;"]
-;             [:td {:align "right" :nowrap "true"}
-;              [:button {:type "button" :onclick (str "return processRosterRequest('#updateplayerform', '/update-player', '" title "')")} title]]
-;             [:td {:align "left" :nowrap "true"}
-;              [:button {:type "button" :onclick "change_roster_form('show-roster');"} "Cancel"]]
-;             [:td {:width "5%"} "&nbsp;"]]]]
-;      [:tr.hidden-control [:td {:colSpan form-span :align "center"} [:input.hidden-control {:id "up_team_id" :name "team_id"}] [:input.hidden-control {:id "up_player_id" :name "player_id"}]]]
-;      (layout/empty-row form-span)]]))
+         [:td {:style {:width "5%"}} (layout/nbsp)]
+         [:td "Status"]
+         [:td]
+         [:td [:select {:name     "status" :value (:status add-player)
+                        :onChange #(rf/dispatch [::evt-add/update-add-player "status" (-> % .-target .-value)])}
+               [:option {:value "A"} "Active"]
+               [:option {:value "I"} "Inactive"]
+               [:option {:value "S"} "Sub"]]]
+         [:td {:style {:width "5%"}} (layout/nbsp)]]
+        (layout/hr-row form-span "90%")
+        (layout/empty-row form-span)
+        [:tr
+         [:td.text-center {:colSpan update-player-form-span}
+          [:table {:style {:width "100%"}}
+           [:tbody
+            [:tr
+             [:td {:colSpan update-player-form-span :style {:width "50%"}} (layout/nbsp)]
+             [:td.text-right
+              [:button {:type "button" :onClick #(rf/dispatch [::evt-add/add-player-request])} title]]
+             [:td.text-left
+              [:button {:type "button" :onClick #(rf/dispatch [::evt-common/show-roster])} "Cancel"]]
+             [:td {:style {:width "50%"}} (layout/nbsp)]]]]]]
+        [:tr.hidden-control
+         [:td
+          [:input.hidden-control {:name "team_id" :value (:id selected-team) :readOnly true}]]]
+        (layout/empty-row form-span)]]]]))
+
+
+(defn update-player-form
+  []
+  (fn []
+    (let [title "Update Player"
+          selected-player @(rf/subscribe [::subs/roster-selected-player])
+          selected-team @(rf/subscribe [::subs/roster-selected-team])
+          div-visible @(rf/subscribe [::subs/roster-panel-visible "update-player"])]
+      [:div {:className (if div-visible "div-panel-roster" "div-panel-hide")}
+       [:form#updateplayerform.form-horizontal {:method "post" :action "/update-player"}
+        [:table.match-info-table.table-sm
+         [:tbody
+          (layout/empty-row update-player-form-span)
+          [:tr [:td.text-center {:colSpan update-player-form-span} [:h4 title]]]
+          (layout/hr-row form-span "90%")
+          (add-form-control "First name:" {:name     "first_name" :maxLength 45 :size 45 :type "text" :value (:first_name selected-player)
+                                           :onChange #(rf/dispatch [::evt-upd/update-selected-player "first_name" (-> % .-target .-value)])}
+                            (:first_name_error selected-player))
+          (add-form-control "Last name:" {:name     "last_name" :maxLength 45 :size 45 :type "text" :value (:last_name selected-player)
+                                          :onChange #(rf/dispatch [::evt-upd/update-selected-player "last_name" (-> % .-target .-value)])}
+                            (:last_name_error selected-player))
+          (add-form-control "Email:" {:name     "email" :maxLength 45 :size 45 :type "text" :value (:email selected-player)
+                                      :onChange #(rf/dispatch [::evt-upd/update-selected-player "email" (-> % .-target .-value)])}
+                            (:email_error selected-player))
+          (add-form-control "Phone number:" {:name     "phone_number" :maxLength 10 :size 10 :value (:phone_number selected-player)
+                                             :onChange #(rf/dispatch [::evt-upd/update-selected-player "phone_number" (-> % .-target .-value)])}
+                            (:phone_number_error selected-player))
+          [:tr
+           [:td {:style {:width "5%"}} (layout/nbsp)]
+           [:td "Status"]
+           [:td]
+           [:td [:select {:name     "status" :value (:status selected-player)
+                          :onChange #(rf/dispatch [::evt-upd/update-selected-player "status" (-> % .-target .-value)])}
+                 [:option {:value "A"} "Active"]
+                 [:option {:value "I"} "Inactive"]
+                 [:option {:value "S"} "Sub"]]]
+           [:td {:style {:width "5%"}} (layout/nbsp)]]
+          (layout/hr-row update-player-form-span "90%")
+          (layout/empty-row update-player-form-span)
+          [:tr
+           [:td.text-center {:colSpan update-player-form-span}
+            [:table {:style {:width "100%"}}
+             [:tbody
+              [:tr
+               [:td {:colSpan update-player-form-span :style {:width "50%"}} (layout/nbsp)]
+               [:td.text-right
+                [:button {:type "button" :onClick #(rf/dispatch [::evt-upd/update-player-request])} title]]
+               [:td.text-left
+                [:button {:type "button" :onClick #(rf/dispatch [::evt-common/show-roster])} "Cancel"]]
+               [:td {:style {:width "50%"}} (layout/nbsp)]]]]]]
+          [:tr.hidden-control
+           [:td
+            [:input.hidden-control {:name "team_id" :value (:id selected-team) :readOnly true}]
+            [:input.hidden-control {:name "player_id" :value (:id selected-player) :readOnly true}]]]
+          (layout/empty-row update-player-form-span)]]]])))
 
 (defn get-team-list
   [teams selected-team]
-  [:select {:name "team-id" :value selected-team :onChange #(rf/dispatch [::evt-select/selected-team-changed (-> % .-target .-value)])}
+  [:select {:name "team-id" :value selected-team :onChange #(rf/dispatch [::evt-common/selected-team-changed (-> % .-target .-value)])}
    (reduce (fn [list team]
              (conj list [:option {:value (:id team) :key (:id team)} (:name team)]))
            () (reverse (sort-by :name teams)))])
@@ -140,27 +193,32 @@
          [:tr
           [:td {:style {:width "5%"}}]
           [:td "Team:"]
-          [:td (get-team-list teams  (:id selected-team))]
+          [:td (get-team-list teams (:id selected-team))]
           [:td {:style {:width "50%"}}]]
          [:tr
           [:td]
           [:td "Roster Action:"]
           [:td
-           [:select {:name "roster-list" :value roster-action :onChange #(rf/dispatch [::evt-select/roster-action-change (-> % .-target .-value)])}
+           [:select {:name     "roster-list" :value (if (s/blank? roster-action) "roster" roster-action)
+                     :onChange #(rf/dispatch [::evt-select/roster-action-change (-> % .-target .-value)])}
             [:option {:value "add-player" :key "add-player"} "Add player"]
-            [:option {:value "show-roster" :key "show-roster"} "Show roster"]]]
+            [:option {:value "roster" :key "roster"} "Show roster"]]]
           [:td]]
          (layout/hr-row form-span "90%")
          (layout/empty-row form-span)]]
        [:br] [:hr] [:br]])))
+
+(defn add-call-status-btn
+  [call-status-fn]
+  (if-not (nil? call-status-fn)
+    [:tr [:td.text-center {:colSpan form-span} [:button {:value "ok" :onClick call-status-fn} "OK"]]]))
 
 (defn call-status
   []
   (fn []
     (let [call-status @(rf/subscribe [::subs/roster-call-status])
           cssClass (if (:success? call-status) "success" "form-error")
-          div-visible @(rf/subscribe [::subs/roster-panel-visible "call-status"])
-          click-fn (if-not (nil? (:on-click call-status)) (:on-click call-status) #(rf/dispatch [::evt-common/hide-call-status]))]
+          div-visible @(rf/subscribe [::subs/roster-panel-visible "call-status"])]
       [:div {:className (if div-visible "div-panel-call-status" "div-panel-hide")}
        [:table.main-table.table-sm.call-status
         [:tbody
@@ -174,8 +232,6 @@
           [:td {:style {:width "5%"}} (layout/nbsp)]]
          (layout/hr-row form-span "90%")
          (layout/empty-row form-span)
-         (if-not (nil? (:on-click call-status))
-           [:tr [:td.text-center {:colSpan form-span}
-                 [:button#ma-status-btn {:value "ok" :onClick click-fn} "OK"]]])
+         (add-call-status-btn (:on-click call-status))
          (layout/empty-row form-span)]]])))
 

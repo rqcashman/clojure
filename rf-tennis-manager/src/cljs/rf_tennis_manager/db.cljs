@@ -83,6 +83,8 @@
               :loaded?                false
               :selected-roster-action ""
               :selected-team {:id 1 :name "Team name"}
+              :selected-player {:id 0 :last_name "" :first_name "" :status "A"}
+              :add-player {:id 0 :last_name "" :first_name "" :status "A"}
               :team-roster [{:id 1 :last_name "cashman" :first_name "rick"}]
               :call-status            {:success? true :message "Processing..." :on-click nil}}
    :teams    {:list [{:id 0 :name "team name"}]}

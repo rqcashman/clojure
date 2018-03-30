@@ -87,7 +87,6 @@
 (re-frame/reg-sub
   ::roster-panel-visible
   (fn [db panel-id]
-    (println "::roster-panel-visible: " panel-id)
     (get-in db [:roster :panel-visible (keyword (second panel-id))])))
 
 (re-frame/reg-sub
@@ -99,6 +98,16 @@
   ::roster-selected-team
   (fn [db]
     (get-in db [:roster :selected-team])))
+
+(re-frame/reg-sub
+  ::roster-selected-player
+  (fn [db]
+    (get-in db [:roster :selected-player])))
+
+(re-frame/reg-sub
+  ::roster-add-player
+  (fn [db]
+    (get-in db [:roster :add-player])))
 
 (re-frame/reg-sub
   ::roster-team-roster

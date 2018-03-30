@@ -61,10 +61,10 @@
                     (.getElementById js/document "ro_select_form"))
     (reagent/render [roster/show-roster]
                     (.getElementById js/document "ro_show_roster"))
-    ;(reagent/render [roster/schedule-form]
-    ;                (.getElementById js/document "ro_update_player"))
-    ;(reagent/render [roster/schedule-form]
-    ;                (.getElementById js/document "ro_add_player"))
+    (reagent/render [roster/update-player-form]
+                    (.getElementById js/document "ro_update_player"))
+    (reagent/render [roster/add-player]
+                    (.getElementById js/document "ro_add_player"))
     (rf/dispatch [::rost-select/init-roster-page])))
 
 

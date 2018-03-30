@@ -37,15 +37,16 @@
 (defn add_player
   "docstring"
   [team_id first_name last_name email phone_number status]
-  (let [phone (if (= (s/blank? phone_number) true) 0 phone_number)]
+  (let [phone (if (s/blank? phone_number) 0 phone_number)]
     (j/execute! sys/db-cred
                 [(str "insert into player values (null,?,?,?,?,?,?)") team_id first_name last_name email phone, status])))
 
 (defn update-player
   "docstring"
   [player-id last_name first_name email phone_number status]
-  (j/execute! sys/db-cred
-              [(str "update player set last_name=?,first_name=?, email=?,phone_number=?,status=?
-                     where id=?") last_name, first_name, email, phone_number, status player-id]))
+  (let [phone (if (s/blank? phone_number) 0 phone_number)]
+    (j/execute! sys/db-cred
+                [(str "update player set last_name=?,first_name=?, email=?,phone_number=?,status=?
+                     where id=?") last_name, first_name, email, phone, status player-id])))
 
 

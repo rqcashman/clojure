@@ -41,6 +41,7 @@
 (rf/reg-fx
   ::call-update-lineup
   evt-common/send-post-request)
+
 (defn update-lineup-set
   [list match match-id]
   (if (= match-id (:match_id match))
