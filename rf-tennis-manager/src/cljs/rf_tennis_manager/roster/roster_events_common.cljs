@@ -1,6 +1,7 @@
 (ns rf-tennis-manager.roster.roster-events-common
   (:require [re-frame.core :as rf]
-            [rf-tennis-manager.events-common :as evt]))
+            [rf-tennis-manager.events-common :as evt]
+            [clojure.string :as s]))
 
 (defn show-div
   [db show-div-id]
@@ -12,8 +13,9 @@
 (rf/reg-event-fx
   ::show-roster
   (fn [{:keys [db]} [_]]
-    (let [upd-db (show-div db "roster")]
-      {:db upd-db})))
+    {:db (-> db
+             (assoc-in [:roster :selected-roster-action] "roster")
+             (show-div "roster"))}))
 
 (rf/reg-event-fx
   ::show-player-update-form
@@ -34,12 +36,13 @@
 
 (rf/reg-event-fx
   ::roster-page-failed
-  (fn [{:keys [db]} [_ status]]
-    {:db (-> db
-             (assoc-in [:roster :call-status :success?] false)
-             (assoc-in [:roster :call-status :message] "Call to get data failed")
-             (assoc-in [:roster :panel-visible :call-status] true)
-             (assoc-in [:roster :call-status :on-click] #(re-frame.core/dispatch [::show-roster])))}))
+  (fn [{:keys [db]} [_ response]]
+    (let [msg (if-not (s/blank? (get-in response [:body :msg])) (get-in response [:body :msg]) "Call to get data failed")]
+      {:db (-> db
+               (assoc-in [:roster :call-status :success?] false)
+               (assoc-in [:roster :call-status :message] msg)
+               (assoc-in [:roster :panel-visible :call-status] true)
+               (assoc-in [:roster :call-status :on-click] #(re-frame.core/dispatch [::hide-call-status])))})))
 
 (rf/reg-event-fx
   ::load-roster

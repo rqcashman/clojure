@@ -74,10 +74,12 @@
         [:tr [:td.text-center {:colSpan form-span} [:h4 title]]]
         (layout/hr-row form-span "90%")
         (add-form-control "First name:" {:name     "first_name" :maxLength 45 :size 45 :type "text" :value (:first_name add-player)
-                                         :onChange #(rf/dispatch [::evt-add/update-add-player "first_name" (-> % .-target .-value)])}
+                                         :onChange #(rf/dispatch [::evt-add/update-add-player "first_name" (-> % .-target .-value)])
+                                         :onBlur   #(rf/dispatch [::evt-add/edit-add-player "first_name" (-> % .-target .-value)])}
                           (:first_name_error add-player))
         (add-form-control "Last name:" {:name     "last_name" :maxLength 45 :size 45 :type "text" :value (:last_name add-player)
-                                        :onChange #(rf/dispatch [::evt-add/update-add-player "last_name" (-> % .-target .-value)])}
+                                        :onChange #(rf/dispatch [::evt-add/update-add-player "last_name" (-> % .-target .-value)])
+                                        :onBlur   #(rf/dispatch [::evt-add/edit-add-player "last_name" (-> % .-target .-value)])}
                           (:last_name_error add-player))
         (add-form-control "Email:" {:name     "email" :maxLength 45 :size 45 :type "text" :value (:email add-player)
                                     :onChange #(rf/dispatch [::evt-add/update-add-player "email" (-> % .-target .-value)])}

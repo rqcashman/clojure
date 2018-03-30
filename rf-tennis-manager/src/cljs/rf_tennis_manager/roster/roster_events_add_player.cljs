@@ -4,6 +4,17 @@
             [rf-tennis-manager.roster.roster-events-common :as evt-common]
             [clojure.string :as s]))
 
+(rf/reg-event-fx
+  ::edit-add-player
+  (fn [{:keys [db]} [_ field value]]
+    (let [upd-db
+          (-> db
+              (assoc-in [:roster :add-player :first_name_error] nil)
+              (assoc-in [:roster :add-player :last_name_error] nil)
+              (assoc-in [:roster :add-player :email_error] nil)
+              (assoc-in [:roster :add-player :phone_number_error] nil))]
+      (if (< (count value) 2)
+        {:db (assoc-in upd-db [:roster :add-player (keyword (str field "_error"))] "Name must be at least 2 characters")}))))
 
 (rf/reg-event-fx
   ::update-add-player

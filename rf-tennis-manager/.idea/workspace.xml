@@ -25,12 +25,54 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="events_common.cljs" pinned="false" current-in-tab="true">
+      <file leaf-file-name="events_common.cljs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/events_common.cljs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="43" column="45" lean-forward="false" selection-start-line="43" selection-start-column="45" selection-end-line="43" selection-end-column="45" />
+            <state relative-caret-position="551">
+              <caret line="45" column="45" lean-forward="false" selection-start-line="45" selection-start-column="45" selection-end-line="45" selection-end-column="45" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="match_events_set_availability.cljs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches/match_events_set_availability.cljs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="19" column="31" lean-forward="true" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="roster_events_add_player.cljs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_add_player.cljs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="442">
+              <caret line="38" column="91" lean-forward="true" selection-start-line="38" selection-start-column="91" selection-end-line="38" selection-end-column="91" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="roster_events_common.cljs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_common.cljs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="16" column="50" lean-forward="true" selection-start-line="16" selection-start-column="50" selection-end-line="16" selection-end-column="50" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="roster_events_select.cljs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_select.cljs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" column="74" lean-forward="false" selection-start-line="3" selection-start-column="74" selection-end-line="3" selection-end-column="74" />
+              <folding>
+                <marker date="1522426430649" expanded="true" signature="2279:2311" ph="(rf/reg-event-fx ...)" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -38,10 +80,10 @@
       <file leaf-file-name="roster_main.cljs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_main.cljs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
-              <caret line="112" column="75" lean-forward="false" selection-start-line="112" selection-start-column="75" selection-end-line="112" selection-end-column="75" />
+            <state relative-caret-position="286">
+              <caret line="110" column="78" lean-forward="false" selection-start-line="110" selection-start-column="78" selection-end-line="110" selection-end-column="78" />
               <folding>
-                <marker date="1522427591148" expanded="true" signature="11009:11971" ph="(defn call-status ...)" />
+                <marker date="1522432266096" expanded="true" signature="11269:12231" ph="(defn call-status ...)" />
               </folding>
             </state>
           </provider>
@@ -50,8 +92,8 @@
       <file leaf-file-name="db.cljs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="84" column="54" lean-forward="false" selection-start-line="84" selection-start-column="54" selection-end-line="84" selection-end-column="54" />
+            <state relative-caret-position="358">
+              <caret line="83" column="40" lean-forward="false" selection-start-line="83" selection-start-column="40" selection-end-line="83" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -68,8 +110,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>number</find>
-      <find>roster-panel</find>
       <find>num</find>
       <find>spec</find>
       <find>onClic</find>
@@ -84,7 +124,6 @@
       <find>printl</find>
       <find>roster-page-failed</find>
       <find>update-player-form</find>
-      <find>selected-team-changed</find>
       <find>::roster-page-failed</find>
       <find>:id</find>
       <find>get-roster</find>
@@ -98,6 +137,9 @@
       <find>label</find>
       <find>&quot;Stat</find>
       <find>update</find>
+      <find>-error</find>
+      <find>selected-team-changed</find>
+      <find>_error</find>
     </findStrings>
     <replaceStrings>
       <replace>gs/unescapeEntities</replace>
@@ -190,10 +232,10 @@
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_update_player.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_select.cljs" />
-        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_common.cljs" />
-        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_add_player.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_main.cljs" />
+        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_add_player.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/events_common.cljs" />
+        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_common.cljs" />
       </list>
     </option>
   </component>
@@ -203,9 +245,8 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1698" />
-    <option name="y" value="5" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-1927" />
     <option name="width" value="1934" />
     <option name="height" value="1047" />
   </component>
@@ -287,6 +328,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="cljs" type="462c0819:PsiDirectoryNode" />
               <item name="rf_tennis_manager" type="462c0819:PsiDirectoryNode" />
+              <item name="matches" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rf-tennis-manager" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rf-tennis-manager" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="cljs" type="462c0819:PsiDirectoryNode" />
+              <item name="rf_tennis_manager" type="462c0819:PsiDirectoryNode" />
               <item name="roster" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -342,7 +391,7 @@
       <recent name="C:\Clojure\rf-tennis-manager\resources\public\css" />
     </key>
   </component>
-  <component name="ReplState" timestamp="1522427786370">{:repl-history {:ide [], :local [], :remote [{:command &quot;(def all-ints (range))&quot;, :offset 22, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 187, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () all-ints)))&quot;, :offset 188, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-me)&quot;, :offset 9, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map #(odd? %) [1 2 3])&quot;, :offset 23, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map odd? [1 2 3])&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? [1 2 3])&quot;, :offset 21, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? (map inc [1 2 3]))&quot;, :offset 31, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3])))&quot;, :offset 40, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3 4 5 6])))&quot;, :offset 46, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc all-ints)))&quot;, :offset 41, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 (drop 1000 (filter odd? (map inc all-ints))))&quot;, :offset 53, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 79, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;\n(macroexpand-1 '(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5)))&quot;, :offset 97, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(macroexpand-1 '(-&gt; all-ints\n                    (map inc)\n                    (filter odd?)\n                    (drop 1000)\n                    (take 5)))&quot;, :offset 155, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;re-frame.db/app-db&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;@re-frame.db/app-db&quot;, :offset 19, :ns &quot;rf-tennis-manager.core&quot;}]}}</component>
+  <component name="ReplState" timestamp="1522441167991">{:repl-history {:ide [], :local [], :remote [{:command &quot;(def all-ints (range))&quot;, :offset 22, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 187, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () all-ints)))&quot;, :offset 188, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-me)&quot;, :offset 9, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map #(odd? %) [1 2 3])&quot;, :offset 23, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map odd? [1 2 3])&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? [1 2 3])&quot;, :offset 21, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? (map inc [1 2 3]))&quot;, :offset 31, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3])))&quot;, :offset 40, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3 4 5 6])))&quot;, :offset 46, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc all-ints)))&quot;, :offset 41, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 (drop 1000 (filter odd? (map inc all-ints))))&quot;, :offset 53, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 79, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;\n(macroexpand-1 '(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5)))&quot;, :offset 97, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(macroexpand-1 '(-&gt; all-ints\n                    (map inc)\n                    (filter odd?)\n                    (drop 1000)\n                    (take 5)))&quot;, :offset 155, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;re-frame.db/app-db&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;@re-frame.db/app-db&quot;, :offset 19, :ns &quot;rf-tennis-manager.core&quot;}]}}</component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -483,10 +532,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="536647000" />
+    <option name="totallyTimeSpent" value="539962000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-1927" y="0" width="1934" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
@@ -504,9 +553,9 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09221748" sideWeight="0.5" order="7" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18036287" sideWeight="0.5" order="7" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2688889" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27160493" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -892,14 +941,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches/match_events_set_availability.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="16" lean-forward="true" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches/match_events_avail_email.cljs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -964,54 +1005,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="83" column="40" lean-forward="false" selection-start-line="83" selection-start-column="40" selection-end-line="83" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/events_common.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="551">
+          <caret line="45" column="45" lean-forward="false" selection-start-line="45" selection-start-column="45" selection-end-line="45" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_select.cljs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="27" column="68" lean-forward="false" selection-start-line="27" selection-start-column="12" selection-end-line="27" selection-end-column="68" />
+        <state relative-caret-position="51">
+          <caret line="3" column="74" lean-forward="false" selection-start-line="3" selection-start-column="74" selection-end-line="3" selection-end-column="74" />
           <folding>
             <marker date="1522426430649" expanded="true" signature="2279:2311" ph="(rf/reg-event-fx ...)" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_common.cljs">
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_main.cljs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="48" column="65" lean-forward="false" selection-start-line="48" selection-start-column="65" selection-end-line="48" selection-end-column="65" />
-          <folding />
+        <state relative-caret-position="286">
+          <caret line="110" column="78" lean-forward="false" selection-start-line="110" selection-start-column="78" selection-end-line="110" selection-end-column="78" />
+          <folding>
+            <marker date="1522432266096" expanded="true" signature="11269:12231" ph="(defn call-status ...)" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_add_player.cljs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="30" column="13" lean-forward="true" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
+        <state relative-caret-position="442">
+          <caret line="38" column="91" lean-forward="true" selection-start-line="38" selection-start-column="91" selection-end-line="38" selection-end-column="91" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs">
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches/match_events_set_availability.cljs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="84" column="54" lean-forward="false" selection-start-line="84" selection-start-column="54" selection-end-line="84" selection-end-column="54" />
+        <state relative-caret-position="323">
+          <caret line="19" column="31" lean-forward="true" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_main.cljs">
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_common.cljs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="112" column="75" lean-forward="false" selection-start-line="112" selection-start-column="75" selection-end-line="112" selection-end-column="75" />
-          <folding>
-            <marker date="1522427591148" expanded="true" signature="11009:11971" ph="(defn call-status ...)" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/events_common.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="43" column="45" lean-forward="false" selection-start-line="43" selection-start-column="45" selection-end-line="43" selection-end-column="45" />
+        <state relative-caret-position="272">
+          <caret line="16" column="50" lean-forward="true" selection-start-line="16" selection-start-column="50" selection-end-line="16" selection-end-column="50" />
           <folding />
         </state>
       </provider>

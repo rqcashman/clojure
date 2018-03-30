@@ -40,6 +40,7 @@
           response (<! (http/post (:url request) {:form-params values}))
           method (cond
                    (= (:status response) session-expired-errno) [::session-timeout]
-                   (:success response) (:on-success request)
+                   (= (get-in response [:body :status]) "success") (:on-success request)
                    :else (:on-fail request))]
+      (println response)
       (rf/dispatch (conj method response)))))
