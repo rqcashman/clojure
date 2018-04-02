@@ -26,7 +26,7 @@
   [phone-number]
   (cond
     (s/blank? phone-number) "0"
-    (> (count phone-number) 7 ) (str "(" (subs phone-number 0 3) ") " (subs phone-number 3 6) " - " (subs phone-number 6))
+    (> (count phone-number) 7) (str "(" (subs phone-number 0 3) ") " (subs phone-number 3 6) " - " (subs phone-number 6))
     (> (count phone-number) 4) (str (subs phone-number 0 3) " - " (subs phone-number 3))
     :else phone-number))
 
@@ -69,6 +69,13 @@
           [:td {:style {:width "5%"}}]]
          (layout/hr-row form-span "90%")]]])))
 
+(defn add-message-row
+  []
+  [:tr
+   [:td]
+   [:td.form-info {:colSpan 3} [:span.error "* "] [:span "Field is required.  Names must have at least 2 characters."]]
+   [:td]])
+
 (defn add-player
   []
   (let [title "Add Player"
@@ -80,15 +87,15 @@
       [:table.match-info-table.table-sm
        [:tbody
         (layout/empty-row form-span)
-        [:tr [:td.text-center {:colSpan form-span} [:h4 title]]]
+        [:tr [:td.text-center {:colSpan form-span} [:h4 (str title " to " (:name selected-team) " Roster")]]]
         (layout/hr-row form-span "90%")
-        (add-form-control "First name:" {:name     "first_name" :maxLength 45 :size 45 :type "text" :value (:first_name add-player)
-                                         :onChange #(rf/dispatch [::evt-add/update-add-player "first_name" (-> % .-target .-value)])
-                                         :onBlur   #(rf/dispatch [::evt-add/edit-add-player "first_name" (-> % .-target .-value)])}
+        (add-form-control [:span "First name:" [:span.error "*"]] {:name     "first_name" :maxLength 45 :size 45 :type "text" :value (:first_name add-player)
+                                                                   :onChange #(rf/dispatch [::evt-add/update-add-player "first_name" (-> % .-target .-value)])
+                                                                   :onBlur   #(rf/dispatch [::evt-add/edit-add-player "first_name" (-> % .-target .-value)])}
                           (:first_name_error add-player))
-        (add-form-control "Last name:" {:name     "last_name" :maxLength 45 :size 45 :type "text" :value (:last_name add-player)
-                                        :onChange #(rf/dispatch [::evt-add/update-add-player "last_name" (-> % .-target .-value)])
-                                        :onBlur   #(rf/dispatch [::evt-add/edit-add-player "last_name" (-> % .-target .-value)])}
+        (add-form-control [:span "Last name:" [:span.error "*"]] {:name     "last_name" :maxLength 45 :size 45 :type "text" :value (:last_name add-player)
+                                                                  :onChange #(rf/dispatch [::evt-add/update-add-player "last_name" (-> % .-target .-value)])
+                                                                  :onBlur   #(rf/dispatch [::evt-add/edit-add-player "last_name" (-> % .-target .-value)])}
                           (:last_name_error add-player))
         (add-form-control "Email:" {:name     "email" :maxLength 45 :size 45 :type "text" :value (:email add-player)
                                     :onChange #(rf/dispatch [::evt-add/update-add-player "email" (-> % .-target .-value)])}
@@ -107,6 +114,7 @@
                [:option {:value "S"} "Sub"]]]
          [:td {:style {:width "5%"}} (layout/nbsp)]]
         (layout/hr-row form-span "90%")
+        (add-message-row)
         (layout/empty-row form-span)
         [:tr
          [:td.text-center {:colSpan update-player-form-span}
@@ -139,11 +147,11 @@
           (layout/empty-row update-player-form-span)
           [:tr [:td.text-center {:colSpan update-player-form-span} [:h4 title]]]
           (layout/hr-row form-span "90%")
-          (add-form-control "First name:" {:name     "first_name" :maxLength 45 :size 45 :type "text" :value (:first_name selected-player)
-                                           :onChange #(rf/dispatch [::evt-upd/update-selected-player "first_name" (-> % .-target .-value)])}
+          (add-form-control [:span "First name:" [:span.error "*"]] {:name     "first_name" :maxLength 45 :size 45 :type "text" :value (:first_name selected-player)
+                                                                     :onChange #(rf/dispatch [::evt-upd/update-selected-player "first_name" (-> % .-target .-value)])}
                             (:first_name_error selected-player))
-          (add-form-control "Last name:" {:name     "last_name" :maxLength 45 :size 45 :type "text" :value (:last_name selected-player)
-                                          :onChange #(rf/dispatch [::evt-upd/update-selected-player "last_name" (-> % .-target .-value)])}
+          (add-form-control [:span "Last name:" [:span.error "*"]] {:name     "last_name" :maxLength 45 :size 45 :type "text" :value (:last_name selected-player)
+                                                                    :onChange #(rf/dispatch [::evt-upd/update-selected-player "last_name" (-> % .-target .-value)])}
                             (:last_name_error selected-player))
           (add-form-control "Email:" {:name     "email" :maxLength 45 :size 45 :type "text" :value (:email selected-player)
                                       :onChange #(rf/dispatch [::evt-upd/update-selected-player "email" (-> % .-target .-value)])}
@@ -162,6 +170,7 @@
                  [:option {:value "S"} "Sub"]]]
            [:td {:style {:width "5%"}} (layout/nbsp)]]
           (layout/hr-row update-player-form-span "90%")
+          (add-message-row)
           (layout/empty-row update-player-form-span)
           [:tr
            [:td.text-center {:colSpan update-player-form-span}

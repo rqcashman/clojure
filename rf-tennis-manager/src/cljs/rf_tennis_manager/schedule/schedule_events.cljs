@@ -47,7 +47,10 @@
           season-id (get-in db [:schedule :selected-season :id])]
       (if-not (or (s/blank? team-id) (s/blank? season-id))
         {:db            (-> db
-                            (assoc-in [:schedule :selected-team] (first (filter #(identical? (str (:id %)) (str team-id)) (get-in db [:teams :list])))))
+                            (assoc-in [:schedule :selected-team] (first (filter #(identical? (str (:id %)) (str team-id)) (get-in db [:teams :list]))))
+                            (assoc-in [:schedule :call-status :success?] true)
+                            (assoc-in [:schedule :panel-visible :call-status] true)
+                            (assoc-in [:schedule :call-status :message] "Processing..."))
          ::get-schedule {:method     :get
                          :url        (str "http://localhost:3000/team-schedule/" season-id "/" team-id)
                          :on-success [::load-schedule]
@@ -90,8 +93,6 @@
   ::show-select-form
   (fn [{:keys [db]} [_ response]]
     {:db (show-div db "select-form")}))
-
-
 
 (rf/reg-event-fx
   ::init-schedule-page
