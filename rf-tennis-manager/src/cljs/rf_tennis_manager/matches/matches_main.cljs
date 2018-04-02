@@ -73,7 +73,7 @@
               [:td "Points"]
               [:td "Opponent Points"]]]
             [:tbody#match-sched-body
-             (get-team-schedule schedule (:team_id team-info))]
+             (get-team-schedule schedule (:id team-info))]
             ]]
           [:td {:style {:width "5%"}}]]
          (layout/hr-row form-span "90%")]]])))
@@ -279,8 +279,7 @@
          (if (nil? (:forfeit_team_name court))
            (list [:td {:key (str "lineup-pl" (:player1 court))} (:player1_name court)]
                  [:td {:key (str "lineup-pl" (:player2 court))} (:player2_name court)])
-           [:td {:key   (str "forfeit-row" (:court_number court)) :colSpan 2
-                 :style {:text-align "left" :font-weight "bold" :color "red"}} (:forfeit_team_name court) " forfeit"])]))
+           [:td.text-left.bold-text.error {:key (str "forfeit-row" (:court_number court)) :colSpan 2} (:forfeit_team_name court) " forfeit"])]))
 
 (defn lineup-email-form
   "docstring"
@@ -380,7 +379,7 @@
         opp-id (if (= team-id (:home_team_id match-info)) (:away_team_id match-info) (:home_team_id match-info))]
     (conj list
           [:tr {:key (str "c" court "-line-up-row")}
-           [:td [:span {:style {:font-weight "bold"}} (str "Court " court)]]
+           [:td.bold-text (str "Court " court)]
            [:td (get-player-list lineup (str "c" court "p1") (pos? btn-value))]
            [:td (get-player-list lineup (str "c" court "p2") (pos? btn-value))]
            [:td

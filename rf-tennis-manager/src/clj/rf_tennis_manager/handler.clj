@@ -57,7 +57,7 @@
            (GET "/admin" {session :session} (layout/fragment "admin.js" (admin/admin session)))
            (GET "/matches" {session :session} (layout/fragment "" (match/matches session)))
            (GET "/roster" {session :session} (layout/fragment "" (rost/roster session)))
-           (GET "/schedule" {session :session} (layout/fragment "schedule.js" (schedule/schedule session)))
+           (GET "/schedule" {session :session} (layout/fragment "" (schedule/schedule session)))
 
            ;rest APIs
            (GET "/clubs" [] (rr/response (club/clubs)))

@@ -65,7 +65,7 @@ hr {
 
 .call-status {
     background-color: lightyellow;
-    opacity: 0.9;
+    opacity: 0.98;
 }
 
 .table-striped tbody > tr:nth-child(odd) {
@@ -117,17 +117,13 @@ hr {
     visibility: hidden;
 }
 
-.roster {: width 80 %
+.team-schedule {
+    margin: auto;
+    width: 40%;
 }
 
 .roster {
     visibility: visible;
-}
-
-.main-formx {
-    width: 50%;
-    visibility: visible;
-    background-color: #e6e6e6;
 }
 
 .login-form {
@@ -136,48 +132,25 @@ hr {
     border: 1px;
 }
 
-.admin-action {
-    width: 100%;
-}
-
-.roster-view {
-    width: 90%;
-}
-
-.schedule-form tr td, .admin-form tr td, .schedule-hdr tr td, .admin-action tr td, .roster-form tr td, .roster-action tr td, .match-form tr td, .matches-action tr td, .login-form tr td {
+.login-form tr td, .roster-form tr td {
     border-top: none;
     border-bottom: none;
     border: none;
 }
 
-.schedule-hdr tr td {
-    border-top: none;
-    border-bottom: none;
-    text-align: left;
+.form-error {
+    color: red;
 }
 
 .schedule-selected-team {
     font-weight: bold;
+    color: #006400;
 }
 
 .admin-form, .roster-form, .match-form {
     visibility: visible;
     color: #2B4408;
     width: 50%;
-}
-
-.admin-action, .roster-action, .matches-action {
-    display: none;
-    visibility: visible;
-    width: 45%;
-}
-
-.matches-action {
-    width: 90%;
-}
-
-.roster-action {
-    width: 70%;
 }
 
 .availability-panel {
@@ -190,19 +163,6 @@ hr {
 
 .email-avail-panel {
     width: 45%;
-}
-
-.form-error {
-    color: red;
-}
-
-.form-label {
-    float: right;
-    margin: 0 0 10px 10px;
-}
-
-.test {
-    color: red;
 }
 
 .error {

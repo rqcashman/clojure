@@ -15,5 +15,5 @@
 (defn hr-row
   "docstring"
   [colspan width]
-  [:tr [:td {:colSpan colspan} [:hr {:width width}]]])
+  [:tr [:td {:colSpan colspan} [:hr {:style {:width width}}]]])
 

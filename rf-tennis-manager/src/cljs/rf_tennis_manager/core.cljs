@@ -8,10 +8,12 @@
             [rf-tennis-manager.db :as db]
             [rf-tennis-manager.events :as events]
             [rf-tennis-manager.matches.match-events-common :as evt-common]
-            [rf-tennis-manager.matches.match-events-schedule :as sched]
+            [rf-tennis-manager.matches.match-events-schedule :as main-sched-evt]
             [rf-tennis-manager.matches.matches-main :as match]
             [rf-tennis-manager.roster.roster-main :as roster]
-            [ rf-tennis-manager.roster.roster-events-select :as rost-select]
+            [ rf-tennis-manager.roster.roster-events-select :as roster-evt]
+            [rf-tennis-manager.schedule.schedule-main :as schedule]
+            [ rf-tennis-manager.schedule.schedule-events :as sched-evt]
             [rf-tennis-manager.views :as views]
             [rf-tennis-manager.subs :as subs]))
 
@@ -42,7 +44,7 @@
                     (.getElementById js/document "ma_call_status"))
     (reagent/render [match/schedule-form]
                     (.getElementById js/document "ma_show_schedule"))
-    (rf/dispatch [::sched/init-schedule-page])
+    (rf/dispatch [::main-sched-evt/init-matches-page])
     (reagent/render [match/availability-form]
                     (.getElementById js/document "ma_show_availability"))
     (reagent/render [match/availability-email-form]
@@ -65,7 +67,18 @@
                     (.getElementById js/document "ro_update_player"))
     (reagent/render [roster/add-player]
                     (.getElementById js/document "ro_add_player"))
-    (rf/dispatch [::rost-select/init-roster-page])))
+    (rf/dispatch [::roster-evt/init-roster-page])))
+
+(defn ^:export init_schedule []
+  (go
+    (println "===== init_schedule =====")
+    (reagent/render [schedule/call-status]
+                    (.getElementById js/document "sched_call_status"))
+    (reagent/render [schedule/schedule-select-form]
+                    (.getElementById js/document "sched_select_form"))
+    (reagent/render [schedule/schedule]
+                    (.getElementById js/document "sched_schedule"))
+    (rf/dispatch [::sched-evt/init-schedule-page])))
 
 
 

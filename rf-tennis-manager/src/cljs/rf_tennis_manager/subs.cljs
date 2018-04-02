@@ -119,6 +119,32 @@
   (fn [db]
     (get-in db [:teams :list])))
 
+(re-frame/reg-sub
+  ::seasons
+  (fn [db]
+    (get-in db [:seasons])))
 
+(re-frame/reg-sub
+  ::schedule-panel-visible
+  (fn [db panel-id]
+    (get-in db [:schedule :panel-visible (keyword (second panel-id))])))
 
+(re-frame/reg-sub
+  ::schedule-selected-team
+  (fn [db]
+    (get-in db [:schedule :selected-team])))
 
+(re-frame/reg-sub
+  ::schedule-selected-season
+  (fn [db]
+    (get-in db [:schedule :selected-season])))
+
+(re-frame/reg-sub
+  ::schedule-team-schedule
+  (fn [db]
+    (get-in db [:schedule :team-schedule])))
+
+(re-frame/reg-sub
+  ::schedule-call-status
+  (fn [db]
+    (get-in db [:schedule :call-status])))

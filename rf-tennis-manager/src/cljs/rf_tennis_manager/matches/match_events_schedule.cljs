@@ -37,7 +37,7 @@
                (evt-common/show-div "schedule"))})))
 
 (rf/reg-event-fx
-  ::init-schedule-page
+  ::init-matches-page
   (fn [{:keys [db]} [_ match-id]]
     (println "====== ::init-schedule-page")
     (let [upd-db (-> db

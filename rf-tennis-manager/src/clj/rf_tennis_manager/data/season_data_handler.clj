@@ -9,7 +9,7 @@
   "docstring"
   []
   (j/query sys/db-cred
-           [(str "select id, name, DATE_FORMAT(start_date,'%M %D, %Y') as start_date,DATE_FORMAT(end_date,'%m-%d-%Y') as end_date
+           [(str "select id, name, DATE_FORMAT(start_date,'%M %D, %Y') as start_date,DATE_FORMAT(end_date,'%M %D, %Y') as end_date
                   from season s order by s.start_date desc")]))
 
 (defn season

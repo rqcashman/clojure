@@ -22,13 +22,22 @@
    [:td [:input.form-control-sm options]]
    [:td {:style {:width "5%"}} (layout/nbsp)]])
 
+(defn format-phone-number
+  [phone-number]
+  (cond
+    (s/blank? phone-number) "0"
+    (> (count phone-number) 7 ) (str "(" (subs phone-number 0 3) ") " (subs phone-number 3 6) " - " (subs phone-number 6))
+    (> (count phone-number) 4) (str (subs phone-number 0 3) " - " (subs phone-number 3))
+    :else phone-number))
+
 (defn roster-row
   [list player]
   (conj list [:tr.text-left {:key (:id player) :onClick #(rf/dispatch [::evt-select/player-selected (:id player)])}
               [:td (:last_name player)]
               [:td (:first_name player)]
               [:td (:email player)]
-              [:td (:phone_number player)]
+              [:td (format-phone-number (str (:phone_number player)))]
+              ;[:td (:phone_number player)]
               [:td (case (:status player) "A" "Active" "S" "Sub" "I" "Inactive" "?")]]))
 
 (defn show-roster
