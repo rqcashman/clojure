@@ -86,9 +86,9 @@
      [:form#addplayerform.form-horizontal {:method "post" :action "/add-player"}
       [:table.match-info-table.table-sm
        [:tbody
-        (layout/empty-row form-span)
-        [:tr [:td.text-center {:colSpan form-span} [:h4 (str title " to " (:name selected-team) " Roster")]]]
-        (layout/hr-row form-span "90%")
+        (layout/empty-row update-player-form-span)
+        [:tr [:td.text-center {:colSpan update-player-form-span} [:h4 (str title " to " (:name selected-team) " Roster")]]]
+        (layout/hr-row update-player-form-span "90%")
         (add-form-control [:span "First name:" [:span.error "*"]] {:name     "first_name" :maxLength 45 :size 45 :type "text" :value (:first_name add-player)
                                                                    :onChange #(rf/dispatch [::evt-add/update-add-player "first_name" (-> % .-target .-value)])
                                                                    :onBlur   #(rf/dispatch [::evt-add/edit-add-player "first_name" (-> % .-target .-value)])}
@@ -113,10 +113,10 @@
                [:option {:value "I"} "Inactive"]
                [:option {:value "S"} "Sub"]]]
          [:td {:style {:width "5%"}} (layout/nbsp)]]
-        (layout/hr-row form-span "90%")
+        (layout/hr-row update-player-form-span "90%")
         (add-message-row)
-        (layout/empty-row form-span)
-        [:tr
+        (layout/empty-row update-player-form-span)
+        [:tr 
          [:td.text-center {:colSpan update-player-form-span}
           [:table {:style {:width "100%"}}
            [:tbody
@@ -126,11 +126,11 @@
               [:button {:type "button" :onClick #(rf/dispatch [::evt-add/add-player-request])} title]]
              [:td.text-left
               [:button {:type "button" :onClick #(rf/dispatch [::evt-common/show-roster])} "Cancel"]]
-             [:td {:style {:width "50%"}} (layout/nbsp)]]]]]]
+             [:td {:style {:width "50%" :colSpan 2}} (layout/nbsp)]]]]]]
         [:tr.hidden-control
          [:td
           [:input.hidden-control {:name "team_id" :value (:id selected-team) :readOnly true}]]]
-        (layout/empty-row form-span)]]]]))
+        (layout/empty-row update-player-form-span)]]]]))
 
 
 (defn update-player-form
@@ -146,7 +146,7 @@
          [:tbody
           (layout/empty-row update-player-form-span)
           [:tr [:td.text-center {:colSpan update-player-form-span} [:h4 title]]]
-          (layout/hr-row form-span "90%")
+          (layout/hr-row update-player-form-span "90%")
           (add-form-control [:span "First name:" [:span.error "*"]] {:name     "first_name" :maxLength 45 :size 45 :type "text" :value (:first_name selected-player)
                                                                      :onChange #(rf/dispatch [::evt-upd/update-selected-player "first_name" (-> % .-target .-value)])}
                             (:first_name_error selected-player))
