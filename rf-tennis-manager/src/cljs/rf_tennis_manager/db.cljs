@@ -88,10 +88,20 @@
               :team-roster            [{:id 1 :last_name "cashman" :first_name "rick"}]
               :call-status            {:success? true :message "Processing..." :on-click nil}}
    :teams    {:list [{:id 0 :name "team name"}]}
+   :season   "rick cashman"
    :schedule {:panel-visible {:select-form true
                               :schedule    false
                               :call-status false}
               :loaded?       false
               :call-status   {:success? true :message "Processing..." :on-click nil}}
-   :admin    {:loaded?     false
-              :call-status {:success? true :message "Processing..." :on-click nil}}})
+   :admin    {:panel-visible {:add-club      true
+                              :add-season    false
+                              :add-team      false
+                              :load-schedule false
+                              :call-status   false}
+              :add-season    {}
+              :add-team      {:fields {:team-name    {:name "Team name" :value "HP Test" :type "text" :required? true :min-length 2 :valid? true :error-msg ""}
+                                       :email        {:name "Email address" :value "xx" :type "email" :required? false :max-length 50 :valid? true :error-msg ""}
+                                       :sched-abbrev {:name "Schedule abbreviation" :value "HPT" :type "text" :required? true :min-length 2 :max-length 4 :valid? true :error-msg ""}}}
+              :loaded?       false
+              :call-status   {:success? true :message "Processing..." :on-click nil}}})

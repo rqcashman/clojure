@@ -22,35 +22,35 @@
 (rf/reg-event-db
   ::initialize-tabbed-db
   (fn [_ _]
-    db/tabbed-db))
+        db/tabbed-db))
 
-(rf/reg-event-fx
-  ::main-btn-click
-  (fn [{:keys [db]} [_ msg]]
-    (println (count (:players db)))
-    (let [new-state (-> db
-                        (assoc :name "Rick")
-                        (assoc :type "Admin")
-                        (assoc-in [:players :13] {:last "Allen" :first "Perry" :id 13}))]
-      {:db new-state})))
+  (rf/reg-event-fx
+    ::main-btn-click
+    (fn [{:keys [db]} [_ msg]]
+      (println (count (:players db)))
+      (let [new-state (-> db
+                          (assoc :name "Rick")
+                          (assoc :type "Admin")
+                          (assoc-in [:players :13] {:last "Allen" :first "Perry" :id 13}))]
+        {:db new-state})))
 
-(rf/reg-event-fx
-  ::list-changed
-  (fn [{:keys [db]} [evt list]]
-    (let [el (.getElementById js/document (str list "-list"))
-          other-list-key (if (= list "c1p1") "c1p2" "c1p1")
-          current (get-in db [:matches :lineup (keyword list) :selected :current])
-          selected (get-in db [:matches :lineup (keyword list) :players (keyword (str el.value))])
-          upd-db (->
-                   (update-in db [:matches :lineup (keyword other-list-key) :players] dissoc (keyword (str (:id selected))))
-                   (assoc-in [:matches :lineup (keyword list) :selected :previous] current)
-                   (assoc-in [:matches :lineup (keyword list) :selected :current] selected))]
-      (println "======================================")
-      (println "db " db)
-      (println "current: " current " sel " selected " other list " other-list-key)
-      (if (pos? (count current))
-        {:db (assoc-in upd-db [:matches :lineup (keyword other-list-key) :players (keyword (str (:id current)))] current)}
-        {:db upd-db}))))
+  (rf/reg-event-fx
+    ::list-changed
+    (fn [{:keys [db]} [evt list]]
+      (let [el (.getElementById js/document (str list "-list"))
+            other-list-key (if (= list "c1p1") "c1p2" "c1p1")
+            current (get-in db [:matches :lineup (keyword list) :selected :current])
+            selected (get-in db [:matches :lineup (keyword list) :players (keyword (str el.value))])
+            upd-db (->
+                     (update-in db [:matches :lineup (keyword other-list-key) :players] dissoc (keyword (str (:id selected))))
+                     (assoc-in [:matches :lineup (keyword list) :selected :previous] current)
+                     (assoc-in [:matches :lineup (keyword list) :selected :current] selected))]
+        (println "======================================")
+        (println "db " db)
+        (println "current: " current " sel " selected " other list " other-list-key)
+        (if (pos? (count current))
+          {:db (assoc-in upd-db [:matches :lineup (keyword other-list-key) :players (keyword (str (:id current)))] current)}
+          {:db upd-db}))))
 
 
 

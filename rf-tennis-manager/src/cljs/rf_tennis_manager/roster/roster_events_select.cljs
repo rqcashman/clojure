@@ -50,7 +50,7 @@
                      (assoc-in [:roster :call-status :on-click] nil)
                      (assoc-in [:roster :panel-visible :call-status] true))]
       {::get-teams {:method     :get
-                    :url        (str "http://localhost:3000/teams")
+                    :url       "/teams"
                     :on-success [::load-teams]
                     :on-fail    [::evt-common/roster-page-failed]}
        :db         upd-db})))

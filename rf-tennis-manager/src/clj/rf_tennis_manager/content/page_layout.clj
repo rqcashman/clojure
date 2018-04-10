@@ -30,6 +30,7 @@
           (include-css "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.css")
           (include-css "https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css")
           (include-css "tennis.css")
+          (include-css "pickaday.css")
           [:body
            [:div content]]]))
 

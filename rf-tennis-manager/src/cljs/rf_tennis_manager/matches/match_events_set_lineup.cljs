@@ -32,7 +32,7 @@
                      (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-update-lineup {:method     :post
-                             :url        (str "http://localhost:3000/update-lineup")
+                             :url        "/update-lineup"
                              :on-success [::update-lineup-success]
                              :form-id    "#updatelineup"
                              :on-fail    [::update-lineup-failed "Call to update lineup failed"]}
@@ -187,15 +187,15 @@
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::get-match-availability    {:method     :get
-                                    :url        (str "http://localhost:3000/match-availability/" match-id)
+                                    :url        (str "/match-availability/" match-id)
                                     :on-success [::show-lineup-form]
                                     :on-fail    [::set-lineup-data-failed]}
        ::get-match-forfeits        {:method     :get
-                                    :url        (str "http://localhost:3000/match-forfeits/" match-id)
+                                    :url        (str "/match-forfeits/" match-id)
                                     :on-success [::init-forfeit-btns]
                                     :on-fail    [::set-lineup-data-failed]}
        ::evt-common/get-match-info {:method     :get
-                                    :url        (str "http://localhost:3000/match-info/" match-id)
+                                    :url        (str "/match-info/" match-id)
                                     :on-success [::set-match-info]
                                     :on-fail    [::set-lineup-data-failed]}
        :db                         upd-db})))

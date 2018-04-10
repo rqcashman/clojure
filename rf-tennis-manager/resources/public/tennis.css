@@ -21,7 +21,7 @@ hr {
     background-color: #e6e6e6;
 }
 
-.match-info-table tr td {
+.match-info-table tr td  {
     white-space: nowrap;
     text-align: left;
 }
@@ -132,10 +132,9 @@ hr {
     border: 1px;
 }
 
-.login-form tr td, .roster-form tr td {
+.login-form tr td, .roster-form tr td, .admin-form tr td {
     border-top: none;
     border-bottom: none;
-    border: none;
 }
 
 .form-error {
@@ -150,6 +149,10 @@ hr {
 .admin-form, .roster-form, .match-form {
     visibility: visible;
     color: #2B4408;
+    width: 50%;
+}
+
+.admin-form {
     width: 50%;
 }
 

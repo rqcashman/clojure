@@ -47,9 +47,11 @@
         (hash-map :status "failed" :status-code 200 :msg (str "Player first and last name required"))
         (if (player/player-exists? team_id first_name last_name)
           (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' already exists."))
-          (do
-            (player/add_player team_id first_name last_name email phone_number status)
-            (hash-map :status "success" :status-code 200 :msg (str "Player '" first_name " " last_name "' added.")))))
+          (if (or (< (count first_name) 2) (< (count last_name) 2))
+            (hash-map :status "failed" :status-code 200 :msg "First and last name must contain at least 2 characters")
+            (do
+              (player/add_player team_id first_name last_name email phone_number status)
+              (hash-map :status "success" :status-code 200 :msg (str "Player '" first_name " " last_name "' added."))))))
       (catch SQLException se
         (println "SQLException in add-player: " (.getMessage se))
         (hash-map :status "failed" :status-code 500 :msg (str "Insert of player '" first_name " " last_name "' failed.") :support-msg (.getMessage se)))
@@ -115,9 +117,11 @@
         (hash-map :status "failed" :status-code 200 :msg (str "Player first and last name required"))
         (if (player/player-id-exists? player_id)
           (if (player/player-name-available? team_id player_id first_name last_name)
-            (do
-              (player/update-player player_id last_name first_name email phone_number status)
-              (hash-map :status "success" :status-code 200 :msg (str "Player '" first_name " " last_name "' updated.")))
+            (if (or (< (count first_name) 2) (< (count last_name) 2))
+              (hash-map :status "failed" :status-code 200 :msg "First and last name must contain at least 2 characters")
+              (do
+                (player/update-player player_id last_name first_name email phone_number status)
+                (hash-map :status "success" :status-code 200 :msg (str "Player '" first_name " " last_name "' updated."))))
             (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' exists under another player id.")))
           (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' does not exist with the given player id."))))
       (catch SQLException se
@@ -198,7 +202,7 @@
         validation-errors (validate-lineup parms)
         user (auth/get-user-from-session-id (:identity session))]
     (try
-      (if (= validation-errors nil)
+      (if (nil? validation-errors)
         (dotimes [x 4]
           (let [court (inc x)
                 player1 ((keyword (str "c" court "p1")) parms)
@@ -208,7 +212,6 @@
           (hash-map :status "success" :status-code 200 :msg (str "Match lineup updated for team")))
         validation-errors)
       (catch Exception e
-        (println "Exception in update-lineup: " e)
         (println "Exception in update-lineup: " (.getMessage e))
         (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
 
@@ -228,28 +231,20 @@
           (sched/add-match (:season_id params) matchDate homeTeamId awayTeamId))))
     (hash-map :status "success" :status-code 200 :msg (str "Season loaded"))))
 
-(defn default-match-time
-  "Convert time to 24 hour time '09:30' AM returns 09:30.  '02:30 PM' returns 14:30."
-  [input-time]
-  (let [match-time (subs input-time 0 5)]
-    (if (or (s/ends-with? input-time "AM") (s/starts-with? input-time "12"))
-      (str match-time)
-      (let [time-arr (s/split match-time #":")]
-        (str (+ (read-string (nth time-arr 0)) 12) ":" (nth time-arr 1))))))
-
 (defn add-team
   "Return the Add Team page"
   [session params]
   (let [team-name (:team_name params)
-        club-id (:club_id params)]
+        club-id (:club_id params)
+        sched-abbrev (:sched_abbrev params)]
     (try
-      (if (s/blank? team-name)
-        (hash-map :status "failed" :status-code 200 :msg (str "Team name required"))
-        (if (team/team-exists? club-id team-name)
-          (hash-map :status "failed" :status-code 200 :msg (str "Team '" team-name "' already exists."))
-          (do
-            (team/add-team team-name club-id (default-match-time (:match_time params)))
-            (hash-map :status "success" :status-code 200 :msg (str "Team '" team-name "' added.")))))
+      (cond
+        (s/blank? team-name) (hash-map :status "failed" :status-code 200 :msg (str "Team name required"))
+        (team/team-exists? club-id team-name) (hash-map :status "failed" :status-code 200 :msg (str "Team '" team-name "' already exists."))
+        (team/sched-abbreviation-exists? sched-abbrev) (hash-map :status "failed" :status-code 200 :msg (str "Schedule abbrevation '" sched-abbrev "' already exists."))
+        :else (do
+                (team/add-team team-name club-id sched-abbrev)
+                (hash-map :status "success" :status-code 200 :msg (str "Team '" team-name "' added."))))
       (catch SQLException se
         (println se)
         (hash-map :status "failed" :status-code 500 :msg (str "Insert of club '" team-name "' failed.") :support-msg (.getMessage se)))

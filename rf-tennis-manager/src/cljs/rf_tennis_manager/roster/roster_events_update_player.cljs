@@ -41,7 +41,7 @@
                      (assoc-in [:roster :call-status :on-click] nil)
                      (assoc-in [:roster :panel-visible :call-status] true))]
       {::update-player {:method     :post
-                        :url        (str "http://localhost:3000/update-player")
+                        :url        "/update-player"
                         :on-success [::update-player-success]
                         :form-id    "#updateplayerform"
                         :on-fail    [::evt-common/roster-page-failed]}

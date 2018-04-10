@@ -32,7 +32,7 @@
                      (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-send-lineup-email {:method     :post
-                                 :url        (str "http://localhost:3000/send-lineup-email")
+                                 :url        "/send-lineup-email"
                                  :on-success [::send-lineup-email-success]
                                  :form-id    "#sendlineupemail"
                                  :on-fail    [::send-lineup-email-failed]}
@@ -85,11 +85,11 @@
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::get-match-lineup          {:method     :get
-                                    :url        (str "http://localhost:3000/match-lineup/" match-id)
+                                    :url        (str "/match-lineup/" match-id)
                                     :on-success [::email-lineup-form]
                                     :on-fail    [::email-lineup-get-data-failed]}
        ::evt-common/get-match-info {:method     :get
-                                    :url        (str "http://localhost:3000/match-info/" match-id)
+                                    :url        (str "/match-info/" match-id)
                                     :on-success [::evt-common/match-info]
                                     :on-fail    [::email-lineup-get-data-failed]}
        :db                         upd-db})))

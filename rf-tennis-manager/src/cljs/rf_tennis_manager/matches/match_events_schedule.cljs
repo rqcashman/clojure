@@ -39,18 +39,18 @@
 (rf/reg-event-fx
   ::init-matches-page
   (fn [{:keys [db]} [_ match-id]]
-    (println "====== ::init-schedule-page")
+    (println "====== ::::init-matches-page new")
     (let [upd-db (-> db
                      (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")
                      (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::get-team-info       {:method     :get
-                              :url        (str "http://localhost:3000/team-info")
+                              :url        "/team-info"
                               :on-success [::team-info]
                               :on-fail    [::init-schedule-page-failed]}
        ::get-schedule {:method     :get
-                              :url        (str "http://localhost:3000/team-schedule-status")
+                              :url        "/team-schedule-status"
                               :on-success [::schedule]
                               :on-fail    [::init-schedule-page-failed]}
        :db                   upd-db})))

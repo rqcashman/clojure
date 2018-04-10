@@ -3,17 +3,14 @@
             [goog.string :as gs]))
 
 (defn nbsp
-  "docstring"
   []
   (gs/unescapeEntities "&nbsp;"))
 
 (defn empty-row
   [colspan]
-  []
-  [:tr [:td {:colSpan colspan} [:span (nbsp)]]])
+  [:tr [:td {:colSpan colspan} (nbsp)]])
 
 (defn hr-row
-  "docstring"
   [colspan width]
   [:tr [:td {:colSpan colspan} [:hr {:style {:width width}}]]])
 

@@ -52,7 +52,7 @@
                             (assoc-in [:schedule :panel-visible :call-status] true)
                             (assoc-in [:schedule :call-status :message] "Processing..."))
          ::get-schedule {:method     :get
-                         :url        (str "http://localhost:3000/team-schedule/" season-id "/" team-id)
+                         :url        (str "/team-schedule/" season-id "/" team-id)
                          :on-success [::load-schedule]
                          :on-fail    [::schedule-page-failed]}}))))
 
@@ -97,6 +97,7 @@
 (rf/reg-event-fx
   ::init-schedule-page
   (fn [{:keys [db]} [_]]
+    (println "=== init sched page ===")
     (let [upd-db (-> db
                      (assoc-in [:schedule :call-status :success?] true)
                      (assoc-in [:schedule :call-status :message] "Processing...")
@@ -104,11 +105,11 @@
                      (show-div "select-form")
                      (assoc-in [:schedule :panel-visible :call-status] true))]
       {::get-teams   {:method     :get
-                      :url        (str "http://localhost:3000/teams")
+                      :url        "/teams"
                       :on-success [::load-teams]
                       :on-fail    [::schedule-page-failed]}
        ::get-seasons {:method     :get
-                      :url        (str "http://localhost:3000/seasons")
+                      :url        "/seasons"
                       :on-success [::load-seasons]
                       :on-fail    [::schedule-page-failed]}
        :db           upd-db})))

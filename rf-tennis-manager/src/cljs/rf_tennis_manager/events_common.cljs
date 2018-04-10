@@ -36,11 +36,14 @@
   [request]
   (go
     (println "send-post-request: " request)
+    (println "form request" (ef/from (:form-id request) (ef/read-form)))
     (let [values (ef/from (:form-id request) (ef/read-form))
           response (<! (http/post (:url request) {:form-params values}))
           method (cond
                    (= (:status response) session-expired-errno) [::session-timeout]
                    (= (get-in response [:body :status]) "success") (:on-success request)
                    :else (:on-fail request))]
-      (println response)
+      (println "send valuesXXXXXXX: " {:form-params values})
+      (println "method: " method)
+      (println "response: " response)
       (rf/dispatch (conj method response)))))

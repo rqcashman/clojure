@@ -57,9 +57,9 @@
 
 (defn add-team
   "docstring"
-  [name club-id start-time]
+  [name club-id sched_abbrev]
   (j/execute! sys/db-cred
-              [(str "insert into team values (null,?,?,?,1)") name club-id start-time]))
+              [(str "insert into team values (null,?,?,?,1)") name club-id sched_abbrev]))
 
 (defn team-exists?
   "docstring"
@@ -67,4 +67,12 @@
   (-> (j/query sys/db-cred
                [(str "select count(*) as ct from team where club_id=? and name=?") club-id name])
       first :ct pos?))
+
+(defn sched-abbreviation-exists?
+  "docstring"
+  [sched-abbrevation]
+  (-> (j/query sys/db-cred
+               [(str "select count(*) as ct from team where sched_abbrev = ?") sched-abbrevation])
+      first :ct pos?))
+
 

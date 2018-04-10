@@ -64,6 +64,6 @@
                       (assoc-in [:roster :selected-roster-action] "roster")
                       (show-div "roster"))
      ::get-roster {:method     :get
-                   :url        (str "http://localhost:3000/team-roster/" team-id)
+                   :url        (str "/team-roster/" team-id)
                    :on-success [::load-roster]
                    :on-fail    [::roster-page-failed]}}))

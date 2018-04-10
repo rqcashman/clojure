@@ -18,8 +18,8 @@
   [:tr.text-left
    [:td {:style {:width "5%"}} (layout/nbsp)]
    [:td label]
-   [:td.error error]
    [:td [:input.form-control-sm options]]
+   [:td.error error]
    [:td {:style {:width "5%"}} (layout/nbsp)]])
 
 (defn format-phone-number
@@ -37,7 +37,6 @@
               [:td (:first_name player)]
               [:td (:email player)]
               [:td (format-phone-number (str (:phone_number player)))]
-              ;[:td (:phone_number player)]
               [:td (case (:status player) "A" "Active" "S" "Sub" "I" "Inactive" "?")]]))
 
 (defn show-roster
@@ -106,17 +105,17 @@
         [:tr
          [:td {:style {:width "5%"}} (layout/nbsp)]
          [:td "Status"]
-         [:td]
          [:td [:select {:name     "status" :value (:status add-player)
                         :onChange #(rf/dispatch [::evt-add/update-add-player "status" (-> % .-target .-value)])}
                [:option {:value "A"} "Active"]
                [:option {:value "I"} "Inactive"]
                [:option {:value "S"} "Sub"]]]
+         [:td]
          [:td {:style {:width "5%"}} (layout/nbsp)]]
         (layout/hr-row update-player-form-span "90%")
         (add-message-row)
         (layout/empty-row update-player-form-span)
-        [:tr 
+        [:tr
          [:td.text-center {:colSpan update-player-form-span}
           [:table {:style {:width "100%"}}
            [:tbody
@@ -162,12 +161,12 @@
           [:tr
            [:td {:style {:width "5%"}} (layout/nbsp)]
            [:td "Status"]
-           [:td]
            [:td [:select {:name     "status" :value (:status selected-player)
                           :onChange #(rf/dispatch [::evt-upd/update-selected-player "status" (-> % .-target .-value)])}
                  [:option {:value "A"} "Active"]
                  [:option {:value "I"} "Inactive"]
                  [:option {:value "S"} "Sub"]]]
+           [:td]
            [:td {:style {:width "5%"}} (layout/nbsp)]]
           (layout/hr-row update-player-form-span "90%")
           (add-message-row)

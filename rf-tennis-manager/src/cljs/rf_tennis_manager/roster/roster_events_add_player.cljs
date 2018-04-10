@@ -50,7 +50,7 @@
                      (assoc-in [:roster :call-status :on-click] nil)
                      (assoc-in [:roster :panel-visible :call-status] true))]
       {::add-player {:method     :post
-                     :url        (str "http://localhost:3000/add-player")
+                     :url        "/add-player"
                      :on-success [::add-player-success]
                      :form-id    "#addplayerform"
                      :on-fail    [::evt-common/roster-page-failed]}

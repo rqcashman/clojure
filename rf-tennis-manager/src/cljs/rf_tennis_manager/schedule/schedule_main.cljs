@@ -82,7 +82,7 @@
 
 (defn get-season-list
   [seasons selected-season]
-  [:select {:name "team-id" :value (if-not (s/blank? selected-season) selected-season "") :onChange #(rf/dispatch [::event/selected-season-changed (-> % .-target .-value)])}
+  [:select {:name "season-id" :value (if-not (s/blank? selected-season) selected-season "") :onChange #(rf/dispatch [::event/selected-season-changed (-> % .-target .-value)])}
    (reduce (fn [list seasons]
              (conj list [:option {:value (:id seasons) :key (:id seasons)} (:name seasons)]))
            () (reverse seasons))])

@@ -54,7 +54,7 @@
            (GET "/mgr" {session :session request :params} (layout/application "Tennis Manager" "tabs.js" USE-REACT (tabs/tabs session request)))
 
            ;HTML framgments - these are tabs
-           (GET "/admin" {session :session} (layout/fragment "admin.js" (admin/admin session)))
+           (GET "/admin" {session :session} (layout/fragment "" (admin/admin session)))
            (GET "/matches" {session :session} (layout/fragment "" (match/matches session)))
            (GET "/roster" {session :session} (layout/fragment "" (rost/roster session)))
            (GET "/schedule" {session :session} (layout/fragment "" (schedule/schedule session)))
@@ -69,10 +69,10 @@
            (GET "/season/:season-id" [& params] (rr/response (season/season (:season-id params))))
            (GET "/seasons" [] (rr/response (season/seasons)))
            (GET "/team/:team-id" [& params] (rr/response (team/team (:team-id params))))
-           (GET "/team-info" {session :session}  (rr/response (auth_data/get-team-info-from-session-id (:identity session))))
+           (GET "/team-info" {session :session} (rr/response (auth_data/get-team-info-from-session-id (:identity session))))
            (GET "/team-roster/:team-id" [& params] (rr/response (team/team-roster (:team-id params))))
            (GET "/team-schedule/:season-id/:team-id" [& params] (rr/response (team/team-schedule (:season-id params) (:team-id params))))
-           (GET "/team-schedule-status" {session :session}  (rr/response (team/team-schedule-status session)))
+           (GET "/team-schedule-status" {session :session} (rr/response (team/team-schedule-status session)))
            (GET "/teams" [] (rr/response (team/teams)))
 
            ;POST

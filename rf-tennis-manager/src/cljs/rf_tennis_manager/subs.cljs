@@ -125,6 +125,11 @@
     (get-in db [:seasons])))
 
 (re-frame/reg-sub
+  ::clubs
+  (fn [db]
+    (get-in db [:clubs])))
+
+(re-frame/reg-sub
   ::schedule-panel-visible
   (fn [db panel-id]
     (get-in db [:schedule :panel-visible (keyword (second panel-id))])))
@@ -148,3 +153,39 @@
   ::schedule-call-status
   (fn [db]
     (get-in db [:schedule :call-status])))
+
+(re-frame/reg-sub
+  ::admin-call-status
+  (fn [db]
+    (get-in db [:admin :call-status])))
+
+(re-frame/reg-sub
+  ::admin-panel-visible
+  (fn [db panel-id]
+    (get-in db [:admin :panel-visible (keyword (second panel-id))])))
+
+(re-frame/reg-sub
+  ::admin-selected-function
+  (fn [db panel-id]
+    (get-in db [:admin :selected-function])))
+
+(re-frame/reg-sub
+  ::admin-selected-season
+  (fn [db]
+    (get-in db [:admin :selected-season])))
+
+(re-frame/reg-sub
+  ::admin-selected-club
+  (fn [db]
+    (get-in db [:admin :selected-club])))
+
+(re-frame/reg-sub
+  ::admin-add-season
+  (fn [db key]
+    (get-in db [:admin :add-season (keyword (second key))])))
+
+(re-frame/reg-sub
+  ::admin-form-data
+  (fn [db key]
+    (get-in db [:admin (keyword (second key)) :fields (keyword (nth key 2))])))
+

@@ -32,7 +32,7 @@
                      (assoc-in [:matches :call-status :on-click] nil)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::call-send-avail-email {:method     :post
-                                :url        (str "http://localhost:3000/send-availability-email")
+                                :url        "/send-availability-email"
                                 :on-success [::send-avail-email-success]
                                 :form-id    "#sendavailabilityemail"
                                 :on-fail    [::send-avail-email-failed]}
@@ -81,7 +81,7 @@
                      (assoc-in [:matches :selected-match-id] match-id)
                      (assoc-in [:matches :panel-visible :call-status] true))]
       {::evt-common/get-match-info {:method     :get
-                                    :url        (str "http://localhost:3000/match-info/" match-id)
+                                    :url        (str "/match-info/" match-id)
                                     :on-success [::email-avail-form]
                                     :on-fail    [::email-avail-get-data-failed]}
        :db                         upd-db})))

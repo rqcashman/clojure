@@ -4,6 +4,8 @@
             [cljs.core.async :refer [<!]]
             [reagent.core :as reagent]
             [re-frame.core :as rf]
+            [rf-tennis-manager.admin.admin-main :as admin]
+            [rf-tennis-manager.admin.admin-events-common :as admin-evt]
             [rf-tennis-manager.config :as config]
             [rf-tennis-manager.db :as db]
             [rf-tennis-manager.events :as events]
@@ -11,9 +13,9 @@
             [rf-tennis-manager.matches.match-events-schedule :as main-sched-evt]
             [rf-tennis-manager.matches.matches-main :as match]
             [rf-tennis-manager.roster.roster-main :as roster]
-            [ rf-tennis-manager.roster.roster-events-select :as roster-evt]
+            [rf-tennis-manager.roster.roster-events-select :as roster-evt]
             [rf-tennis-manager.schedule.schedule-main :as schedule]
-            [ rf-tennis-manager.schedule.schedule-events :as sched-evt]
+            [rf-tennis-manager.schedule.schedule-events :as sched-evt]
             [rf-tennis-manager.views :as views]
             [rf-tennis-manager.subs :as subs]))
 
@@ -79,6 +81,28 @@
     (reagent/render [schedule/schedule]
                     (.getElementById js/document "sched_schedule"))
     (rf/dispatch [::sched-evt/init-schedule-page])))
+
+
+(defn ^:export init_admin []
+  (go
+    (println "===== init_admin =====")
+    (reagent/render [admin/call-status]
+                    (.getElementById js/document "admin_call_status"))
+    (reagent/render [admin/admin-select-form]
+                    (.getElementById js/document "admin_select"))
+    (reagent/render [admin/load-schedule]
+                    (.getElementById js/document "admin_load_schedule"))
+    (reagent/render [admin/season-content]
+                    (.getElementById js/document "admin_add_season"))
+    (reagent/render [admin/club-content]
+                    (.getElementById js/document "admin_add_club"))
+    (reagent/render [admin/team-content]
+                    (.getElementById js/document "admin_add_team"))
+    ;(reagent/render [tf/form]
+    ;                (.getElementById js/document "xx"))
+    ;(reagent/render-component [tf/form] (.getElementById js/document "admin_add_season"))
+    (rf/dispatch [::admin-evt/init-admin-page])))
+
 
 
 
