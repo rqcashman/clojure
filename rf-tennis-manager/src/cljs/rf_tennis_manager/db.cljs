@@ -16,24 +16,24 @@
                                                  :1 {:last "Cashman" :first "Rick" :id 1}
                                                  :2 {:last "Flowers" :first "Henry" :id 2}
                                                  :3 {:last "Barnhill" :first "Bruce" :id 3}
-                                                 :4 {:last "Allen" :first "Mark" :id 4}
-                                                 }}
+                                                 :4 {:last "Allen" :first "Mark" :id 4}}}
+
                            :c1p2     {:selected {:current {} :previous {}}
                                       :players  {
                                                  :0 {:last "-- none --" :first "" :id 0}
                                                  :1 {:last "Cashman" :first "Rick" :id 1}
                                                  :2 {:last "Flowers" :first "Henry" :id 2}
                                                  :3 {:last "Barnhill" :first "Bruce" :id 3}
-                                                 :4 {:last "Allen" :first "Mark" :id 4}
-                                                 }}
+                                                 :4 {:last "Allen" :first "Mark" :id 4}}}
+
                            :c1p3     {:selected {:current {} :previous {}}
                                       :players  {
                                                  :0 {:last "-- none --" :first "" :id 0}
                                                  :1 {:last "Cashman" :first "Rick" :id 1}
                                                  :2 {:last "Flowers" :first "Henry" :id 2}
                                                  :3 {:last "Barnhill" :first "Bruce" :id 3}
-                                                 :4 {:last "Allen" :first "Mark" :id 4}
-                                                 }}
+                                                 :4 {:last "Allen" :first "Mark" :id 4}}}
+
                            :forfeits {:c1 0 :c2 0 :c3 0 :c4 0}}}
    :test    ["rick" "cashman"]})
 
@@ -102,5 +102,11 @@
               :add-season    {}
               :add-team      {:fields {:team-name    {:name "Team name" :value "" :type "text" :required? true :min-length 2 :valid? true :error-msg ""}
                                        :sched-abbrev {:name "Schedule abbreviation" :value "" :type "text" :required? true :min-length 2 :max-length 10 :valid? true :error-msg ""}}}
+              :add-club      {:fields {:club-name    {:name "Club name" :value "" :type "text" :required? true :min-length 2 :max-length 45 :valid? true :error-msg ""}
+                                       :street       {:name "Street address" :value "" :type "text" :required? true :min-length 5 :max-length 100 :valid? true :error-msg ""}
+                                       :city         {:name "City" :value "" :type "text" :required? true :min-length 2 :max-length 45 :valid? true :error-msg ""}
+                                       :state        {:name "State" :value "Ohio" :type "text" :required? true :valid? true :error-msg ""}
+                                       :zip-code     {:name "Zip code" :value "" :type "numeric" :required? true :min-length 5 :max-length 5 :valid? true :error-msg ""}
+                                       :phone-number {:name "Phone number" :value "" :type "phone-number" :required? true :valid? true :error-msg ""}}}
               :loaded?       false
               :call-status   {:success? true :message "Processing..." :on-click nil}}})

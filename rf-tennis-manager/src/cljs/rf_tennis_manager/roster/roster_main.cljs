@@ -131,7 +131,6 @@
           [:input.hidden-control {:name "team_id" :value (:id selected-team) :readOnly true}]]]
         (layout/empty-row update-player-form-span)]]]]))
 
-
 (defn update-player-form
   []
   (fn []

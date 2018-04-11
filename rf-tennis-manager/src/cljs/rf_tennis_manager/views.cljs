@@ -31,11 +31,11 @@
         [:table
          [:tbody
           [:tr
-           [:td
+           [:td]
            (let [test (re-frame/subscribe [::subs/test])]
              (println "build test " @test)
-             [:select {:name "test" :id "test" }
-              (doall (map add-test @test))])]
+             [:select {:name "test" :id "test"}
+              (doall (map add-test @test))])
            [:td
             (let [list1 (re-frame/subscribe [::subs/c1p1])]
               (println "build list 1")
@@ -44,7 +44,7 @@
            [:td
             (let [list3 (re-frame/subscribe [::subs/c1p3])]
               (println "build list 3")
-              [:select {:name "c1p3" :id "c1p3-list" }
+              [:select {:name "c1p3" :id "c1p3-list"}
                (doall (map add-player (sort-by (juxt :last :first) (vals @list3))))])]
            [:td
             (let [list2 (re-frame/subscribe [::subs/c1p2])]

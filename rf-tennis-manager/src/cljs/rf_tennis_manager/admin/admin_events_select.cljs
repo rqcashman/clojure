@@ -4,7 +4,6 @@
             [rf-tennis-manager.admin.admin-events-common :as evt-common]
             [clojure.string :as s]))
 
-
 (rf/reg-event-fx
   ::function-changed
   (fn [{:keys [db]} [_ value]]

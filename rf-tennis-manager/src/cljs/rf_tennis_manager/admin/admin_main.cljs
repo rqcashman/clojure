@@ -23,18 +23,37 @@
   [:tr
    [:td {:style {:width "5%"}} (layout/nbsp)]
    [:td label]
-   [:td [:input.form-control options]]
+   [:td [:input options]]
    [:td {:style {:width "5%"}} (layout/nbsp)]])
 
 (defn add-form-input
   [options form-name field-name]
   (let [fld-hash @(rf/subscribe [::subs/admin-form-data form-name field-name])]
-    (println "=== hash: " fld-hash)
     [:tr
      [:td {:style {:width "5%"}} (layout/nbsp)]
      [:td (:name fld-hash)]
-     [:td [:input.form-control (conj options {:value (:value fld-hash) :onChange #(rf/dispatch [::form-val/validate-field [:admin (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])})]]
-     [:td.error (:error-msg fld-hash)]]))
+     [:td
+      [:input (conj options {:value (:value fld-hash) :onChange #(rf/dispatch [::form-val/validate-field [:admin (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])})]
+      [:span.error (layout/nbsp) (:error-msg fld-hash)]]
+     [:td]]))
+
+(defn add-options
+  [option-hash]
+  (reduce (fn [list opt-key]
+            (conj list [:option {:value (opt-key option-hash) :key (opt-key option-hash)} (name opt-key)]))
+          () (sort (keys option-hash))))
+
+(defn add-form-select
+  [select-name form-name field-name option-hash]
+  (let [fld-hash @(rf/subscribe [::subs/admin-form-data form-name field-name])]
+    [:tr
+     [:td {:style {:width "5%"}} (layout/nbsp)]
+     [:td (:name fld-hash)]
+     [:td
+      [:select {:name     select-name :value (:value fld-hash)
+                :onChange #(rf/dispatch [::form-val/validate-field [:admin (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])}
+       (add-options option-hash)] (layout/nbsp) [:span.error (:error-msg fld-hash)]]
+     [:td]]))
 
 (defn add-date-control
   [label options]
@@ -43,6 +62,7 @@
    [:td label]
    [:td [dp/date-selector options]]
    [:td {:style {:width "5%"}} (layout/nbsp)]])
+
 
 (defn club-content
   []
@@ -58,23 +78,16 @@
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span} [:h4 title]]]
           (layout/hr-row form-span "90%")
-          (add-form-control "Club name:" {:id "club_name" :name "club_name" :maxLength 45 :size 45 :type "text"})
-          (add-form-control "Street:" {:id "street" :name "street" :maxLength 100 :size 60})
-          (add-form-control "City:" {:id "city" :name "city" :maxLength 45 :size 45})
-          [:tr
-           [:td]
-           [:td "State"]
-           [:td [:select {:name     "state" :value "Ohio"
-                          :onChange #(rf/dispatch [::evt-club/state-changed (-> % .-target .-value)])}
-                 [:option "Ohio"]
-                 [:option "Kentucky"]]]
-           [:td {:style {:width "5%"}} (layout/nbsp)]]
-          (add-form-control "Zip code:" {:id "zip_code" :name "zip_code" :maxLength 5 :size 5 :onChange #(rf/dispatch [::evt-club/zip-code-changed (-> % .-target .-value)])})
-          (add-form-control "Phone number:" {:id "phone_number" :name "phone_number" :maxLength 10 :size 10 :onChange #(rf/dispatch [::evt-club/phone-number-changed (-> % .-target .-value)])})
+          (add-form-input {:name "club_name" :maxLength "45" :size "45" :type "text"} "add-club" "club-name")
+          (add-form-input {:name "street" :maxLength "100" :size "60" :type "text"} "add-club" "street")
+          (add-form-input {:name "city" :maxLength "45" :size "45" :type "text"} "add-club" "city")
+          (add-form-select "state" "add-club" "state" {:Ohio "Ohio" :Kentucky "Kentucky"})
+          (add-form-input {:name "zip_code" :maxLength "5" :size "5" :type "text"} "add-club" "zip-code")
+          (add-form-input {:name "phone_number" :size "10" :type "text"} "add-club" "phone-number")
           (layout/hr-row form-span "90%")
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span}
-                [:button {:type "button" :onClick #(rf/dispatch [::evt-club/add-club])} title]]]
+                [:button {:type "button" :onClick #(rf/dispatch [::form-val/validate-form [:admin :add-club :fields] [::evt-club/add-club-request] [::evt-common/admin-form-validation-error]])} title]]]
           (layout/empty-row form-span)]]]])))
 
 (defn get-club-list
@@ -110,8 +123,7 @@
           (layout/hr-row form-span "90%")
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span}
-                 [:button {:type "button" :onClick #(rf/dispatch [::form-val/validate-form [:admin :add-team :fields] [::evt-team/add-team-request] [::evt-common/admin-form-validation-error]])} title]]]
-                ;[:button {:type "button" :onClick #(rf/dispatch [::form-val/validate-form [:admin :add-team :fields]])} title]]]
+                [:button {:type "button" :onClick #(rf/dispatch [::form-val/validate-form [:admin :add-team :fields] [::evt-team/add-team-request] [::evt-common/admin-form-validation-error]])} title]]]
           (layout/empty-row form-span)]]]])))
 
 (defn season-content
@@ -201,7 +213,6 @@
          (layout/hr-row form-span "90%")
          (layout/empty-row form-span)]]
        [:br] [:hr] [:br]])))
-
 
 (defn add-call-status-btn
   [call-status-fn]

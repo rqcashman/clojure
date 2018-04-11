@@ -1,35 +1,35 @@
 (ns rf-tennis-manager.admin.admin-events-add-club
   (:require [re-frame.core :as rf]
             [rf-tennis-manager.events-common :as evt]
-            [rf-tennis-manager.admin.admin-events-common :as evt-common]
+            [rf-tennis-manager.admin.admin-events-common :as evt-admin]
             [clojure.string :as s]))
 
 
-(rf/reg-event-fx
-  ::function-changed
-  (fn [{:keys [db]} [_ value]]
-    (println "::function-changed value: " value)
-    {:db (-> db
-             (evt-common/show-div value)
-             (assoc-in [:admin :selected-function] value))}))
-
-(rf/reg-event-fx
-  ::state-changed
-  (fn [{:keys [db]} [_ state]]
-    (println "::state-changed state: " state)))
-
-(rf/reg-event-fx
-  ::phone-number-changed
-  (fn [{:keys [db]} [_ value]]
-    (println "::phone-number-changed value: " value)))
-
-(rf/reg-event-fx
-  ::zip-code-changed
-  (fn [{:keys [db]} [_ value]]
-    (println "::zip-code-changed value: " value)))
-
-(rf/reg-event-fx
+(rf/reg-fx
   ::add-club
-  (fn [{:keys [db]} [_ request]]
-    (println "::add-club: " request)))
+  evt/send-post-request)
+
+(rf/reg-event-fx
+  ::add-club-success
+  (fn [{:keys [db]} [_ status]]
+    {:db (-> db
+             (assoc-in [:admin :call-status :success?] true)
+             (assoc-in [:admin :panel-visible :call-status] true)
+             (assoc-in [:admin :call-status :message] "Club added")
+             (assoc-in [:admin :call-status :on-click] #(rf/dispatch [::evt-admin/hide-call-status])))}))
+
+(rf/reg-event-fx
+  ::add-club-request
+  (fn [{:keys [db]} [_]]
+    (let [upd-db (-> db
+                     (assoc-in [:admin :call-status :success?] true)
+                     (assoc-in [:admin :call-status :message] "Processing...")
+                     (assoc-in [:admin :call-status :on-click] nil)
+                     (assoc-in [:admin :panel-visible :call-status] true))]
+      {::add-club {:method     :post
+                   :url        "/add-club"
+                   :on-success [::add-club-success]
+                   :form-id    "#addclubform"
+                   :on-fail    [::evt-admin/admin-page-failed]}
+       :db        upd-db})))
 

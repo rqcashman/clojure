@@ -50,7 +50,7 @@
 (rf/reg-event-fx
   ::validate-form
   (fn [{:keys [db]} [_ path success-fn error-fn]]
-    (let [upd-db (reduce (fn [upd-db key]
+     (let [upd-db (reduce (fn [upd-db key]
                            (let [fld-path (conj path key)
                                  fld-hash (get-in upd-db fld-path)]
                              (validate-fld upd-db fld-path fld-hash (s/trim (:value fld-hash)))))

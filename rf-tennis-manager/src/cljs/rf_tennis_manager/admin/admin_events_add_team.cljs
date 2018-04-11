@@ -9,11 +9,6 @@
   (fn [{:keys [db]} [_ club-id]]
     {:db (assoc-in db [:admin :selected-club] (first (filter #(identical? (str (:id %)) (str club-id)) (:clubs db))))}))
 
-(rf/reg-event-fx
-  ::update-field
-  (fn [{:keys [db]} [_ form-name field-name value]]
-    {:db (assoc-in db [:admin (keyword form-name) :fields (keyword field-name) :value] value)}))
-
 (rf/reg-fx
   ::add-team
   evt/send-post-request)
@@ -25,7 +20,7 @@
              (assoc-in [:admin :call-status :success?] true)
              (assoc-in [:admin :panel-visible :call-status] true)
              (assoc-in [:admin :call-status :message] "Team added")
-             (assoc-in [:admin :call-status :on-click] #(rf/dispatch [::evt-admin/hide-call-status (get-in db [:roster :selected-team :id])])))}))
+             (assoc-in [:admin :call-status :on-click] #(rf/dispatch [::evt-admin/hide-call-status])))}))
 
 (rf/reg-event-fx
   ::add-team-request
