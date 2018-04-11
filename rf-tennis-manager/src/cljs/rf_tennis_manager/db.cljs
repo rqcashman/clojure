@@ -100,8 +100,7 @@
                               :load-schedule false
                               :call-status   false}
               :add-season    {}
-              :add-team      {:fields {:team-name    {:name "Team name" :value "HP Test" :type "text" :required? true :min-length 2 :valid? true :error-msg ""}
-                                       :email        {:name "Email address" :value "xx" :type "email" :required? false :max-length 50 :valid? true :error-msg ""}
-                                       :sched-abbrev {:name "Schedule abbreviation" :value "HPT" :type "text" :required? true :min-length 2 :max-length 4 :valid? true :error-msg ""}}}
+              :add-team      {:fields {:team-name    {:name "Team name" :value "" :type "text" :required? true :min-length 2 :valid? true :error-msg ""}
+                                       :sched-abbrev {:name "Schedule abbreviation" :value "" :type "text" :required? true :min-length 2 :max-length 10 :valid? true :error-msg ""}}}
               :loaded?       false
               :call-status   {:success? true :message "Processing..." :on-click nil}}})

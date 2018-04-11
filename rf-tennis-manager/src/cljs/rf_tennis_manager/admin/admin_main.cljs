@@ -107,7 +107,6 @@
              [:td {:style {:width "50%"}}]])
           (add-form-input {:name "team_name" :maxLength 45 :size 45 :type "text"} "add-team" "team-name")
           (add-form-input {:name "sched_abbrev" :maxLength 10 :size 10 :type "text"} "add-team" "sched-abbrev")
-          (add-form-input {:name "email" :maxLength 50 :size 50 :type "text"} "add-team" "email")
           (layout/hr-row form-span "90%")
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span}
