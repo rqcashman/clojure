@@ -53,12 +53,6 @@
            (GET "/logout" {session :session params :params} (layout/application "User Login" "" NO-REACT (login/login login/LOGIN_PAGE session params)))
            (GET "/mgr" {session :session request :params} (layout/application "Tennis Manager" "tabs.js" USE-REACT (tabs/tabs session request)))
 
-           ;HTML framgments - these are tabs
-           (GET "/admin" {session :session} (layout/fragment "" (admin/admin session)))
-           (GET "/matches" {session :session} (layout/fragment "" (match/matches session)))
-           (GET "/roster" {session :session} (layout/fragment "" (rost/roster session)))
-           (GET "/schedule" {session :session} (layout/fragment "" (schedule/schedule session)))
-
            ;rest APIs
            (GET "/clubs" [] (rr/response (club/clubs)))
            (GET "/match-info/:match-id" [& params] (rr/response (sched/match-info (:match-id params))))

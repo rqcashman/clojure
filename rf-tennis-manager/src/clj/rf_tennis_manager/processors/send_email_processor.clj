@@ -154,12 +154,14 @@
   "Send a match lineup email"
   [session {:keys [message signature match_id send_subs]}]
   (try
+    (println "===== send-lineup-email =====")
     (let [match-info (sched/match-info match_id)
           user (auth/get-user-from-session-id (:identity session))
           email-template (get-lineup-email-body message signature match-info)
           court-assignments (s/join (reduce #(get-lineup-row %1 %2) () (reverse (sched/match-lineup match_id user))))
           parms (conj sys/email-cred {:from (:email user) :subject (str "Lineup for " (:match_date match-info))})]
       (doseq [player (sched/get-lineup-email-addresses match_id (:team_id user) send_subs)]
+        (println "sending email to player: " player)
         (let [email-msg (-> email-template
                             (s/replace "---salutation---" (str (:first_name player) " " (:last_name player)))
                             (s/replace "---courts---" (-> court-assignments
