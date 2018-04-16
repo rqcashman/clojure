@@ -95,7 +95,7 @@
        [:table.match-info-table.table-sm.team-schedule
         [:thead
          (layout/empty-row form-span)
-         [:tr [:td.text-center {:colSpan form-span} [:h4 "Select season and club"]]]
+         [:tr [:td.text-center {:colSpan form-span} [:h4 "Select season and team"]]]
          (layout/hr-row form-span "90%")]
         [:tbody
          (let [teams @(rf/subscribe [::subs/team-list])

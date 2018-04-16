@@ -75,11 +75,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tabs.clj" pinned="false" current-in-tab="true">
+      <file leaf-file-name="tabs.clj" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/content/tabs.clj">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="505">
-              <caret line="49" column="58" lean-forward="true" selection-start-line="49" selection-start-column="58" selection-end-line="49" selection-end-column="58" />
+            <state relative-caret-position="420">
+              <caret line="38" column="46" lean-forward="true" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="schedule_main.cljs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/schedule/schedule_main.cljs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-56">
+              <caret line="97" column="84" lean-forward="true" selection-start-line="97" selection-start-column="84" selection-end-line="97" selection-end-column="84" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tennis.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/public/tennis.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="177" column="11" lean-forward="true" selection-start-line="177" selection-start-column="11" selection-end-line="177" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -97,8 +117,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>disp</find>
-      <find>admin-add</find>
       <find>evt-add</find>
       <find>keyword</find>
       <find>add</find>
@@ -127,10 +145,10 @@
       <find>user_team_id</find>
       <find>&quot;#&quot;</find>
       <find>&quot;false&quot;</find>
+      <find>and club</find>
+      <find>show}</find>
     </findStrings>
     <replaceStrings>
-      <replace>rf_tennis_manager.tennismgr</replace>
-      <replace>evt-common/SET-LINEUP-DIV-ID</replace>
       <replace>evt-common/SEND-LINEUP-DIV-ID</replace>
       <replace>evt-common/CALL-STATUS-DIV-ID</replace>
       <replace>evt-common/SCHEDULE-DIV-ID</replace>
@@ -159,6 +177,8 @@
       <replace>club</replace>
       <replace>&quot;javascript:void(0)&quot;</replace>
       <replace>false</replace>
+      <replace>.</replace>
+      <replace>show</replace>
     </replaceStrings>
     <dirStrings>
       <dir>C:\Clojure\rf-tennis-manager\resources\public</dir>
@@ -186,8 +206,6 @@
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches/matches_main.cljs" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/data/season_data_handler.clj" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/views_common.cljs" />
-        <option value="$PROJECT_DIR$/resources/public/tennis.css" />
-        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/schedule/schedule_main.cljs" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/processors/service_processor.clj" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/data/team_data_handler.clj" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/admin/admin_events_load_schedule.cljs" />
@@ -221,8 +239,10 @@
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/core.clj" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/handler.clj" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/content/page_layout.clj" />
-        <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/content/tabs.clj" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/core.cljs" />
+        <option value="$PROJECT_DIR$/resources/public/tennis.css" />
+        <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/content/tabs.clj" />
+        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/schedule/schedule_main.cljs" />
       </list>
     </option>
   </component>
@@ -233,8 +253,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1807" />
-    <option name="y" value="4" />
+    <option name="x" value="-1746" />
+    <option name="y" value="40" />
     <option name="width" value="1920" />
     <option name="height" value="1040" />
   </component>
@@ -496,7 +516,7 @@
       <recent name="C:\Clojure\rf-tennis-manager\resources\public\css" />
     </key>
   </component>
-  <component name="ReplState" timestamp="1523638131976">{:repl-history {:ide [], :local [{:command &quot;(println \&quot;xxx\&quot;)&quot;, :offset 15, :ns &quot;user&quot;} {:command &quot;(println \&quot;rick\&quot;)&quot;, :offset 16, :ns &quot;user&quot;} {:command &quot;(= 1 2)&quot;, :offset 7, :ns &quot;user&quot;} {:command &quot;(println \&quot;xx\&quot;)&quot;, :offset 14, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(println \&quot;xxxxxx\&quot;)&quot;, :offset 18, :ns &quot;user&quot;} {:command &quot;(js/alert \&quot;rick\&quot;)&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(take 5 (drop 1000 (filter odd? (map inc all-ints))))&quot;, :offset 53, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5)&quot;, :offset 8, :ns &quot;user&quot;} {:command &quot;(take 5 (ranger))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;\n(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 80, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt; all-ints\n    (map inc)\n    (filter odd?)\n    (drop 1000)\n    (take 5))&quot;, :offset 74, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 64, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 79, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (drop 1000)\n     (take 5))&quot;, :offset 45, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (drop 1000)\n     (take 5))&quot;, :offset 60, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(re-tennis-manager.core/test-me)&quot;, :offset 31, :ns &quot;user&quot;} {:command &quot;(ns)&quot;, :offset 3, :ns &quot;user&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(use rf-tennis-manager.core)&quot;, :offset 28, :ns &quot;user&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (println x)\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 224, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(println (test-me))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(all-ints)&quot;, :offset 9, :ns &quot;user&quot;} {:command &quot;(test-me)&quot;, :offset 9, :ns &quot;user&quot;} {:command &quot;(take 4 (all-ints))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(take 4 all-ints)&quot;, :offset 16, :ns &quot;user&quot;} {:command &quot;(take 5 range)&quot;, :offset 0, :ns &quot;user&quot;} {:command &quot;(take 5 (range))&quot;, :offset 14, :ns &quot;user&quot;} {:command &quot;(def all-ints (range))&quot;, :offset 22, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 rf-tennis-manager.core/all-ints)&quot;, :offset 39, :ns &quot;user&quot;} {:command &quot;(rf-tennis-manager.core/test-me)&quot;, :offset 31, :ns &quot;user&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt; idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx)))\n  )&quot;, :offset 169, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt;= idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx)))\n  )&quot;, :offset 170, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt;= idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx))\n    (println \&quot;=== THE END === idx:\&quot; idx \&quot; stop: \&quot; stop-idx)))&quot;, :offset 227, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(rf-tennis-manager.core/test-recur 5 10)&quot;, :offset 39, :ns &quot;user&quot;} {:command &quot;(loop [idx 1]\n  (when (&lt; idx 5)\n    (println \&quot;idx: \&quot; idx)\n    (recur (inc idx))))&quot;, :offset 81, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map + [1 2] [3 4] [5 6 7])&quot;, :offset 27, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map + [1 2 100] [3 4] [5 6 7])&quot;, :offset 31, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map (println \&quot;idx: \&quot; %) [1 2 4])&quot;, :offset 33, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 (iterate inc 1))&quot;, :offset 24, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(current)&quot;, :offset 8, :ns &quot;user&quot;} {:command &quot;in-ns rf-tennis-manager.core&quot;, :offset 28, :ns &quot;user&quot;} {:command &quot;(in-ns rf-tennis-manager.core)&quot;, :offset 29, :ns &quot;user&quot;} {:command &quot;(in-ns 'rf-tennis-manager.core)&quot;, :offset 8, :ns &quot;user&quot;} {:command &quot;*ns*&quot;, :offset 4, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur)&quot;, :offset 11, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 100 2)&quot;, :offset 17, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 100 1000)&quot;, :offset 20, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 9 10)&quot;, :offset 16, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(def xx (\&quot;rick\&quot; \&quot;cashman\&quot;))&quot;, :offset 27, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(def xx (list \&quot;rick\&quot; \&quot;cashman\&quot;))&quot;, :offset 32, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(xx)&quot;, :offset 3, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;xx&quot;, :offset 2, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(first xx)&quot;, :offset 9, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(second xx)&quot;, :offset 10, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(last xx)&quot;, :offset 8, :ns &quot;rf-tennis-manager.core&quot;}], :remote [{:command &quot;(def all-ints (range))&quot;, :offset 22, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 187, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () all-ints)))&quot;, :offset 188, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-me)&quot;, :offset 9, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map #(odd? %) [1 2 3])&quot;, :offset 23, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map odd? [1 2 3])&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? [1 2 3])&quot;, :offset 21, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? (map inc [1 2 3]))&quot;, :offset 31, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3])))&quot;, :offset 40, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3 4 5 6])))&quot;, :offset 46, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc all-ints)))&quot;, :offset 41, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 (drop 1000 (filter odd? (map inc all-ints))))&quot;, :offset 53, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 79, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;\n(macroexpand-1 '(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5)))&quot;, :offset 97, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(macroexpand-1 '(-&gt; all-ints\n                    (map inc)\n                    (filter odd?)\n                    (drop 1000)\n                    (take 5)))&quot;, :offset 155, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;re-frame.db/app-db&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;@re-frame.db/app-db&quot;, :offset 19, :ns &quot;rf-tennis-manager.core&quot;}]}}</component>
+  <component name="ReplState" timestamp="1523888207026">{:repl-history {:ide [], :local [{:command &quot;(println \&quot;xxx\&quot;)&quot;, :offset 15, :ns &quot;user&quot;} {:command &quot;(println \&quot;rick\&quot;)&quot;, :offset 16, :ns &quot;user&quot;} {:command &quot;(= 1 2)&quot;, :offset 7, :ns &quot;user&quot;} {:command &quot;(println \&quot;xx\&quot;)&quot;, :offset 14, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(println \&quot;xxxxxx\&quot;)&quot;, :offset 18, :ns &quot;user&quot;} {:command &quot;(js/alert \&quot;rick\&quot;)&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(take 5 (drop 1000 (filter odd? (map inc all-ints))))&quot;, :offset 53, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5)&quot;, :offset 8, :ns &quot;user&quot;} {:command &quot;(take 5 (ranger))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;\n(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 80, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt; all-ints\n    (map inc)\n    (filter odd?)\n    (drop 1000)\n    (take 5))&quot;, :offset 74, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 64, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 79, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (drop 1000)\n     (take 5))&quot;, :offset 45, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (drop 1000)\n     (take 5))&quot;, :offset 60, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(re-tennis-manager.core/test-me)&quot;, :offset 31, :ns &quot;user&quot;} {:command &quot;(ns)&quot;, :offset 3, :ns &quot;user&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(use rf-tennis-manager.core)&quot;, :offset 28, :ns &quot;user&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (println x)\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 224, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(println (test-me))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(all-ints)&quot;, :offset 9, :ns &quot;user&quot;} {:command &quot;(test-me)&quot;, :offset 9, :ns &quot;user&quot;} {:command &quot;(take 4 (all-ints))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(take 4 all-ints)&quot;, :offset 16, :ns &quot;user&quot;} {:command &quot;(take 5 range)&quot;, :offset 0, :ns &quot;user&quot;} {:command &quot;(take 5 (range))&quot;, :offset 14, :ns &quot;user&quot;} {:command &quot;(def all-ints (range))&quot;, :offset 22, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 rf-tennis-manager.core/all-ints)&quot;, :offset 39, :ns &quot;user&quot;} {:command &quot;(rf-tennis-manager.core/test-me)&quot;, :offset 31, :ns &quot;user&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt; idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx)))\n  )&quot;, :offset 169, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt;= idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx)))\n  )&quot;, :offset 170, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt;= idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx))\n    (println \&quot;=== THE END === idx:\&quot; idx \&quot; stop: \&quot; stop-idx)))&quot;, :offset 227, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(rf-tennis-manager.core/test-recur 5 10)&quot;, :offset 39, :ns &quot;user&quot;} {:command &quot;(loop [idx 1]\n  (when (&lt; idx 5)\n    (println \&quot;idx: \&quot; idx)\n    (recur (inc idx))))&quot;, :offset 81, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map + [1 2] [3 4] [5 6 7])&quot;, :offset 27, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map + [1 2 100] [3 4] [5 6 7])&quot;, :offset 31, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map (println \&quot;idx: \&quot; %) [1 2 4])&quot;, :offset 33, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 (iterate inc 1))&quot;, :offset 24, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(current)&quot;, :offset 8, :ns &quot;user&quot;} {:command &quot;in-ns rf-tennis-manager.core&quot;, :offset 28, :ns &quot;user&quot;} {:command &quot;(in-ns rf-tennis-manager.core)&quot;, :offset 29, :ns &quot;user&quot;} {:command &quot;(in-ns 'rf-tennis-manager.core)&quot;, :offset 8, :ns &quot;user&quot;} {:command &quot;*ns*&quot;, :offset 4, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur)&quot;, :offset 11, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 100 2)&quot;, :offset 17, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 100 1000)&quot;, :offset 20, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 9 10)&quot;, :offset 16, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(def xx (\&quot;rick\&quot; \&quot;cashman\&quot;))&quot;, :offset 27, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(def xx (list \&quot;rick\&quot; \&quot;cashman\&quot;))&quot;, :offset 32, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(xx)&quot;, :offset 3, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;xx&quot;, :offset 2, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(first xx)&quot;, :offset 9, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(second xx)&quot;, :offset 10, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(last xx)&quot;, :offset 8, :ns &quot;rf-tennis-manager.core&quot;}], :remote [{:command &quot;(def all-ints (range))&quot;, :offset 22, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 187, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () all-ints)))&quot;, :offset 188, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-me)&quot;, :offset 9, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map #(odd? %) [1 2 3])&quot;, :offset 23, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map odd? [1 2 3])&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? [1 2 3])&quot;, :offset 21, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? (map inc [1 2 3]))&quot;, :offset 31, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3])))&quot;, :offset 40, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3 4 5 6])))&quot;, :offset 46, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc all-ints)))&quot;, :offset 41, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 (drop 1000 (filter odd? (map inc all-ints))))&quot;, :offset 53, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 79, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;\n(macroexpand-1 '(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5)))&quot;, :offset 97, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(macroexpand-1 '(-&gt; all-ints\n                    (map inc)\n                    (filter odd?)\n                    (drop 1000)\n                    (take 5)))&quot;, :offset 155, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;re-frame.db/app-db&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;@re-frame.db/app-db&quot;, :offset 19, :ns &quot;rf-tennis-manager.core&quot;}]}}</component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -649,12 +669,12 @@
       <workItem from="1520211418645" duration="5000" />
       <workItem from="1521550685309" duration="127528000" />
       <workItem from="1522040816078" duration="29611000" />
-      <workItem from="1523629823364" duration="8009000" />
+      <workItem from="1523629823364" duration="10727000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="709263000" />
+    <option name="totallyTimeSpent" value="711981000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
@@ -755,14 +775,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/schedule/schedule_main.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="31" column="62" lean-forward="true" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/admin/admin_events_load_schedule.cljs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -866,14 +878,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/tennis.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="139" column="6" lean-forward="false" selection-start-line="139" selection-start-column="6" selection-end-line="139" selection-end-column="6" />
           <folding />
         </state>
       </provider>
@@ -1153,10 +1157,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/tennis.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="177" column="11" lean-forward="true" selection-start-line="177" selection-start-column="11" selection-end-line="177" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/content/tabs.clj">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="49" column="58" lean-forward="true" selection-start-line="49" selection-start-column="58" selection-end-line="49" selection-end-column="58" />
+        <state relative-caret-position="420">
+          <caret line="38" column="46" lean-forward="true" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/schedule/schedule_main.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-56">
+          <caret line="97" column="84" lean-forward="true" selection-start-line="97" selection-start-column="84" selection-end-line="97" selection-end-column="84" />
           <folding />
         </state>
       </provider>

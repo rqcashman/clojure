@@ -175,6 +175,11 @@ hr {
     #display: block;
 }
 
+.red-bold {
+    color: red;
+    font-weight: bold;
+}
+
 .bold-text {
     font-weight: bold;
 }
