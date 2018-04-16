@@ -80,6 +80,11 @@
                                        :add-player    false
                                        :update-player false
                                        :call-status   false}
+              :add-update             {:fields {:first-name   {:name "First name" :value "" :type "text" :required? true :min-length 2 :valid? true :error-msg ""}
+                                                :last-name    {:name "Last name" :value "" :type "text" :required? true :min-length 2 :valid? true :error-msg ""}
+                                                :email        {:name "Email" :value "" :type "email" :required? false :min-length 4 :valid? true :error-msg ""}
+                                                :phone-number {:name "Phone number" :value "" :type "phone-number" :required? false :valid? true :error-msg ""}
+                                                :status       {:name "Status" :value "Active" :type "select" :required? true :valid? true :error-msg ""}}}
               :loaded?                false
               :selected-roster-action ""
               :selected-team          {:id 1 :name "Team name"}

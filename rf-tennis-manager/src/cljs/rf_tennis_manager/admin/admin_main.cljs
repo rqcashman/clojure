@@ -31,7 +31,7 @@
   (let [fld-hash @(rf/subscribe [::subs/admin-form-data form-name field-name])]
     [:tr
      [:td {:style {:width "5%"}} (layout/nbsp)]
-     [:td (:name fld-hash)]
+     [:td (:name fld-hash) (if (:required? fld-hash) [:span.red-bold " *"])]
      [:td
       [:input (conj options {:value (:value fld-hash) :onChange #(rf/dispatch [::form-val/validate-field [:admin (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])})]
       [:span.error (layout/nbsp) (:error-msg fld-hash)]]
@@ -85,6 +85,7 @@
           (add-form-input {:name "zip_code" :maxLength "5" :size "5" :type "text"} "add-club" "zip-code")
           (add-form-input {:name "phone_number" :size "10" :type "text"} "add-club" "phone-number")
           (layout/hr-row form-span "90%")
+          (layout/required-message form-span)
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span}
                 [:button {:type "button" :onClick #(rf/dispatch [::form-val/validate-form [:admin :add-club :fields] [::evt-club/add-club-request] [::evt-common/admin-form-validation-error]])} title]]]
@@ -121,6 +122,7 @@
           (add-form-input {:name "team_name" :maxLength 45 :size 45 :type "text"} "add-team" "team-name")
           (add-form-input {:name "sched_abbrev" :maxLength 10 :size 10 :type "text"} "add-team" "sched-abbrev")
           (layout/hr-row form-span "90%")
+          (layout/required-message form-span)
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span}
                 [:button {:type "button" :onClick #(rf/dispatch [::form-val/validate-form [:admin :add-team :fields] [::evt-team/add-team-request] [::evt-common/admin-form-validation-error]])} title]]]
@@ -144,6 +146,7 @@
           (add-date-control "Season start date" {:date-atom season-start-date :input-attrs {:onChange #(rf/dispatch [::evt-season/update-date "start-date" (-> % .-target .-value)])}})
           (add-date-control "Season start date" {:date-atom season-end-date :input-attrs {:onSelect #(rf/dispatch [::evt-season/update-date "end-date" (-> % .-target .-value)])}})
           (layout/hr-row form-span "90%")
+          (layout/required-message form-span)
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span}
                 [:button {:type "button" :onClick #(rf/dispatch [::evt-season/add-season-request])} title]]]

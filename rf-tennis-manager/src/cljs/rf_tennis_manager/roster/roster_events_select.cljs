@@ -18,8 +18,11 @@
 (rf/reg-event-fx
   ::player-selected
   (fn [{:keys [db]} [_ player-id]]
-    {:db       (assoc-in db [:roster :selected-player] (first (filter #(identical? (str (:id %)) (str player-id)) (get-in db [:roster :team-roster]))))
-     :dispatch [::evt-common/show-player-update-form]}))
+    (let [player-selected (first (filter #(identical? (str (:id %)) (str player-id)) (get-in db [:roster :team-roster])))]
+      {:db       (-> db
+                     (assoc-in [:roster :selected-player] player-selected)
+                     (evt-common/reset-form player-selected))
+       :dispatch [::evt-common/show-player-update-form]})))
 
 (rf/reg-event-fx
   ::roster-action-change
@@ -27,7 +30,8 @@
     {:db (-> db
              (assoc-in [:roster :selected-roster-action] item-value)
              (assoc-in [:roster :add-player] {:id 0 :first_name "" :last_name "" :status "A"})
-             (evt-common/show-div item-value))}))
+             (evt-common/show-div item-value)
+             (evt-common/reset-form))}))
 
 (rf/reg-event-fx
   ::load-teams
@@ -50,7 +54,7 @@
                      (assoc-in [:roster :call-status :on-click] nil)
                      (assoc-in [:roster :panel-visible :call-status] true))]
       {::get-teams {:method     :get
-                    :url       "/teams"
+                    :url        "/teams"
                     :on-success [::load-teams]
                     :on-fail    [::evt-common/roster-page-failed]}
        :db         upd-db})))

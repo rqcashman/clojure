@@ -11,20 +11,13 @@
 (rf/reg-event-fx
   ::update-date
   (fn [{:keys [db]} [_ date-key value]]
-    (println "===update-date key: " date-key "value: " value)
     (let [date-arr (s/split value " ")
           selected-date (js/Date. (last date-arr) (second date-arr) (nth date-arr 2))]
-      (println "date-arr: " date-arr)
-      (println (str (last date-arr) "-" (second date-arr) "-" (nth date-arr 2)))
-      (println "date: " selected-date)
-      (println "xxxxx: " (.parse js/Date value))
-      ;(println (str (.getFullYear @selected-date) "/" (.getMonth @selected-date) "/" (.getDate @selected-date)))
       {:db (assoc-in db [:admin :add-season (keyword date-key)] value)})))
 
 (rf/reg-event-fx
   ::add-season-success
   (fn [{:keys [db]} [_ status]]
-    (println "::add-season-success")
     {:db (-> db
              (assoc-in [:admin :call-status :success?] true)
              (assoc-in [:admin :panel-visible :call-status] true)

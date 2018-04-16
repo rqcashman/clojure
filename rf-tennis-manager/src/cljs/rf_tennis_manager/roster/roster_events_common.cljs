@@ -17,22 +17,51 @@
              (assoc-in [:roster :selected-roster-action] "roster")
              (show-div "roster"))}))
 
+(defn reset-form
+  ([in-db] (reset-form in-db nil))
+  ([in-db player]
+   (let [upd-db (reduce (fn [reset-db fld]
+                          (if (= (:type (val fld)) "select")
+                            (assoc-in reset-db [:roster :add-update :fields (key fld) :value] "Active")
+                            (-> reset-db
+                                (assoc-in [:roster :add-update :fields (key fld) :value] "")
+                                (assoc-in [:roster :add-update :fields (key fld) :error-msg] ""))))
+                        in-db (get-in in-db [:roster :add-update :fields]))]
+     (if (nil? player)
+       upd-db
+       (-> upd-db
+           (assoc-in [:roster :add-update :fields :first-name :value] (:first_name player))
+           (assoc-in [:roster :add-update :fields :last-name :value] (:last_name player))
+           (assoc-in [:roster :add-update :fields :email :value] (:email player))
+           (assoc-in [:roster :add-update :fields :phone-number :value] (:phone_number player))
+           (assoc-in [:roster :add-update :fields :status :value] (:status player)))))))
+
 (rf/reg-event-fx
   ::show-player-update-form
   (fn [{:keys [db]} [_]]
-    (let [upd-db (show-div db "update-player")]
-      {:db upd-db})))
+    {:db (-> db
+             (show-div "update-player"))}))
 
 (rf/reg-event-fx
   ::show-select
   (fn [{:keys [db]} [_]]
-    (let [upd-db (show-div db "select-form")]
-      {:db upd-db})))
+    {:db (-> db
+             (show-div "select-form")
+             (reset-form))}))
 
 (rf/reg-event-fx
   ::hide-call-status
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db [:roster :panel-visible :call-status] false)}))
+
+(rf/reg-event-fx
+  ::roster-form-validation-error
+  (fn [{:keys [db]} [_]]
+    {:db (-> db
+             (assoc-in [:roster :call-status :success?] false)
+             (assoc-in [:roster :call-status :message] "Fix validation errors before submitting")
+             (assoc-in [:roster :panel-visible :call-status] true)
+             (assoc-in [:roster :call-status :on-click] #(re-frame.core/dispatch [::hide-call-status])))}))
 
 (rf/reg-event-fx
   ::roster-page-failed

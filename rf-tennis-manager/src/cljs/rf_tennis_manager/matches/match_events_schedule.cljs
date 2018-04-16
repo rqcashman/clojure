@@ -39,7 +39,6 @@
 (rf/reg-event-fx
   ::init-matches-page
   (fn [{:keys [db]} [_ match-id]]
-    (println "====== ::::init-matches-page new")
     (let [upd-db (-> db
                      (assoc-in [:matches :call-status :success?] true)
                      (assoc-in [:matches :call-status :message] "Processing...")

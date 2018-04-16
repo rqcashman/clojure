@@ -10,6 +10,10 @@
   [colspan]
   [:tr [:td {:colSpan colspan} (nbsp)]])
 
+(defn required-message
+  [colspan]
+  [:tr [:td (nbsp)] [:td {:colSpan (dec colspan)} [:span.red-bold "* "] [:span " - required field"]]])
+
 (defn hr-row
   [colspan width]
   [:tr [:td {:colSpan colspan} [:hr {:style {:width width}}]]])

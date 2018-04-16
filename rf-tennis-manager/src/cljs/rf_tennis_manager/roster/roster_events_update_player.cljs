@@ -5,21 +5,6 @@
             [clojure.string :as s]))
 
 (rf/reg-event-fx
-  ::update-selected-player
-  (fn [{:keys [db]} [_ field value]]
-    (let [upd-db
-          (-> db
-              (assoc-in [:roster :selected-player :first_name_error] nil)
-              (assoc-in [:roster :selected-player :last_name_error] nil)
-              (assoc-in [:roster :selected-player :email_error] nil)
-              (assoc-in [:roster :selected-player :phone_number_error] nil))]
-      (cond
-        (and (= field "phone_number") (not (s/blank? value)) (not= (count value) (count (str (re-find #"\d+" value))))) {:db (assoc-in upd-db [:roster :selected-player :phone_number_error] "Phone number can take only numbers")}
-        (and (= field "first_name") (< (count value) 2)) {:db (assoc-in upd-db [:roster :selected-player :first_name_error] "First name must contain at least 2 characters")}
-        (and (= field "last_name") (< (count value) 2)) {:db (assoc-in upd-db [:roster :selected-player :last_name_error] "Last name must contain at least 2 characters")}
-        :else {:db (assoc-in upd-db [:roster :selected-player (keyword field)] value)}))))
-
-(rf/reg-event-fx
   ::update-player-success
   (fn [{:keys [db]} [_ status]]
     {:db (-> db

@@ -189,3 +189,8 @@
   (fn [db key]
     (get-in db [:admin (keyword (second key)) :fields (keyword (nth key 2))])))
 
+(re-frame/reg-sub
+  ::roster-form-data
+  (fn [db key]
+    (get-in db [:roster (keyword (second key)) :fields (keyword (nth key 2))])))
+

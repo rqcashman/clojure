@@ -50,7 +50,6 @@
 (defn login
   "docstring"
   [page-type session request]
-  (println "login page session: " session)
   (let [title (if (= page-type LOGIN_PAGE) "Login" "Change Password")
         action (if (= page-type LOGIN_PAGE) "/login" "/chgpassword")
         username (get-user-name request session)

@@ -64,7 +64,6 @@
     (do
       (set! (.-roster tab-state) true)
       (go
-        (println "===== init_roster =====")
         (reagent/render [roster/call-status]
                         (.getElementById js/document "ro_call_status"))
         (reagent/render [roster/roster-select-form]
@@ -82,7 +81,6 @@
     (do
       (aset tab-state "schedule" true)
       (go
-        (println "===== init_schedule =====")
         (reagent/render [schedule/call-status]
                         (.getElementById js/document "sched_call_status"))
         (reagent/render [schedule/schedule-select-form]
@@ -96,7 +94,6 @@
     (do
       (aset tab-state "admin" true)
       (go
-        (println "===== init_admin =====")
         (reagent/render [admin/call-status]
                         (.getElementById js/document "admin_call_status"))
         (reagent/render [admin/admin-select-form]

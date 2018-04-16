@@ -64,7 +64,6 @@
 (rf/reg-event-fx
   ::selected-season-changed
   (fn [{:keys [db]} [_ schedule-id]]
-    (println "==== season changed: id: " schedule-id " sched: " (get-in db [:seasons]))
     {:db (assoc-in db [:schedule :selected-season] (first (filter #(identical? (str (:id %)) (str schedule-id)) (get-in db [:seasons]))))}))
 
 (rf/reg-event-fx
@@ -97,7 +96,6 @@
 (rf/reg-event-fx
   ::init-schedule-page
   (fn [{:keys [db]} [_]]
-    (println "=== init sched page ===")
     (let [upd-db (-> db
                      (assoc-in [:schedule :call-status :success?] true)
                      (assoc-in [:schedule :call-status :message] "Processing...")

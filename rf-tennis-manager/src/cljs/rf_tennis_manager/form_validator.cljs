@@ -12,7 +12,7 @@
 (defn phone-number-valid?
   "validates a phone number is either 7 or 10 digits long.  Numeric validation happens before we get here"
   [phone-number]
-  (or (= (alength phone-number) 7) (= (alength phone-number) 10)))
+  (or (= phone-number "0") (= (alength phone-number) 7) (= (alength phone-number) 10)))
 
 (defn email-valid?
   [email]
@@ -34,8 +34,8 @@
   (cond
     (and (:required? fld-hash) (s/blank? value)) (update-field db path fld-hash value false "is required")
     (and (some #(= (:type fld-hash) %) numeric-types) (not (numeric? value))) (update-field db path fld-hash value false "requires numeric input")
-    (and (not-nil? (:min-length fld-hash)) (< (alength value) (:min-length fld-hash))) (update-field db path fld-hash value false (str "must be at least " (:min-length fld-hash) " characters long"))
-    (and (not-nil? (:max-length fld-hash)) (> (alength value) (:max-length fld-hash))) (update-field db path fld-hash value false (str "can be only " (:max-length fld-hash) " characters long"))
+    (and (not-nil? (:min-length fld-hash)) (> (alength value) 0) (< (alength value) (:min-length fld-hash))) (update-field db path fld-hash value false (str "must be at least " (:min-length fld-hash) " characters long"))
+    (and (not-nil? (:max-length fld-hash)) (> (alength value) 0) (> (alength value) (:max-length fld-hash))) (update-field db path fld-hash value false (str "can be only " (:max-length fld-hash) " characters long"))
     (and (= (:type fld-hash) "email") (not (s/blank? value)) (not (email-valid? value))) (update-field db path fld-hash value false "format invalid")
     (and (= (:type fld-hash) "phone-number") (not (s/blank? value)) (not (phone-number-valid? value))) (update-field db path fld-hash value false "have either 7 or 10 digits")
     :else (update-field db path fld-hash value true "")))
@@ -45,15 +45,15 @@
 (rf/reg-event-fx
   ::validate-field
   (fn [{:keys [db]} [_ path value]]
-    {:db (validate-fld db path (get-in db path) (s/triml value))}))
+    {:db (validate-fld db path (get-in db path) (s/triml (str value)))}))
 
 (rf/reg-event-fx
   ::validate-form
   (fn [{:keys [db]} [_ path success-fn error-fn]]
-     (let [upd-db (reduce (fn [upd-db key]
+    (let [upd-db (reduce (fn [upd-db key]
                            (let [fld-path (conj path key)
                                  fld-hash (get-in upd-db fld-path)]
-                             (validate-fld upd-db fld-path fld-hash (s/trim (:value fld-hash)))))
+                             (validate-fld upd-db fld-path fld-hash (s/trim (str (:value fld-hash))))))
                          db (keys (get-in db path)))]
       (let [method (if (empty? (filter #(not (:valid? (val %))) (get-in upd-db path))) success-fn error-fn)]
         {:db       upd-db

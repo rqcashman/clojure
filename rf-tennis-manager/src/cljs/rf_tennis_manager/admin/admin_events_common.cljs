@@ -14,7 +14,6 @@
 (rf/reg-event-fx
   ::hide-call-status
   (fn [{:keys [db]} [_]]
-    (println "admin ::hide-call-status")
     {:db (assoc-in db [:admin :panel-visible :call-status] false)}))
 
 (rf/reg-fx
@@ -28,7 +27,6 @@
 (rf/reg-event-fx
   ::admin-page-failed
   (fn [{:keys [db]} [_ response]]
-    (println "::admin-page-failed")
     (let [msg (if-not (s/blank? (get-in response [:body :msg])) (get-in response [:body :msg]) "Call to get data failed")]
       {:db (-> db
                (assoc-in [:admin :call-status :success?] false)
@@ -39,7 +37,6 @@
 (rf/reg-event-fx
   ::admin-form-validation-error
   (fn [{:keys [db]} [_]]
-    (println "::admin-form-validation-error")
     {:db (-> db
              (assoc-in [:admin :call-status :success?] false)
              (assoc-in [:admin :call-status :message] "Fix validation errors before submitting")

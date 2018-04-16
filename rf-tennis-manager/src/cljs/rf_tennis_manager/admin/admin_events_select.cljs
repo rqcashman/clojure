@@ -7,7 +7,6 @@
 (rf/reg-event-fx
   ::function-changed
   (fn [{:keys [db]} [_ value]]
-    (println "::function-changed value: " value)
     {:db (-> db
              (evt-common/show-div value)
              (assoc-in [:admin :selected-function] value))}))

@@ -7,7 +7,6 @@
             [ring.util.codec :as codec]
             [ring.util.response :as rr]
             [rf-tennis-manager.content.page-layout :as layout]
-            [rf-tennis-manager.content.admin :as admin]
             [rf-tennis-manager.data.auth-handler :as auth]
             [rf-tennis-manager.data.auth-messages :as am]))
 
