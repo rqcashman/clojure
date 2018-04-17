@@ -25,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="send_email_processor.clj" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/processors/send_email_processor.clj">
+      <file leaf-file-name="db.cljs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="161" column="0" lean-forward="false" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
+            <state relative-caret-position="328">
+              <caret line="84" column="16" lean-forward="false" selection-start-line="84" selection-start-column="14" selection-end-line="84" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -39,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_common.cljs">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="194">
-              <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+              <caret line="79" column="32" lean-forward="false" selection-start-line="79" selection-start-column="32" selection-end-line="79" selection-end-column="32" />
               <folding>
                 <marker date="1523904851708" expanded="true" signature="625:1212" ph="(defn reset-form ...)" />
               </folding>
@@ -47,81 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="roster_main.cljs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_main.cljs">
+      <file leaf-file-name="roster_events_select.cljs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_select.cljs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="41">
-              <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="schedule_events.cljs" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/schedule/schedule_events.cljs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="admin_main.cljs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/admin/admin_main.cljs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
-              <caret line="191" column="65" lean-forward="false" selection-start-line="191" selection-start-column="65" selection-end-line="191" selection-end-column="65" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="admin_events_select.cljs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/admin/admin_events_select.cljs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="admin_events_load_schedule.cljs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/admin/admin_events_load_schedule.cljs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="5" lean-forward="false" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="match_events_schedule.cljs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches/match_events_schedule.cljs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="login.clj" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/content/login.clj">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="52" column="0" lean-forward="false" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="player_availability.clj" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/content/player_availability.clj">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="447">
-              <caret line="46" column="7" lean-forward="false" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="7" />
+            <state relative-caret-position="-114">
+              <caret line="23" column="61" lean-forward="true" selection-start-line="23" selection-start-column="61" selection-end-line="23" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -139,11 +69,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>selected</find>
-      <find>printl</find>
-      <find>union</find>
-      <find>lineup-email-address-sql</find>
-      <find>print</find>
       <find>init_matches</find>
       <find>mgr</find>
       <find>/mgr</find>
@@ -169,6 +94,11 @@
       <find>selected-play</find>
       <find>phone</find>
       <find>println</find>
+      <find>form-val</find>
+      <find>zz</find>
+      <find>format</find>
+      <find>active</find>
+      <find>:add-player</find>
     </findStrings>
     <replaceStrings>
       <replace>evt-common/CALL-STATUS-DIV-ID</replace>
@@ -230,7 +160,6 @@
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/content/admin.clj" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches/match_events_lineup_email.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches/match_events_set_availability.cljs" />
-        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_add_player.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches/match_events_avail_email.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/matches/match_events_set_lineup.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/admin/test_form.cljs" />
@@ -244,15 +173,10 @@
         <option value="$PROJECT_DIR$/resources/public/tennis.css" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/content/tabs.clj" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/schedule/schedule_main.cljs" />
-        <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/subs.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/admin/admin_main.cljs" />
-        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/views_common.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_update_player.cljs" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/handler.clj" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/processors/auth_processor.clj" />
-        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_select.cljs" />
-        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/core.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/events_common.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/form_validator.cljs" />
@@ -263,8 +187,14 @@
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/content/login.clj" />
         <option value="$PROJECT_DIR$/src/clj/rf_tennis_manager/processors/send_email_processor.clj" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_common.cljs" />
-        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_main.cljs" />
         <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/schedule/schedule_events.cljs" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/views_common.cljs" />
+        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_main.cljs" />
+        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/subs.cljs" />
+        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_add_player.cljs" />
+        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_select.cljs" />
+        <option value="$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs" />
       </list>
     </option>
   </component>
@@ -275,8 +205,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1746" />
-    <option name="y" value="40" />
+    <option name="x" value="-1813" />
     <option name="width" value="1920" />
     <option name="height" value="1040" />
   </component>
@@ -546,7 +475,7 @@
       <recent name="C:\Clojure\rf-tennis-manager\resources\public\css" />
     </key>
   </component>
-  <component name="ReplState" timestamp="1523904854123">{:repl-history {:ide [], :local [{:command &quot;(println \&quot;xxx\&quot;)&quot;, :offset 15, :ns &quot;user&quot;} {:command &quot;(println \&quot;rick\&quot;)&quot;, :offset 16, :ns &quot;user&quot;} {:command &quot;(= 1 2)&quot;, :offset 7, :ns &quot;user&quot;} {:command &quot;(println \&quot;xx\&quot;)&quot;, :offset 14, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(println \&quot;xxxxxx\&quot;)&quot;, :offset 18, :ns &quot;user&quot;} {:command &quot;(js/alert \&quot;rick\&quot;)&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(take 5 (drop 1000 (filter odd? (map inc all-ints))))&quot;, :offset 53, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5)&quot;, :offset 8, :ns &quot;user&quot;} {:command &quot;(take 5 (ranger))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;\n(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 80, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt; all-ints\n    (map inc)\n    (filter odd?)\n    (drop 1000)\n    (take 5))&quot;, :offset 74, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 64, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 79, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (drop 1000)\n     (take 5))&quot;, :offset 45, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (drop 1000)\n     (take 5))&quot;, :offset 60, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(re-tennis-manager.core/test-me)&quot;, :offset 31, :ns &quot;user&quot;} {:command &quot;(ns)&quot;, :offset 3, :ns &quot;user&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(use rf-tennis-manager.core)&quot;, :offset 28, :ns &quot;user&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (println x)\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 224, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(println (test-me))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(all-ints)&quot;, :offset 9, :ns &quot;user&quot;} {:command &quot;(test-me)&quot;, :offset 9, :ns &quot;user&quot;} {:command &quot;(take 4 (all-ints))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(take 4 all-ints)&quot;, :offset 16, :ns &quot;user&quot;} {:command &quot;(take 5 range)&quot;, :offset 0, :ns &quot;user&quot;} {:command &quot;(take 5 (range))&quot;, :offset 14, :ns &quot;user&quot;} {:command &quot;(def all-ints (range))&quot;, :offset 22, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 rf-tennis-manager.core/all-ints)&quot;, :offset 39, :ns &quot;user&quot;} {:command &quot;(rf-tennis-manager.core/test-me)&quot;, :offset 31, :ns &quot;user&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt; idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx)))\n  )&quot;, :offset 169, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt;= idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx)))\n  )&quot;, :offset 170, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt;= idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx))\n    (println \&quot;=== THE END === idx:\&quot; idx \&quot; stop: \&quot; stop-idx)))&quot;, :offset 227, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(rf-tennis-manager.core/test-recur 5 10)&quot;, :offset 39, :ns &quot;user&quot;} {:command &quot;(loop [idx 1]\n  (when (&lt; idx 5)\n    (println \&quot;idx: \&quot; idx)\n    (recur (inc idx))))&quot;, :offset 81, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map + [1 2] [3 4] [5 6 7])&quot;, :offset 27, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map + [1 2 100] [3 4] [5 6 7])&quot;, :offset 31, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map (println \&quot;idx: \&quot; %) [1 2 4])&quot;, :offset 33, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 (iterate inc 1))&quot;, :offset 24, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(current)&quot;, :offset 8, :ns &quot;user&quot;} {:command &quot;in-ns rf-tennis-manager.core&quot;, :offset 28, :ns &quot;user&quot;} {:command &quot;(in-ns rf-tennis-manager.core)&quot;, :offset 29, :ns &quot;user&quot;} {:command &quot;*ns*&quot;, :offset 4, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur)&quot;, :offset 11, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 100 2)&quot;, :offset 17, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 100 1000)&quot;, :offset 20, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 9 10)&quot;, :offset 16, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(def xx (\&quot;rick\&quot; \&quot;cashman\&quot;))&quot;, :offset 27, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(def xx (list \&quot;rick\&quot; \&quot;cashman\&quot;))&quot;, :offset 32, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(xx)&quot;, :offset 3, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;xx&quot;, :offset 2, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(first xx)&quot;, :offset 9, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(second xx)&quot;, :offset 10, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(last xx)&quot;, :offset 8, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(in-ns 'rf-tennis-manager.core)&quot;, :offset 30, :ns &quot;user&quot;} {:command &quot;(defn fib-num2\n  \&quot;docstring\&quot;\n  [start-val]\n  (let [num (if (&lt; start-val 2)\n              start-val\n              (+  (fib-num (dec start-val)) (fib-num (- start-val 2))))]\n    (println \&quot;fib-num: \&quot; num)\n    num))&quot;, :offset 211, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(fib-num2 4)&quot;, :offset 11, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn fib-num2\n  \&quot;docstring\&quot;\n  [start-val]\n  (if (&lt; start-val 2)\n    start-val\n    (+ (fib-num (dec start-val)) (fib-num (- start-val 2)))))&quot;, :offset 140, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn fib-num2\n  \&quot;docstring\&quot;\n  [start-val]\n  (if (&lt; start-val 2)\n    start-val\n    (+ (fib-num2 (dec start-val)) (fib-num2 (- start-val 2)))))&quot;, :offset 142, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn fib-num2\n  \&quot;docstring\&quot;\n  [in-val]\n  (if (&lt; in-val 2)\n    in-val\n    (+ (fib-num2 (dec in-val)) (fib-num2 (- in-val 2)))))&quot;, :offset 127, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(fib-num2 8)&quot;, :offset 11, :ns &quot;rf-tennis-manager.core&quot;}], :remote [{:command &quot;(def all-ints (range))&quot;, :offset 22, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 187, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () all-ints)))&quot;, :offset 188, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-me)&quot;, :offset 9, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map #(odd? %) [1 2 3])&quot;, :offset 23, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map odd? [1 2 3])&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? [1 2 3])&quot;, :offset 21, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? (map inc [1 2 3]))&quot;, :offset 31, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3])))&quot;, :offset 40, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3 4 5 6])))&quot;, :offset 46, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc all-ints)))&quot;, :offset 41, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 (drop 1000 (filter odd? (map inc all-ints))))&quot;, :offset 53, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 79, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;\n(macroexpand-1 '(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5)))&quot;, :offset 97, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(macroexpand-1 '(-&gt; all-ints\n                    (map inc)\n                    (filter odd?)\n                    (drop 1000)\n                    (take 5)))&quot;, :offset 155, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;re-frame.db/app-db&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;@re-frame.db/app-db&quot;, :offset 19, :ns &quot;rf-tennis-manager.core&quot;}]}}</component>
+  <component name="ReplState" timestamp="1523980165893">{:repl-history {:ide [], :local [{:command &quot;(println \&quot;xxx\&quot;)&quot;, :offset 15, :ns &quot;user&quot;} {:command &quot;(println \&quot;rick\&quot;)&quot;, :offset 16, :ns &quot;user&quot;} {:command &quot;(= 1 2)&quot;, :offset 7, :ns &quot;user&quot;} {:command &quot;(println \&quot;xx\&quot;)&quot;, :offset 14, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(println \&quot;xxxxxx\&quot;)&quot;, :offset 18, :ns &quot;user&quot;} {:command &quot;(js/alert \&quot;rick\&quot;)&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(take 5 (drop 1000 (filter odd? (map inc all-ints))))&quot;, :offset 53, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5)&quot;, :offset 8, :ns &quot;user&quot;} {:command &quot;(take 5 (ranger))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;\n(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 80, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt; all-ints\n    (map inc)\n    (filter odd?)\n    (drop 1000)\n    (take 5))&quot;, :offset 74, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 64, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 79, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (drop 1000)\n     (take 5))&quot;, :offset 45, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (drop 1000)\n     (take 5))&quot;, :offset 60, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(re-tennis-manager.core/test-me)&quot;, :offset 31, :ns &quot;user&quot;} {:command &quot;(ns)&quot;, :offset 3, :ns &quot;user&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(use rf-tennis-manager.core)&quot;, :offset 28, :ns &quot;user&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (println x)\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 224, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(println (test-me))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(all-ints)&quot;, :offset 9, :ns &quot;user&quot;} {:command &quot;(test-me)&quot;, :offset 9, :ns &quot;user&quot;} {:command &quot;(take 4 (all-ints))&quot;, :offset 17, :ns &quot;user&quot;} {:command &quot;(take 4 all-ints)&quot;, :offset 16, :ns &quot;user&quot;} {:command &quot;(take 5 range)&quot;, :offset 0, :ns &quot;user&quot;} {:command &quot;(take 5 (range))&quot;, :offset 14, :ns &quot;user&quot;} {:command &quot;(def all-ints (range))&quot;, :offset 22, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 rf-tennis-manager.core/all-ints)&quot;, :offset 39, :ns &quot;user&quot;} {:command &quot;(rf-tennis-manager.core/test-me)&quot;, :offset 31, :ns &quot;user&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt; idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx)))\n  )&quot;, :offset 169, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt;= idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx)))\n  )&quot;, :offset 170, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-recur\n  \&quot;docstring\&quot;\n  [idx stop-idx]\n  (if (&lt;= idx stop-idx)\n    (do\n      (println \&quot;idx: \&quot; idx \&quot; stop: \&quot; stop-idx)\n      (test-recur (inc idx) stop-idx))\n    (println \&quot;=== THE END === idx:\&quot; idx \&quot; stop: \&quot; stop-idx)))&quot;, :offset 227, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(rf-tennis-manager.core/test-recur 5 10)&quot;, :offset 39, :ns &quot;user&quot;} {:command &quot;(loop [idx 1]\n  (when (&lt; idx 5)\n    (println \&quot;idx: \&quot; idx)\n    (recur (inc idx))))&quot;, :offset 81, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map + [1 2] [3 4] [5 6 7])&quot;, :offset 27, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map + [1 2 100] [3 4] [5 6 7])&quot;, :offset 31, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map (println \&quot;idx: \&quot; %) [1 2 4])&quot;, :offset 33, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 (iterate inc 1))&quot;, :offset 24, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(current)&quot;, :offset 8, :ns &quot;user&quot;} {:command &quot;in-ns rf-tennis-manager.core&quot;, :offset 28, :ns &quot;user&quot;} {:command &quot;(in-ns rf-tennis-manager.core)&quot;, :offset 29, :ns &quot;user&quot;} {:command &quot;*ns*&quot;, :offset 4, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur)&quot;, :offset 11, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 100 2)&quot;, :offset 17, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 100 1000)&quot;, :offset 20, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-recur 9 10)&quot;, :offset 16, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(def xx (\&quot;rick\&quot; \&quot;cashman\&quot;))&quot;, :offset 27, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(def xx (list \&quot;rick\&quot; \&quot;cashman\&quot;))&quot;, :offset 32, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(xx)&quot;, :offset 3, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;xx&quot;, :offset 2, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(first xx)&quot;, :offset 9, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(second xx)&quot;, :offset 10, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(last xx)&quot;, :offset 8, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(in-ns 'rf-tennis-manager.core)&quot;, :offset 30, :ns &quot;user&quot;} {:command &quot;(defn fib-num2\n  \&quot;docstring\&quot;\n  [start-val]\n  (let [num (if (&lt; start-val 2)\n              start-val\n              (+  (fib-num (dec start-val)) (fib-num (- start-val 2))))]\n    (println \&quot;fib-num: \&quot; num)\n    num))&quot;, :offset 211, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(fib-num2 4)&quot;, :offset 11, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn fib-num2\n  \&quot;docstring\&quot;\n  [start-val]\n  (if (&lt; start-val 2)\n    start-val\n    (+ (fib-num (dec start-val)) (fib-num (- start-val 2)))))&quot;, :offset 140, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn fib-num2\n  \&quot;docstring\&quot;\n  [start-val]\n  (if (&lt; start-val 2)\n    start-val\n    (+ (fib-num2 (dec start-val)) (fib-num2 (- start-val 2)))))&quot;, :offset 142, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn fib-num2\n  \&quot;docstring\&quot;\n  [in-val]\n  (if (&lt; in-val 2)\n    in-val\n    (+ (fib-num2 (dec in-val)) (fib-num2 (- in-val 2)))))&quot;, :offset 127, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(fib-num2 8)&quot;, :offset 11, :ns &quot;rf-tennis-manager.core&quot;}], :remote [{:command &quot;(def all-ints (range))&quot;, :offset 22, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 187, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc 1)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () (all-ints))))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list) list)))\n                  () all-ints)))&quot;, :offset 188, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(test-me)&quot;, :offset 9, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(defn test-me\n  \&quot;docstring\&quot;\n  []\n  (take 2 (reduce (fn [list i]\n                    (let [x (inc i)]\n                      (if (odd? x) (conj list x) list)))\n                  () all-ints)))&quot;, :offset 190, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map #(odd? %) [1 2 3])&quot;, :offset 23, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(map odd? [1 2 3])&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? [1 2 3])&quot;, :offset 21, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(filter odd? (map inc [1 2 3]))&quot;, :offset 31, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3])))&quot;, :offset 40, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc [1 2 3 4 5 6])))&quot;, :offset 46, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 2 (filter odd? (map inc all-ints)))&quot;, :offset 41, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(take 5 (drop 1000 (filter odd? (map inc all-ints))))&quot;, :offset 53, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5))&quot;, :offset 79, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;\n(macroexpand-1 '(-&gt;&gt; all-ints\n     (map inc)\n     (filter odd?)\n     (drop 1000)\n     (take 5)))&quot;, :offset 97, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;(macroexpand-1 '(-&gt; all-ints\n                    (map inc)\n                    (filter odd?)\n                    (drop 1000)\n                    (take 5)))&quot;, :offset 155, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;re-frame.db/app-db&quot;, :offset 18, :ns &quot;rf-tennis-manager.core&quot;} {:command &quot;@re-frame.db/app-db&quot;, :offset 19, :ns &quot;rf-tennis-manager.core&quot;}]}}</component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -699,12 +628,12 @@
       <workItem from="1520211418645" duration="5000" />
       <workItem from="1521550685309" duration="127528000" />
       <workItem from="1522040816078" duration="29611000" />
-      <workItem from="1523629823364" duration="26607000" />
+      <workItem from="1523629823364" duration="30542000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="727861000" />
+    <option name="totallyTimeSpent" value="731796000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
@@ -805,14 +734,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/clojure/clojure/1.8.0/clojure-1.8.0.jar!/clojure/core.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="49351">
-          <caret line="2903" column="6" lean-forward="false" selection-start-line="2903" selection-start-column="6" selection-end-line="2903" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/core.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="269">
@@ -933,34 +854,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="7" lean-forward="false" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/clj/rf_tennis_manager/content/email_body.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/views_common.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="102" lean-forward="true" selection-start-line="14" selection-start-column="102" selection-end-line="14" selection-end-column="102" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_add_player.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-136">
-          <caret line="18" column="16" lean-forward="true" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
           <folding />
         </state>
       </provider>
@@ -1061,22 +958,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_select.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="24" column="59" lean-forward="true" selection-start-line="24" selection-start-column="59" selection-end-line="24" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="88" column="40" lean-forward="true" selection-start-line="88" selection-start-column="40" selection-end-line="88" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/core.cljs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
@@ -1107,14 +988,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="348">
           <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/subs.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-17">
-          <caret line="11" column="5" lean-forward="false" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -1191,28 +1064,84 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/schedule/schedule_events.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="6" lean-forward="true" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/re-frame/re-frame/0.10.5/re-frame-0.10.5.jar!/re_frame/core.cljc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="4" lean-forward="false" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/views_common.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="51" column="12" lean-forward="false" selection-start-line="51" selection-start-column="6" selection-end-line="51" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_main.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="83">
+          <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/subs.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_add_player.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="19" column="22" lean-forward="true" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/db.cljs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="84" column="16" lean-forward="false" selection-start-line="84" selection-start-column="14" selection-end-line="84" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_common.cljs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
-          <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+          <caret line="79" column="32" lean-forward="false" selection-start-line="79" selection-start-column="32" selection-end-line="79" selection-end-column="32" />
           <folding>
             <marker date="1523904851708" expanded="true" signature="625:1212" ph="(defn reset-form ...)" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_main.cljs">
+    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/roster/roster_events_select.cljs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="41">
-          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cljs/rf_tennis_manager/schedule/schedule_events.cljs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+        <state relative-caret-position="-114">
+          <caret line="23" column="61" lean-forward="true" selection-start-line="23" selection-start-column="61" selection-end-line="23" selection-end-column="61" />
           <folding />
         </state>
       </provider>

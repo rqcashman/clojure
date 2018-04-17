@@ -105,11 +105,6 @@
     (get-in db [:roster :selected-player])))
 
 (re-frame/reg-sub
-  ::roster-add-player
-  (fn [db]
-    (get-in db [:roster :add-player])))
-
-(re-frame/reg-sub
   ::roster-team-roster
   (fn [db]
     (get-in db [:roster :team-roster])))
@@ -193,4 +188,10 @@
   ::roster-form-data
   (fn [db key]
     (get-in db [:roster (keyword (second key)) :fields (keyword (nth key 2))])))
+
+
+(re-frame/reg-sub
+  ::form-data
+  (fn [db [_ tab-name form-name field-name]]
+    (get-in db [(keyword tab-name) (keyword form-name) :fields (keyword field-name)])))
 

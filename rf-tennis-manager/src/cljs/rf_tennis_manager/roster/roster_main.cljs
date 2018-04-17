@@ -13,51 +13,6 @@
 
 
 (def form-span 4)
-(defn add-form-control
-  [label options error]
-  [:tr.text-left
-   [:td {:style {:width "5%"}} (layout/nbsp)]
-   [:td label]
-   [:td [:input.form-control-sm options]]
-   [:td.error error]
-   [:td {:style {:width "5%"}} (layout/nbsp)]])
-
-(defn add-options
-  [option-hash]
-  (reduce (fn [list opt-key]
-            (conj list [:option {:value (opt-key option-hash) :key (opt-key option-hash)} (name opt-key)]))
-          () (reverse (sort (keys option-hash)))))
-
-(defn add-form-select
-  [select-name form-name field-name option-hash]
-  (let [fld-hash @(rf/subscribe [::subs/roster-form-data form-name field-name])]
-    [:tr
-     [:td {:style {:width "5%"}} (layout/nbsp)]
-     [:td (:name fld-hash)]
-     [:td
-      [:select {:name     select-name :value (:value fld-hash)
-                :onChange #(rf/dispatch [::form-val/validate-field [:roster (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])}
-       (add-options option-hash)] (layout/nbsp) [:span.error (:error-msg fld-hash)]]
-     [:td]]))
-
-(defn add-form-input
-  [options form-name field-name]
-  (let [fld-hash @(rf/subscribe [::subs/roster-form-data form-name field-name])]
-    [:tr
-     [:td {:style {:width "5%"}} (layout/nbsp)]
-     [:td (:name fld-hash) (if (:required? fld-hash) [:span.red-bold " *"])]
-     [:td
-      [:input (conj options {:value (:value fld-hash) :onChange #(rf/dispatch [::form-val/validate-field [:roster (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])})]
-      [:span.error (layout/nbsp) (:error-msg fld-hash)]]
-     [:td]]))
-
-
-(defn format-phone-number
-  [phone-number]
-  (cond
-    (> (count phone-number) 7) (str "(" (subs phone-number 0 3) ") " (subs phone-number 3 6) " - " (subs phone-number 6))
-    (> (count phone-number) 4) (str (subs phone-number 0 3) " - " (subs phone-number 3))
-    :else phone-number))
 
 (defn roster-row
   [list player]
@@ -65,7 +20,7 @@
               [:td (:last_name player)]
               [:td (:first_name player)]
               [:td (:email player)]
-              [:td (format-phone-number (str (:phone_number player)))]
+              [:td (layout/format-phone-number (str (:phone_number player)))]
               [:td (case (:status player) "A" "Active" "S" "Sub" "I" "Inactive" "?")]]))
 
 (defn show-roster
@@ -104,19 +59,10 @@
    [:td.form-info {:colSpan 3} [:span.error "* "] [:span "Field is required.  Names must have at least 2 characters."]]
    [:td]])
 
-(defn add-player-controls
-  [prefix]
-  (list
-    (add-form-input {:name "first_name" :maxLength "45" :size "45" :type "text"} "add-update" "first-name")
-    (add-form-input {:name "last_name" :maxLength "45" :size "45" :type "text"} "add-update" "last-name")
-    (add-form-input {:name "email" :maxLength "100" :size "45" :type "text"} "add-update" "email")
-    (add-form-input {:name "phone_number" :maxLength "10" :size "10" :type "text"} "add-update" "phone-number")
-    (add-form-select "status" "add-update" "status" {:Active "A" :Inactive "I" :Sub "S"})))
 
 (defn add-player
   []
   (let [title "Add Player"
-        add-player @(rf/subscribe [::subs/roster-add-player])
         selected-team @(rf/subscribe [::subs/roster-selected-team])
         div-visible @(rf/subscribe [::subs/roster-panel-visible "add-player"])]
     [:div {:className (if div-visible "div-panel-roster" "div-panel-hide")}
@@ -126,11 +72,11 @@
         (layout/empty-row form-span)
         [:tr [:td.text-center {:colSpan form-span} [:h4 (str title " to " (:name selected-team) " Roster")]]]
         (layout/hr-row form-span "90%")
-        (add-form-input {:name "first_name" :maxLength "45" :size "45" :type "text"} "add-update" "first-name")
-        (add-form-input {:name "last_name" :maxLength "45" :size "45" :type "text"} "add-update" "last-name")
-        (add-form-input {:name "email" :maxLength "100" :size "45" :type "text"} "add-update" "email")
-        (add-form-input {:name "phone_number" :maxLength "10" :size "10" :type "text"} "add-update" "phone-number")
-        (add-form-select "status" "add-update" "status" {:Active "A" :Inactive "I" :Sub "S"})
+        (layout/add-form-input {:name "first_name" :maxLength "45" :size "45" :type "text"} "roster" "add-update" "first-name")
+        (layout/add-form-input {:name "last_name" :maxLength "45" :size "45" :type "text"} "roster" "add-update" "last-name")
+        (layout/add-form-input {:name "email" :maxLength "100" :size "45" :type "text"} "roster" "add-update" "email")
+        (layout/add-form-input {:name "phone_number" :maxLength "10" :size "10" :type "text"} "roster" "add-update" "phone-number")
+        (layout/add-form-select "status" "roster" "add-update" "status" {:Active "A" :Inactive "I" :Sub "S"})
         (layout/hr-row form-span "90%")
         (add-message-row)
         (layout/empty-row form-span)
@@ -164,11 +110,11 @@
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span} [:h4 title]]]
           (layout/hr-row form-span "90%")
-          (add-form-input {:name "first_name" :maxLength "45" :size "45" :type "text"} "add-update" "first-name")
-          (add-form-input {:name "last_name" :maxLength "45" :size "45" :type "text"} "add-update" "last-name")
-          (add-form-input {:name "email" :maxLength "100" :size "45" :type "text"} "add-update" "email")
-          (add-form-input {:name "phone_number" :maxLength "10" :size "10" :type "text"} "add-update" "phone-number")
-          (add-form-select "status" "add-update" "status" {:Active "A" :Inactive "I" :Sub "S"})
+          (layout/add-form-input {:name "first_name" :maxLength "45" :size "45" :type "text"} "roster" "add-update" "first-name")
+          (layout/add-form-input {:name "last_name" :maxLength "45" :size "45" :type "text"} "roster" "add-update" "last-name")
+          (layout/add-form-input {:name "email" :maxLength "100" :size "45" :type "text"} "roster" "add-update" "email")
+          (layout/add-form-input {:name "phone_number" :maxLength "10" :size "10" :type "text"} "roster" "add-update" "phone-number")
+          (layout/add-form-select "status" "roster" "add-update" "status" {:Active "A" :Inactive "I" :Sub "S"})
           (layout/hr-row form-span "90%")
           (add-message-row)
           (layout/empty-row form-span)

@@ -37,13 +37,6 @@
                            :forfeits {:c1 0 :c2 0 :c3 0 :c4 0}}}
    :test    ["rick" "cashman"]})
 
-;:roster   {:loaded?     false
-;           :call-status {:success? false :message "Processing..."}}
-;:schedule {:loaded?     false
-;           :call-status {:success? false :message "Processing..."}}
-;:admin    {:loaded?     false
-;           :call-status {:success? false :message "Processing..."}}})
-()
 (def default-player {:last_name "----- none -----" :first_name "" :id 0})
 (comment
   ":curent and :previous are a hash map {:first 'Rick' :last 'Cashman' :id 10}
@@ -84,12 +77,11 @@
                                                 :last-name    {:name "Last name" :value "" :type "text" :required? true :min-length 2 :valid? true :error-msg ""}
                                                 :email        {:name "Email" :value "" :type "email" :required? false :min-length 4 :valid? true :error-msg ""}
                                                 :phone-number {:name "Phone number" :value "" :type "phone-number" :required? false :valid? true :error-msg ""}
-                                                :status       {:name "Status" :value "Active" :type "select" :required? true :valid? true :error-msg ""}}}
+                                                :status       {:name "Status" :value "A" :type "select" :required? true :valid? true :error-msg ""}}}
               :loaded?                false
               :selected-roster-action ""
               :selected-team          {:id 1 :name "Team name"}
               :selected-player        {:id 0 :last_name "" :first_name "" :status "A"}
-              :add-player             {:id 0 :last_name "" :first_name "" :status "A"}
               :team-roster            [{:id 1 :last_name "cashman" :first_name "rick"}]
               :call-status            {:success? true :message "Processing..." :on-click nil}}
    :teams    {:list [{:id 0 :name "team name"}]}

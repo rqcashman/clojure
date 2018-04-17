@@ -29,7 +29,6 @@
   (fn [{:keys [db]} [_ item-value]]
     {:db (-> db
              (assoc-in [:roster :selected-roster-action] item-value)
-             (assoc-in [:roster :add-player] {:id 0 :first_name "" :last_name "" :status "A"})
              (evt-common/show-div item-value)
              (evt-common/reset-form))}))
 
