@@ -26,35 +26,6 @@
    [:td [:input options]]
    [:td {:style {:width "5%"}} (layout/nbsp)]])
 
-(defn add-form-input
-  [options form-name field-name]
-  (let [fld-hash @(rf/subscribe [::subs/admin-form-data form-name field-name])]
-    [:tr
-     [:td {:style {:width "5%"}} (layout/nbsp)]
-     [:td (:name fld-hash) (if (:required? fld-hash) [:span.red-bold " *"])]
-     [:td
-      [:input (conj options {:value (:value fld-hash) :onChange #(rf/dispatch [::form-val/validate-field [:admin (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])})]
-      [:span.error (layout/nbsp) (:error-msg fld-hash)]]
-     [:td]]))
-
-(defn add-options
-  [option-hash]
-  (reduce (fn [list opt-key]
-            (conj list [:option {:value (opt-key option-hash) :key (opt-key option-hash)} (name opt-key)]))
-          () (sort (keys option-hash))))
-
-(defn add-form-select
-  [select-name form-name field-name option-hash]
-  (let [fld-hash @(rf/subscribe [::subs/admin-form-data form-name field-name])]
-    [:tr
-     [:td {:style {:width "5%"}} (layout/nbsp)]
-     [:td (:name fld-hash)]
-     [:td
-      [:select {:name     select-name :value (:value fld-hash)
-                :onChange #(rf/dispatch [::form-val/validate-field [:admin (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])}
-       (add-options option-hash)] (layout/nbsp) [:span.error (:error-msg fld-hash)]]
-     [:td]]))
-
 (defn add-date-control
   [label options]
   [:tr
@@ -62,7 +33,6 @@
    [:td label]
    [:td [dp/date-selector options]]
    [:td {:style {:width "5%"}} (layout/nbsp)]])
-
 
 (defn club-content
   []
@@ -78,12 +48,12 @@
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span} [:h4 title]]]
           (layout/hr-row form-span "90%")
-          (add-form-input {:name "club_name" :maxLength "45" :size "45" :type "text"} "add-club" "club-name")
-          (add-form-input {:name "street" :maxLength "100" :size "60" :type "text"} "add-club" "street")
-          (add-form-input {:name "city" :maxLength "45" :size "45" :type "text"} "add-club" "city")
-          (add-form-select "state" "add-club" "state" {:Ohio "Ohio" :Kentucky "Kentucky"})
-          (add-form-input {:name "zip_code" :maxLength "5" :size "5" :type "text"} "add-club" "zip-code")
-          (add-form-input {:name "phone_number" :size "10" :type "text"} "add-club" "phone-number")
+          (layout/add-form-input {:name "club_name" :maxLength "45" :size "45" :type "text"} "admin" "add-club" "club-name")
+          (layout/add-form-input {:name "street" :maxLength "100" :size "60" :type "text"} "admin" "add-club" "street")
+          (layout/add-form-input {:name "city" :maxLength "45" :size "45" :type "text"} "admin" "add-club" "city")
+          (layout/add-form-select "club_state" "admin" "add-club" "state" {:Ohio "OH" :Kentucky "KY"})
+          (layout/add-form-input {:name "zip_code" :maxLength "5" :size "5" :type "text"} "admin" "add-club" "zip-code")
+          (layout/add-form-input {:name "phone_number" :size "10" :type "text"} "admin" "add-club" "phone-number")
           (layout/hr-row form-span "90%")
           (layout/required-message form-span)
           (layout/empty-row form-span)
@@ -97,6 +67,12 @@
    (reduce (fn [list clubs]
              (conj list [:option {:value (:id clubs) :key (:id clubs)} (:name clubs)]))
            () (reverse clubs))])
+
+(defn get-club-hash
+  [clubs]
+  (reduce (fn [club-hash club]
+            (into club-hash {(keyword (:name club)) (:id club)}))
+          {} clubs))
 
 (defn team-content
   []
@@ -113,14 +89,12 @@
           [:tr [:td.text-center {:colSpan form-span} [:h4 title]]]
           (layout/hr-row form-span "90%")
           (let [clubs @(rf/subscribe [::subs/clubs])
-                selected-club @(rf/subscribe [::subs/admin-selected-club])]
-            [:tr
-             [:td {:style {:width "5%"}}]
-             [:td "Club:"]
-             [:td (get-club-list clubs (:id selected-club))]
-             [:td {:style {:width "50%"}}]])
-          (add-form-input {:name "team_name" :maxLength 45 :size 45 :type "text"} "add-team" "team-name")
-          (add-form-input {:name "sched_abbrev" :maxLength 10 :size 10 :type "text"} "add-team" "sched-abbrev")
+                selected-club @(rf/subscribe [::subs/admin-selected-club])
+                club-hash (get-club-hash clubs)]
+            (if-not (empty? club-hash)
+              (layout/add-form-select "club_id" "admin" "add-team" "club" club-hash)))
+          (layout/add-form-input {:name "team_name" :maxLength 45 :size 45 :type "text"} "admin" "add-team" "team-name")
+          (layout/add-form-input {:name "sched_abbrev" :maxLength 10 :size 10 :type "text"} "admin" "add-team" "sched-abbrev")
           (layout/hr-row form-span "90%")
           (layout/required-message form-span)
           (layout/empty-row form-span)
@@ -144,7 +118,7 @@
           (layout/hr-row form-span "90%")
           (add-form-control "Season name:" {:id :season :name "season" :maxLength 45 :size 45 :type "text"})
           (add-date-control "Season start date" {:date-atom season-start-date :input-attrs {:onChange #(rf/dispatch [::evt-season/update-date "start-date" (-> % .-target .-value)])}})
-          (add-date-control "Season start date" {:date-atom season-end-date :input-attrs {:onSelect #(rf/dispatch [::evt-season/update-date "end-date" (-> % .-target .-value)])}})
+          (add-date-control "Season end date" {:date-atom season-end-date :input-attrs {:onSelect #(rf/dispatch [::evt-season/update-date "end-date" (-> % .-target .-value)])}})
           (layout/hr-row form-span "90%")
           (layout/required-message form-span)
           (layout/empty-row form-span)

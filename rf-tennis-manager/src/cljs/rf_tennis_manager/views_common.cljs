@@ -2,7 +2,8 @@
   (:require [goog.string :as gs]
             [rf-tennis-manager.form-validator :as form-val]
             [rf-tennis-manager.subs :as subs]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [clojure.string :as s]))
 
 (defn nbsp
   []
@@ -34,7 +35,7 @@
      [:td (:name fld-hash)]
      [:td
       [:select {:name     select-name :value (:value fld-hash)
-                :onChange #(rf/dispatch [::form-val/validate-field [:roster (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])}
+                :onChange #(rf/dispatch [::form-val/validate-field [(keyword tab-name) (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])}
        (add-options option-hash)] (nbsp) [:span.error (:error-msg fld-hash)]]
      [:td]]))
 
@@ -45,7 +46,7 @@
      [:td {:style {:width "5%"}} (nbsp)]
      [:td (:name fld-hash) (if (:required? fld-hash) [:span.red-bold " *"])]
      [:td
-      [:input (conj options {:value (:value fld-hash) :onChange #(rf/dispatch [::form-val/validate-field [:roster (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])})]
+      [:input (conj options {:value (:value fld-hash) :onChange #(rf/dispatch [::form-val/validate-field [(keyword tab-name) (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])})]
       [:span.error (nbsp) (:error-msg fld-hash)]]
      [:td]]))
 

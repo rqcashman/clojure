@@ -97,12 +97,13 @@
                               :load-schedule false
                               :call-status   false}
               :add-season    {}
-              :add-team      {:fields {:team-name    {:name "Team name" :value "" :type "text" :required? true :min-length 2 :valid? true :error-msg ""}
+              :add-team      {:fields {:club         {:name "Club" :value "1" :type "select" :required? true :valid? true :error-msg ""}
+                                       :team-name    {:name "Team name" :value "" :type "text" :required? true :min-length 2 :valid? true :error-msg ""}
                                        :sched-abbrev {:name "Schedule abbreviation" :value "" :type "text" :required? true :min-length 2 :max-length 10 :valid? true :error-msg ""}}}
               :add-club      {:fields {:club-name    {:name "Club name" :value "" :type "text" :required? true :min-length 2 :max-length 45 :valid? true :error-msg ""}
                                        :street       {:name "Street address" :value "" :type "text" :required? true :min-length 5 :max-length 100 :valid? true :error-msg ""}
                                        :city         {:name "City" :value "" :type "text" :required? true :min-length 2 :max-length 45 :valid? true :error-msg ""}
-                                       :state        {:name "State" :value "Ohio" :type "text" :required? true :valid? true :error-msg ""}
+                                       :state        {:name "State" :value "OH" :type "text" :required? true :valid? true :error-msg ""}
                                        :zip-code     {:name "Zip code" :value "" :type "numeric" :required? true :min-length 5 :max-length 5 :valid? true :error-msg ""}
                                        :phone-number {:name "Phone number" :value "" :type "phone-number" :required? true :valid? true :error-msg ""}}}
               :loaded?       false

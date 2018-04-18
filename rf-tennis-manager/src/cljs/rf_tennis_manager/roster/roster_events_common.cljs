@@ -22,7 +22,7 @@
   ([in-db player]
    (let [upd-db (reduce (fn [reset-db fld]
                           (if (= (:type (val fld)) "select")
-                            (assoc-in reset-db [:roster :add-update :fields (key fld) :value] "Active")
+                            (assoc-in reset-db [:roster :add-update :fields (key fld) :value] "A")
                             (-> reset-db
                                 (assoc-in [:roster :add-update :fields (key fld) :value] "")
                                 (assoc-in [:roster :add-update :fields (key fld) :error-msg] ""))))

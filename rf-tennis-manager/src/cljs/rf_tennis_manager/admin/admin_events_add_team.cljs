@@ -7,7 +7,7 @@
 (rf/reg-event-fx
   ::selected-club-changed
   (fn [{:keys [db]} [_ club-id]]
-    {:db (assoc-in db [:admin :selected-club] (first (filter #(identical? (str (:id %)) (str club-id)) (:clubs db))))}))
+    {:db  (assoc-in db [:admin :add-team :fields :club :value] club-id)}))
 
 (rf/reg-fx
   ::add-team

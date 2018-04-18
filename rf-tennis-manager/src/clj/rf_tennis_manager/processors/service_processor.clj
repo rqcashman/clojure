@@ -232,7 +232,7 @@
     (hash-map :status "success" :status-code 200 :msg (str "Season loaded"))))
 
 (defn add-team
-  "Return the Add Team page"
+  "Add team"
   [session params]
   (let [team-name (:team_name params)
         club-id (:club_id params)

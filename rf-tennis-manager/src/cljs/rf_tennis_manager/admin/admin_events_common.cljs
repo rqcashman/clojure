@@ -10,6 +10,16 @@
               db (keys (get-in db [:admin :panel-visible])))
       (assoc-in [:admin :panel-visible (keyword show-div-id)] true)))
 
+(defn reset-form
+  [in-db form-name]
+  {:db (reduce (fn [reset-db fld]
+                 (if (= (:type (val fld)) "select")
+                   (assoc-in reset-db [:admin (keyword form-name) :fields (key fld) :value] "A")
+                   (-> reset-db
+                       (assoc-in [:admin (keyword form-name) :fields (key fld) :value] "")
+                       (assoc-in [:admin (keyword form-name) :fields (key fld) :error-msg] ""))))
+               in-db (get-in in-db [:admin (keyword form-name) :fields]))})
+
 
 (rf/reg-event-fx
   ::hide-call-status
@@ -58,7 +68,7 @@
              (assoc-in [:admin :call-status :message] "Success")
              (assoc-in [:admin :panel-visible :call-status] false)
              (assoc-in [:admin :panel-visible :select-form] true)
-             (assoc-in [:admin :selected-club] (first (:body response))))}))
+             (assoc-in [:admin :add-team :fields :club :value] (-> response :body first :id)))}))
 
 (rf/reg-event-fx
   ::init-admin-page

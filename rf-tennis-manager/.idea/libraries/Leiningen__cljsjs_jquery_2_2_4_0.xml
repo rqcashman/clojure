@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Leiningen: cljsjs/jquery:2.2.4-0">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/cljsjs/jquery/2.2.4-0/jquery-2.2.4-0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
