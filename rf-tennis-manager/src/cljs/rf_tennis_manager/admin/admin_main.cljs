@@ -53,7 +53,7 @@
           (layout/add-form-input {:name "city" :maxLength "45" :size "45" :type "text"} "admin" "add-club" "city")
           (layout/add-form-select "club_state" "admin" "add-club" "state" {:Ohio "OH" :Kentucky "KY"})
           (layout/add-form-input {:name "zip_code" :maxLength "5" :size "5" :type "text"} "admin" "add-club" "zip-code")
-          (layout/add-form-input {:name "phone_number" :size "10" :type "text"} "admin" "add-club" "phone-number")
+          (layout/add-form-input {:name "phone_number" :size "10" :maxLength "10" :type "text"} "admin" "add-club" "phone-number")
           (layout/hr-row form-span "90%")
           (layout/required-message form-span)
           (layout/empty-row form-span)

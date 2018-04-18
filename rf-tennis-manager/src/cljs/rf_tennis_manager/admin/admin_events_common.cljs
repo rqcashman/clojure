@@ -12,13 +12,13 @@
 
 (defn reset-form
   [in-db form-name]
-  {:db (reduce (fn [reset-db fld]
-                 (if (= (:type (val fld)) "select")
-                   (assoc-in reset-db [:admin (keyword form-name) :fields (key fld) :value] "A")
-                   (-> reset-db
-                       (assoc-in [:admin (keyword form-name) :fields (key fld) :value] "")
-                       (assoc-in [:admin (keyword form-name) :fields (key fld) :error-msg] ""))))
-               in-db (get-in in-db [:admin (keyword form-name) :fields]))})
+  (reduce (fn [upd-db fld]
+            (if (not= (:type (val fld)) "select")
+              (-> upd-db
+                  (assoc-in [:admin (keyword form-name) :fields (key fld) :value] "")
+                  (assoc-in [:admin (keyword form-name) :fields (key fld) :error-msg] ""))
+              upd-db))
+          in-db (get-in in-db [:admin (keyword form-name) :fields])))
 
 
 (rf/reg-event-fx

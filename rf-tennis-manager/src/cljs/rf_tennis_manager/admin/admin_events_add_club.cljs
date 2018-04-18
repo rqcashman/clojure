@@ -13,6 +13,7 @@
   ::add-club-success
   (fn [{:keys [db]} [_ status]]
     {:db (-> db
+             (evt-admin/reset-form "add-club")
              (assoc-in [:admin :call-status :success?] true)
              (assoc-in [:admin :panel-visible :call-status] true)
              (assoc-in [:admin :call-status :message] "Club added")
