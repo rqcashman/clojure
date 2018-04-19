@@ -3,6 +3,9 @@
             [rf-tennis-manager.events-common :as evt]
             [clojure.string :as s]))
 
+(defonce season-start-date (atom (js/Date.)))
+(defonce season-end-date (atom (js/Date. (.getFullYear @season-start-date) (.getMonth @season-start-date) (+ (.getDate @season-start-date) 35))))
+
 (defn show-div
   [db show-div-id]
   (-> (reduce (fn [upd-db key]
@@ -10,16 +13,16 @@
               db (keys (get-in db [:admin :panel-visible])))
       (assoc-in [:admin :panel-visible (keyword show-div-id)] true)))
 
+(def skip-reset-types ["date" "select"])
 (defn reset-form
   [in-db form-name]
   (reduce (fn [upd-db fld]
-            (if (not= (:type (val fld)) "select")
+            (if (not-any? #(= (:type (val fld)) %) skip-reset-types)
               (-> upd-db
                   (assoc-in [:admin (keyword form-name) :fields (key fld) :value] "")
                   (assoc-in [:admin (keyword form-name) :fields (key fld) :error-msg] ""))
               upd-db))
           in-db (get-in in-db [:admin (keyword form-name) :fields])))
-
 
 (rf/reg-event-fx
   ::hide-call-status
@@ -73,7 +76,11 @@
 (rf/reg-event-fx
   ::init-admin-page
   (fn [{:keys [db]} [_]]
+    (println "::init-admin-page " @season-start-date)
+    ()
     (let [upd-db (-> db
+                     (assoc-in [:admin :add-season :fields :start-date :value] @season-start-date)
+                     (assoc-in [:admin :add-season :fields :end-date :value] @season-end-date)
                      (assoc-in [:admin :call-status :success?] true)
                      (assoc-in [:admin :call-status :message] "Processing...")
                      (assoc-in [:admin :call-status :on-click] nil)

@@ -31,7 +31,7 @@
   "docstring"
   [name start-date end-date]
   (j/execute! sys/db-cred
-              [(str "insert into season values (null,?,str_to_date(?, '%m/%d/%Y'),str_to_date(?, '%m/%d/%Y'))") name start-date end-date]))
+              [(str "insert into season values (null,?,str_to_date(?, '%b %d %Y'),str_to_date(?, '%b %d %Y'))") name start-date end-date]))
 
 (defn current-season
   "docstring"

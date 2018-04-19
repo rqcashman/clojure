@@ -170,27 +170,6 @@
     (get-in db [:admin :selected-season])))
 
 (re-frame/reg-sub
-  ::admin-selected-club
-  (fn [db]
-    (get-in db [:admin :selected-club])))
-
-(re-frame/reg-sub
-  ::admin-add-season
-  (fn [db key]
-    (get-in db [:admin :add-season (keyword (second key))])))
-
-(re-frame/reg-sub
-  ::admin-form-data
-  (fn [db key]
-    (get-in db [:admin (keyword (second key)) :fields (keyword (nth key 2))])))
-
-(re-frame/reg-sub
-  ::roster-form-data
-  (fn [db key]
-    (get-in db [:roster (keyword (second key)) :fields (keyword (nth key 2))])))
-
-
-(re-frame/reg-sub
   ::form-data
   (fn [db [_ tab-name form-name field-name]]
     (get-in db [(keyword tab-name) (keyword form-name) :fields (keyword field-name)])))

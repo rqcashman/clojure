@@ -13,7 +13,7 @@
            (clojure.lang EdnReader$StringReader)
            (java.io StringReader BufferedReader)))
 
-(def date-fmt (f/formatter "MM/dd/YYYY"))
+(def date-fmt (f/formatter "MMM dd YYYY"))
 
 (defn add-club
   "Add a club to the DB"
@@ -63,8 +63,9 @@
   "Add a season to the DB"
   [session params]
   (let [season (:season params)
-        start-date (:start_date params)
-        end-date (:end_date params)]
+        start-date (subs (:start_date params) 4)
+        end-date (subs (:end_date params) 4)]
+    (println "add-seasonXX start-date: " start-date " end date: " end-date)
     (try
       (if (s/blank? season)
         (hash-map :status "failed" :status-code 200 :msg (str "Season name required"))
@@ -72,7 +73,7 @@
           (hash-map :status "failed" :status-code 200 :msg (str "Season '" season "' already exists."))
           (if (t/after? (f/parse date-fmt end-date) (f/parse date-fmt start-date))
             (do
-              (season/add_season season start-date end-date)
+              (season/add_season season start-date end-date )
               (hash-map :status "success" :status-code 200 :msg (str "Season '" season "' added.")))
             (hash-map :status "failed" :status-code 200 :msg (str "Season '" season "' not added. End date (" end-date ") must be greater than start date (" start-date ").")))))
       (catch SQLException se

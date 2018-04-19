@@ -1,5 +1,6 @@
 (ns rf-tennis-manager.views-common
-  (:require [goog.string :as gs]
+  (:require [cljs-pikaday.reagent :as dp]
+            [goog.string :as gs]
             [rf-tennis-manager.form-validator :as form-val]
             [rf-tennis-manager.subs :as subs]
             [re-frame.core :as rf]
@@ -49,6 +50,15 @@
       [:input (conj options {:value (:value fld-hash) :onChange #(rf/dispatch [::form-val/validate-field [(keyword tab-name) (keyword form-name) :fields (keyword field-name)] (-> % .-target .-value)])})]
       [:span.error (nbsp) (:error-msg fld-hash)]]
      [:td]]))
+
+(defn add-date-control
+  [options tab-name form-name field-name]
+  (let [fld-hash @(rf/subscribe [::subs/form-data tab-name form-name field-name])]
+    [:tr
+     [:td {:style {:width "5%"}} (nbsp)]
+     [:td (:name fld-hash)]
+     [:td [dp/date-selector options] (nbsp) [:span.error (nbsp) (:error-msg fld-hash)]]
+     [:td {:style {:width "5%"}} (nbsp)]]))
 
 (defn format-phone-number
   [phone-number]

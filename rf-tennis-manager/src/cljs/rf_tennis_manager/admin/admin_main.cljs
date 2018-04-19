@@ -2,7 +2,6 @@
   (:require [clojure.string :as s]
             [goog.string :as gs]
             [re-frame.core :as rf]
-            [cljs-pikaday.reagent :as dp]
             [rf-tennis-manager.db :as db]
             [rf-tennis-manager.form-validator :as form-val]
             [rf-tennis-manager.admin.admin-events-add-club :as evt-club]
@@ -15,24 +14,7 @@
             [rf-tennis-manager.views-common :as layout]))
 
 (def form-span 4)
-(defonce season-start-date (atom (js/Date.)))
-(defonce season-end-date (atom (js/Date. (.getFullYear @season-start-date) (.getMonth @season-start-date) (+ (.getDate @season-start-date) 35))))
 
-(defn add-form-control
-  [label options]
-  [:tr
-   [:td {:style {:width "5%"}} (layout/nbsp)]
-   [:td label]
-   [:td [:input options]]
-   [:td {:style {:width "5%"}} (layout/nbsp)]])
-
-(defn add-date-control
-  [label options]
-  [:tr
-   [:td {:style {:width "5%"}} (layout/nbsp)]
-   [:td label]
-   [:td [dp/date-selector options]]
-   [:td {:style {:width "5%"}} (layout/nbsp)]])
 
 (defn club-content
   []
@@ -61,13 +43,6 @@
                 [:button {:type "button" :onClick #(rf/dispatch [::form-val/validate-form [:admin :add-club :fields] [::evt-club/add-club-request] [::evt-common/admin-form-validation-error]])} title]]]
           (layout/empty-row form-span)]]]])))
 
-(defn get-club-list
-  [clubs selected-club]
-  [:select {:name "club_id" :value (if-not (s/blank? selected-club) selected-club "") :onChange #(rf/dispatch [::evt-team/selected-club-changed (-> % .-target .-value)])}
-   (reduce (fn [list clubs]
-             (conj list [:option {:value (:id clubs) :key (:id clubs)} (:name clubs)]))
-           () (reverse clubs))])
-
 (defn get-club-hash
   [clubs]
   (reduce (fn [club-hash club]
@@ -89,7 +64,6 @@
           [:tr [:td.text-center {:colSpan form-span} [:h4 title]]]
           (layout/hr-row form-span "90%")
           (let [clubs @(rf/subscribe [::subs/clubs])
-                selected-club @(rf/subscribe [::subs/admin-selected-club])
                 club-hash (get-club-hash clubs)]
             (if-not (empty? club-hash)
               (layout/add-form-select "club_id" "admin" "add-team" "club" club-hash)))
@@ -116,19 +90,20 @@
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span} [:h4 title]]]
           (layout/hr-row form-span "90%")
-          (add-form-control "Season name:" {:id :season :name "season" :maxLength 45 :size 45 :type "text"})
-          (add-date-control "Season start date" {:date-atom season-start-date :input-attrs {:onChange #(rf/dispatch [::evt-season/update-date "start-date" (-> % .-target .-value)])}})
-          (add-date-control "Season end date" {:date-atom season-end-date :input-attrs {:onSelect #(rf/dispatch [::evt-season/update-date "end-date" (-> % .-target .-value)])}})
+          (layout/add-form-input {:name "season" :maxLength 45 :size 45 :type "text"} "admin" "add-season" "name")
+          (layout/add-date-control {:date-atom evt-common/season-start-date :input-attrs {:name "start_date" :onSelect #(rf/dispatch [::evt-season/update-date "start-date" (-> % .-target .-value)])}} "admin" "add-season" "start-date")
+          (layout/add-date-control {:date-atom evt-common/season-end-date :input-attrs {:name "end_date" :onSelect #(rf/dispatch [::evt-season/update-date "end-date" (-> % .-target .-value)])}} "admin" "add-season" "end-date")
           (layout/hr-row form-span "90%")
           (layout/required-message form-span)
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span}
-                [:button {:type "button" :onClick #(rf/dispatch [::evt-season/add-season-request])} title]]]
+                [:button {:type "button" :onClick #(rf/dispatch [::form-val/validate-form [:admin :add-season :fields] [::evt-season/add-season-request] [::evt-common/admin-form-validation-error]])} title]]]
           (layout/empty-row form-span)]]
-        (let [start-date @(rf/subscribe [::subs/admin-add-season "start-date"])]
-          [:input.hidden-control {:name "start_date" :value (if-not (nil? start-date) start-date "") :readOnly true}])
-        (let [end-date @(rf/subscribe [::subs/admin-add-season "end-date"])]
-          [:input.hidden-control {:name "end_date" :value (if-not (nil? end-date) end-date "") :readOnly true}])]])))
+        ;(let [start-date @(rf/subscribe [::subs/form-data "admin" "add-season" "start_date"])]
+        ;  [:input.hidden-control {:name "start_date" :value start-date :readOnly true}])
+        ;(let [end-date @(rf/subscribe [::subs/form-data "admin" "add-season" "end_date"])]
+        ;  [:input.hidden-control {:name "end_date" :value end-date :readOnly true}])
+        ]])))
 
 (defn get-season-list
   [seasons selected-season]
