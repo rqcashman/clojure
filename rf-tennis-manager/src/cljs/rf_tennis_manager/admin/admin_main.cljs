@@ -98,12 +98,7 @@
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span}
                 [:button {:type "button" :onClick #(rf/dispatch [::form-val/validate-form [:admin :add-season :fields] [::evt-season/add-season-request] [::evt-common/admin-form-validation-error]])} title]]]
-          (layout/empty-row form-span)]]
-        ;(let [start-date @(rf/subscribe [::subs/form-data "admin" "add-season" "start_date"])]
-        ;  [:input.hidden-control {:name "start_date" :value start-date :readOnly true}])
-        ;(let [end-date @(rf/subscribe [::subs/form-data "admin" "add-season" "end_date"])]
-        ;  [:input.hidden-control {:name "end_date" :value end-date :readOnly true}])
-        ]])))
+          (layout/empty-row form-span)]]]])))
 
 (defn get-season-list
   [seasons selected-season]

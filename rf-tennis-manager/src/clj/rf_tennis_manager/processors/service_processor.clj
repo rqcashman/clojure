@@ -65,7 +65,6 @@
   (let [season (:season params)
         start-date (subs (:start_date params) 4)
         end-date (subs (:end_date params) 4)]
-    (println "add-seasonXX start-date: " start-date " end date: " end-date)
     (try
       (if (s/blank? season)
         (hash-map :status "failed" :status-code 200 :msg (str "Season name required"))

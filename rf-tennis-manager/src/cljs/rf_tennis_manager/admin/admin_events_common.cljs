@@ -76,8 +76,6 @@
 (rf/reg-event-fx
   ::init-admin-page
   (fn [{:keys [db]} [_]]
-    (println "::init-admin-page " @season-start-date)
-    ()
     (let [upd-db (-> db
                      (assoc-in [:admin :add-season :fields :start-date :value] @season-start-date)
                      (assoc-in [:admin :add-season :fields :end-date :value] @season-end-date)
