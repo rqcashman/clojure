@@ -35,10 +35,13 @@
   {:dbtype   (:dbtype system-info)
    :dbname   (:dbname system-info)
    :host     (:host system-info)
-   :port     (:port system-info)
+   ;:port       (:port system-info)
    :user     (:user system-info)
-   :useSSL   (:useSSL system-info)
-   :password (:password system-info)})
+   :password (:password system-info)
+   :ssl      false
+   ;:ssl        (:useSSL system-info)
+   ;:sslfactory (:sslfactory system-info)
+   })
 
 (println "SYS INFO: " system-info)
 (println "DB INFO: " db-cred)

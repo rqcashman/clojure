@@ -43,4 +43,6 @@
                    (= (:status response) session-expired-errno) [::session-timeout]
                    (= (get-in response [:body :status]) "success") (:on-success request)
                    :else (:on-fail request))]
+      (println "method: " method)
+      (println response)
       (rf/dispatch (conj method response)))))

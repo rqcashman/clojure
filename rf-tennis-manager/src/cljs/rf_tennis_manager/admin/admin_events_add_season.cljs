@@ -11,7 +11,6 @@
 (rf/reg-event-fx
   ::update-date
   (fn [{:keys [db]} [_ date-key upd-val]]
-    (println "::update-date key: " date-key " val: " upd-val " replace: " (s/replace date-key "-" "_"))
     (let [date-arr (s/split upd-val " ")
           selected-date (js/Date. (last date-arr) (second date-arr) (nth date-arr 2))]
       {:db (-> db

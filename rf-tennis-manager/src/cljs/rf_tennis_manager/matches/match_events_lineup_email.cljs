@@ -1,5 +1,6 @@
 (ns rf-tennis-manager.matches.match-events-lineup-email
   (:require [re-frame.core :as rf]
+            [rf-tennis-manager.events-common :as evt]
             [rf-tennis-manager.matches.match-events-common :as evt-common]))
 
 (rf/reg-event-fx
@@ -40,7 +41,7 @@
 
 (rf/reg-fx
   ::call-send-lineup-email
-  evt-common/send-post-request)
+  evt/send-post-request)
 
 (defn update-lineup-sent
   [list match match-id]
@@ -73,7 +74,7 @@
 
 (rf/reg-fx
   ::get-match-lineup
-  evt-common/send-get-request)
+  evt/send-get-request)
 
 (rf/reg-event-fx
   ::show-email-lineup-form

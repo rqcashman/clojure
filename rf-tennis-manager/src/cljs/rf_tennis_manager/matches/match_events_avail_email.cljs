@@ -1,5 +1,6 @@
 (ns rf-tennis-manager.matches.match-events-avail-email
   (:require [re-frame.core :as rf]
+            [rf-tennis-manager.events-common :as evt]
             [rf-tennis-manager.matches.match-events-common :as evt-common]
             [cljs-time.core :as t]))
 
@@ -40,7 +41,7 @@
 
 (rf/reg-fx
   ::call-send-avail-email
-  evt-common/send-post-request)
+  evt/send-post-request)
 
 (defn update-avail-sent
   [list match match-id]

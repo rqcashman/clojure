@@ -111,12 +111,10 @@
         (and (not= (:status player) "I") (= active? true))
         (and (= (:status player) "I") (= active? false)))
     (let [player_response (case (:response player) 0 "N" 1 "Y" 2 "?" "NA")
-          avail (if (= (:available player) 1) "Y" "N")
           long-status (case (:status player) "A" "Active" "S" "Sub" "I" "Inactive" "?")
-          box-checked (if (= avail "Y") true false)
           box-disabled (if (= (:status player) "I") true false)
           row-class (cond
-                      (= avail "Y") "player-avail"
+                      (:available player) "player-avail"
                       (= (:status player) "I") "player-inactive"
                       :else "")]
       (conj rows
@@ -125,7 +123,7 @@
               [:tr {:class row-class :id player-id :key player-id}
                [:td.text-left (:last_name player) ", " (:first_name player)]
                [:td.text-center
-                [:input {:type "checkbox" :disabled box-disabled :checked box-checked :name cb-id :key cb-id :onChange #(rf/dispatch [::evt-set-avail/player-selection-changed player-id])}]]
+                [:input {:type "checkbox" :disabled box-disabled :checked (:available player) :name cb-id :key cb-id :onChange #(rf/dispatch [::evt-set-avail/player-selection-changed player-id])}]]
                [:td.text-center player_response]
                [:td (if (= (:response_date player) nil) "" (:response_date player))]
                [:td.text-center long-status]])))
@@ -348,8 +346,7 @@
         sel-id (get-in court-list [:selected :id])]
     [:select {:name court-key :id id :value sel-id :disabled disable-list :onChange #(rf/dispatch [::evt-set-lineup/update-player-lists court-key (-> % .-target .-value)])}
      (reduce (fn [list player]
-               (let [comma (if (s/blank? (:first_name player)) " " ", ")
-                     player-selected (if (= sel-id (:id player)) true false)]
+               (let [comma (if (s/blank? (:first_name player)) " " ", ")]
                  (conj list [:option {:value (:id player) :key (:id player)} (str (:last_name player) comma (str (:first_name player)))])))
              () (reverse (sort-by (juxt :last_name :first_name) (vals (:players court-list)))))]))
 

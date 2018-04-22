@@ -20,6 +20,7 @@
                  [org.clojure/core.async "0.3.443"]
                  [org.clojure/java.jdbc "0.7.3"]
                  [org.clojure/tools.reader "1.1.0"]
+                 [org.postgresql/postgresql "42.1.4.jre7"]
                  [cljs-pikaday "0.1.4"]
                  [reagent "0.7.0"]
                  [re-frame "0.10.5"]

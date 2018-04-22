@@ -1,5 +1,6 @@
 (ns rf-tennis-manager.matches.match-events-set-lineup
   (:require [re-frame.core :as rf]
+            [rf-tennis-manager.events-common :as evt]
             [rf-tennis-manager.matches.match-events-common :as evt-common]
             [clojure.string :as s]))
 (def court-player-key ["c1p1" "c1p2" "c2p1" "c2p2" "c3p1" "c3p2" "c4p1" "c4p2"])
@@ -22,7 +23,6 @@
   (fn [{:keys [db]} [_ call-response]]
     {:db (assoc-in db [:matches :match-info] (:body call-response))}))
 
-
 (rf/reg-event-fx
   ::update-lineup
   (fn [{:keys [db]} [_ match-id]]
@@ -40,7 +40,7 @@
 
 (rf/reg-fx
   ::call-update-lineup
-  evt-common/send-post-request)
+  evt/send-post-request)
 
 (defn update-lineup-set
   [list match match-id]
@@ -68,18 +68,18 @@
 
 (rf/reg-event-fx
   ::update-lineup-failed
-  (fn [{:keys [db]} [_ msg status]]
-    {:db (-> db
-             (assoc-in [:matches :call-status :success?] false)
-             (assoc-in [:matches :call-status :message] msg)
-             (assoc-in [:matches :panel-visible :call-status] true)
-             (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))}))
+  (fn [{:keys [db]} [_ in-msg response]]
+    (let [msg (if-not (s/blank? (get-in response [:body :msg])) (get-in response [:body :msg]) in-msg)]
+      {:db (-> db
+               (assoc-in [:matches :call-status :success?] false)
+               (assoc-in [:matches :call-status :message] msg)
+               (assoc-in [:matches :panel-visible :call-status] true)
+               (assoc-in [:matches :call-status :on-click] #(rf/dispatch [::evt-common/hide-call-status])))})))
 
 (def no-plyayer-selected {:last_name " ----- none selected -----" :first_name "" :id 0})
 (def init-player-list {
                        :selected no-plyayer-selected
                        :players  {(keyword (str (:id no-plyayer-selected))) no-plyayer-selected}})
-(def player-available 1)
 
 (defn get-player-court-assignment
   "get court assignment for player"
@@ -87,13 +87,13 @@
   (if-not (nil? (:court_number player))
     (let [player-id (:id player)]
       (cond
-        (or (= player-id (:home_player1 player)) (= player-id (:away_player1 player))) (str "c" (:court_number player) "p1")
-        (or (= player-id (:home_player2 player)) (= player-id (:away_player2 player))) (str "c" (:court_number player) "p2")))))
+        (or (= player-id (:home_player_1 player)) (= player-id (:away_player_1 player))) (str "c" (:court_number player) "p1")
+        (or (= player-id (:home_player_2 player)) (= player-id (:away_player_2 player))) (str "c" (:court_number player) "p2")))))
 
 (defn add-player-list
   "Add available player to list unless they are selected in a different list"
   [list player court-key]
-  (if (= player-available (:available player))
+  (if (:available player)
     (let [court-assignment (get-player-court-assignment player)
           add-player {:last_name (:last_name player) :first_name (:first_name player) :id (:id player)}]
       (cond-> list
@@ -171,11 +171,11 @@
 
 (rf/reg-fx
   ::get-match-availability
-  evt-common/send-get-request)
+  evt/send-get-request)
 
 (rf/reg-fx
   ::get-match-forfeits
-  evt-common/send-get-request)
+  evt/send-get-request)
 
 (rf/reg-event-fx
   ::show-set-lineup-form

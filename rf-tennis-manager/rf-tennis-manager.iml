@@ -114,6 +114,7 @@
     <orderEntry type="library" name="Leiningen: org.msgpack/msgpack:0.6.12" level="project" />
     <orderEntry type="library" name="Leiningen: org.omcljs/om:1.0.0-beta1" level="project" />
     <orderEntry type="library" name="Leiningen: org.ow2.asm/asm-all:4.2" level="project" />
+    <orderEntry type="library" name="Leiningen: org.postgresql/postgresql:42.1.4.jre7" level="project" />
     <orderEntry type="library" name="Leiningen: org.tukaani/xz:1.6" level="project" />
     <orderEntry type="library" name="Leiningen: re-frame:0.10.5" level="project" />
     <orderEntry type="library" name="Leiningen: reagent-forms:0.5.40" level="project" />

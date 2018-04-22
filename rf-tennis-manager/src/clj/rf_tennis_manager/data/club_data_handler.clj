@@ -16,7 +16,7 @@
   "docstring"
   [name address city state zip_code phone_number]
   (j/execute! sys/db-cred
-              [(str "insert into club values (null,?,?,?,?,?,?)") name address city state zip_code phone_number]))
+              [(str "insert into club values (default,?,?,?,cast (? as integer),cast (? as integer),?)") name address city zip_code phone_number state]))
 
 (defn club_exists?
   "docstring"

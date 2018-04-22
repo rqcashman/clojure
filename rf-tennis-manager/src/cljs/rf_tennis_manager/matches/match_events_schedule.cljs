@@ -1,6 +1,7 @@
 (ns rf-tennis-manager.matches.match-events-schedule
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [re-frame.core :as rf]
+            [rf-tennis-manager.events-common :as evt]
             [rf-tennis-manager.matches.match-events-common :as evt-common]
             [cljs-http.client :as http]))
 
@@ -11,11 +12,11 @@
 
 (rf/reg-fx
   ::get-team-info
-  evt-common/send-get-request)
+  evt/send-get-request)
 
 (rf/reg-fx
   ::get-schedule
-  evt-common/send-get-request)
+  evt/send-get-request)
 
 (rf/reg-event-fx
   ::init-schedule-page-failed

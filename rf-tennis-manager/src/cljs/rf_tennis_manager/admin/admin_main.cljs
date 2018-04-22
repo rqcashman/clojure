@@ -102,7 +102,7 @@
 
 (defn get-season-list
   [seasons selected-season]
-  [:select {:name "season-id" :value (if-not (s/blank? selected-season) selected-season "") :onChange #(rf/dispatch [::evt-load-sched/selected-season-changed (-> % .-target .-value)])}
+  [:select {:name "season_id" :value (if-not (s/blank? selected-season) selected-season "") :onChange #(rf/dispatch [::evt-load-sched/selected-season-changed (-> % .-target .-value)])}
    (reduce (fn [list seasons]
              (conj list [:option {:value (:id seasons) :key (:id seasons)} (:name seasons)]))
            () (reverse seasons))])
@@ -133,7 +133,7 @@
           (layout/hr-row form-span "90%")
           (layout/empty-row form-span)
           [:tr [:td.text-center {:colSpan form-span}
-                [:button {:type "button" :onClick #(rf/dispatch [::evt-load-sched/load-schedule])} title]]]
+                [:button {:type "button" :onClick #(rf/dispatch [::evt-load-sched/load-schedule-request])} title]]]
           (layout/empty-row form-span)]]]])))
 
 (defn admin-select-form

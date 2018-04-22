@@ -28,10 +28,9 @@
                 zip (if (s/blank? (:zip_code params)) 0 (:zip_code params))]
             (club/add_club club_name (:street params) (:city params) (:club_state params) zip phone)
             (hash-map :status "success" :status-code 200 :msg (str "Club '" club_name "' added.")))))
-      (catch SQLException se
-        (hash-map :status "failed" :status-code 500 :msg (str "Insert of club '" club_name "' failed.") :support-msg (.getMessage se)))
       (catch Exception e
-        (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+        (println "Exception is add-club: " e)
+        (hash-map :status "failed" :status-code 500 :msg (str "Insert of club '" club_name "' failed.") :support-msg (.getMessage e))))))
 
 (defn add-player
   "Add a player to the DB"
@@ -52,12 +51,9 @@
             (do
               (player/add_player team_id first_name last_name email phone_number status)
               (hash-map :status "success" :status-code 200 :msg (str "Player '" first_name " " last_name "' added."))))))
-      (catch SQLException se
-        (println "SQLException in add-player: " (.getMessage se))
-        (hash-map :status "failed" :status-code 500 :msg (str "Insert of player '" first_name " " last_name "' failed.") :support-msg (.getMessage se)))
       (catch Exception e
         (println "Exception in add-player: " (.getMessage e))
-        (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+        (hash-map :status "failed" :status-code 500 :msg (str "Insert of player '" first_name " " last_name "' failed.") :support-msg (.getMessage e))))))
 
 (defn add-season
   "Add a season to the DB"
@@ -72,15 +68,12 @@
           (hash-map :status "failed" :status-code 200 :msg (str "Season '" season "' already exists."))
           (if (t/after? (f/parse date-fmt end-date) (f/parse date-fmt start-date))
             (do
-              (season/add_season season start-date end-date )
+              (season/add_season season start-date end-date)
               (hash-map :status "success" :status-code 200 :msg (str "Season '" season "' added.")))
             (hash-map :status "failed" :status-code 200 :msg (str "Season '" season "' not added. End date (" end-date ") must be greater than start date (" start-date ").")))))
-      (catch SQLException se
-        (println se)
-        (hash-map :status "failed" :status-code 500 :msg (str "Insert of season '" season "' failed.") :support-msg (.getMessage se)))
       (catch Exception e
-        (println e)
-        (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+        (println "Exception in add-season: " e)
+        (hash-map :status "failed" :status-code 500 :msg (str "Insert of season '" season "' failed.") :support-msg (.getMessage e))))))
 
 (defn load-schedule
   "Loads a season schedule."
@@ -124,12 +117,9 @@
                 (hash-map :status "success" :status-code 200 :msg (str "Player '" first_name " " last_name "' updated."))))
             (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' exists under another player id.")))
           (hash-map :status "failed" :status-code 200 :msg (str "Player '" first_name " " last_name "' does not exist with the given player id."))))
-      (catch SQLException se
-        (println "SQLException in update-player-info-player: " (.getMessage se))
-        (hash-map :status "failed" :status-code 500 :msg (str "Update of player '" first_name " " last_name "' failed.") :support-msg (.getMessage se)))
       (catch Exception e
-        (println "Exception in add-update-player-info: " (.getMessage e))
-        (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+        (println "Exception in update-player-info: " (.getMessage e))
+        (hash-map :status "failed" :status-code 500 :msg (str "Update of player '" first_name " " last_name "' failed.") :support-msg (.getMessage e))))))
 
 (defn update-player-availability
   "Process the request to update player availability"
@@ -143,8 +133,8 @@
             (sched/upsert_player_availability match-id player-id "Y"))))
       (hash-map :status "success" :status-code 200 :msg (str "Match availability updated for team"))
       (catch Exception e
-        (println "Exception in add-update-player-info: " (.getMessage e))
-        (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+        (println "Exception in update-player-availability: " (.getMessage e))
+        (hash-map :status "failed" :status-code 500 :msg (str "Error updating player availability.") :support-msg (.getMessage e))))))
 
 (def player-id-arr '("c1p1" "c1p2" "c2p1" "c2p2" "c3p1" "c3p2" "c4p1" "c4p2"))
 
@@ -176,7 +166,6 @@
   "Convert player id to player name"
   [player-id-list]
   (reduce (fn [list id] (let [p (player/player id)]
-                          (println "player: " p)
                           (conj list (str (:last_name p) ", " (:first_name p)))))
           () player-id-list))
 
@@ -195,7 +184,6 @@
 (defn update-lineup
   "Process an update lineup request"
   [session inparms]
-  (println "update lineup: " inparms)
   (comment "Chrome is sending values for disabled items.  Need to remove players from the parm list if they are
             assigned to a court that is being forfeited")
   (let [parms (reduce #(removePlayersFromForfeitedCourts %1 %2) inparms (range 1 5))
@@ -203,12 +191,13 @@
         user (auth/get-user-from-session-id (:identity session))]
     (try
       (if (nil? validation-errors)
-        (dotimes [x 4]
-          (let [court (inc x)
-                player1 ((keyword (str "c" court "p1")) parms)
-                player2 ((keyword (str "c" court "p2")) parms)
-                forfeit-team-id ((keyword (str "c" court "-forfeit-grp")) parms)]
-            (sched/upsert-match-lineup (:match_id parms) (:team_id user) court player1 player2 forfeit-team-id))
+        (do
+          (dotimes [x 4]
+            (let [court (inc x)
+                  player1 ((keyword (str "c" court "p1")) parms)
+                  player2 ((keyword (str "c" court "p2")) parms)
+                  forfeit-team-id ((keyword (str "c" court "-forfeit-grp")) parms)]
+              (sched/upsert-match-lineup (:match_id parms) (:team_id user) court player1 player2 forfeit-team-id)))
           (hash-map :status "success" :status-code 200 :msg (str "Match lineup updated for team")))
         validation-errors)
       (catch Exception e
@@ -245,12 +234,9 @@
         :else (do
                 (team/add-team team-name club-id sched-abbrev)
                 (hash-map :status "success" :status-code 200 :msg (str "Team '" team-name "' added."))))
-      (catch SQLException se
-        (println se)
-        (hash-map :status "failed" :status-code 500 :msg (str "Insert of club '" team-name "' failed.") :support-msg (.getMessage se)))
       (catch Exception e
-        (println e)
-        (hash-map :status "failed" :status-code 500 :msg (str "Server error.") :support-msg (.getMessage e))))))
+        (println "Exception in add-team: " e)
+        (hash-map :status "failed" :status-code 500 :msg (str "Insert of team '" team-name "' failed.") :support-msg (.getMessage e))))))
 
 (defn match-availability
   "docstring"

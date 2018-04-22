@@ -146,7 +146,6 @@
       (hash-map :status "success" :status-code 0 :msg (str "Success") :support-msg "Availability email sent"))
     (catch Exception e
       (println "Error sending availability email.  Msg" (.getMessage e))
-      (println e)
       (hash-map :status "failed" :status-code 500 :msg (str "Server error sending availability email.") :support-msg (.getMessage e)))))
 
 (defn send-lineup-email

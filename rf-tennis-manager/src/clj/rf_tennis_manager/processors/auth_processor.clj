@@ -58,9 +58,9 @@
         user (auth/get-user-with-password username password)]
     (if user
       (cond
-        (> (:account_locked user) 0) (error am/LOGIN_LOCKED)
-        (> (:account_disabled user) 0) (error am/LOGIN_DISABLED)
-        (> (:force_password_change user) 0) (error am/CHG_PASSWORD)
+        (:account_locked user) (error am/LOGIN_LOCKED)
+        (:account_disabled user) (error am/LOGIN_DISABLED)
+        (:force_password_change user) (error am/CHG_PASSWORD)
         :else (error am/LOGIN_SUCCESS))
       (error am/LOGIN_FAILED))))
 
@@ -85,8 +85,8 @@
   [request value]
   (println "=======on-err-from-get =======")
   (let [errMsg (if-not (s/blank? value) value am/NOT_AUTHORIZED_MSG)]
-    {:status  400
-     :body    (str {:status "failed" :status-code 400 :msg "User not logged in"})}))
+    {:status 400
+     :body   (str {:status "failed" :status-code 400 :msg "User not logged in"})}))
 
 (defn get-qs-parm
   "get a qs parm"
@@ -279,6 +279,6 @@
             {:pattern        #"(^/testpagex)"
              :handler        admin-access
              :request-method :get}
-            {:pattern        #"^/.*"
-             :handler        authenticated-access
-             :on-error       on-err-from-get}])
+            {:pattern  #"^/.*"
+             :handler  authenticated-access
+             :on-error on-err-from-get}])

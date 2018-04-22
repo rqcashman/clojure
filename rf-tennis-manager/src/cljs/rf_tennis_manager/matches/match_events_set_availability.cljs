@@ -1,6 +1,7 @@
 (ns rf-tennis-manager.matches.match-events-set-availability
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [re-frame.core :as rf]
+            [rf-tennis-manager.events-common :as evt]
             [rf-tennis-manager.matches.match-events-common :as evt-common]
             [cljs-http.client :as http]))
 
@@ -26,7 +27,7 @@
 
 (rf/reg-fx
   ::get-match_availability
-  evt-common/send-get-request)
+  evt/send-get-request)
 
 
 (rf/reg-event-fx
@@ -46,15 +47,12 @@
 
 (rf/reg-fx
   ::call-update-availability
-  evt-common/send-post-request)
-
-(def player-available 1)
-(def player-unavailable 0)
+  evt/send-post-request)
 
 (defn update-player-availability
   [player-list player update-id]
   (if (= (:id player) update-id)
-    (conj player-list (assoc player :available (if (= (:available player) player-available) player-unavailable player-available)))
+    (conj player-list (assoc player :available (if (:available player) false true)))
     (conj player-list player)))
 
 (rf/reg-event-fx

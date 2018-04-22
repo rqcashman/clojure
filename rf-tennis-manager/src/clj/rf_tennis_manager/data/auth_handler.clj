@@ -9,7 +9,7 @@
   "docstring"
   [username password]
   (-> (j/query sys/db-cred
-               [(str "select count(*) as ct from user_login u where u.email=? and trim(u.password)=trim(sha1(?))") (s/trim username) (s/trim password)])
+               [(str "select count(*) as ct from user_login u where u.email=? and trim(u.password)=trim(crypt(?, u.password))") (s/trim username) (s/trim password)])
       first :ct pos?))
 
 (defn get-user-with-password
@@ -18,7 +18,7 @@
   (-> (j/query sys/db-cred
                [(str "select iduser_login, email, last_name, first_name, team_id, last_login_date,
                account_locked, account_disabled, force_password_change
-            from user_login u where u.email=? and trim(u.password)=trim(sha1(?))") (s/trim username) (s/trim password)])
+            from user_login u where u.email=? and trim(u.password)=trim(crypt(?, u.password))") (s/trim username) (s/trim password)])
       (first)))
 
 (defn get-user
@@ -34,20 +34,19 @@
   "docstring"
   [username status]
   (j/execute! sys/db-cred
-              [(str "insert into user_login_attempts values (?,current_timestamp(),?)") username status]))
+              [(str "insert into user_login_attempts values (?,current_timestamp,cast (? AS INTEGER))") username status]))
 
 (defn change-password
   "docstring"
   [username newpassword]
-  (println "chg password - username: " username " pwd: " newpassword)
   (j/execute! sys/db-cred
-              [(str "update user_login set password=sha1(?),password_change_date=current_timestamp(),force_password_change=0 where email=?") newpassword username]))
+              [(str "update user_login set password=trim(crypt(?, u.password)),password_change_date=current_timestamp,force_password_change=0 where email=?") newpassword username]))
 
 (defn new-password-different?
   "Make sure the new password is not the same as the old one"
   [username new-password]
   (-> (j/query sys/db-cred
-               [(str "select count(*) as ct from user_login l where email=? and sha1(?) = l.password") username new-password])
+               [(str "select count(*) as ct from user_login l where email=? and trim(crypt(?, u.password)) = l.password") username new-password])
       first :ct (= 0)))
 
 (defn get-system-parms
@@ -72,8 +71,9 @@
         failure-minutes (:FAILURE_MINUTES parms)
         failures (-> (j/query sys/db-cred
                               [(str "select count(1) as ct from user_login_attempts where email=? and login_status=?
-             and login_time > date_sub(current_timestamp(), INTERVAL " failure-minutes " MINUTE)") username failed-login-status])
+             and login_time > current_timestamp - interval '" failure-minutes " minute'") username failed-login-status])
                      first :ct)]
+
     (println "too-many-login-failures? failures: " failures " max failures: " max-failed-attempts)
     (if (< failures (Integer/parseInt max-failed-attempts)) false true)))
 
@@ -85,7 +85,7 @@
     (do
       (println "unlocking account: " username)
       (j/execute! sys/db-cred
-                  [(str "update user_login set account_locked=0 where email=?") username])
+                  [(str "update user_login set account_locked=false where email=?") username])
       true)
     false))
 
@@ -97,7 +97,7 @@
     (do
       (println "locking account: " username)
       (j/execute! sys/db-cred
-                  [(str "update user_login set account_locked=1 where email=?") username])
+                  [(str "update user_login set account_locked=true where email=?") username])
       true)
     false))
 
@@ -129,7 +129,7 @@
   (let [user (get-user username)]
     (if user
       (j/execute! sys/db-cred
-                  [(str "insert into user_session values (?,?,current_timestamp(), current_timestamp())") session-id (:iduser_login user)]))))
+                  [(str "insert into user_session values (?,?,current_timestamp, current_timestamp)") session-id (:iduser_login user)]))))
 
 (defn session-valid?
   "Check to see if the session id exists and if it has timed out"
@@ -138,17 +138,17 @@
         session-timeout (:SESSION_TIMEOUT_MINUTES parms)]
     (-> (j/query sys/db-cred
                  [(str "select count(1) as ct from user_session where session_id=?
-                        and last_used_time > date_sub(current_timestamp(), INTERVAL " session-timeout " MINUTE)") session-id])
+                        and last_used_time > current_timestamp - interval '" session-timeout " MINUTE'") session-id])
         first :ct pos?)))
 
 (defn update-session-used-time
   "update last used time for session"
   [session-id]
   (j/execute! sys/db-cred
-              [(str "update user_session set last_used_time = current_timestamp() where session_id=?") session-id]))
+              [(str "update user_session set last_used_time = current_timestamp where session_id=?") session-id]))
 
 (defn update-user-last-login-time
   "update user's last login date"
   [username]
   (j/execute! sys/db-cred
-              [(str "update user_login set last_login_date = current_timestamp() where email=?") username]))
+              [(str "update user_login set last_login_date = current_timestamp where email=?") username]))

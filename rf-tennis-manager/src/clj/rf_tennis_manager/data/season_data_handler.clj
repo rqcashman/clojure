@@ -9,14 +9,14 @@
   "docstring"
   []
   (j/query sys/db-cred
-           [(str "select id, name, DATE_FORMAT(start_date,'%M %D, %Y') as start_date,DATE_FORMAT(end_date,'%M %D, %Y') as end_date
+           [(str "select id, name, to_char(start_date,'Month DD, YYYY') as start_date,to_char(end_date,'Month DD, YYYY') as end_date
                   from season s order by s.start_date desc")]))
 
 (defn season
   "docstring"
   [season-id]
   (-> (j/query sys/db-cred
-               [(str "select id, name, DATE_FORMAT(start_date,'%M %D, %Y') as start_date,DATE_FORMAT(end_date,'%M %D, %Y') as end_date
+               [(str "select id, name, to_char(start_date,'Month DD, YYYY') as start_date,to_char(end_date,'Month DD, YYYY') as end_date
                       from season  where id = ?") season-id])
       first))
 
@@ -31,12 +31,12 @@
   "docstring"
   [name start-date end-date]
   (j/execute! sys/db-cred
-              [(str "insert into season values (null,?,str_to_date(?, '%b %d %Y'),str_to_date(?, '%b %d %Y'))") name start-date end-date]))
+              [(str "insert into season values (default,?,to_date(?, 'Mon DD YYYY'),to_date(?, 'Mon DD YYYY'))") name start-date end-date]))
 
 (defn current-season
   "docstring"
   []
   (-> (j/query sys/db-cred
-               [(str "select id, name from season where start_date <= date_sub(current_date(), interval 10 day) and end_date >= current_date()")])
+               [(str "select id, name from season where start_date <= current_date - interval '10 days' and end_date >= current_date")])
       first))
 

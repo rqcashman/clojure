@@ -1,6 +1,7 @@
 (ns rf-tennis-manager.matches.match-events-common
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [re-frame.core :as rf]
+            [rf-tennis-manager.events-common :as evt]
             [cljs-http.client :as http]
             [enfocus.core :as ef]))
 
@@ -25,31 +26,10 @@
                      (assoc-in [:matches :call-status :on-click] nil))]
       {:db upd-db})))
 
-(def session-expired-errno 400)
-(defn send-get-request
-  [request]
-  (go
-    (let [response (<! (http/get (:url request)))
-          method (cond
-                   (= (:status response) session-expired-errno) [::session-timeout]
-                   (:success response) (:on-success request)
-                   :else (:on-fail request))]
-      (rf/dispatch (conj method response)))))
-
-(defn send-post-request
-  [request]
-  (go
-    (let [values (ef/from (:form-id request) (ef/read-form))
-          response (<! (http/post (:url request) {:form-params values}))
-          method (cond
-                   (= (:status response) session-expired-errno) [::session-timeout]
-                   (:success response) (:on-success request)
-                   :else (:on-fail request))]
-      (rf/dispatch (conj method response)))))
 
 (rf/reg-fx
   ::get-match-info
-  send-get-request)
+  evt/send-get-request)
 
 (defn show-div
   [db show-div-id]

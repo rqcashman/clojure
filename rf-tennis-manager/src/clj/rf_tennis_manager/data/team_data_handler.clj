@@ -14,13 +14,13 @@
   (j/query sys/db-cred
            [(str "select id, last_name, first_name, email, phone_number, status"
                  " from player "
-                 " where team_id = ?"
+                 " where team_id = cast (? as integer)"
                  " order by last_name") team-id]))
 
 (defn team-schedule
   ([season-id team-id]
    (j/query sys/db-cred
-            [(str "select s.match_id, s.season_id, DATE_FORMAT(s.match_date,'%Y-%m-%d') as match_date,DATE_FORMAT(s.match_date,'%h:%i %p') as match_time
+            [(str "select s.match_id, s.season_id, to_char(s.match_date,'Month DD, YYYY') as match_date,to_char(s.match_date,'HH:MI AM') as match_time
                   ,s.home_team_id, s.away_team_id, ht.name as home_team, at.name as away_team, home_team_points, away_team_points, cl.name as home_club_name
                   ,mc.availability_sent, mc.lineup_sent
                   from schedule s
@@ -28,7 +28,7 @@
                   join club cl on cl.id = ht.club_id
                   join team at on at.id = s.away_team_id
                   left join match_communication mc on mc.match_id = s.match_id
-                  where season_id = ? and (s.home_team_id = ? or s.away_team_id = ?)
+                  where season_id = cast (? as integer) and (s.home_team_id = cast (? as integer) or s.away_team_id = cast (? as integer))
                   order by s.match_date")
              season-id team-id team-id])))
 
@@ -52,20 +52,20 @@
   [team-id]
   (-> (j/query sys/db-cred
                [(str "select id, name, club_id, default_match_time
-                      from team where id = ? order by name") team-id])
+                      from team where id = cast (? as integer) order by name") team-id])
       first))
 
 (defn add-team
   "docstring"
   [name club-id sched_abbrev]
   (j/execute! sys/db-cred
-              [(str "insert into team values (null,?,?,?,1)") name club-id sched_abbrev]))
+              [(str "insert into team values (default,?,cast (? as integer),?,true)") name club-id sched_abbrev]))
 
 (defn team-exists?
   "docstring"
   [club-id name]
   (-> (j/query sys/db-cred
-               [(str "select count(*) as ct from team where club_id=? and name=?") club-id name])
+               [(str "select count(*) as ct from team where club_id=cast (? as integer) and name=?") club-id name])
       first :ct pos?))
 
 (defn sched-abbreviation-exists?
