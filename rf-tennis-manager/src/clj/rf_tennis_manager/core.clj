@@ -57,6 +57,24 @@
 
 (def xx (list "rick" "cashman"))
 
+(def team [{:last "Cashman" :first "Rick" :address {:street "Main St."}}
+           {:last "Allen" :first "Mark" :address {:street "First St."}}
+           {:last "Barnhill" :first "Bruce" :address {:street "Elm Ave."}}
+           {:last "Flowers" :first "Henry" :address {:street "Maple Blvd."}}])
+
+(filter #(= "Allen" (:last %)) team)
+(doseq [name (reverse (sort-by #(:last %) (conj team {:first "Raghu" :last "Reddy"})))]
+  (println "First: " (:last name) " Last: " (:first name) " Address: " (-> name :address :street))
+  )
+
+(into (first team) {:new "New attr"})
+(assoc (last team) :new "new")
+(sort-by #(:last %) team)
+(sort-by #(:first %) team)
+(sort-by #(-> % :first) team)
+(sort-by #(-> % :address :street) team)
+(filter #(println %) team)
+
 (defn fib-num
   [start-val]
   (let [num (condp = start-val
@@ -71,6 +89,9 @@
   (if (< in-val 2)
     in-val
     (+ (fib-num2 (dec in-val)) (fib-num2 (- in-val 2)))))
+
+
+(fib-num2 12)
 
 
 

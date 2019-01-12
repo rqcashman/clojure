@@ -37,7 +37,7 @@
     (and (not-nil? (:min-length fld-hash)) (> (alength value) 0) (< (alength value) (:min-length fld-hash))) (update-field db path fld-hash value false (str "must be at least " (:min-length fld-hash) " characters long"))
     (and (not-nil? (:max-length fld-hash)) (> (alength value) 0) (> (alength value) (:max-length fld-hash))) (update-field db path fld-hash value false (str "can be only " (:max-length fld-hash) " characters long"))
     (and (= (:type fld-hash) "email") (not (s/blank? value)) (not (email-valid? value))) (update-field db path fld-hash value false "format invalid")
-    (and (= (:type fld-hash) "phone-number") (not (s/blank? value)) (not (phone-number-valid? value))) (update-field db path fld-hash value false "have either 7 or 10 digits")
+    (and (= (:type fld-hash) "phone-number") (not (s/blank? value)) (not (phone-number-valid? value))) (update-field db path fld-hash value false "must have either 7 or 10 digits")
     :else (update-field db path fld-hash value true "")))
 
 (comment "Doing triml here so a value can have a space in the middle of the input.

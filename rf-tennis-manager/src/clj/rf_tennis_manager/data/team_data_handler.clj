@@ -27,10 +27,10 @@
                   join team ht on ht.id = s.home_team_id
                   join club cl on cl.id = ht.club_id
                   join team at on at.id = s.away_team_id
-                  left join match_communication mc on mc.match_id = s.match_id
+                  left join match_communication mc on mc.match_id = s.match_id and mc.team_id = cast (? as integer)
                   where season_id = cast (? as integer) and (s.home_team_id = cast (? as integer) or s.away_team_id = cast (? as integer))
                   order by s.match_date")
-             season-id team-id team-id])))
+             team-id season-id team-id team-id])))
 
 (defn team-schedule-status
   "docstring"

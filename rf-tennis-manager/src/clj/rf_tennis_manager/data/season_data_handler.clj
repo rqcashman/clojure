@@ -37,6 +37,6 @@
   "docstring"
   []
   (-> (j/query sys/db-cred
-               [(str "select id, name from season where start_date <= current_date - interval '10 days' and end_date >= current_date")])
+               [(str "select id, name from season where start_date <= current_date + interval '10 days' and end_date >= current_date")])
       first))
 

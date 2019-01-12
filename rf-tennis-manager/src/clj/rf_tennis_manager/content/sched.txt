@@ -8,7 +8,7 @@ Jan-13-2018 1:00 PM	FSKY Red @ HP Gold
 Jan-13-2018 1:00 PM	EH Blue @ MF
 Jan-13-2018 2:30 PM	HP Red @ HP Bronze
 Jan-13-2018 4:00 PM	CAM @ WTF
-Jan-20-2018 12:00 PM	MF @ CAM
+Jan-20-2018 12:00 PM    MF @ CAM
 Jan-20-2018 12:30 PM	WTF @ HP Red
 Jan-20-2018 1:30 PM	QC Blue @ EH Blue
 Jan-20-2018 2:30 PM	HP Bronze @ FSKY Red
