@@ -139,7 +139,7 @@
           user (auth/get-user-from-session-id (:identity session))
           email-body (get-availability-email-body message signature match-info)
           subject (str "Match availability for " (:match_date match-info))
-          parms (conj sys/email-cred {:from (:email user) :subject subject})]
+          parms (conj @sys/email-cred {:from (:email user) :subject subject})]
       (doseq [player (team/team-roster (:team_id user))]
         (send-email-to-player player send_subs email-body parms match_id user))
       (comm/upsert_match_avail_email_sent match_id user)
@@ -156,7 +156,7 @@
           user (auth/get-user-from-session-id (:identity session))
           email-template (get-lineup-email-body message signature match-info)
           court-assignments (s/join (reduce #(get-lineup-row %1 %2) () (reverse (sched/match-lineup match_id user))))
-          parms (conj sys/email-cred {:from (:email user) :subject (str "Lineup for " (:match_date match-info))})]
+          parms (conj @sys/email-cred {:from (:email user) :subject (str "Lineup for " (:match_date match-info))})]
       (doseq [player (sched/get-lineup-email-addresses match_id (:team_id user) send_subs)]
         (let [email-msg (-> email-template
                             (s/replace "---salutation---" (str (:first_name player) " " (:last_name player)))

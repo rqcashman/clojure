@@ -8,14 +8,14 @@
 (defn add-match
   "docstring"
   [season_id date home_team_id away_team_id]
-  (j/execute! sys/db-cred
+  (j/execute! @sys/db-cred
               [(str "insert into schedule
               values (default,cast (? as integer),to_timestamp(?, 'Mon-DD-YYYY HH:MI AM'),cast (? as integer),cast (? as integer),0,0)") season_id date home_team_id away_team_id]))
 
 (defn match-info
   "docstring"
   [match-id]
-  (-> (j/query sys/db-cred
+  (-> (j/query @sys/db-cred
                [(str "select s.match_id, to_char(s.match_date,'Month DD, YYYY') as match_date,to_char(s.match_date,'HH:MI AM') as match_time"
                      " ,cl.name as club_name, cl.address, cl.city, cl.state, cl.zip_code, cl.phone_number, s.home_team_id, s.away_team_id"
                      " from schedule s"
@@ -28,7 +28,7 @@
 (defn team-schedule-abbreviations
   "docstring"
   []
-  (j/query sys/db-cred
+  (j/query @sys/db-cred
            ["select id, sched_abbrev from team"]
            {:as-arrays?    false
             :result-set-fn (fn [rs]
@@ -40,7 +40,7 @@
 (defn match-availability
   "docstring"
   [match-id user]
-  (j/query sys/db-cred
+  (j/query @sys/db-cred
            [(str "select p.id, p.first_name, p.last_name, p.status,
             pc.date_sent, pc.response, to_char(pc.response_date, 'Month DD, YYYY HH:MI AM') as response_date, ma.available,
             mc.home_player_1, mc.home_player_2, mc.away_player_1, mc.away_player_2, mc.court_number
@@ -55,7 +55,7 @@
 (defn match-forfeits
   "docstring"
   [match-id]
-  (j/query sys/db-cred
+  (j/query @sys/db-cred
            [(str "select match_id, court_number, forfeit_team_id
            from match_courts
            where match_id = cast (? as integer)
@@ -64,7 +64,7 @@
 (defn reset-match-availability
   "docstring"
   [match-id]
-  (j/execute! sys/db-cred
+  (j/execute! @sys/db-cred
               [(str "update match_availability set available= false where match_id = cast (? as integer)") match-id]))
 
 (defn reset-match-lineup
@@ -72,15 +72,15 @@
   [match-id team-id]
   (let [match (match-info match-id)]
     (if (= (:home_team_id match) team-id)
-      (j/execute! sys/db-cred
+      (j/execute! @sys/db-cred
                   [(str "update match_courts set home_player_1 = null, home_player_2 = null where match_id = cast (? as integer)") match-id])
-      (j/execute! sys/db-cred
+      (j/execute! @sys/db-cred
                   [(str "update match_courts set away_player_1 = null, away_player_2 = null where match_id = cast (? as integer)") match-id]))))
 
 (defn match_court_exists?
   "docstring"
   [match-id court]
-  (-> (j/query sys/db-cred
+  (-> (j/query @sys/db-cred
                [(str "select count(*) as ct from match_courts where match_id= cast (? as integer) and court_number= cast (? as integer)") match-id court])
       first :ct pos?))
 
@@ -89,28 +89,28 @@
   [match-id team-id court player1 player2 forfeit_team_id]
   (let [match (match-info match-id)]
     (if (= (match_court_exists? match-id court) false)
-      (j/execute! sys/db-cred
+      (j/execute! @sys/db-cred
                   [(str "insert into match_courts
                   values (cast (? as integer),cast (? as integer),null,null,null,null,null)") match-id, court]))
     (if (= (:home_team_id match) team-id)
-      (j/execute! sys/db-cred
+      (j/execute! @sys/db-cred
                   [(str "update match_courts set home_player_1= cast (? as integer), home_player_2 = cast (? as integer),
                   forfeit_team_id= cast (? as integer) where match_id = cast (? as integer) and court_number = cast (? as integer)") player1 player2 forfeit_team_id match-id court])
-      (j/execute! sys/db-cred
+      (j/execute! @sys/db-cred
                   [(str "update match_courts set away_player_1= cast (? as integer), away_player_2 = cast (? as integer),
                   forfeit_team_id= cast (? as integer) where match_id = cast (? as integer) and court_number = cast (? as integer)") player1 player2 forfeit_team_id match-id court]))))
 
 (defn update-player-availability
   "docstring"
   [match-id player-id avail-value]
-  (j/execute! sys/db-cred
+  (j/execute! @sys/db-cred
               [(str "update match_availability set available=? where match_id = cast (? as integer) and player_id = cast (? as integer)")
                avail-value match-id player-id]))
 
 (defn match_availability_exists?
   "docstring"
   [match_id player_id]
-  (-> (j/query sys/db-cred
+  (-> (j/query @sys/db-cred
                [(str "select count(*) as ct from match_availability
                where match_id= cast (? as integer) and player_id= cast (? as integer)") match_id player_id])
       first :ct pos?))
@@ -120,10 +120,10 @@
   [match_id player_id available]
   (let [avail_flag (if (= available "Y") true false)]
     (if (match_availability_exists? match_id player_id)
-      (j/execute! sys/db-cred
+      (j/execute! @sys/db-cred
                   [(str "update match_availability set available=?
                   where match_id= cast (? as integer) and player_id= cast (? as integer)") avail_flag match_id player_id])
-      (j/execute! sys/db-cred
+      (j/execute! @sys/db-cred
                   [(str "insert into match_availability values (cast (? as integer),cast (? as integer),?)") match_id player_id avail_flag]))))
 
 (defn court-valid?
@@ -144,7 +144,7 @@
         sql (str "select " player1-col player2-col "forfeit_team_id
                  from match_courts
                  where match_id = cast (? as integer) order by court_number")
-        results (j/query sys/db-cred
+        results (j/query @sys/db-cred
                          [sql match-id])]
     (if (< (count results) 4)
       false
@@ -164,7 +164,7 @@
                  left join player p1 on p1.id = " player1-col
                  " left join player p2 on p2.id = " player2-col
                  " where mc.match_id = cast (? as integer) order by court_number")]
-    (j/query sys/db-cred [sql match-id])))
+    (j/query @sys/db-cred [sql match-id])))
 
 (comment "The union is to ensure that any sub in the lineup gets an email")
 (def lineup-email-address-sql
@@ -189,7 +189,7 @@
   [match-id team-id send-subs]
   (let [status (if (s/blank? send-subs) "'A'", "'A','S'")
         sql (s/replace lineup-email-address-sql #"--status--" status)]
-    (j/query sys/db-cred [sql team-id team-id match-id])))
+    (j/query @sys/db-cred [sql team-id team-id match-id])))
 
 
 
